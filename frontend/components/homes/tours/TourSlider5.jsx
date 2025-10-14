@@ -47,6 +47,17 @@ export default function TourSlider5() {
                     },
                   }}
                 >
+                  <SwiperSlide>
+                    <Link href={`/`} className=" -type-3 ">
+                      <div className="tourCard__image ratio  ratio-41:45 rounded-12  ">
+                        <div className="img-ratio rounded-12 d-flex items-center justify-center bg-light-1">
+                          <span className="text-black text-24 fw-500 text-center px-20">
+                            Customize your trip
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  </SwiperSlide>
                   {tourData.map((elm, i) => (
                     <SwiperSlide key={i}>
                       <Link

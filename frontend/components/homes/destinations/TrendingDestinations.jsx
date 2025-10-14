@@ -5,7 +5,7 @@ import React from "react";
 
 export default function TrendingDestinations() {
   return (
-    <section className="layout-pt-xl layout-pb-xl">
+    <section className="layout-pt-lg-2 layout-pb-lg-2">
       <div className="container">
         <div className="row justify-between items-end y-gap-10">
           <div className="col-auto">

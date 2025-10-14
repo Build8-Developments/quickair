@@ -4,7 +4,7 @@ import React from "react";
 
 export default function FeaturesThree() {
   return (
-    <section className="layout-pt-xl">
+    <section className="">
       <div className="container">
         <div className="row justify-center text-center">
           <div className="col-auto">
