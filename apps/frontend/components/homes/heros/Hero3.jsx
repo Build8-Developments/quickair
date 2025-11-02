@@ -1,7 +1,4 @@
 "use client";
-import Calender from "@/components/common/dropdownSearch/Calender";
-import Location from "@/components/common/dropdownSearch/Location";
-import TourType from "@/components/common/dropdownSearch/TourType";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
@@ -36,15 +33,7 @@ export default function Hero3() {
 
   return (
     <section className="hero -type-3">
-      <div className="hero__bg">
-        <Image
-          width={1920}
-          height={760}
-          src="/img/hero/3/bg.jpg"
-          style={{ objectFit: "cover", height: "auto" }}
-          alt="background"
-        />
-      </div>
+      <div className="hero__bg" />
 
       <div className="container">
         <div className="row justify-between">
@@ -76,100 +65,25 @@ export default function Hero3() {
               data-aos-delay="300"
               className="hero__filter mt-60 lg:mt-30"
             >
-              <div
-                ref={dropDownContainer}
-                className="searchForm -type-1 shadow-1"
-              >
-                <div className="searchForm__form">
-                  <div className="searchFormItem js-select-control js-form-dd">
-                    <div
-                      className="searchFormItem__button"
-                      onClick={() =>
-                        setCurrentActiveDD((pre) =>
-                          pre == "location" ? "" : "location",
-                        )
-                      }
-                    >
-                      <div className="searchFormItem__icon size-50 rounded-full bg-accent-1-05 flex-center">
-                        <i className="text-20 icon-pin"></i>
-                      </div>
-                      <div className="searchFormItem__content">
-                        <h5>Where</h5>
-                        <div className="js-select-control-chosen">
-                          {" "}
-                          {location ? location : "Search destinations"}
-                        </div>
-                      </div>
-                    </div>
+              <div className="hero__search">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10.0001 4.29932C7.95277 4.29932 6.28711 5.96498 6.28711 8.01232C6.28711 10.0597 7.95277 11.7253 10.0001 11.7253C12.0475 11.7253 13.7131 10.0597 13.7131 8.01232C13.7131 5.96498 12.0475 4.29932 10.0001 4.29932ZM10.0001 10.162C8.8148 10.162 7.85047 9.19764 7.85047 8.01232C7.85047 6.82701 8.8148 5.86268 10.0001 5.86268C11.1854 5.86268 12.1498 6.82701 12.1498 8.01232C12.1498 9.19764 11.1854 10.162 10.0001 10.162Z"
+                    fill="#05073C"
+                  />
+                  <path
+                    d="M10.0006 0C5.58258 0 1.98828 3.59434 1.98828 8.01231V8.23379C1.98828 10.4682 3.2693 13.0719 5.79586 15.9726C7.62742 18.0754 9.4334 19.5416 9.50934 19.603L10.0006 20L10.4918 19.6031C10.5678 19.5417 12.3738 18.0754 14.2053 15.9726C16.7318 13.0719 18.0129 10.4682 18.0129 8.23383V8.01234C18.0129 3.59434 14.4186 0 10.0006 0ZM16.4495 8.23383C16.4495 12.0098 11.5843 16.5807 10.0006 17.9683C8.41648 16.5803 3.55164 12.0095 3.55164 8.23383V8.01234C3.55164 4.45641 6.44465 1.5634 10.0006 1.5634C13.5565 1.5634 16.4495 4.45641 16.4495 8.01234V8.23383Z"
+                    fill="#05073C"
+                  />
+                </svg>
 
-                    <Location
-                      setLocation={setLocation}
-                      active={currentActiveDD === "location"}
-                    />
-                  </div>
-
-                  <div className="searchFormItem js-select-control js-form-dd js-calendar">
-                    <div
-                      className="searchFormItem__button"
-                      onClick={() =>
-                        setCurrentActiveDD((pre) =>
-                          pre == "calender" ? "" : "calender",
-                        )
-                      }
-                    >
-                      <div className="searchFormItem__icon size-50 rounded-full bg-accent-1-05 flex-center">
-                        <i className="text-20 icon-calendar"></i>
-                      </div>
-                      <div className="searchFormItem__content">
-                        <h5>When</h5>
-                        <div>
-                          <span className="js-first-date">
-                            {" "}
-                            <Calender active={currentActiveDD === "calender"} />
-                          </span>
-                          <span className="js-last-date"></span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="searchFormItem js-select-control js-form-dd">
-                    <div
-                      className="searchFormItem__button"
-                      onClick={() =>
-                        setCurrentActiveDD((pre) =>
-                          pre == "tourType" ? "" : "tourType",
-                        )
-                      }
-                    >
-                      <div className="searchFormItem__icon size-50 rounded-full bg-accent-1-05 flex-center">
-                        <i className="text-20 icon-flag"></i>
-                      </div>
-                      <div className="searchFormItem__content">
-                        <h5>Tour Type</h5>
-                        <div className="js-select-control-chosen">
-                          {" "}
-                          {tourType ? tourType : "All tour"}
-                        </div>
-                      </div>
-                    </div>
-
-                    <TourType
-                      setTourType={setTourType}
-                      active={currentActiveDD === "tourType"}
-                    />
-                  </div>
-                </div>
-
-                <div className="searchForm__button">
-                  <button
-                    onClick={() => router.push("/tour-list-2")}
-                    className="button -dark-1 bg-accent-1 rounded-200 text-white"
-                  >
-                    <i className="icon-search text-16 mr-10"></i>
-                    Search
-                  </button>
-                </div>
+                <input type="text" placeholder="Search destinations" />
               </div>
             </div>
           </div>

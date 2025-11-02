@@ -13,31 +13,7 @@ export default function Menu() {
       <div className="xl:d-none ml-30">
         <div className="desktopNav">
           <div className="desktopNav__item">
-            <a
-              className={
-                pathname?.split("/")[1].split("-")[0] == "home"
-                  ? "activeMenu"
-                  : ""
-              }
-              href="#"
-            >
-              Home <i className="icon-chevron-down"></i>
-            </a>
-
-            <div className="desktopNavSubnav">
-              <div className="desktopNavSubnav__content">
-                {homes.map((elm, i) => (
-                  <div key={i} className="desktopNavSubnav__item text-dark-1">
-                    <Link
-                      className={pathname == elm.href ? "activeMenu" : ""}
-                      href={elm.href}
-                    >
-                      {elm.title}
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <Link href="/">Home</Link>
           </div>
 
           <div className="desktopNav__item">
@@ -122,45 +98,11 @@ export default function Menu() {
           </div>
 
           <div className="desktopNav__item">
-            <Link href="/destinations">Destination</Link>
+            <a href="/flow">Create your trip</a>
           </div>
 
           <div className="desktopNav__item">
-            <a href="#">Activities</a>
-          </div>
-
-          <div className="desktopNav__item">
-            <a href="#">
-              Pages <i className="icon-chevron-down"></i>
-            </a>
-
-            <div className="desktopNavSubnav">
-              <div className="desktopNavSubnav__content">
-                {pages.map((elm, i) => (
-                  <div key={i} className="desktopNavSubnav__item text-dark-1">
-                    {elm.href ? (
-                      <Link href={elm.href}>{elm.title}</Link>
-                    ) : (
-                      <a href="#">
-                        {elm.title} <i className="icon-chevron-right"></i>
-                      </a>
-                    )}
-
-                    {elm.subnav && (
-                      <div className="desktopNavSubnav">
-                        <div className="desktopNavSubnav__content">
-                          {elm.subnav.map((elm2, i2) => (
-                            <div key={i2} className="desktopNavSubnav__item">
-                              <Link href={elm2.href}>{elm2.title}</Link>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <a href="/about">About</a>
           </div>
 
           <div className="desktopNav__item">

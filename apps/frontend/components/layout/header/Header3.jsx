@@ -4,11 +4,14 @@ import React, { useEffect, useState } from "react";
 import Menu from "../components/Menu";
 import Currency from "../components/Currency";
 import MobileMenu from "../components/MobileMenu";
+import LanguageSwitcherButton from "@/components/common/LanguageSwitcherButton";
+import { useLanguage } from "@/contexts/LanguageContext";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 export default function Header3() {
   const router = useRouter();
+  const { language } = useLanguage();
   const pageNavigate = (pageName) => {
     router.push(pageName);
   };
@@ -53,7 +56,9 @@ export default function Header3() {
               <Image
                 width="167"
                 height="32"
-                src="/img/general/logo-1.svg"
+                src={`/img/general/${
+                  language === "ar" ? "ar-logo" : "en-logo"
+                }.svg`}
                 alt="logo icon"
                 priority
               />
@@ -62,40 +67,13 @@ export default function Header3() {
             <Menu />
           </div>
 
-          <div className="headerMobile__right">
-            <button
-              onClick={() => pageNavigate("/tour-list-1")}
-              className="d-flex"
-            >
-              <i className="icon-search text-18"></i>
-            </button>
-
-            <button
-              onClick={() => pageNavigate("/login")}
-              className="d-flex ml-20"
-            >
-              <i className="icon-person text-18"></i>
-            </button>
-          </div>
-
           <div className="header__right">
-            <div className="ml-30">
-              <Currency />
-            </div>
-
-            <Link href="/help-center" className="ml-20">
-              Help
-            </Link>
-
-            <Link href="/register" className="ml-30">
-              Sign up
-            </Link>
-
+            <LanguageSwitcherButton />
             <Link
-              href="/login"
+              href="/contact"
               className="button -sm -outline-dark-1 rounded-200 text-dark-1 ml-30"
             >
-              Log in
+              Help
             </Link>
           </div>
         </div>

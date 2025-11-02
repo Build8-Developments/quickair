@@ -1,9 +1,10 @@
 "use client";
 
-import { menuData } from "@/data/mobileMenu";
+import { destinationsData } from "@/data/mobileMenu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
+
 const socialMediaLinks = [
   { id: 1, class: "icon-facebook", href: "#" },
   { id: 2, class: "icon-twitter", href: "#" },
@@ -31,7 +32,7 @@ export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen }) {
 
       <div className="menu__container">
         <div className="menu__header">
-          <h4>Main Menu</h4>
+          <h4>Menu</h4>
 
           <button
             onClick={() => setMobileMenuOpen(false)}
@@ -46,60 +47,54 @@ export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen }) {
             className="menuNav js-navList -is-active"
             style={{ maxHeight: "calc(100vh - 262px)", overflowY: "auto" }}
           >
-            {menuData.map((elm, i) => (
-              <li key={i} className="menuNav__item -has-submenu js-has-submenu">
-                <a
-                  onClick={() =>
-                    setActiveSub((pre) => (pre == elm.label ? "" : elm.label))
-                  }
-                >
-                  <span
-                    className={
-                      elm.submenu.some(
-                        (elm) =>
-                          elm.href.split("/")[1] == pathname?.split("/")[1],
-                      )
-                        ? "activeMenu"
-                        : ""
-                    }
-                  >
-                    {elm.label}
-                  </span>
-                  <i
-                    style={
-                      activeSub == elm.label
-                        ? { transform: "rotate(90deg)", transition: "0.3s" }
-                        : { transform: "rotate(0deg)", transition: "0.3s" }
-                    }
-                    className="icon-chevron-right"
-                  ></i>
-                </a>
+            <li className="menuNav__item">
+              <Link href="/">Home</Link>
+            </li>
 
-                <ul
+            <li className="menuNav__item -has-submenu js-has-submenu">
+              <a
+                onClick={() =>
+                  setActiveSub((pre) => (pre == "Tour" ? "" : "Tour"))
+                }
+              >
+                <span>Tour</span>
+                <i
                   style={
-                    activeSub == elm.label
-                      ? { maxHeight: "1200px", transition: "0.6s" }
-                      : { maxHeight: "0px", transition: "0.6s" }
+                    activeSub == "Tour"
+                      ? { transform: "rotate(90deg)", transition: "0.3s" }
+                      : { transform: "rotate(0deg)", transition: "0.3s" }
                   }
-                >
-                  {elm.submenu.map((elm2, i2) => (
-                    <li key={i2} className="">
-                      <Link
-                        className={
-                          pathname.split("/")[1] == elm2.href?.split("/")[1]
-                            ? "activeMenu"
-                            : ""
-                        }
-                        style={{ paddingLeft: "15px", fontSize: "17px" }}
-                        href={elm2.href}
-                      >
-                        {elm2.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
+                  className="icon-chevron-right"
+                ></i>
+              </a>
+
+              <ul
+                style={
+                  activeSub == "Tour"
+                    ? { maxHeight: "1200px", transition: "0.6s" }
+                    : { maxHeight: "0px", transition: "0.6s" }
+                }
+              >
+                {destinationsData.map((destination) => (
+                  <li key={destination.id}>
+                    <Link
+                      style={{ paddingLeft: "15px", fontSize: "17px" }}
+                      href={destination.href}
+                    >
+                      {destination.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </li>
+
+            <li className="menuNav__item">
+              <Link href="/flow">Create your trip</Link>
+            </li>
+
+            <li className="menuNav__item">
+              <Link href="/about">About</Link>
+            </li>
 
             <li className="menuNav__item">
               <Link href="/contact">Contact</Link>

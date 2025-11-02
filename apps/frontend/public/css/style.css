@@ -9,5 +9,11 @@
 @import "swiper/css/effect-cards";
 @import "swiper/css/effect-cards";
 
-@import "../../node_modules/aos/dist/aos.css";
+@import "aos/dist/aos.css";
 @import "react-multi-date-picker/styles/colors/yellow.css";
+
+/* Ensure icon fonts are never overridden */
+[class*="icon-"],
+i[class*="icon"] {
+  font-family: icomoon !important;
+}

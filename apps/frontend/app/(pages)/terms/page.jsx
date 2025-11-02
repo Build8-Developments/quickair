@@ -1,5 +1,5 @@
-import FooterOne from "@/components/layout/footers/FooterOne";
-import Header1 from "@/components/layout/header/Header1";
+import FooterTwo from "@/components/layout/footers/FooterTwo";
+import Header3 from "@/components/layout/header/Header3";
 import Content from "@/components/pages/terms/Content";
 import PageHeader from "@/components/pages/terms/PageHeader";
 import React from "react";
@@ -13,10 +13,10 @@ export default function page() {
   return (
     <>
       <main>
-        <Header1 />
+        <Header3 />
         <PageHeader />
         <Content />
-        <FooterOne />
+        <FooterTwo />
       </main>
     </>
   );

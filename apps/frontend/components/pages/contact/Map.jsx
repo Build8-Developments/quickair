@@ -1,228 +1,72 @@
 "use client";
 
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
-import React from "react";
-
-const containerStyle = {
-  width: "100%",
-  height: "100%",
-};
+import React, { useEffect, useRef } from "react";
+import "leaflet/dist/leaflet.css";
 
 const center = {
   lat: -3.745,
   lng: -38.523,
 };
 
-const option = {
-  zoomControl: true,
-  disableDefaultUI: true,
-  styles: [
-    {
-      featureType: "all",
-      elementType: "geometry.fill",
-      stylers: [
-        {
-          weight: "2.00",
-        },
-      ],
-    },
-    {
-      featureType: "all",
-      elementType: "geometry.stroke",
-      stylers: [
-        {
-          color: "#9c9c9c",
-        },
-      ],
-    },
-    {
-      featureType: "all",
-      elementType: "labels.text",
-      stylers: [
-        {
-          visibility: "on",
-        },
-      ],
-    },
-    {
-      featureType: "landscape",
-      elementType: "all",
-      stylers: [
-        {
-          color: "#f2f2f2",
-        },
-      ],
-    },
-    {
-      featureType: "landscape",
-      elementType: "geometry.fill",
-      stylers: [
-        {
-          color: "#ffffff",
-        },
-      ],
-    },
-    {
-      featureType: "landscape.man_made",
-      elementType: "geometry.fill",
-      stylers: [
-        {
-          color: "#ffffff",
-        },
-      ],
-    },
-    {
-      featureType: "poi",
-      elementType: "all",
-      stylers: [
-        {
-          visibility: "off",
-        },
-      ],
-    },
-    {
-      featureType: "road",
-      elementType: "all",
-      stylers: [
-        {
-          saturation: -100,
-        },
-        {
-          lightness: 45,
-        },
-      ],
-    },
-    {
-      featureType: "road",
-      elementType: "geometry.fill",
-      stylers: [
-        {
-          color: "#eeeeee",
-        },
-      ],
-    },
-    {
-      featureType: "road",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#7b7b7b",
-        },
-      ],
-    },
-    {
-      featureType: "road",
-      elementType: "labels.text.stroke",
-      stylers: [
-        {
-          color: "#ffffff",
-        },
-      ],
-    },
-    {
-      featureType: "road.highway",
-      elementType: "all",
-      stylers: [
-        {
-          visibility: "simplified",
-        },
-      ],
-    },
-    {
-      featureType: "road.arterial",
-      elementType: "labels.icon",
-      stylers: [
-        {
-          visibility: "off",
-        },
-      ],
-    },
-    {
-      featureType: "transit",
-      elementType: "all",
-      stylers: [
-        {
-          visibility: "off",
-        },
-      ],
-    },
-    {
-      featureType: "water",
-      elementType: "all",
-      stylers: [
-        {
-          color: "#46bcec",
-        },
-        {
-          visibility: "on",
-        },
-      ],
-    },
-    {
-      featureType: "water",
-      elementType: "geometry.fill",
-      stylers: [
-        {
-          color: "#c8d7d4",
-        },
-      ],
-    },
-    {
-      featureType: "water",
-      elementType: "labels.text.fill",
-      stylers: [
-        {
-          color: "#070707",
-        },
-      ],
-    },
-    {
-      featureType: "water",
-      elementType: "labels.text.stroke",
-      stylers: [
-        {
-          color: "#ffffff",
-        },
-      ],
-    },
-  ],
-  scrollwheel: true,
-};
-
 function MyComponent() {
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: "AIzaSyAAz77U5XQuEME6TpftaMdX0bBelQxXRlM",
-  });
+  const mapRef = useRef(null);
+  const mapInstanceRef = useRef(null);
 
-  const [map, setMap] = React.useState(null);
+  useEffect(() => {
+    // Only initialize on client side
+    if (
+      typeof window !== "undefined" &&
+      mapRef.current &&
+      !mapInstanceRef.current
+    ) {
+      // Dynamic import of Leaflet
+      import("leaflet").then((L) => {
+        // Initialize map
+        const map = L.map(mapRef.current).setView([center.lat, center.lng], 12);
 
-  const onLoad = React.useCallback(function callback(map) {
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
+        // Add OpenStreetMap tiles (free)
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          maxZoom: 19,
+        }).addTo(map);
 
-    setMap(map);
+        // Optional: Add a marker at the center
+        const customIcon = L.divIcon({
+          className: "custom-marker",
+          html: '<div style="background-color: #eb662b; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>',
+          iconSize: [30, 30],
+          iconAnchor: [15, 15],
+        });
+
+        L.marker([center.lat, center.lng], { icon: customIcon })
+          .addTo(map)
+          .bindPopup("We are here!")
+          .openPopup();
+
+        mapInstanceRef.current = map;
+      });
+    }
+
+    // Cleanup
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
   }, []);
 
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null);
-  }, []);
   return (
     <div className="map relative mt-header ml-60 mr-60 md:ml-0 md:mr-0">
-      {isLoaded ? (
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={12}
-          options={option}
-        >
-          {/* Child components, such as markers, info windows, etc. */}
-          <></>
-        </GoogleMap>
-      ) : (
-        <></>
-      )}
+      <div
+        ref={mapRef}
+        style={{
+          width: "100%",
+          height: "500px",
+          borderRadius: "8px",
+        }}
+      />
 
       <div className="map__shape">
         <svg

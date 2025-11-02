@@ -103,20 +103,20 @@
   --color-white: #ffffff;
   --color-black: #000000;
   --color-border: #dddddd;
-  --color-accent-1: #eb662b;
-  --color-accent-1-dark: #ce5a25;
-  --color-accent-2: #4a43c4;
+  --color-accent-1: #019fb1; /* Primary - Teal */
+  --color-accent-1-dark: #017a89; /* Darker Teal for hover */
+  --color-accent-2: #b71c38; /* Secondary - Crimson */
   --color-dark-1: #05073c;
-  --color-blue-1: #1967d2;
-  --color-red-1: #d93025;
-  --color-red-2: #f64e60;
-  --color-red-3: #ff0000;
+  --color-blue-1: #019fb1; /* Changed to brand teal */
+  --color-red-1: #b71c38; /* Changed to brand crimson */
+  --color-red-2: #9f1c35; /* Changed to brand burgundy */
+  --color-red-3: #b71c38; /* Brand crimson */
   --color-red-4: #ffe5e5;
   --color-purple-1: #8950fc;
   --color-yellow-1: #ffa800;
   --color-yellow-2: #e2ad64;
   --color-yellow-3: #f9ab00;
-  --color-light-1: #f5f5f5;
+  --color-light-1: #f5f5f5; /* Brand background */
   --color-light-2: #717171;
   --color-light-3: #fbfbfb;
   --color-light-4: #ddd3ec;
@@ -3793,7 +3793,7 @@ h6 {
   font-weight: 600;
   font-size: 60px;
   line-height: 1.2;
-  background: linear-gradient(97deg, #ee8c61 27.01%, #4c43c4 87.3%);
+  background: linear-gradient(97deg, #019fb1 27.01%, #b71c38 87.3%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
