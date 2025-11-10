@@ -2,13 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import Menu from "../components/Menu";
-import Currency from "../components/Currency";
 import MobileMenu from "../components/MobileMenu";
 import LanguageSwitcherButton from "@/components/common/LanguageSwitcherButton";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 export default function Header3() {
   const router = useRouter();
   const { language } = useLanguage();

@@ -6,11 +6,20 @@ const LanguageContext = createContext();
 export function LanguageProvider({ children }) {
   const [language, setLanguage] = useState("en");
 
-  // Load language from localStorage on mount
+  // Load language from cookie or localStorage on mount
   useEffect(() => {
-    const savedLanguage = localStorage.getItem("language");
+    // Check cookie first (for consistency with server)
+    const cookieLanguage = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("language="))
+      ?.split("=")[1];
+
+    const savedLanguage = cookieLanguage || localStorage.getItem("language");
     if (savedLanguage) {
       setLanguage(savedLanguage);
+      // Update HTML attributes
+      document.documentElement.lang = savedLanguage;
+      document.documentElement.dir = savedLanguage === "ar" ? "rtl" : "ltr";
     }
   }, []);
 
@@ -18,6 +27,10 @@ export function LanguageProvider({ children }) {
   const changeLanguage = (newLanguage) => {
     setLanguage(newLanguage);
     localStorage.setItem("language", newLanguage);
+
+    // Also save to cookie for server components
+    document.cookie = `language=${newLanguage}; path=/; max-age=31536000`; // 1 year
+
     // Update HTML lang attribute for accessibility
     document.documentElement.lang = newLanguage;
     // Update direction for RTL languages

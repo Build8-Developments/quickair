@@ -6,37 +6,24 @@
   },
   "options": {},
   "attributes": {
-    "hotelName": {
-      "type": "string",
-      "required": true
+    "hotel": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::hotel.hotel"
     },
     "nights": {
       "type": "integer",
       "required": true
     },
     "mealPlan": {
-      "type": "string"
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::meal-plan.meal-plan"
     },
     "currency": {
       "type": "enumeration",
       "required": true,
-      "enum": [
-        "EGP",
-        "USD",
-        "EUR",
-        "GBP"
-      ]
-    },
-    "location": {
-      "type": "string"
-    },
-    "gallery": {
-      "type": "media",
-      "multiple": true,
-      "required": false,
-      "allowedTypes": [
-        "images"
-      ]
+      "enum": ["EGP", "USD", "EUR", "GBP"]
     },
     "roomPricing": {
       "type": "component",
@@ -51,10 +38,12 @@
     "notes": {
       "type": "text"
     },
-    "stars": {
-      "type": "integer",
-      "min": 1,
-      "max": 5
+    "specialOffer": {
+      "type": "string"
+    },
+    "available": {
+      "type": "boolean",
+      "default": true
     }
   }
 }

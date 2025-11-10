@@ -30,14 +30,11 @@
       "targetField": "title",
       "required": true
     },
-    "destination": {
-      "type": "string",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "required": true
+    "location": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::location.location",
+      "inversedBy": "offers"
     },
     "month": {
       "type": "enumeration",
@@ -90,9 +87,7 @@
       },
       "multiple": true,
       "required": false,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"]
     },
     "pdfFile": {
       "type": "media",
@@ -103,9 +98,7 @@
       },
       "multiple": false,
       "required": true,
-      "allowedTypes": [
-        "files"
-      ]
+      "allowedTypes": ["files"]
     },
     "coverImage": {
       "type": "media",
@@ -116,9 +109,7 @@
       },
       "multiple": false,
       "required": false,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"]
     },
     "hotelOptions": {
       "type": "component",

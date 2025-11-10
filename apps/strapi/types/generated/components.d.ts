@@ -1,5 +1,54 @@
 import type { Schema, Struct } from '@strapi/strapi';
 
+export interface HotelAmenity extends Struct.ComponentSchema {
+  collectionName: 'components_hotel_amenities';
+  info: {
+    description: 'Hotel facilities and amenities';
+    displayName: 'Amenity';
+  };
+  attributes: {
+    category: Schema.Attribute.Enumeration<
+      [
+        'General',
+        'Room Features',
+        'Activities',
+        'Food & Drink',
+        'Services',
+        'Internet',
+        'Transportation',
+        'Wellness',
+      ]
+    > &
+      Schema.Attribute.DefaultTo<'General'>;
+    icon: Schema.Attribute.String;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface HotelCoordinates extends Struct.ComponentSchema {
+  collectionName: 'components_hotel_coordinates';
+  info: {
+    description: 'Geographic coordinates for hotel location';
+    displayName: 'Coordinates';
+  };
+  attributes: {
+    latitude: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    longitude: Schema.Attribute.Decimal & Schema.Attribute.Required;
+  };
+}
+
+export interface MealPlanMealInclusion extends Struct.ComponentSchema {
+  collectionName: 'components_meal_plan_meal_inclusions';
+  info: {
+    description: 'Individual meal or beverage included in a meal plan';
+    displayName: 'Meal Inclusion';
+  };
+  attributes: {
+    description: Schema.Attribute.String;
+    item: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface OfferExclusion extends Struct.ComponentSchema {
   collectionName: 'components_offer_exclusions';
   info: {
@@ -18,24 +67,16 @@ export interface OfferHotelOption extends Struct.ComponentSchema {
     displayName: 'Hotel Option';
   };
   attributes: {
+    available: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     currency: Schema.Attribute.Enumeration<['EGP', 'USD', 'EUR', 'GBP']> &
       Schema.Attribute.Required;
-    gallery: Schema.Attribute.Media<'images', true>;
-    hotelName: Schema.Attribute.String & Schema.Attribute.Required;
+    hotel: Schema.Attribute.Relation<'oneToOne', 'api::hotel.hotel'>;
     kidsPricing: Schema.Attribute.Component<'offer.kids-pricing', true>;
-    location: Schema.Attribute.String;
-    mealPlan: Schema.Attribute.String;
+    mealPlan: Schema.Attribute.Relation<'oneToOne', 'api::meal-plan.meal-plan'>;
     nights: Schema.Attribute.Integer & Schema.Attribute.Required;
     notes: Schema.Attribute.Text;
     roomPricing: Schema.Attribute.Component<'offer.room-pricing', true>;
-    stars: Schema.Attribute.Integer &
-      Schema.Attribute.SetMinMax<
-        {
-          max: 5;
-          min: 1;
-        },
-        number
-      >;
+    specialOffer: Schema.Attribute.String;
   };
 }
 
@@ -162,6 +203,9 @@ export interface SharedSeo extends Struct.ComponentSchema {
 declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
+      'hotel.amenity': HotelAmenity;
+      'hotel.coordinates': HotelCoordinates;
+      'meal-plan.meal-inclusion': MealPlanMealInclusion;
       'offer.exclusion': OfferExclusion;
       'offer.hotel-option': OfferHotelOption;
       'offer.inclusion': OfferInclusion;

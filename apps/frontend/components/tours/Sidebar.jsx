@@ -1,16 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import Calender from "../common/dropdownSearch/Calender";
-import {
-  durations,
-  languages,
-  toursTypes,
-  features,
-  rating,
-} from "@/data/tourFilteringOptions";
+import { durations, toursTypes } from "@/data/tourFilteringOptions";
 import RangeSlider from "../common/RangeSlider";
-import Stars from "../common/Stars";
 import Image from "next/image";
 
 export default function Sidebar() {

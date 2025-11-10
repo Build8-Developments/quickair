@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_meal_plan_meal_inclusions",
+  "info": {
+    "displayName": "Meal Inclusion",
+    "description": "Individual meal or beverage included in a meal plan"
+  },
+  "options": {},
+  "attributes": {
+    "item": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_hotel_coordinates",
+  "info": {
+    "displayName": "Coordinates",
+    "description": "Geographic coordinates for hotel location"
+  },
+  "options": {},
+  "attributes": {
+    "latitude": {
+      "type": "decimal",
+      "required": true
+    },
+    "longitude": {
+      "type": "decimal",
+      "required": true
+    }
+  }
+}
