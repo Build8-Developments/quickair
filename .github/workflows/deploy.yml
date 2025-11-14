@@ -136,10 +136,10 @@ jobs:
             # Install dependencies
             echo "📦 Installing dependencies..."
 
-            # Clean everything for fresh install
-            echo "📦 Cleaning old dependencies and cache..."
-            rm -rf node_modules apps/*/node_modules package-lock.json
-            npm cache clean --force
+            # Aggressive cleanup to avoid symlink conflicts
+            echo "📦 Cleaning old dependencies..."
+            find . -name "node_modules" -type d -prune -exec rm -rf {} +
+            rm -f package-lock.json
 
             # Install with optimized settings for memory-constrained environments
             echo "📦 Running npm install (this may take several minutes)..."
