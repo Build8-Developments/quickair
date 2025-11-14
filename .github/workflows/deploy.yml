@@ -27,17 +27,19 @@ jobs:
             TIMESTAMP=$(date +%Y%m%d_%H%M%S)
             BACKUP_PATH="$BACKUP_DIR/backup_$TIMESTAMP"
 
-            # Create backup directory if it doesn't exist
-            mkdir -p "$BACKUP_DIR"
+            # Create backup directory with proper permissions if it doesn't exist
+            if [ ! -d "$BACKUP_DIR" ]; then
+              sudo mkdir -p "$BACKUP_DIR"
+              sudo chown -R deploy:deploy "$BACKUP_DIR"
+            fi
 
             # Navigate to deployment directory
             cd "$DEPLOY_DIR" || {
               echo "📁 Creating deployment directory..."
-              mkdir -p "$DEPLOY_DIR"
+              sudo mkdir -p "$DEPLOY_DIR"
+              sudo chown -R deploy:deploy "$DEPLOY_DIR"
               cd "$DEPLOY_DIR"
-            }
-
-            # Backup current deployment before updating
+            }            # Backup current deployment before updating
             if [ -d "$DEPLOY_DIR/apps" ]; then
               echo "� Creating backup of current deployment..."
               mkdir -p "$BACKUP_PATH"
@@ -133,11 +135,28 @@ jobs:
 
             # Install dependencies
             echo "📦 Installing dependencies..."
-            npm install
+            rm -rf node_modules package-lock.json
+            npm install --legacy-peer-deps
+
+            # Verify turbo is installed
+            if ! command -v npx turbo &> /dev/null; then
+              echo "❌ Turbo not found after install, installing globally..."
+              npm install -g turbo
+            fi
 
             # Build applications
             echo "🔨 Building applications..."
             npm run build
+
+            # Verify builds were successful
+            if [ ! -d "apps/frontend/.next" ]; then
+              echo "❌ Frontend build failed!"
+              exit 1
+            fi
+            if [ ! -d "apps/strapi/build" ]; then
+              echo "❌ Strapi build failed!"
+              exit 1
+            fi
 
             # Create logs directory
             mkdir -p logs
