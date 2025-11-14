@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_offer_trip_inclusions",
+  "info": {
+    "displayName": "Trip Inclusion",
+    "description": "Items included in an optional trip"
+  },
+  "options": {},
+  "attributes": {
+    "item": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

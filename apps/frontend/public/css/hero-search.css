@@ -1,0 +1,96 @@
+/* Hero Search Dropdown Styles */
+.hero__search {
+  position: relative;
+}
+
+.hero__search-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  min-width: 100%;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  margin-top: 0;
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1001;
+}
+
+.hero__search-loading {
+  padding: 16px;
+  text-align: center;
+  color: #666;
+}
+
+.hero__search-results {
+  padding: 8px 0;
+}
+
+.hero__search-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.hero__search-item:hover {
+  background-color: #f5f5f5;
+}
+
+.hero__search-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.hero__search-icon i {
+  font-size: 18px;
+  color: #05073c;
+}
+
+.hero__search-info {
+  flex: 1;
+}
+
+.hero__search-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: #05073c;
+  margin-bottom: 2px;
+}
+
+.hero__search-type {
+  font-size: 13px;
+  color: #666;
+}
+
+/* RTL Support for Arabic */
+[dir="rtl"] .hero__search-icon {
+  margin-right: 0;
+  margin-left: 12px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .hero__search-dropdown {
+    max-height: 300px;
+  }
+
+  .hero__search-item {
+    padding: 10px 12px;
+  }
+
+  .hero__search-icon {
+    width: 36px;
+    height: 36px;
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "quickair",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3"
+  },
+  "packageManager": "npm@10.0.0",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

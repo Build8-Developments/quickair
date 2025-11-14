@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_hotel_amenities",
+  "info": {
+    "displayName": "Amenity",
+    "description": "Hotel facilities and amenities"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "icon": {
+      "type": "string"
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": [
+        "General",
+        "Room Features",
+        "Activities",
+        "Food & Drink",
+        "Services",
+        "Internet",
+        "Transportation",
+        "Wellness"
+      ],
+      "default": "General"
+    }
+  }
+}

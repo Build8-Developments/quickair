@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_offer_optional_trips",
+  "info": {
+    "displayName": "Optional Trip",
+    "description": "Optional excursions/adventures available with the offer"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "pricePerPerson": {
+      "type": "decimal",
+      "required": true
+    },
+    "currency": {
+      "type": "enumeration",
+      "enum": ["EGP", "USD", "EUR", "GBP"],
+      "required": true
+    },
+    "inclusions": {
+      "type": "component",
+      "repeatable": true,
+      "component": "offer.trip-inclusion"
+    }
+  }
+}

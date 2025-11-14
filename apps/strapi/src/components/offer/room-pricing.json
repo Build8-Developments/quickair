@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_offer_room_pricings",
+  "info": {
+    "displayName": "Room Pricing",
+    "description": "Detailed pricing for different room types and occupancy"
+  },
+  "options": {},
+  "attributes": {
+    "roomType": {
+      "type": "string",
+      "required": true
+    },
+    "singlePrice": {
+      "type": "decimal"
+    },
+    "doublePrice": {
+      "type": "decimal"
+    },
+    "triplePrice": {
+      "type": "decimal"
+    },
+    "notes": {
+      "type": "text"
+    }
+  }
+}

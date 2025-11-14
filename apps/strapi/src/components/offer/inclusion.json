@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_offer_inclusions",
+  "info": {
+    "displayName": "Inclusion",
+    "description": "Items included in the offer"
+  },
+  "options": {},
+  "attributes": {
+    "item": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

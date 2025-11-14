@@ -1,0 +1,68 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/locations",
+      "handler": "location.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/locations/search",
+      "handler": "location.search",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/locations/featured",
+      "handler": "location.featured",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/locations/by-type",
+      "handler": "location.byType",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/locations/:id",
+      "handler": "location.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/locations",
+      "handler": "location.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/locations/:id",
+      "handler": "location.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/locations/:id",
+      "handler": "location.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

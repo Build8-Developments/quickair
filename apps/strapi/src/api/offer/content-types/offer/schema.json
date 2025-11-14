@@ -1,0 +1,164 @@
+{
+  "kind": "collectionType",
+  "collectionName": "offers",
+  "info": {
+    "singularName": "offer",
+    "pluralName": "offers",
+    "displayName": "Offer",
+    "description": "Travel offers with hotel packages and optional trips"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "location": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::location.location",
+      "inversedBy": "offers"
+    },
+    "month": {
+      "type": "enumeration",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "enum": [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+        "يناير",
+        "فبراير",
+        "مارس",
+        "ابريل",
+        "مايو",
+        "يونيو",
+        "يوليو",
+        "أغسطس",
+        "أكتوبر",
+        "نوفبر",
+        "ديسمبر"
+      ]
+    },
+    "year": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "required": true
+    },
+    "gallery": {
+      "type": "media",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "multiple": true,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "pdfFile": {
+      "type": "media",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "multiple": false,
+      "required": true,
+      "allowedTypes": ["files"]
+    },
+    "coverImage": {
+      "type": "media",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "hotelOptions": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "offer.hotel-option",
+      "repeatable": true,
+      "required": true
+    },
+    "inclusions": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "offer.inclusion",
+      "repeatable": true
+    },
+    "exclusions": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "offer.exclusion",
+      "repeatable": true
+    },
+    "policies": {
+      "type": "richtext",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "optionalTrips": {
+      "type": "component",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "component": "offer.optional-trip",
+      "repeatable": true
+    }
+  }
+}

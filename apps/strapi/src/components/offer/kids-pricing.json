@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_offer_kids_pricings",
+  "info": {
+    "displayName": "Kids Pricing",
+    "description": "Age-based pricing for children"
+  },
+  "options": {},
+  "attributes": {
+    "ageFrom": {
+      "type": "integer",
+      "required": true
+    },
+    "ageTo": {
+      "type": "integer",
+      "required": true
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "discount": {
+      "type": "integer"
+    },
+    "isFree": {
+      "type": "boolean",
+      "default": false
+    },
+    "notes": {
+      "type": "text"
+    }
+  }
+}
