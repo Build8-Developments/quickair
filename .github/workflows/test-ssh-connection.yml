@@ -1,0 +1,41 @@
+name: Test SSH Connection
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-connection:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test SSH Connection
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            echo "✅ SSH connection successful!"
+            echo "Current user: $(whoami)"
+            echo "Home directory: $HOME"
+            echo "Current directory: $(pwd)"
+            echo ""
+            echo "Checking deployment directories..."
+            ls -la /var/www/ || echo "⚠️  /var/www/ not accessible"
+            echo ""
+            echo "Checking permissions..."
+            if [ -w /var/www/quickair-frontend ]; then
+              echo "✅ Can write to /var/www/quickair-frontend"
+            else
+              echo "❌ Cannot write to /var/www/quickair-frontend"
+            fi
+            if [ -w /var/www/quickair-strapi ]; then
+              echo "✅ Can write to /var/www/quickair-strapi"
+            else
+              echo "❌ Cannot write to /var/www/quickair-strapi"
+            fi
+            echo ""
+            echo "Node.js version: $(node -v 2>/dev/null || echo 'Node.js not installed')"
+            echo "npm version: $(npm -v 2>/dev/null || echo 'npm not installed')"
+            echo "PM2 status: $(pm2 -v 2>/dev/null || echo 'PM2 not installed')"
