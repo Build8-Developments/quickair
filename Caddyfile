@@ -1,0 +1,49 @@
+# Caddyfile for QuickAir
+# Place this file at /etc/caddy/Caddyfile on your VPS
+
+# Frontend
+quickair.build8.dev {
+    reverse_proxy localhost:3000
+    
+    encode gzip
+    
+    header {
+        X-Frame-Options "SAMEORIGIN"
+        X-Content-Type-Options "nosniff"
+        X-XSS-Protection "1; mode=block"
+    }
+    
+    # Logging
+    log {
+        output file /var/log/caddy/quickair-frontend.log
+        format json
+    }
+}
+
+# Strapi Admin & API
+quickair-admin.build8.dev {
+    reverse_proxy localhost:1337
+    
+    encode gzip
+    
+    # Increase upload size for media files
+    request_body {
+        max_size 100MB
+    }
+    
+    header {
+        X-Frame-Options "SAMEORIGIN"
+        X-Content-Type-Options "nosniff"
+        X-XSS-Protection "1; mode=block"
+        Access-Control-Allow-Origin "https://quickair.build8.dev"
+        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+        Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+        Access-Control-Expose-Headers "Content-Length,Content-Range"
+    }
+    
+    # Logging
+    log {
+        output file /var/log/caddy/quickair-strapi.log
+        format json
+    }
+}

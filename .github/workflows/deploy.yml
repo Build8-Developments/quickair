@@ -1,0 +1,189 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🚀 Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            echo "🔄 Starting deployment..."
+
+            # Set up variables
+            DEPLOY_DIR="/var/www/quickair"
+            BACKUP_DIR="/var/www/quickair-backups"
+            TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+            BACKUP_PATH="$BACKUP_DIR/backup_$TIMESTAMP"
+
+            # Create backup directory if it doesn't exist
+            mkdir -p "$BACKUP_DIR"
+
+            # Navigate to deployment directory
+            cd "$DEPLOY_DIR" || {
+              echo "📁 Creating deployment directory..."
+              mkdir -p "$DEPLOY_DIR"
+              cd "$DEPLOY_DIR"
+            }
+
+            # Backup current deployment before updating
+            if [ -d "$DEPLOY_DIR/apps" ]; then
+              echo "� Creating backup of current deployment..."
+              mkdir -p "$BACKUP_PATH"
+              
+              # Backup Strapi database
+              if [ -f "$DEPLOY_DIR/apps/strapi/.tmp/data.db" ]; then
+                echo "💾 Backing up Strapi database..."
+                mkdir -p "$BACKUP_PATH/strapi-db"
+                cp -r "$DEPLOY_DIR/apps/strapi/.tmp" "$BACKUP_PATH/strapi-db/"
+              fi
+              
+              # Backup Strapi uploads
+              if [ -d "$DEPLOY_DIR/apps/strapi/public/uploads" ]; then
+                echo "💾 Backing up Strapi uploads..."
+                mkdir -p "$BACKUP_PATH/strapi-uploads"
+                cp -r "$DEPLOY_DIR/apps/strapi/public/uploads" "$BACKUP_PATH/strapi-uploads/"
+              fi
+              
+              # Backup .env files
+              echo "💾 Backing up environment files..."
+              cp "$DEPLOY_DIR/apps/strapi/.env" "$BACKUP_PATH/strapi.env" 2>/dev/null || true
+              cp "$DEPLOY_DIR/apps/frontend/.env.local" "$BACKUP_PATH/frontend.env.local" 2>/dev/null || true
+              
+              # Create backup manifest
+              cat > "$BACKUP_PATH/manifest.txt" << MANIFEST
+            Backup created: $(date)
+            Git commit: $(cd "$DEPLOY_DIR" && git rev-parse HEAD 2>/dev/null || echo "N/A")
+            Git branch: $(cd "$DEPLOY_DIR" && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "N/A")
+            MANIFEST
+              
+              echo "✅ Backup created at: $BACKUP_PATH"
+              
+              # Keep only last 5 backups
+              echo "🧹 Cleaning old backups (keeping last 5)..."
+              cd "$BACKUP_DIR"
+              ls -t | tail -n +6 | xargs -r rm -rf
+            fi
+
+            # Return to deployment directory
+            cd "$DEPLOY_DIR"
+
+            # Clone or pull latest code
+            if [ -d ".git" ]; then
+              echo "📥 Pulling latest changes..."
+              git fetch origin
+              git reset --hard origin/main
+              git clean -fd
+            else
+              echo "📦 Cloning repository..."
+              git clone https://github.com/Build8-Developments/quickair.git .
+            fi
+
+            # Restore database and uploads from backup if this is a fresh clone
+            if [ ! -f "$DEPLOY_DIR/apps/strapi/.tmp/data.db" ] && [ -n "$(ls -A $BACKUP_DIR 2>/dev/null)" ]; then
+              LATEST_BACKUP=$(ls -t "$BACKUP_DIR" | head -1)
+              if [ -f "$BACKUP_DIR/$LATEST_BACKUP/strapi-db/.tmp/data.db" ]; then
+                echo "♻️  Restoring database from latest backup..."
+                mkdir -p "$DEPLOY_DIR/apps/strapi/.tmp"
+                cp -r "$BACKUP_DIR/$LATEST_BACKUP/strapi-db/.tmp/"* "$DEPLOY_DIR/apps/strapi/.tmp/"
+              fi
+              if [ -d "$BACKUP_DIR/$LATEST_BACKUP/strapi-uploads/uploads" ]; then
+                echo "♻️  Restoring uploads from latest backup..."
+                mkdir -p "$DEPLOY_DIR/apps/strapi/public"
+                cp -r "$BACKUP_DIR/$LATEST_BACKUP/strapi-uploads/uploads" "$DEPLOY_DIR/apps/strapi/public/"
+              fi
+            fi
+
+            # Create .env files
+            echo "📝 Creating environment files..."
+
+            # Strapi .env
+            cat > apps/strapi/.env << 'EOF'
+            HOST=${{ secrets.STRAPI_HOST }}
+            PORT=${{ secrets.STRAPI_PORT }}
+            APP_KEYS=${{ secrets.STRAPI_APP_KEYS }}
+            API_TOKEN_SALT=${{ secrets.STRAPI_API_TOKEN_SALT }}
+            ADMIN_JWT_SECRET=${{ secrets.STRAPI_ADMIN_JWT_SECRET }}
+            TRANSFER_TOKEN_SALT=${{ secrets.STRAPI_TRANSFER_TOKEN_SALT }}
+            ENCRYPTION_KEY=${{ secrets.STRAPI_ENCRYPTION_KEY }}
+            DATABASE_CLIENT=${{ secrets.STRAPI_DATABASE_CLIENT }}
+            DATABASE_FILENAME=${{ secrets.STRAPI_DATABASE_FILENAME }}
+            JWT_SECRET=${{ secrets.STRAPI_JWT_SECRET }}
+            EOF
+
+            # Frontend .env.local
+            cat > apps/frontend/.env.local << 'EOF'
+            NEXT_PUBLIC_STRAPI_URL=${{ secrets.NEXT_PUBLIC_STRAPI_URL }}
+            NEXT_PUBLIC_STRAPI_API_TOKEN=${{ secrets.NEXT_PUBLIC_STRAPI_API_TOKEN }}
+            NEXT_PUBLIC_DEBUG=${{ secrets.NEXT_PUBLIC_DEBUG }}
+            NEXT_PUBLIC_ENV=${{ secrets.NEXT_PUBLIC_ENV }}
+            NEXT_PUBLIC_SITE_URL=${{ secrets.NEXT_PUBLIC_SITE_URL }}
+            EOF
+
+            # Install dependencies
+            echo "📦 Installing dependencies..."
+            npm install
+
+            # Build applications
+            echo "🔨 Building applications..."
+            npm run build
+
+            # Setup PM2 ecosystem file if it doesn't exist
+            if [ ! -f "ecosystem.config.js" ]; then
+              echo "⚙️  Creating PM2 ecosystem file..."
+              cat > ecosystem.config.js << 'EOFPM2'
+            module.exports = {
+              apps: [
+                {
+                  name: 'quickair-strapi',
+                  cwd: '/var/www/quickair/apps/strapi',
+                  script: 'npm',
+                  args: 'start',
+                  env: {
+                    NODE_ENV: 'production',
+                  },
+                  instances: 1,
+                  autorestart: true,
+                  watch: false,
+                  max_memory_restart: '1G',
+                },
+                {
+                  name: 'quickair-frontend',
+                  cwd: '/var/www/quickair/apps/frontend',
+                  script: 'npm',
+                  args: 'start',
+                  env: {
+                    NODE_ENV: 'production',
+                    PORT: 3000,
+                  },
+                  instances: 1,
+                  autorestart: true,
+                  watch: false,
+                  max_memory_restart: '1G',
+                },
+              ],
+            };
+            EOFPM2
+            fi
+
+            # Restart applications with PM2
+            echo "🔄 Restarting applications..."
+            pm2 delete all || true
+            pm2 start ecosystem.config.js
+            pm2 save
+
+            echo "✅ Deployment completed successfully!"
+            echo ""
+            echo "📊 Application Status:"
+            pm2 status
