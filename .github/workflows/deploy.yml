@@ -135,20 +135,20 @@ jobs:
 
             # Install dependencies
             echo "📦 Installing dependencies..."
-            rm -rf node_modules package-lock.json apps/*/node_modules
 
-            # Install with force to resolve date-fns issue
-            npm install --legacy-peer-deps --force
-
-            # Verify turbo is installed
-            if ! command -v npx turbo &> /dev/null; then
-              echo "❌ Turbo not found after install, installing globally..."
-              npm install -g turbo
+            # Only clean if node_modules exists and is from a different version
+            if [ -f "package-lock.json" ]; then
+              echo "📦 Cleaning old dependencies..."
+              rm -rf node_modules apps/*/node_modules
             fi
+
+            # Install with optimized settings for memory-constrained environments
+            echo "📦 Running npm install (this may take several minutes)..."
+            NODE_OPTIONS="--max-old-space-size=2048" npm install --legacy-peer-deps --prefer-offline --no-audit --progress=false
 
             # Build applications
             echo "🔨 Building applications..."
-            npm run build
+            NODE_OPTIONS="--max-old-space-size=2048" npm run build
 
             # Verify builds were successful
             if [ ! -d "apps/frontend/.next" ]; then
