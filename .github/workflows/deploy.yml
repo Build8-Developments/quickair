@@ -146,6 +146,12 @@ jobs:
             echo "📦 Running npm install (this may take several minutes)..."
             NODE_OPTIONS="--max-old-space-size=2048" npm install --legacy-peer-deps --prefer-offline --no-audit --progress=false
 
+            # Rebuild native modules for the correct platform
+            echo "🔧 Rebuilding native modules..."
+            cd apps/strapi
+            npm rebuild @swc/core better-sqlite3
+            cd ../..
+
             # Build applications
             echo "🔨 Building applications..."
             NODE_OPTIONS="--max-old-space-size=2048" npm run build
