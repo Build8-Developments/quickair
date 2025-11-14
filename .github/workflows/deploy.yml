@@ -158,10 +158,12 @@ jobs:
               echo "❌ Frontend build failed!"
               exit 1
             fi
-            if [ ! -d "apps/strapi/build" ]; then
+            if [ ! -d "apps/strapi/dist" ]; then
               echo "❌ Strapi build failed!"
               exit 1
             fi
+
+            echo "✅ Both applications built successfully!"
 
             # Create logs directory
             mkdir -p logs
