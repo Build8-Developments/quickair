@@ -135,8 +135,10 @@ jobs:
 
             # Install dependencies
             echo "📦 Installing dependencies..."
-            rm -rf node_modules package-lock.json
-            npm install --legacy-peer-deps
+            rm -rf node_modules package-lock.json apps/*/node_modules
+
+            # Install with force to resolve date-fns issue
+            npm install --legacy-peer-deps --force
 
             # Verify turbo is installed
             if ! command -v npx turbo &> /dev/null; then
