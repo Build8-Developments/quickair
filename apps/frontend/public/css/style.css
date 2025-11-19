@@ -1,6 +1,7 @@
 @import "./vendors.css";
 @import "./main.css";
 @import "./custom.css";
+@import "./flight-tabs.css";
 
 @import "swiper/css";
 @import "swiper/css/pagination";

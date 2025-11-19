@@ -1,0 +1,96 @@
+{
+  "common": {
+    "search": "بحث",
+    "reset": "إعادة تعيين",
+    "apply": "تطبيق",
+    "loading": "جار التحميل..."
+  },
+  "hero": {
+    "subtitle": "موقع واحد، أكثر من 300,000 تجربة لا تُنسى",
+    "title": {
+      "line1": "استكشف أبعد",
+      "line2": "من كل أفق",
+      "line3": "تحلم به!"
+    }
+  },
+  "navbar": {
+    "home": "الرئيسية",
+    "tour": "الجولات",
+    "createTrip": "أنشئ رحلتك",
+    "about": "من نحن",
+    "contact": "اتصل بنا",
+    "help": "مساعدة",
+    "offers": "العروض",
+    "hotels": "الفنادق",
+    "haj": "الحج",
+    "omra": "العمرة",
+    "destinations": "الوجهات",
+    "tourListStyle": "قوائم الجولات",
+    "tourSingleStyle": "صفحات الجولات",
+    "bookingPages": "صفحات الحجز",
+    "tourList": "قائمة الجولات",
+    "tourSingle": "صفحة الجولة",
+    "offersDesc": "عروض حصرية",
+    "hotelsDesc": "أماكن الإقامة",
+    "hajDesc": "رحلة مقدسة",
+    "omraDesc": "رحلة روحانية",
+    "destinationsDesc": "استكشف الوجهات الرائجة حول العالم",
+    "promoCard1Subtitle": "استمتع بخصم يصل إلى",
+    "promoCard1Title": "60٪ خصم",
+    "promoCard1Text": "على حجزك",
+    "promoCard2Subtitle": "خصم 80٪",
+    "promoCard2Title": "هل أنت مستعد لجولة تركيا"
+  },
+  "flightSearch": {
+    "tripTypes": {
+      "roundTrip": "ذهاب وعودة",
+      "oneWay": "ذهاب فقط",
+      "multiCity": "متعدد المدن"
+    },
+    "fields": {
+      "from": "من",
+      "to": "إلى",
+      "departure": "المغادرة",
+      "return": "العودة",
+      "passengersClass": "المسافرون والدرجة"
+    },
+    "placeholders": {
+      "departureAirport": "مطار المغادرة",
+      "arrivalAirport": "مطار الوصول",
+      "selectDate": "اختر التاريخ"
+    },
+    "buttons": {
+      "addFlight": "إضافة رحلة أخرى",
+      "searchFlights": "ابحث عن رحلات"
+    },
+    "passengers": {
+      "traveller": "مسافر",
+      "travellers": "مسافرون",
+      "adults": "البالغون",
+      "children": "الأطفال",
+      "infants": "الرضع",
+      "ages": {
+        "adults": "16+ سنة",
+        "children": "2-15 سنة",
+        "infants": "0-23 شهر"
+      }
+    },
+    "classes": {
+      "travelClass": "درجة السفر",
+      "economy": "الاقتصادية",
+      "premiumEconomy": "الاقتصادية المميزة",
+      "business": "رجال الأعمال",
+      "first": "الأولى"
+    },
+    "airport": {
+      "searchPlaceholder": "ابحث عن المطارات...",
+      "noResults": "لم يتم العثور على مطارات"
+    }
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "الصفحة غير موجودة",
+    "description": "لم نتمكن من العثور على الصفحة التي تبحث عنها. قد تكون الصفحة قد تم نقلها أو حذفها أو أن الرابط غير صحيح.",
+    "button": "العودة للرئيسية"
+  }
+}

@@ -1,9 +1,11 @@
 "use client";
 
-import { destinationsData } from "@/data/mobileMenu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Tag, Hotel, Compass, MapPin, Globe } from "lucide-react";
 
 const socialMediaLinks = [
   { id: 1, class: "icon-facebook", href: "#" },
@@ -14,6 +16,9 @@ const socialMediaLinks = [
 export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen }) {
   const [activeSub, setActiveSub] = useState("");
   const pathname = usePathname();
+  const { t } = useTranslation();
+  const { language } = useLanguage();
+  const isRTL = language === "ar";
   return (
     <div
       data-aos="fade"
@@ -48,7 +53,7 @@ export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen }) {
             style={{ maxHeight: "calc(100vh - 262px)", overflowY: "auto" }}
           >
             <li className="menuNav__item">
-              <Link href="/">Home</Link>
+              <Link href="/">{t("navbar.home")}</Link>
             </li>
 
             <li className="menuNav__item -has-submenu js-has-submenu">
@@ -57,47 +62,124 @@ export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen }) {
                   setActiveSub((pre) => (pre == "Tour" ? "" : "Tour"))
                 }
               >
-                <span>Tour</span>
+                <span>{t("navbar.tour")}</span>
                 <i
-                  style={
-                    activeSub == "Tour"
-                      ? { transform: "rotate(90deg)", transition: "0.3s" }
-                      : { transform: "rotate(0deg)", transition: "0.3s" }
-                  }
+                  style={{
+                    transform:
+                      activeSub == "Tour" ? "rotate(90deg)" : "rotate(0deg)",
+                    transition: "transform 0.6s ease",
+                  }}
                   className="icon-chevron-right"
                 ></i>
               </a>
 
               <ul
-                style={
-                  activeSub == "Tour"
-                    ? { maxHeight: "1200px", transition: "0.6s" }
-                    : { maxHeight: "0px", transition: "0.6s" }
-                }
+                className="mobile-tour-submenu"
+                style={{
+                  maxHeight: activeSub == "Tour" ? "1200px" : "0px",
+                  transition: "max-height 0.6s ease, padding 0.6s ease",
+                }}
+                dir={isRTL ? "rtl" : "ltr"}
               >
-                {destinationsData.map((destination) => (
-                  <li key={destination.id}>
-                    <Link
-                      style={{ paddingLeft: "15px", fontSize: "17px" }}
-                      href={destination.href}
-                    >
-                      {destination.title}
-                    </Link>
-                  </li>
-                ))}
+                <li className="mobile-bento-item">
+                  <Link href="/offers" className="mobile-bento-link">
+                    <div className="mobile-bento-icon">
+                      <Tag size={18} strokeWidth={1.5} />
+                    </div>
+                    <div className="mobile-bento-content">
+                      <div className="mobile-bento-title">
+                        {t("navbar.offers")}
+                      </div>
+                      <div className="mobile-bento-desc">
+                        {t("navbar.offersDesc")}
+                      </div>
+                    </div>
+                  </Link>
+                </li>
+
+                <li className="mobile-bento-item">
+                  <Link href="/hotels" className="mobile-bento-link">
+                    <div className="mobile-bento-icon">
+                      <Hotel size={18} strokeWidth={1.5} />
+                    </div>
+                    <div className="mobile-bento-content">
+                      <div className="mobile-bento-title">
+                        {t("navbar.hotels")}
+                      </div>
+                      <div className="mobile-bento-desc">
+                        {t("navbar.hotelsDesc")}
+                      </div>
+                    </div>
+                  </Link>
+                </li>
+
+                <li className="mobile-bento-item">
+                  <Link href="/haj" className="mobile-bento-link">
+                    <div className="mobile-bento-icon">
+                      <Compass size={18} strokeWidth={1.5} />
+                    </div>
+                    <div className="mobile-bento-content">
+                      <div className="mobile-bento-title">
+                        {t("navbar.haj")}
+                      </div>
+                      <div className="mobile-bento-desc">
+                        {t("navbar.hajDesc")}
+                      </div>
+                    </div>
+                  </Link>
+                </li>
+
+                <li className="mobile-bento-item">
+                  <Link href="/omra" className="mobile-bento-link">
+                    <div className="mobile-bento-icon">
+                      <MapPin size={18} strokeWidth={1.5} />
+                    </div>
+                    <div className="mobile-bento-content">
+                      <div className="mobile-bento-title">
+                        {t("navbar.omra")}
+                      </div>
+                      <div className="mobile-bento-desc">
+                        {t("navbar.omraDesc")}
+                      </div>
+                    </div>
+                  </Link>
+                </li>
+
+                <li className="mobile-bento-item mobile-bento-featured">
+                  <a
+                    href="#trending_destinations"
+                    className="mobile-bento-link"
+                  >
+                    <div className="mobile-bento-icon">
+                      <Globe size={20} strokeWidth={1.5} />
+                    </div>
+                    <div className="mobile-bento-content">
+                      <div className="mobile-bento-title">
+                        {t("navbar.destinations")}
+                      </div>
+                      <div className="mobile-bento-desc">
+                        {t("navbar.destinationsDesc")}
+                      </div>
+                    </div>
+                  </a>
+                </li>
               </ul>
             </li>
 
             <li className="menuNav__item">
-              <Link href="/flow">Create your trip</Link>
+              <Link href="/flow">{t("navbar.createTrip")}</Link>
             </li>
 
             <li className="menuNav__item">
-              <Link href="/about">About</Link>
+              <Link href="/about">{t("navbar.about")}</Link>
             </li>
 
             <li className="menuNav__item">
-              <Link href="/contact">Contact</Link>
+              <Link href="/contact">{t("navbar.contact")}</Link>
+            </li>
+
+            <li className="menuNav__item">
+              <Link href="/contact">{t("navbar.help")}</Link>
             </li>
           </ul>
         </div>

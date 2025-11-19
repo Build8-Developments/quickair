@@ -1,6 +1,7 @@
 import ScrollToTop from "@/components/common/ScrollToTop";
 import "../public/css/style.css";
 import "../public/css/hero-search.css";
+import "../public/css/mega-menu-cards.css";
 
 import { Rubik } from "next/font/google";
 import ScrollTopBehaviour from "@/components/common/ScrollTopBehavier";

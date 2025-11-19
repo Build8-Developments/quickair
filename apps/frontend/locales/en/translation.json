@@ -1,0 +1,96 @@
+{
+  "common": {
+    "search": "Search",
+    "reset": "Reset",
+    "apply": "Apply",
+    "loading": "Loading..."
+  },
+  "hero": {
+    "subtitle": "One site, 300,000+ experiences you'll remember",
+    "title": {
+      "line1": "Explore Beyond",
+      "line2": "Every Horizon",
+      "line3": "You Dream!"
+    }
+  },
+  "navbar": {
+    "home": "Home",
+    "tour": "Tour",
+    "createTrip": "Create your trip",
+    "about": "About",
+    "contact": "Contact",
+    "help": "Help",
+    "offers": "Offers",
+    "hotels": "Hotels",
+    "haj": "Haj",
+    "omra": "Omra",
+    "destinations": "Destinations",
+    "tourListStyle": "Tour List Style",
+    "tourSingleStyle": "Tour Single Style",
+    "bookingPages": "Booking Pages",
+    "tourList": "Tour list",
+    "tourSingle": "Tour single",
+    "offersDesc": "Exclusive deals",
+    "hotelsDesc": "Accommodations",
+    "hajDesc": "Sacred pilgrimage",
+    "omraDesc": "Spiritual journey",
+    "destinationsDesc": "Explore trending destinations worldwide",
+    "promoCard1Subtitle": "Enjoy Upto",
+    "promoCard1Title": "60 % OFF",
+    "promoCard1Text": "on Your Booking",
+    "promoCard2Subtitle": "80% Discount",
+    "promoCard2Title": "Are You Ready To Turkey Tour"
+  },
+  "flightSearch": {
+    "tripTypes": {
+      "roundTrip": "Round Trip",
+      "oneWay": "One Way",
+      "multiCity": "Multi City"
+    },
+    "fields": {
+      "from": "From",
+      "to": "To",
+      "departure": "Departure",
+      "return": "Return",
+      "passengersClass": "Passengers & Class"
+    },
+    "placeholders": {
+      "departureAirport": "Departure Airport",
+      "arrivalAirport": "Arrival Airport",
+      "selectDate": "Select Date"
+    },
+    "buttons": {
+      "addFlight": "Add Another Flight",
+      "searchFlights": "Search Flights"
+    },
+    "passengers": {
+      "traveller": "Traveller",
+      "travellers": "Travellers",
+      "adults": "Adults",
+      "children": "Children",
+      "infants": "Infants",
+      "ages": {
+        "adults": "16+ years",
+        "children": "2-15 years",
+        "infants": "0-23 months"
+      }
+    },
+    "classes": {
+      "travelClass": "Travel Class",
+      "economy": "Economy",
+      "premiumEconomy": "Premium Economy",
+      "business": "Business",
+      "first": "First"
+    },
+    "airport": {
+      "searchPlaceholder": "Search airports...",
+      "noResults": "No airports found"
+    }
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Page Not Found",
+    "description": "We couldn't find the page you're looking for. The page might have been moved, deleted, or the URL might be incorrect.",
+    "button": "Return to Home"
+  }
+}

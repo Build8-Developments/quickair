@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Menu from "../components/Menu";
 import MobileMenu from "../components/MobileMenu";
 import LanguageSwitcherButton from "@/components/common/LanguageSwitcherButton";
@@ -11,6 +12,7 @@ import { useRouter } from "next/navigation";
 
 export default function Header3() {
   const router = useRouter();
+  const { t } = useTranslation();
   const { language } = useLanguage();
   const pageNavigate = (pageName) => {
     router.push(pageName);
@@ -42,15 +44,6 @@ export default function Header3() {
         className={`header -type-3 js-header ${addClass ? "-is-sticky" : ""}`}
       >
         <div className="header__container container">
-          <div className="headerMobile__left">
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              className="header__menuBtn js-menu-button"
-            >
-              <i className="icon-main-menu"></i>
-            </button>
-          </div>
-
           <div className="header__logo">
             <Link href="/" className="header__logo">
               <Image
@@ -71,10 +64,16 @@ export default function Header3() {
             <LanguageSwitcherButton />
             <Link
               href="/contact"
-              className="button -sm -outline-dark-1 rounded-200 text-dark-1 ml-30"
+              className="button -sm -outline-dark-1 rounded-200 text-dark-1 header__help-btn"
             >
-              Help
+              {t("navbar.help")}
             </Link>
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="header__menuBtn js-menu-button"
+            >
+              <i className="icon-main-menu"></i>
+            </button>
           </div>
         </div>
       </header>

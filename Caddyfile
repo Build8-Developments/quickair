@@ -35,10 +35,6 @@ quickair-admin.build8.dev {
         X-Frame-Options "SAMEORIGIN"
         X-Content-Type-Options "nosniff"
         X-XSS-Protection "1; mode=block"
-        Access-Control-Allow-Origin "https://quickair.build8.dev"
-        Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
-        Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
-        Access-Control-Expose-Headers "Content-Length,Content-Range"
     }
     
     # Logging

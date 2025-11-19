@@ -1,0 +1,903 @@
+/* Override main.css grid for bento layout */
+.header .desktopNavMega__lists {
+  display: block !important;
+  grid-template-columns: unset !important;
+  gap: 0 !important;
+}
+
+/* Bento Grid Layout */
+.bento-menu-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  grid-template-rows: repeat(3, auto) !important;
+  gap: 10px !important;
+}
+
+/* Bento Menu Item */
+.bento-menu-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(249, 250, 251, 0.8) 100%
+  );
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  color: #2d3748;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  min-height: 100px;
+  width: 100%;
+  text-align: center;
+}
+
+.bento-menu-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(255, 255, 255, 0.3) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.bento-menu-item:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(249, 250, 251, 1) 100%
+  );
+  border-color: rgba(0, 0, 0, 0.12);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.bento-menu-item:hover::before {
+  opacity: 1;
+}
+
+/* Icon Container */
+.bento-menu-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f1f3f5 0%, #e9ecef 100%);
+  color: #495057;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.bento-menu-item:hover .bento-menu-icon {
+  background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+  color: #212529;
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Content */
+.bento-menu-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.bento-menu-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.bento-menu-description {
+  font-size: 12px;
+  color: #718096;
+  line-height: 1.5;
+}
+
+/* Featured Item (Destinations) - Purple accent spanning 2 columns */
+.bento-menu-featured {
+  grid-column: span 2;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.08) 0%,
+    rgba(139, 92, 246, 0.08) 100%
+  );
+  border-color: rgba(99, 102, 241, 0.2);
+  min-height: 110px;
+}
+
+.bento-menu-featured:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.12) 0%,
+    rgba(139, 92, 246, 0.12) 100%
+  );
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.bento-menu-featured .bento-menu-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.15) 0%,
+    rgba(139, 92, 246, 0.15) 100%
+  );
+  color: #6366f1;
+}
+
+.bento-menu-featured:hover .bento-menu-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.25) 0%,
+    rgba(139, 92, 246, 0.25) 100%
+  );
+  color: #4f46e5;
+}
+
+.bento-menu-featured .bento-menu-title {
+  color: #4338ca;
+}
+
+.bento-menu-featured .bento-menu-description {
+  color: #6366f1;
+  opacity: 0.9;
+}
+
+/* RTL Support */
+[dir="rtl"] .bento-menu-item {
+  align-items: center;
+}
+
+[dir="rtl"] .bento-menu-content {
+  text-align: center;
+}
+
+/* Animation */
+.desktopNav__item:hover .bento-menu-item {
+  animation: bentoSlideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+.desktopNav__item:hover .bento-menu-item:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.desktopNav__item:hover .bento-menu-item:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.desktopNav__item:hover .bento-menu-item:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.desktopNav__item:hover .bento-menu-item:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.desktopNav__item:hover .bento-menu-item:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+@keyframes bentoSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+  .bento-menu-grid {
+    gap: 8px;
+  }
+
+  .bento-menu-item {
+    padding: 14px;
+    min-height: 90px;
+  }
+
+  .bento-menu-featured {
+    min-height: 100px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .bento-menu-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .bento-menu-featured {
+    grid-column: span 1;
+  }
+
+  .bento-menu-item {
+    padding: 12px;
+    min-height: 80px;
+  }
+
+  .bento-menu-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .bento-menu-title {
+    font-size: 14px;
+  }
+
+  .bento-menu-description {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .bento-menu-item {
+    padding: 10px;
+    min-height: 70px;
+  }
+
+  .bento-menu-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .bento-menu-title {
+    font-size: 13px;
+  }
+
+  .bento-menu-description {
+    font-size: 10px;
+  }
+}
+
+/* ========================================
+   MOBILE MENU BENTO STYLES
+   ======================================== */
+
+.mobile-tour-submenu {
+  padding: 0;
+  overflow: hidden;
+}
+
+.mobile-tour-submenu[style*="maxHeight: 0px"] {
+  padding: 0 !important;
+}
+
+.mobile-tour-submenu[style*="maxHeight: 1200px"] {
+  padding: 8px !important;
+}
+
+.mobile-bento-item {
+  list-style: none;
+  margin-bottom: 6px;
+}
+
+.mobile-bento-item:last-child {
+  margin-bottom: 0;
+}
+
+.mobile-bento-link {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 14px 16px !important;
+  border-radius: 8px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(249, 250, 251, 0.8) 100%
+  );
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.mobile-bento-link:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(249, 250, 251, 1) 100%
+  );
+  border-color: rgba(0, 0, 0, 0.12);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+[dir="rtl"] .mobile-bento-link:hover {
+  transform: translateX(-4px);
+}
+
+.mobile-bento-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #f1f3f5 0%, #e9ecef 100%);
+  color: #495057;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.mobile-bento-link:hover .mobile-bento-icon {
+  background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+  color: #212529;
+  transform: scale(1.1);
+}
+
+.mobile-bento-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.mobile-bento-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 2px;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+.mobile-bento-desc {
+  font-size: 11px;
+  color: #718096;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Featured Item (Destinations) in Mobile */
+.mobile-bento-featured .mobile-bento-link {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.08) 0%,
+    rgba(139, 92, 246, 0.08) 100%
+  );
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.mobile-bento-featured .mobile-bento-link:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.12) 0%,
+    rgba(139, 92, 246, 0.12) 100%
+  );
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.mobile-bento-featured .mobile-bento-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.15) 0%,
+    rgba(139, 92, 246, 0.15) 100%
+  );
+  color: #6366f1;
+  width: 40px;
+  height: 40px;
+}
+
+.mobile-bento-featured .mobile-bento-link:hover .mobile-bento-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.25) 0%,
+    rgba(139, 92, 246, 0.25) 100%
+  );
+  color: #4f46e5;
+}
+
+.mobile-bento-featured .mobile-bento-title {
+  color: #4338ca;
+}
+
+.mobile-bento-featured .mobile-bento-desc {
+  color: #6366f1;
+  opacity: 0.9;
+  white-space: normal;
+}
+
+/* RTL Support for Mobile */
+[dir="rtl"] .mobile-bento-content {
+  text-align: right;
+}
+
+[dir="rtl"] .mobile-bento-link {
+  flex-direction: row-reverse;
+}
+
+/* ========================================
+   RESPONSIVE IMPROVEMENTS FOR NAVBAR
+   ======================================== */
+
+/* Improved Desktop Mega Menu Responsiveness */
+@media (max-width: 1400px) {
+  .header .desktopNavMega {
+    width: 90vw !important;
+    max-width: 900px !important;
+  }
+
+  .header .desktopNavMega__container {
+    grid-template-columns: 1fr 350px !important;
+    gap: 30px !important;
+    padding: 25px !important;
+  }
+
+  [dir="rtl"] .header .desktopNavMega__container {
+    grid-template-columns: 350px 1fr !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .header .desktopNavMega {
+    width: 95vw !important;
+    max-width: 800px !important;
+  }
+
+  .header .desktopNavMega__container {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    padding: 20px !important;
+  }
+
+  .header .desktopNavMega__info {
+    display: none !important;
+  }
+
+  .bento-menu-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .bento-menu-featured {
+    grid-column: span 1 !important;
+  }
+}
+
+/* Tablet and small desktop adjustments */
+@media (max-width: 991px) {
+  /* Keep desktop nav visible but hide mega menu promo images */
+  .header .desktopNavMega__info {
+    display: none !important;
+  }
+} /* Mobile optimizations */
+@media (max-width: 768px) {
+  .mobile-bento-link {
+    padding: 12px 14px !important;
+    gap: 10px !important;
+  }
+
+  .mobile-bento-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .mobile-bento-featured .mobile-bento-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mobile-bento-title {
+    font-size: 13px;
+  }
+
+  .mobile-bento-desc {
+    font-size: 10px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 576px) {
+  .mobile-tour-submenu[style*="maxHeight: 1200px"] {
+    padding: 6px !important;
+  }
+
+  .mobile-bento-item {
+    margin-bottom: 4px;
+  }
+
+  .mobile-bento-link {
+    padding: 10px 12px !important;
+    gap: 8px !important;
+  }
+
+  .mobile-bento-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .mobile-bento-featured .mobile-bento-icon {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* ========================================
+   HEADER LAYOUT IMPROVEMENTS
+   ======================================== */
+
+/* Apply proper layout for screens below 2000px */
+@media (max-width: 1999px) {
+  /* Ensure proper flex layout */
+  .header__container {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+
+  .header__logo {
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .header__right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+}
+
+/* Specific positioning for smaller screens */
+@media (max-width: 1199px) {
+  /* EN: Logo left, Actions right */
+  .header__logo {
+    order: 1;
+    margin-right: auto !important;
+  }
+
+  .header__right {
+    order: 2;
+    margin-left: 0 !important;
+  }
+
+  /* AR: Actions right, Logo left */
+  [dir="rtl"] .header__logo {
+    order: 1;
+    margin-right: 0 !important;
+    margin-left: auto !important;
+  }
+
+  [dir="rtl"] .header__right {
+    order: 2;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* Remove old mobile left container on all screens */
+.headerMobile__left {
+  display: none !important;
+}
+
+/* Hide menu button on large screens, show Help button */
+@media (min-width: 1200px) {
+  .header__menuBtn {
+    display: none !important;
+  }
+
+  .header__help-btn {
+    display: inline-flex !important;
+  }
+}
+
+/* Show menu button on smaller screens, hide Help button */
+@media (max-width: 1199px) {
+  .header__menuBtn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 8px !important;
+  }
+
+  .header__help-btn {
+    display: none !important;
+  }
+}
+
+/* ========================================
+   MOBILE MENU DIRECTION BASED ON LANGUAGE
+   ======================================== */
+
+/* Default (English): Menu opens from left */
+.menu.js-menu {
+  left: 0;
+  right: auto;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.menu.js-menu.-is-active {
+  transform: translateX(0);
+}
+
+/* RTL (Arabic): Menu opens from right */
+[dir="rtl"] .menu.js-menu {
+  left: auto;
+  right: 0;
+  transform: translateX(100%);
+}
+
+[dir="rtl"] .menu.js-menu.-is-active {
+  transform: translateX(0);
+} /* Bento Grid Layout */
+.elegant-menu-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, auto);
+  gap: 10px;
+}
+
+/* Bento Menu Item */
+.elegant-menu-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(249, 250, 251, 0.8) 100%
+  );
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  color: #2d3748;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  min-height: 100px;
+}
+
+.elegant-menu-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(255, 255, 255, 0.3) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.elegant-menu-item:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(249, 250, 251, 1) 100%
+  );
+  border-color: rgba(0, 0, 0, 0.12);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.elegant-menu-item:hover::before {
+  opacity: 1;
+}
+
+/* Icon Container */
+.elegant-menu-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f1f3f5 0%, #e9ecef 100%);
+  color: #495057;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.elegant-menu-item:hover .elegant-menu-icon {
+  background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+  color: #212529;
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Content */
+.elegant-menu-content {
+  position: relative;
+  z-index: 1;
+}
+
+.elegant-menu-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.elegant-menu-description {
+  font-size: 12px;
+  color: #718096;
+  line-height: 1.5;
+}
+
+/* Featured Item (Destinations) - Spans 2 columns with purple accent */
+.elegant-menu-featured {
+  grid-column: span 2;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.08) 0%,
+    rgba(139, 92, 246, 0.08) 100%
+  );
+  border-color: rgba(99, 102, 241, 0.2);
+  min-height: 110px;
+}
+
+.elegant-menu-featured:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.12) 0%,
+    rgba(139, 92, 246, 0.12) 100%
+  );
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.elegant-menu-featured .elegant-menu-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.15) 0%,
+    rgba(139, 92, 246, 0.15) 100%
+  );
+  color: #6366f1;
+}
+
+.elegant-menu-featured:hover .elegant-menu-icon {
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.25) 0%,
+    rgba(139, 92, 246, 0.25) 100%
+  );
+  color: #4f46e5;
+}
+
+.elegant-menu-featured .elegant-menu-title {
+  color: #4338ca;
+}
+
+.elegant-menu-featured .elegant-menu-description {
+  color: #6366f1;
+  opacity: 0.9;
+}
+
+/* RTL Support */
+[dir="rtl"] .elegant-menu-item {
+  align-items: flex-end;
+}
+
+[dir="rtl"] .elegant-menu-content {
+  text-align: right;
+}
+
+/* Animation */
+.desktopNav__item:hover .elegant-menu-item {
+  animation: bentoSlideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+}
+
+.desktopNav__item:hover .elegant-menu-item:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.desktopNav__item:hover .elegant-menu-item:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.desktopNav__item:hover .elegant-menu-item:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.desktopNav__item:hover .elegant-menu-item:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.desktopNav__item:hover .elegant-menu-item:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+@keyframes bentoSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsive */
+@media (max-width: 1400px) {
+  .elegant-menu-wrapper {
+    gap: 8px;
+  }
+
+  .elegant-menu-item {
+    padding: 14px;
+    min-height: 90px;
+  }
+
+  .elegant-menu-featured {
+    min-height: 100px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .elegant-menu-wrapper {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .elegant-menu-featured {
+    grid-column: span 1;
+  }
+
+  .elegant-menu-item {
+    padding: 12px;
+    min-height: 80px;
+  }
+
+  .elegant-menu-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .elegant-menu-title {
+    font-size: 14px;
+  }
+
+  .elegant-menu-description {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 768px) {
+  .elegant-menu-item {
+    padding: 10px;
+    min-height: 70px;
+  }
+
+  .elegant-menu-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .elegant-menu-title {
+    font-size: 13px;
+  }
+
+  .elegant-menu-description {
+    font-size: 10px;
+  }
+}

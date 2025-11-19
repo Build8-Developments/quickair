@@ -1,12 +1,13 @@
 "use client";
 import { createContext, useContext, useState, useEffect } from "react";
+import i18n from "@/lib/i18n";
 
 const LanguageContext = createContext();
 
 export function LanguageProvider({ children }) {
   const [language, setLanguage] = useState("en");
 
-  // Load language from cookie or localStorage on mount
+  // Initialize i18n and load language from cookie or localStorage on mount
   useEffect(() => {
     // Check cookie first (for consistency with server)
     const cookieLanguage = document.cookie
@@ -17,6 +18,9 @@ export function LanguageProvider({ children }) {
     const savedLanguage = cookieLanguage || localStorage.getItem("language");
     if (savedLanguage) {
       setLanguage(savedLanguage);
+      if (i18n.isInitialized) {
+        i18n.changeLanguage(savedLanguage); // Sync with i18next
+      }
       // Update HTML attributes
       document.documentElement.lang = savedLanguage;
       document.documentElement.dir = savedLanguage === "ar" ? "rtl" : "ltr";
@@ -26,6 +30,9 @@ export function LanguageProvider({ children }) {
   // Save language to localStorage and update HTML attributes
   const changeLanguage = (newLanguage) => {
     setLanguage(newLanguage);
+    if (i18n.isInitialized) {
+      i18n.changeLanguage(newLanguage); // Sync with i18next
+    }
     localStorage.setItem("language", newLanguage);
 
     // Also save to cookie for server components

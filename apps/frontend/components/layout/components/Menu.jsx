@@ -1,46 +1,110 @@
 "use client";
 
 import { homes, pages, tours } from "@/data/menu";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/contexts/LanguageContext";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { Tag, Hotel, Compass, MapPin, Globe } from "lucide-react";
 
 export default function Menu() {
   const pathname = usePathname();
+  const { t } = useTranslation();
+  const { language } = useLanguage();
+  const isRTL = language === "ar";
+
   return (
     <>
       <div className="xl:d-none ml-30">
         <div className="desktopNav">
           <div className="desktopNav__item">
-            <Link href="/">Home</Link>
+            <Link href="/">{t("navbar.home")}</Link>
           </div>
 
           <div className="desktopNav__item">
             <a href="#">
-              Tour <i className="icon-chevron-down"></i>
+              {t("navbar.tour")} <i className="icon-chevron-down"></i>
             </a>
 
-            <div className="desktopNavMega">
+            <div className="desktopNavMega" dir={isRTL ? "rtl" : "ltr"}>
               <div className="desktopNavMega__container">
                 <div className="desktopNavMega__lists">
-                  {tours.map((elm, i) => (
-                    <div key={i} className="desktopNavMega-list">
-                      <div className="desktopNavMega-list__item">
-                        <div className="desktopNavMega-list__title">
-                          {elm.title}
+                  <div className="bento-menu-grid">
+                    <Link href="/offers" className="bento-menu-item">
+                      <div className="bento-menu-icon">
+                        <Tag size={20} strokeWidth={1.5} />
+                      </div>
+                      <div className="bento-menu-content">
+                        <div className="bento-menu-title">
+                          {t("navbar.offers")}
                         </div>
-
-                        <div className="desktopNavMega-list__list">
-                          {elm.links.map((elm2, i2) => (
-                            <div key={i2} className="desktopNavMega-list__link">
-                              <Link href={elm2.href}>{elm2.title}</Link>
-                            </div>
-                          ))}
+                        <div className="bento-menu-description">
+                          {t("navbar.offersDesc")}
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    </Link>
+
+                    <Link href="/hotels" className="bento-menu-item">
+                      <div className="bento-menu-icon">
+                        <Hotel size={20} strokeWidth={1.5} />
+                      </div>
+                      <div className="bento-menu-content">
+                        <div className="bento-menu-title">
+                          {t("navbar.hotels")}
+                        </div>
+                        <div className="bento-menu-description">
+                          {t("navbar.hotelsDesc")}
+                        </div>
+                      </div>
+                    </Link>
+
+                    <Link href="/haj" className="bento-menu-item">
+                      <div className="bento-menu-icon">
+                        <Compass size={20} strokeWidth={1.5} />
+                      </div>
+                      <div className="bento-menu-content">
+                        <div className="bento-menu-title">
+                          {t("navbar.haj")}
+                        </div>
+                        <div className="bento-menu-description">
+                          {t("navbar.hajDesc")}
+                        </div>
+                      </div>
+                    </Link>
+
+                    <Link href="/omra" className="bento-menu-item">
+                      <div className="bento-menu-icon">
+                        <MapPin size={20} strokeWidth={1.5} />
+                      </div>
+                      <div className="bento-menu-content">
+                        <div className="bento-menu-title">
+                          {t("navbar.omra")}
+                        </div>
+                        <div className="bento-menu-description">
+                          {t("navbar.omraDesc")}
+                        </div>
+                      </div>
+                    </Link>
+
+                    <a
+                      href="#trending_destinations"
+                      className="bento-menu-item bento-menu-featured"
+                    >
+                      <div className="bento-menu-icon">
+                        <Globe size={22} strokeWidth={1.5} />
+                      </div>
+                      <div className="bento-menu-content">
+                        <div className="bento-menu-title">
+                          {t("navbar.destinations")}
+                        </div>
+                        <div className="bento-menu-description">
+                          {t("navbar.destinationsDesc")}
+                        </div>
+                      </div>
+                    </a>
+                  </div>
                 </div>
 
                 <div className="desktopNavMega__info">
@@ -58,11 +122,13 @@ export default function Menu() {
 
                         <div className="specialCard__content">
                           <div className="specialCard__subtitle">
-                            Enjoy Upto
+                            {t("navbar.promoCard1Subtitle")}
                           </div>
-                          <h3 className="specialCard__title">60 % OFF</h3>
+                          <h3 className="specialCard__title">
+                            {t("navbar.promoCard1Title")}
+                          </h3>
                           <div className="specialCard__text">
-                            on Your Booking
+                            {t("navbar.promoCard1Text")}
                           </div>
                         </div>
                       </div>
@@ -81,11 +147,10 @@ export default function Menu() {
 
                         <div className="specialCard__content">
                           <div className="specialCard__subtitle">
-                            80% Discount
+                            {t("navbar.promoCard2Subtitle")}
                           </div>
                           <h3 className="specialCard__title">
-                            Are You Ready
-                            <br /> To Turkey Tour
+                            {t("navbar.promoCard2Title")}
                           </h3>
                           <div className="specialCard__text"></div>
                         </div>
@@ -98,15 +163,15 @@ export default function Menu() {
           </div>
 
           <div className="desktopNav__item">
-            <a href="/flow">Create your trip</a>
+            <a href="/flow">{t("navbar.createTrip")}</a>
           </div>
 
           <div className="desktopNav__item">
-            <a href="/about">About</a>
+            <a href="/about">{t("navbar.about")}</a>
           </div>
 
           <div className="desktopNav__item">
-            <Link href="/contact">Contact</Link>
+            <Link href="/contact">{t("navbar.contact")}</Link>
           </div>
         </div>
       </div>

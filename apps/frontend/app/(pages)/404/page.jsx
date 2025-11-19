@@ -1,13 +1,14 @@
+"use client";
+
 import FooterTwo from "@/components/layout/footers/FooterTwo";
 import Header3 from "@/components/layout/header/Header3";
 import Image from "next/image";
-
-export const metadata = {
-  title: "Not found || ViaTour - Travel & Tour React NextJS Template",
-  description: "ViaTour - Travel & Tour React NextJS Template",
-};
+import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
 export default function NotFound() {
+  const { t } = useTranslation();
+
   return (
     <>
       <main>
@@ -30,17 +31,17 @@ export default function NotFound() {
                     40<span className="text-accent-1">4</span>
                   </h1>
                   <h2 className="text-30 md:text-24 fw-700">
-                    Oops! It looks like you're lost.
+                    {t("notFound.heading")}
                   </h2>
-                  <p>
-                    The page you're looking for isn't available. Try to search
-                    again or use the go to.
-                  </p>
+                  <p>{t("notFound.description")}</p>
 
-                  <button className="button -md -dark-1 bg-accent-1 text-white mt-25">
-                    Go back to homepage
+                  <Link
+                    href="/"
+                    className="button -md -dark-1 bg-accent-1 text-white mt-25"
+                  >
+                    {t("notFound.button")}
                     <i className="icon-arrow-top-right ml-10"></i>
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
