@@ -7,6 +7,7 @@ import { Rubik } from "next/font/google";
 import ScrollTopBehaviour from "@/components/common/ScrollTopBehavier";
 import Wrapper from "@/components/layout/Wrapper";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import BootstrapClient from "@/components/common/BootstrapClient";
 
 const rubik = Rubik({
   weight: ["300", "400", "500", "600", "700", "800", "900"],
@@ -15,15 +16,12 @@ const rubik = Rubik({
   display: "swap",
 });
 
-if (typeof window !== "undefined") {
-  import("bootstrap");
-}
-
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head></head>
       <body className={rubik.className}>
+        <BootstrapClient />
         <LanguageProvider>
           <Wrapper>{children}</Wrapper>
           <ScrollToTop />

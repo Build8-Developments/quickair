@@ -1,10 +1,16 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Paymentcards from "../components/Paymentcards";
 import FooterLinks from "../components/FooterLinks";
 import Socials from "../components/Socials";
 import Image from "next/image";
 
 export default function FooterTwo() {
+  const [year, setYear] = useState(2024);
+
+  useEffect(() => {
+    setYear(new Date().getFullYear());
+  }, []);
   return (
     <footer className="footer -type-1 -dark bg-dark-1 text-white">
       <div className="footer__main">
@@ -84,7 +90,7 @@ export default function FooterTwo() {
         <div className="footer__bottom">
           <div className="row y-gap-5 justify-between items-center">
             <div className="col-auto">
-              <div>© Copyright Quickair Travel {new Date().getFullYear()}</div>
+              <div>© Copyright Quickair Travel {year}</div>
             </div>
 
             <div className="col-auto">

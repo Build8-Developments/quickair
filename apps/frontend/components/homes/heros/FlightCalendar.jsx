@@ -1,10 +1,17 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
 
 export default function FlightCalendar({ date, setDate, minDate }) {
-  const today = new DateObject();
-  const minimumDate = minDate ? new DateObject(minDate) : today;
+  const [minimumDate, setMinimumDate] = useState(null);
+
+  useEffect(() => {
+    const today = new DateObject();
+    setMinimumDate(minDate ? new DateObject(minDate) : today);
+  }, [minDate]);
+
+  if (!minimumDate) return null;
 
   return (
     <DatePicker

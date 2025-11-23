@@ -14,14 +14,17 @@ const resources = {
   },
 };
 
-// Only initialize if we're in the browser
-if (typeof window !== "undefined") {
+// Initialize i18n for both server and client
+if (!i18n.isInitialized) {
   i18n.use(initReactI18next).init({
     resources,
     lng: "en", // default language
     fallbackLng: "en",
     interpolation: {
       escapeValue: false, // React already does escaping
+    },
+    react: {
+      useSuspense: false, // Disable suspense for SSR
     },
   });
 }
