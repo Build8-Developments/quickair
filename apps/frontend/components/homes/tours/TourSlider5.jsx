@@ -1,14 +1,74 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
-import { tourData } from "@/data/tours";
+import { getFeaturedTrips } from "@/lib/api/services/hotel";
+import { getStrapiURL } from "@/lib/strapi";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useTranslation } from "react-i18next";
 import Stars from "@/components/common/Stars";
 import Image from "next/image";
 import Link from "next/link";
+import { MenuSquare } from "lucide-react";
 
 export default function TourSlider5() {
+  const { getLocale } = useLanguage();
+  const { t } = useTranslation();
+  const [trips, setTrips] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTrips = async () => {
+      const locale = getLocale();
+      const tripsData = await getFeaturedTrips({ locale, limit: 10 });
+      setTrips(tripsData);
+      setLoading(false);
+    };
+    fetchTrips();
+  }, [getLocale]);
+
+  const getImageUrl = (imageUrl) => {
+    if (!imageUrl) return "/img/tourCards/1/1.png";
+    if (imageUrl.startsWith("http")) return imageUrl;
+    return getStrapiURL(imageUrl);
+  };
+
+  // Get minimum price from hotel options
+  const getMinPrice = (hotelOptions) => {
+    if (!hotelOptions || hotelOptions.length === 0) return null;
+
+    let minPrice = Infinity;
+    let currency = "EGP";
+
+    hotelOptions.forEach((option) => {
+      if (option.roomPricing && option.roomPricing.length > 0) {
+        currency = option.currency || currency;
+        option.roomPricing.forEach((room) => {
+          const prices = [
+            room.singlePrice,
+            room.doublePrice,
+            room.triplePrice,
+          ].filter((p) => p > 0);
+          if (prices.length > 0) {
+            minPrice = Math.min(minPrice, ...prices);
+          }
+        });
+      }
+    });
+
+    return minPrice !== Infinity ? { price: minPrice, currency } : null;
+  };
+
+  // Count available meal plan options
+  const getMealPlanCount = (hotelOptions) => {
+    if (!hotelOptions) return 0;
+    const uniqueMealPlans = new Set(
+      hotelOptions.filter((opt) => opt.mealPlan).map((opt) => opt.mealPlan.code)
+    );
+    return uniqueMealPlans.size;
+  };
+
   return (
     <>
       <section className="layout-pt-xl layout-pb-xl">
@@ -16,7 +76,7 @@ export default function TourSlider5() {
           <div className="row y-gap-10 justify-between items-center y-gap-10">
             <div className="col-auto">
               <h2 data-aos="fade-up" data-aos-delay="" className="text-30">
-                Featured Trips
+                {t("home.featuredTrips")}
               </h2>
             </div>
           </div>
@@ -52,71 +112,108 @@ export default function TourSlider5() {
                       <div className="tourCard__image ratio  ratio-41:45 rounded-12  ">
                         <div className="img-ratio rounded-12 d-flex items-center justify-center bg-light-1">
                           <span className="text-black text-24 fw-500 text-center px-20">
-                            Customize your trip
+                            {t("home.customizeTrip")}
                           </span>
                         </div>
                       </div>
                     </Link>
                   </SwiperSlide>
-                  {tourData.map((elm, i) => (
-                    <SwiperSlide key={i}>
-                      <Link
-                        href={`/tour-single-1/${elm.id}`}
-                        className="tourCard -type-3 -hover-image-scale"
-                      >
-                        <div className="tourCard__image ratio ratio-41:45 rounded-12 -hover-image-scale__image">
-                          <Image
-                            width={421}
-                            height={301}
-                            src={elm.imageSrc}
-                            alt="image"
-                            className="img-ratio rounded-12"
-                          />
-                        </div>
 
-                        <div className="tourCard__wrap">
-                          <div className="tourCard__header d-flex justify-between items-center text-13 text-white">
-                            <div className="d-flex items-center">
-                              <i className="icon-clock text-16 mr-5"></i>
-                              {elm.duration}
-                            </div>
-
-                            <button className="tourCard__favorite">
-                              <i className="icon-heart"></i>
-                            </button>
+                  {loading
+                    ? Array.from({ length: 3 }).map((_, i) => (
+                        <SwiperSlide key={`skeleton-${i}`}>
+                          <div className="tourCard -type-3">
+                            <div
+                              className="tourCard__image ratio ratio-41:45 rounded-12"
+                              style={{ background: "#eee" }}
+                            ></div>
                           </div>
+                        </SwiperSlide>
+                      ))
+                    : trips.map((trip, i) => {
+                        const pricing = getMinPrice(trip.hotelOptions);
+                        const mealPlanCount = getMealPlanCount(
+                          trip.hotelOptions
+                        );
+                        const firstHotel = trip.hotelOptions?.[0]?.hotel;
+                        const nights = trip.hotelOptions?.[0]?.nights;
 
-                          <div className="tourCard__content">
-                            <div>
-                              <div className="tourCard__location d-flex items-center text-13 text-white">
-                                <i className="icon-pin d-flex text-16 text-white mr-5"></i>
-                                {elm.location}
+                        return (
+                          <SwiperSlide key={trip.documentId || i}>
+                            <Link
+                              href={`/offers/${trip.documentId}`}
+                              className="tourCard -type-3 -hover-image-scale"
+                            >
+                              <div className="tourCard__image ratio ratio-41:45 rounded-12 -hover-image-scale__image">
+                                <Image
+                                  width={421}
+                                  height={301}
+                                  src={getImageUrl(trip.coverImage?.url)}
+                                  alt={trip.coverImage?.name || trip.title}
+                                  className="img-ratio rounded-12"
+                                />
                               </div>
 
-                              <h3 className="tourCard__title text-18 text-white fw-500 mt-5">
-                                <span>{elm.title}</span>
-                              </h3>
+                              <div className="tourCard__wrap">
+                                <div className="tourCard__header d-flex justify-between items-center text-13 text-white">
+                                  <div className="d-flex items-center">
+                                    <i className="icon-clock text-16 mr-5"></i>
+                                    {nights
+                                      ? `${nights} ${t("home.nights")}`
+                                      : trip.month}
+                                  </div>
 
-                              <div className="tourCard__rating d-flex items-center text-13 mt-5">
-                                <div className="d-flex items-center x-gap-5">
-                                  <Stars font={12} star={elm.rating} />
+                                  <button className="tourCard__favorite">
+                                    <i className="icon-heart"></i>
+                                  </button>
                                 </div>
 
-                                <span className="text-white ml-10">
-                                  {elm.rating} ({elm.ratingCount})
-                                </span>
-                              </div>
-                            </div>
+                                <div className="tourCard__content d-flex justify-between items-end">
+                                  <div>
+                                    <div className="tourCard__location d-flex items-center text-13 text-white">
+                                      <i className="icon-pin d-flex text-16 text-white mr-5"></i>
+                                      {trip.location?.name ||
+                                        t("home.destination")}
+                                    </div>
 
-                            <div className="text-right text-white">
-                              <div className="text-13 lh-14">From</div>
-                              <div className="text-18 fw-500">${elm.price}</div>
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
-                    </SwiperSlide>
-                  ))}
+                                    <h3 className="tourCard__title text-18 text-white fw-500 mt-5">
+                                      <span>{trip.title}</span>
+                                    </h3>
+
+                                    <div className="tourCard__rating d-flex items-center text-13 mt-5">
+                                      {firstHotel && (
+                                        <>
+                                          <div className="d-flex items-center x-gap-5">
+                                            <Stars
+                                              font={12}
+                                              star={firstHotel.stars}
+                                            />
+                                          </div>
+                                          <span className="text-white ml-10">
+                                            {firstHotel.stars}.0
+                                          </span>
+                                        </>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  {pricing && (
+                                    <div className="text-right text-white">
+                                      <div className="text-13 lh-14">
+                                        {t("home.from")}
+                                      </div>
+                                      <div className="text-18 fw-500">
+                                        {pricing.currency}{" "}
+                                        {pricing.price.toLocaleString()}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </Link>
+                          </SwiperSlide>
+                        );
+                      })}
                 </Swiper>
               </div>
             </div>

@@ -3,7 +3,66 @@
     "search": "بحث",
     "reset": "إعادة تعيين",
     "apply": "تطبيق",
-    "loading": "جار التحميل..."
+    "loading": "جاري التحميل...",
+    "seeAll": "عرض الكل"
+  },
+  "home": {
+    "specialOffers": "عروض خاصة",
+    "trustedBrands": "موثوق به من قبل جميع أكبر العلامات التجارية للسفر",
+    "spiritualJourneys": "رحلات روحانية",
+    "hajOmraPackages": "باقات الحج والعمرة",
+    "haj": "الحج",
+    "omra": "العمرة",
+    "trendingDestinations": "الوجهات الرائجة",
+    "stats": {
+      "totalDonations": "مسافرون سعداء",
+      "campaignsClosed": "جولات مكتملة",
+      "happyPeople": "وجهات مغطاة",
+      "ourVolunteers": "فنادق شريكة"
+    },
+    "featuredTrips": "رحلات مميزة",
+    "customizeTrip": "خصص رحلتك",
+    "nights": "ليالي",
+    "destination": "الوجهة",
+    "from": "من",
+    "whyChoose": "لماذا تختار كويك إير",
+    "features": {
+      "flexibility": {
+        "title": "مرونة فائقة",
+        "text": "أنت المتحكم، مع إلغاء مجاني وخيارات دفع لتلبية أي خطة أو ميزانية."
+      },
+      "experiences": {
+        "title": "تجارب لا تُنسى",
+        "text": "تصفح واحجز جولات وأنشطة رائعة سترغب في إخبار أصدقائك عنها."
+      },
+      "quality": {
+        "title": "الجودة أساسنا",
+        "text": "معايير جودة عالية. ملايين المراجعات. شركة كويك إير."
+      },
+      "support": {
+        "title": "دعم حائز على جوائز",
+        "text": "سعر جديد؟ خطة جديدة؟ لا مشكلة. نحن هنا للمساعدة، 24/7."
+      }
+    }
+  },
+  "footer": {
+    "speakToExpert": "تحدث إلى خبيرنا على",
+    "followUs": "تابعنا",
+    "contact": "اتصل بنا",
+    "company": "الشركة",
+    "support": "الدعم",
+    "newsletter": "النشرة الإخبارية",
+    "newsletterText": "اشترك في النشرة الإخبارية المجانية وابق على اطلاع",
+    "emailPlaceholder": "عنوان بريدك الإلكتروني",
+    "send": "إرسال",
+    "copyright": "حقوق النشر كويك إير للسفر",
+    "aboutUs": "من نحن",
+    "contactUs": "اتصل بنا",
+    "dataPolicy": "سياسة البيانات",
+    "cookiePolicy": "سياسة ملفات تعريف الارتباط",
+    "legal": "قانوني",
+    "getInTouch": "تواصل معنا",
+    "liveChat": "دردشة حية"
   },
   "hero": {
     "subtitle": "موقع واحد، أكثر من 300,000 تجربة لا تُنسى",
@@ -92,5 +151,52 @@
     "heading": "الصفحة غير موجودة",
     "description": "لم نتمكن من العثور على الصفحة التي تبحث عنها. قد تكون الصفحة قد تم نقلها أو حذفها أو أن الرابط غير صحيح.",
     "button": "العودة للرئيسية"
+  },
+  "hotel": {
+    "night": "ليلة",
+    "nights": "ليالي",
+    "amenities": "المرافق",
+    "startingFrom": "ابتداءً من",
+    "viewDetails": "عرض التفاصيل"
+  },
+  "offer": {
+    "notFound": "العرض غير موجود",
+    "notFoundDescription": "العرض الذي تبحث عنه غير موجود أو تم إزالته.",
+    "about": "حول",
+    "availableHotels": "الفنادق المتاحة",
+    "availableHotelsDescription": "اختر من بين فنادقنا المختارة بعناية لهذه الباقة. انقر على أي فندق لعرض المعلومات التفصيلية والأسعار.",
+    "whatsIncluded": "ما يشمله العرض",
+    "frequentlyAskedQuestions": "الأسئلة الشائعة",
+    "specialOffer": "عرض خاص",
+    "share": "مشاركة",
+    "wishlist": "المفضلة",
+    "hotelOption": "خيار فندق",
+    "hotelOptions": "خيارات الفنادق",
+    "tripDetails": "تفاصيل الرحلة",
+    "offerDate": "تاريخ العرض",
+    "available": "متاح",
+    "downloadPdf": "العرض الكامل (PDF)",
+    "contactWhatsApp": "تواصل عبر واتساب",
+    "priceNotice": "تختلف الأسعار بناءً على اختيار الفندق وتكوين الغرفة. راجع خيارات الفنادق أدناه للحصول على الأسعار التفصيلية.",
+    "photo": "صورة",
+    "photos": "صور",
+    "availableText": "متاح"
+  },
+  "offersList": {
+    "filter": "تصفية",
+    "clearAllFilters": "مسح جميع الفلاتر",
+    "from": "من",
+    "contactUs": "تواصل معنا",
+    "hotel": "فندق",
+    "hotels": "فنادق",
+    "noOffersFound": "لم يتم العثور على عروض",
+    "noOffersDescription": "حاول تعديل الفلاتر للعثور على المزيد من العروض",
+    "showingResults": "عرض النتائج",
+    "of": "من",
+    "pageTitle": "عروض وباقات السفر",
+    "pageDescription": "اكتشف مجموعتنا المختارة من عروض السفر الحصرية وباقات العطلات",
+    "destination": "الوجهة",
+    "travelMonth": "شهر السفر",
+    "noDestinationsAvailable": "لا توجد وجهات متاحة"
   }
 }

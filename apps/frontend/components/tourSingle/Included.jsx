@@ -1,6 +1,11 @@
+"use client";
+
 import React from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Included({ inclusions, exclusions }) {
+  const { language } = useLanguage();
+  const isRTL = language === "ar";
   const hasInclusions = inclusions && inclusions.length > 0;
   const hasExclusions = exclusions && exclusions.length > 0;
 
@@ -14,7 +19,11 @@ export default function Included({ inclusions, exclusions }) {
           <div className="y-gap-15">
             {inclusions.map((item, i) => (
               <div key={i} className="d-flex">
-                <i className="icon-check flex-center text-10 size-24 rounded-full text-green-2 bg-green-1 mr-15"></i>
+                <i
+                  className={`icon-check flex-center text-10 size-24 rounded-full text-green-2 bg-green-1 ${
+                    isRTL ? "ml-15" : "mr-15"
+                  }`}
+                ></i>
                 <span className="text-15">{item.item}</span>
               </div>
             ))}
@@ -28,7 +37,11 @@ export default function Included({ inclusions, exclusions }) {
           <div className="y-gap-15">
             {exclusions.map((item, i) => (
               <div key={i} className="d-flex">
-                <i className="icon-close flex-center text-10 size-24 rounded-full text-red-3 bg-red-4 mr-15"></i>
+                <i
+                  className={`icon-close flex-center text-10 size-24 rounded-full text-red-3 bg-red-4 ${
+                    isRTL ? "ml-15" : "mr-15"
+                  }`}
+                ></i>
                 <span className="text-15">{item.item}</span>
               </div>
             ))}

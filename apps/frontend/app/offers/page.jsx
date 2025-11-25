@@ -1,37 +1,33 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Header3 from "@/components/layout/header/Header3";
 import FooterTwo from "@/components/layout/footers/FooterTwo";
 import OffersList from "@/components/offers/OffersList";
 import { getAllOffers } from "@/lib/api/services/offer";
-import { getServerLocale } from "@/lib/locale";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-export const metadata = {
-  title: "Travel Offers & Packages | QuickAir",
-  description:
-    "Browse our exclusive travel offers and vacation packages. Find the best deals on flights, hotels, and complete holiday packages to destinations worldwide.",
-  keywords:
-    "travel offers, vacation packages, travel deals, holiday packages, cheap flights, hotel deals",
-  openGraph: {
-    title: "Travel Offers & Packages | QuickAir",
-    description:
-      "Browse our exclusive travel offers and vacation packages. Find the best deals to destinations worldwide.",
-    images: [
-      {
-        url: "/img/offers/offers-banner.jpg",
-        alt: "QuickAir Travel Offers",
-      },
-    ],
-  },
-};
+export default function OffersPage() {
+  const { t } = useTranslation();
+  const { getLocale, language } = useLanguage();
+  const [offers, setOffers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const isRTL = language === "ar";
 
-export default async function OffersPage() {
-  const locale = await getServerLocale();
-
-  // Fetch all offers from Strapi
-  const offers = await getAllOffers({
-    locale,
-    limit: 100,
-    sort: "createdAt:desc",
-  });
+  useEffect(() => {
+    const fetchOffers = async () => {
+      const locale = getLocale();
+      const data = await getAllOffers({
+        locale,
+        limit: 100,
+        sort: "createdAt:desc",
+      });
+      setOffers(data);
+      setLoading(false);
+    };
+    fetchOffers();
+  }, [getLocale]);
 
   return (
     <>
@@ -48,14 +44,16 @@ export default async function OffersPage() {
           <div className="container">
             <div className="row justify-center">
               <div className="col-12">
-                <div className="pageHeader__content">
+                <div
+                  className="pageHeader__content"
+                  style={{ textAlign: isRTL ? "right" : "left" }}
+                >
                   <h1 className="pageHeader__title">
-                    Travel Offers & Packages
+                    {t("offersList.pageTitle")}
                   </h1>
 
                   <p className="pageHeader__text">
-                    Discover our handpicked selection of exclusive travel offers
-                    and vacation packages
+                    {t("offersList.pageDescription")}
                   </p>
                 </div>
               </div>
@@ -64,7 +62,11 @@ export default async function OffersPage() {
         </section>
 
         {/* Offers List */}
-        <OffersList initialOffers={offers} totalCount={offers.length} />
+        <OffersList
+          initialOffers={offers}
+          totalCount={offers.length}
+          isLoading={loading}
+        />
 
         <FooterTwo />
       </main>

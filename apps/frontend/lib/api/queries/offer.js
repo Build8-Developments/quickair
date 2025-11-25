@@ -33,6 +33,8 @@ export const GET_ALL_OFFERS = `
         currency
         roomPricing {
           doublePrice
+          singlePrice
+          triplePrice
         }
       }
     }
@@ -218,6 +220,48 @@ export const SEARCH_OFFERS = `
         name
         slug
         country
+      }
+    }
+  }
+`;
+
+// Get filtered offers (optimized for client-side filtering with location slugs and months)
+export const GET_FILTERED_OFFERS = `
+  query GetFilteredOffers(
+    $locale: I18NLocaleCode
+    $pagination: PaginationArg
+    $sort: [String]
+    $filters: OfferFiltersInput
+  ) {
+    offers(locale: $locale, pagination: $pagination, sort: $sort, filters: $filters) {
+      documentId
+      title
+      slug
+      description
+      month
+      year
+      coverImage {
+        url
+        alternativeText
+      }
+      location {
+        documentId
+        name
+        slug
+        type
+        country
+      }
+      hotelOptions {
+        hotel {
+          documentId
+        }
+        nights
+        currency
+        roomPricing {
+          doublePrice
+          singlePrice
+          triplePrice
+        }
       }
     }
   }

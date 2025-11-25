@@ -1,8 +1,23 @@
+"use client";
 import { featuresThree } from "@/data/features";
+import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import React from "react";
 
 export default function FeaturesFour() {
+  const { t } = useTranslation();
+
+  // Map the feature IDs to translation keys
+  const getTranslationKey = (id) => {
+    const keys = {
+      1: "totalDonations",
+      2: "campaignsClosed",
+      3: "happyPeople",
+      4: "ourVolunteers",
+    };
+    return keys[id] || "";
+  };
+
   return (
     <section className="layout-pt-xl">
       <div className="container">
@@ -15,7 +30,7 @@ export default function FeaturesFour() {
                 <h3 className="text-40 md:text-30 lh-14 fw-700 mt-30 md:mt-15">
                   {elm.value}
                 </h3>
-                <p className="lh-15">{elm.text}</p>
+                <p className="lh-15">{t(`home.stats.${getTranslationKey(elm.id)}`)}</p>
               </div>
             </div>
           ))}

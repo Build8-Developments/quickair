@@ -4,44 +4,43 @@ import i18n from "@/lib/i18n";
 
 const LanguageContext = createContext();
 
-export function LanguageProvider({ children }) {
-  const [language, setLanguage] = useState("en");
+// Read language from cookie synchronously (not in useEffect)
+const getInitialLanguage = () => {
+  if (typeof window === "undefined") return "en";
 
-  // Initialize i18n and load language from cookie or localStorage on mount
+  const cookieLanguage = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("language="))
+    ?.split("=")[1];
+
+  return cookieLanguage || localStorage.getItem("language") || "en";
+};
+
+export function LanguageProvider({ children, initialLanguage }) {
+  const [language, setLanguage] = useState(
+    initialLanguage || getInitialLanguage()
+  );
+
+  // Initialize i18n and HTML attributes on mount
   useEffect(() => {
-    // Check cookie first (for consistency with server)
-    const cookieLanguage = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("language="))
-      ?.split("=")[1];
-
-    const savedLanguage = cookieLanguage || localStorage.getItem("language");
-    if (savedLanguage) {
-      setLanguage(savedLanguage);
-      if (i18n.isInitialized) {
-        i18n.changeLanguage(savedLanguage); // Sync with i18next
-      }
-      // Update HTML attributes
-      document.documentElement.lang = savedLanguage;
-      document.documentElement.dir = savedLanguage === "ar" ? "rtl" : "ltr";
-    }
-  }, []);
-
-  // Save language to localStorage and update HTML attributes
-  const changeLanguage = (newLanguage) => {
-    setLanguage(newLanguage);
     if (i18n.isInitialized) {
-      i18n.changeLanguage(newLanguage); // Sync with i18next
+      i18n.changeLanguage(language);
     }
+    // Update HTML attributes
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
+  }, [language]);
+
+  // Save language to localStorage and reload page
+  const changeLanguage = (newLanguage) => {
+    // Save to localStorage
     localStorage.setItem("language", newLanguage);
 
-    // Also save to cookie for server components
+    // Save to cookie for server components
     document.cookie = `language=${newLanguage}; path=/; max-age=31536000`; // 1 year
 
-    // Update HTML lang attribute for accessibility
-    document.documentElement.lang = newLanguage;
-    // Update direction for RTL languages
-    document.documentElement.dir = newLanguage === "ar" ? "rtl" : "ltr";
+    // Force full page reload to ensure all components re-render with new language
+    window.location.reload();
   };
 
   // Get locale for Strapi API requests

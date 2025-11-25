@@ -1,26 +1,28 @@
 "use client";
 
-import React, { useState } from "react";
-import RangeSlider from "../common/RangeSlider";
+import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import Image from "next/image";
+import { getAllLocations } from "@/lib/api/services/location";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function OffersSidebar({ offers, filters, setFilters }) {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
   const [ddActives, setDdActives] = useState(["location", "month"]);
+  const [locations, setLocations] = useState([]);
+  const [locationsLoading, setLocationsLoading] = useState(true);
 
-  // Extract unique locations from offers
-  const uniqueLocations = Array.from(
-    new Set(
-      offers
-        .filter((offer) => offer.location?.name)
-        .map((offer) =>
-          JSON.stringify({
-            name: offer.location.name,
-            slug: offer.location.slug,
-            country: offer.location.country,
-          })
-        )
-    )
-  ).map((item) => JSON.parse(item));
+  // Fetch locations from API based on current language
+  useEffect(() => {
+    const fetchLocations = async () => {
+      setLocationsLoading(true);
+      const data = await getAllLocations({ locale: language });
+      setLocations(data);
+      setLocationsLoading(false);
+    };
+    fetchLocations();
+  }, [language]);
 
   // Extract unique months from offers
   const uniqueMonths = Array.from(
@@ -61,42 +63,9 @@ export default function OffersSidebar({ offers, filters, setFilters }) {
     }));
   };
 
-  const handlePriceChange = (range) => {
-    setFilters((prev) => ({
-      ...prev,
-      priceRange: range,
-    }));
-  };
-
-  const clearAllFilters = () => {
-    setFilters({
-      locations: [],
-      months: [],
-      priceRange: [0, 10000],
-    });
-  };
-
-  const hasActiveFilters =
-    filters.locations.length > 0 ||
-    filters.months.length > 0 ||
-    filters.priceRange[0] !== 0 ||
-    filters.priceRange[1] !== 10000;
-
   return (
     <div className="sidebar -type-1 rounded-12">
       <div className="sidebar__content">
-        {hasActiveFilters && (
-          <div className="sidebar__item pb-20">
-            <button
-              onClick={clearAllFilters}
-              className="button -md -outline-accent-1 text-accent-1 w-100"
-            >
-              <i className="icon-close mr-10"></i>
-              Clear All Filters
-            </button>
-          </div>
-        )}
-
         {/* Destination Filter */}
         <div className="sidebar__item">
           <div className="accordion -simple-2 js-accordion">
@@ -115,7 +84,9 @@ export default function OffersSidebar({ offers, filters, setFilters }) {
                   )
                 }
               >
-                <h5 className="text-18 fw-500">Destination</h5>
+                <h5 className="text-18 fw-500">
+                  {t("offersList.destination")}
+                </h5>
 
                 <div className="accordion__icon flex-center">
                   <i className="icon-chevron-down"></i>
@@ -124,15 +95,23 @@ export default function OffersSidebar({ offers, filters, setFilters }) {
               </div>
 
               <div
-                className="accordion__content"
+                className="accordion__content filter-accordion-enter"
                 style={
                   ddActives.includes("location") ? { maxHeight: "400px" } : {}
                 }
               >
                 <div className="pt-15">
                   <div className="d-flex flex-column y-gap-15">
-                    {uniqueLocations.length > 0 ? (
-                      uniqueLocations.map((location, i) => (
+                    {locationsLoading ? (
+                      // Show skeleton loaders while fetching
+                      Array.from({ length: 5 }).map((_, i) => (
+                        <div key={i} className="d-flex items-center">
+                          <div className="skeleton-checkbox skeleton-pulse"></div>
+                          <div className="skeleton-filter-text skeleton-pulse ml-10"></div>
+                        </div>
+                      ))
+                    ) : locations.length > 0 ? (
+                      locations.map((location, i) => (
                         <div key={i}>
                           <div className="d-flex items-center">
                             <div className="form-checkbox">
@@ -170,53 +149,10 @@ export default function OffersSidebar({ offers, filters, setFilters }) {
                       ))
                     ) : (
                       <div className="text-14 text-light-1">
-                        No destinations available
+                        {t("offersList.noDestinationsAvailable")}
                       </div>
                     )}
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Price Range Filter */}
-        <div className="sidebar__item">
-          <div className="accordion -simple-2 js-accordion">
-            <div
-              className={`accordion__item js-accordion-item-active ${
-                ddActives.includes("pricerange") ? "is-active" : ""
-              } `}
-            >
-              <div
-                className="accordion__button mb-10 d-flex items-center justify-between"
-                onClick={() =>
-                  setDdActives((pre) =>
-                    pre.includes("pricerange")
-                      ? [...pre.filter((elm) => elm !== "pricerange")]
-                      : [...pre, "pricerange"]
-                  )
-                }
-              >
-                <h5 className="text-18 fw-500">Price Range</h5>
-
-                <div className="accordion__icon flex-center">
-                  <i className="icon-chevron-down"></i>
-                  <i className="icon-chevron-down"></i>
-                </div>
-              </div>
-
-              <div
-                className="accordion__content"
-                style={
-                  ddActives.includes("pricerange") ? { maxHeight: "300px" } : {}
-                }
-              >
-                <div className="pt-15">
-                  <RangeSlider
-                    value={filters.priceRange}
-                    onChange={handlePriceChange}
-                  />
                 </div>
               </div>
             </div>
@@ -241,7 +177,9 @@ export default function OffersSidebar({ offers, filters, setFilters }) {
                   )
                 }
               >
-                <h5 className="text-18 fw-500">Travel Month</h5>
+                <h5 className="text-18 fw-500">
+                  {t("offersList.travelMonth")}
+                </h5>
 
                 <div className="accordion__icon flex-center">
                   <i className="icon-chevron-down"></i>
@@ -250,7 +188,7 @@ export default function OffersSidebar({ offers, filters, setFilters }) {
               </div>
 
               <div
-                className="accordion__content"
+                className="accordion__content filter-accordion-enter"
                 style={
                   ddActives.includes("month") ? { maxHeight: "400px" } : {}
                 }
@@ -294,39 +232,6 @@ export default function OffersSidebar({ offers, filters, setFilters }) {
             </div>
           </div>
         </div>
-
-        {/* Active Filters Summary */}
-        {hasActiveFilters && (
-          <div className="sidebar__item">
-            <div className="pt-15 pb-15">
-              <h6 className="text-15 fw-500 mb-10">Active Filters:</h6>
-              <div className="d-flex flex-wrap gap-10">
-                {filters.locations.length > 0 && (
-                  <div className="bg-accent-1-05 px-10 py-5 rounded-8">
-                    <span className="text-13">
-                      {filters.locations.length} destination(s)
-                    </span>
-                  </div>
-                )}
-                {filters.months.length > 0 && (
-                  <div className="bg-accent-1-05 px-10 py-5 rounded-8">
-                    <span className="text-13">
-                      {filters.months.length} month(s)
-                    </span>
-                  </div>
-                )}
-                {(filters.priceRange[0] !== 0 ||
-                  filters.priceRange[1] !== 10000) && (
-                  <div className="bg-accent-1-05 px-10 py-5 rounded-8">
-                    <span className="text-13">
-                      ${filters.priceRange[0]} - ${filters.priceRange[1]}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

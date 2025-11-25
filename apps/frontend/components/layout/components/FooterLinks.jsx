@@ -1,29 +1,42 @@
+"use client";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/contexts/LanguageContext";
+
 const sections = [
   {
-    title: "Company",
+    titleKey: "footer.company",
     links: [
-      { id: 1, text: "About Us", href: "/about" },
-      { id: 3, text: "Contact Us", href: "/contact" },
-      { id: 5, text: "Data Policy", href: "/data-policy" },
-      { id: 6, text: "Cookie Policy", href: "/cookie-policy" },
-      { id: 7, text: "Legal", href: "/legal" },
+      { id: 1, textKey: "footer.aboutUs", href: "/about" },
+      { id: 3, textKey: "footer.contactUs", href: "/contact" },
+      { id: 7, textKey: "footer.legal", href: "/legal" },
     ],
   },
   {
-    title: "Support",
+    titleKey: "footer.support",
     links: [
-      { id: 9, text: "Get in Touch", href: "/contact" },
-      { id: 11, text: "Live chat", href: "https://wa.me/+201007004828" },
+      { id: 9, textKey: "footer.getInTouch", href: "/contact" },
+      {
+        id: 11,
+        textKey: "footer.liveChat",
+        href: "https://wa.me/+201007004828",
+      },
     ],
   },
 ];
 
 export default function FooterLinks() {
+  const { t } = useTranslation();
+  const { isRTL } = useLanguage();
+
   return (
     <>
       {sections.map((elm, i) => (
-        <div key={i} className="col-lg-auto col-6">
-          <h4 className="text-20 fw-500">{elm.title}</h4>
+        <div
+          key={i}
+          className="col-lg-auto col-6"
+          style={{ textAlign: isRTL ? "right" : "left" }}
+        >
+          <h4 className="text-20 fw-500">{t(elm.titleKey)}</h4>
 
           <div className="y-gap-10 mt-20">
             {elm.links.map((elm2, i2) =>
@@ -34,11 +47,11 @@ export default function FooterLinks() {
                   className="d-block fw-500"
                   href={elm2.href}
                 >
-                  {elm2.text}
+                  {t(elm2.textKey)}
                 </a>
               ) : (
                 <a key={i2} className="d-block fw-500" href={elm2.href}>
-                  {elm2.text}
+                  {t(elm2.textKey)}
                 </a>
               )
             )}

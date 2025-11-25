@@ -13,6 +13,15 @@ export const GET_ALL_LOCATIONS = `
       slug
       type
       country
+      image {
+        name
+        url
+      }
+      hotels_connection {
+        nodes {
+          documentId
+        }
+      }
       shortDescription
       featured
     }
@@ -42,6 +51,10 @@ export const GET_FEATURED_LOCATIONS = `
       slug
       type
       country
+      image {
+        name
+        url
+      }
       shortDescription
       featured
     }

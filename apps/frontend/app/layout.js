@@ -3,12 +3,14 @@ import "../public/css/style.css";
 import "../public/css/hero-search.css";
 import "../public/css/mega-menu-cards.css";
 import "../public/css/flight-search.css";
+import "../public/css/offer-skeleton.css";
 
 import { Rubik } from "next/font/google";
 import ScrollTopBehaviour from "@/components/common/ScrollTopBehavier";
 import Wrapper from "@/components/layout/Wrapper";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import BootstrapClient from "@/components/common/BootstrapClient";
+import { cookies } from "next/headers";
 
 const rubik = Rubik({
   weight: ["300", "400", "500", "600", "700", "800", "900"],
@@ -17,13 +19,17 @@ const rubik = Rubik({
   display: "swap",
 });
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const cookieStore = await cookies();
+  const language = cookieStore.get("language")?.value || "en";
+  const dir = language === "ar" ? "rtl" : "ltr";
+
   return (
-    <html lang="en">
+    <html lang={language} dir={dir}>
       <head></head>
       <body className={rubik.className}>
         <BootstrapClient />
-        <LanguageProvider>
+        <LanguageProvider initialLanguage={language}>
           <Wrapper>{children}</Wrapper>
           <ScrollToTop />
           <ScrollTopBehaviour />

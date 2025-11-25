@@ -3,8 +3,36 @@
 import React from "react";
 import Image from "next/image";
 import { getStrapiURL } from "@/lib/strapi";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function OfferSidebar({ offer }) {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
+  const isRTL = language === "ar";
+
+  // Translate English month names to Arabic
+  const translateMonth = (monthName) => {
+    if (!monthName || language !== "ar") return monthName;
+
+    const monthMap = {
+      January: "يناير",
+      February: "فبراير",
+      March: "مارس",
+      April: "أبريل",
+      May: "مايو",
+      June: "يونيو",
+      July: "يوليو",
+      August: "أغسطس",
+      September: "سبتمبر",
+      October: "أكتوبر",
+      November: "نوفمبر",
+      December: "ديسمبر",
+    };
+
+    return monthMap[monthName] || monthName;
+  };
+
   if (!offer) return null;
 
   const handleDownloadPDF = () => {
@@ -30,20 +58,22 @@ export default function OfferSidebar({ offer }) {
 
       {/* Quick Info */}
       <div className="bg-light-1 rounded-12 px-20 py-20 mb-20">
-        <h5 className="text-18 fw-500 mb-15">Trip Details</h5>
+        <h5 className="text-18 fw-500 mb-15">{t("offer.tripDetails")}</h5>
 
         <div className="d-flex items-center justify-between py-10 border-bottom-1">
-          <div className="text-14 text-light-2">Offer Date</div>
+          <div className="text-14 text-light-2">{t("offer.offerDate")}</div>
           <div className="text-14 fw-500">
-            {offer.month} {offer.year}
+            <bdi>{translateMonth(offer.month)}</bdi> {offer.year}
           </div>
         </div>
 
         {offer.hotelOptions && offer.hotelOptions.length > 0 && (
           <div className="d-flex items-center justify-between py-10 border-bottom-1">
-            <div className="text-14 text-light-2">Hotel Options</div>
+            <div className="text-14 text-light-2">
+              {t("offer.hotelOptions")}
+            </div>
             <div className="text-14 fw-500">
-              {offer.hotelOptions.length} Available
+              {offer.hotelOptions.length} {t("offer.available")}
             </div>
           </div>
         )}
@@ -54,8 +84,10 @@ export default function OfferSidebar({ offer }) {
             onClick={handleDownloadPDF}
             className="button -md -accent-1 col-12 bg-accent-1 text-white mt-15"
           >
-            <i className="icon-download text-16 mr-10"></i>
-            Full Offer (PDF)
+            <i
+              className={`icon-download text-16 ${isRTL ? "ml-10" : "mr-10"}`}
+            ></i>
+            {t("offer.downloadPdf")}
           </button>
         )}
       </div>
@@ -67,19 +99,18 @@ export default function OfferSidebar({ offer }) {
         rel="noopener noreferrer"
         className="button -md -dark-1 col-12 bg-dark-1 text-white"
       >
-        <i className="icon-phone text-16 mr-10"></i>
-        Contact via WhatsApp
+        <i className={`icon-phone text-16 ${isRTL ? "ml-10" : "mr-10"}`}></i>
+        {t("offer.contactWhatsApp")}
       </a>
 
       {/* Additional Info */}
       <div className="mt-30 pt-20 border-top-1">
         <div className="text-14 text-light-2">
           <div className="d-flex items-start mb-10">
-            <i className="icon-info text-16 mr-10 mt-5"></i>
-            <span>
-              Prices vary based on hotel choice and room configuration. See
-              hotel options below for detailed pricing.
-            </span>
+            <i
+              className={`icon-info text-16 mt-5 ${isRTL ? "ml-10" : "mr-10"}`}
+            ></i>
+            <span>{t("offer.priceNotice")}</span>
           </div>
         </div>
       </div>
@@ -88,9 +119,12 @@ export default function OfferSidebar({ offer }) {
       {offer.gallery && offer.gallery.length > 0 && (
         <div className="mt-20">
           <div className="d-flex items-center text-14">
-            <i className="icon-photo text-16 mr-10"></i>
-            {offer.gallery.length} Photo{offer.gallery.length > 1 ? "s" : ""}{" "}
-            Available
+            <i
+              className={`icon-photo text-16 ${isRTL ? "ml-10" : "mr-10"}`}
+            ></i>
+            {offer.gallery.length}{" "}
+            {offer.gallery.length > 1 ? t("offer.photos") : t("offer.photo")}{" "}
+            {t("offer.availableText")}
           </div>
         </div>
       )}

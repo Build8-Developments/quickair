@@ -1,4 +1,8 @@
+"use client";
+
 import React from "react";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/contexts/LanguageContext";
 import MainInformation from "../MainInformation";
 import Included from "../Included";
 import Gallery1 from "../Galleries/Gallery1";
@@ -9,14 +13,18 @@ import OfferSidebar from "../OfferSidebar";
 import Faq from "../Faq";
 
 export default function OfferDetail({ offer }) {
+  const { t } = useTranslation();
+  const { language } = useLanguage();
+  const isRTL = language === "ar";
+
   if (!offer) {
     return (
       <div className="py-30 mt-80">
         <div className="container">
           <div className="text-center py-60">
-            <h2 className="text-30">Offer not found</h2>
+            <h2 className="text-30">{t("offer.notFound")}</h2>
             <p className="text-light-2 mt-10">
-              The offer you're looking for doesn't exist or has been removed.
+              {t("offer.notFoundDescription")}
             </p>
           </div>
         </div>
@@ -37,13 +45,31 @@ export default function OfferDetail({ offer }) {
       {/* Content Section */}
       <section className="layout-pt-md js-pin-container">
         <div className="container">
-          <div className="row y-gap-30 justify-between">
+          <div
+            className="row y-gap-30 justify-between"
+            style={{ direction: isRTL ? "rtl" : "ltr" }}
+          >
+            {/* Sidebar - shows first in RTL */}
+            {isRTL && (
+              <div className="col-lg-4">
+                <div className="d-flex justify-start js-pin-content">
+                  <OfferSidebar offer={offer} />
+                </div>
+              </div>
+            )}
+
             {/* Main Content */}
-            <div className="col-lg-8">
+            <div
+              className="col-lg-8"
+              dir={isRTL ? "rtl" : "ltr"}
+              style={{ textAlign: isRTL ? "right" : "left" }}
+            >
               {/* Location Description */}
               {offer.location?.description && (
                 <>
-                  <h2 className="text-30">About {offer.location.name}</h2>
+                  <h2 className="text-30">
+                    {t("offer.about")} {offer.location.name}
+                  </h2>
                   <p className="mt-20 text-15 text-light-2">
                     {offer.location.description}
                   </p>
@@ -54,10 +80,9 @@ export default function OfferDetail({ offer }) {
               {/* Hotel Options Cards */}
               {offer.hotelOptions && offer.hotelOptions.length > 0 && (
                 <>
-                  <h2 className="text-30">Available Hotels</h2>
+                  <h2 className="text-30">{t("offer.availableHotels")}</h2>
                   <p className="text-15 text-light-2 mt-10 mb-30">
-                    Choose from our carefully selected hotels for this package.
-                    Click on any hotel to view detailed information and pricing.
+                    {t("offer.availableHotelsDescription")}
                   </p>
                   <HotelCards hotelOptions={offer.hotelOptions} />
                   <div className="line mt-60 mb-60"></div>
@@ -68,7 +93,7 @@ export default function OfferDetail({ offer }) {
               {((offer.inclusions && offer.inclusions.length > 0) ||
                 (offer.exclusions && offer.exclusions.length > 0)) && (
                 <>
-                  <h2 className="text-30">What's Included</h2>
+                  <h2 className="text-30">{t("offer.whatsIncluded")}</h2>
                   <Included
                     inclusions={offer.inclusions}
                     exclusions={offer.exclusions}
@@ -89,18 +114,20 @@ export default function OfferDetail({ offer }) {
               {offer.policies && <Policies policies={offer.policies} />}
 
               {/* FAQ Section */}
-              <h2 className="text-30">Frequently Asked Questions</h2>
+              <h2 className="text-30">{t("offer.frequentlyAskedQuestions")}</h2>
               <div className="accordion -simple row y-gap-20 mt-30 js-accordion">
                 <Faq />
               </div>
             </div>
 
-            {/* Sidebar */}
-            <div className="col-lg-4">
-              <div className="d-flex justify-end js-pin-content">
-                <OfferSidebar offer={offer} />
+            {/* Sidebar - shows last in LTR */}
+            {!isRTL && (
+              <div className="col-lg-4">
+                <div className="d-flex justify-end js-pin-content">
+                  <OfferSidebar offer={offer} />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>

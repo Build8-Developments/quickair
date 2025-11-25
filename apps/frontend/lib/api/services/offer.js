@@ -11,6 +11,7 @@ import {
   GET_OFFERS_BY_LOCATION,
   GET_FEATURED_OFFERS,
   SEARCH_OFFERS,
+  GET_FILTERED_OFFERS,
 } from "../queries/offer";
 
 /**
@@ -187,6 +188,52 @@ export async function getOffersByDate({
     return data?.offers || [];
   } catch (error) {
     console.error("[OfferService] Error fetching offers by date:", error);
+    return [];
+  }
+}
+
+/**
+ * Get filtered offers with location slugs and months
+ * @param {object} params - Query parameters
+ * @param {string[]} params.locationSlugs - Array of location slugs to filter by
+ * @param {string[]} params.months - Array of months to filter by
+ * @param {string} params.locale - Locale code ('en' or 'ar')
+ * @param {number} params.limit - Maximum number of results
+ * @param {string} params.sort - Sort order
+ * @returns {Promise<Array>} Array of filtered offers
+ */
+export async function getFilteredOffers({
+  locationSlugs = [],
+  months = [],
+  locale = "en",
+  limit = 100,
+  sort = "createdAt:desc",
+} = {}) {
+  try {
+    const filters = {};
+
+    // Build location filter if location slugs provided
+    if (locationSlugs && locationSlugs.length > 0) {
+      filters.location = {
+        slug: { in: locationSlugs },
+      };
+    }
+
+    // Build month filter if months provided
+    if (months && months.length > 0) {
+      filters.month = { in: months };
+    }
+
+    const data = await executeGraphQL(GET_FILTERED_OFFERS, {
+      locale,
+      filters,
+      pagination: { limit },
+      sort: [sort],
+    });
+
+    return data?.offers || [];
+  } catch (error) {
+    console.error("[OfferService] Error fetching filtered offers:", error);
     return [];
   }
 }

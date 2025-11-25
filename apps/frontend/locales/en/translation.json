@@ -3,7 +3,66 @@
     "search": "Search",
     "reset": "Reset",
     "apply": "Apply",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "seeAll": "See all"
+  },
+  "home": {
+    "specialOffers": "Special Offers",
+    "trustedBrands": "Trusted by all the largest travel brands",
+    "spiritualJourneys": "Spiritual Journeys",
+    "hajOmraPackages": "Haj & Omra Packages",
+    "haj": "Haj",
+    "omra": "Omra",
+    "trendingDestinations": "Trending Destinations",
+    "stats": {
+      "totalDonations": "Happy Travelers",
+      "campaignsClosed": "Tours Completed",
+      "happyPeople": "Destinations Covered",
+      "ourVolunteers": "Partner Hotels"
+    },
+    "featuredTrips": "Featured Trips",
+    "customizeTrip": "Customize your trip",
+    "nights": "Nights",
+    "destination": "Destination",
+    "from": "From",
+    "whyChoose": "Why choose Quick Air",
+    "features": {
+      "flexibility": {
+        "title": "Ultimate flexibility",
+        "text": "You're in control, with free cancellation and payment options to satisfy any plan or budget."
+      },
+      "experiences": {
+        "title": "Memorable experiences",
+        "text": "Browse and book tours and activities so incredible, you'll want to tell your friends."
+      },
+      "quality": {
+        "title": "Quality at our core",
+        "text": "High-quality standards. Millions of reviews. A Quick Air company."
+      },
+      "support": {
+        "title": "Award-winning support",
+        "text": "New price? New plan? No problem. We're here to help, 24/7."
+      }
+    }
+  },
+  "footer": {
+    "speakToExpert": "Speak to our expert at",
+    "followUs": "Follow Us",
+    "contact": "Contact",
+    "company": "Company",
+    "support": "Support",
+    "newsletter": "Newsletter",
+    "newsletterText": "Subscribe to the free newsletter and stay up to date",
+    "emailPlaceholder": "Your email address",
+    "send": "Send",
+    "copyright": "Copyright Quickair Travel",
+    "aboutUs": "About Us",
+    "contactUs": "Contact Us",
+    "dataPolicy": "Data Policy",
+    "cookiePolicy": "Cookie Policy",
+    "legal": "Legal",
+    "getInTouch": "Get in Touch",
+    "liveChat": "Live chat"
   },
   "hero": {
     "subtitle": "One site, 300,000+ experiences you'll remember",
@@ -92,5 +151,52 @@
     "heading": "Page Not Found",
     "description": "We couldn't find the page you're looking for. The page might have been moved, deleted, or the URL might be incorrect.",
     "button": "Return to Home"
+  },
+  "hotel": {
+    "night": "Night",
+    "nights": "Nights",
+    "amenities": "Amenities",
+    "startingFrom": "Starting from",
+    "viewDetails": "View Details"
+  },
+  "offer": {
+    "notFound": "Offer not found",
+    "notFoundDescription": "The offer you're looking for doesn't exist or has been removed.",
+    "about": "About",
+    "availableHotels": "Available Hotels",
+    "availableHotelsDescription": "Choose from our carefully selected hotels for this package. Click on any hotel to view detailed information and pricing.",
+    "whatsIncluded": "What's Included",
+    "frequentlyAskedQuestions": "Frequently Asked Questions",
+    "specialOffer": "Special Offer",
+    "share": "Share",
+    "wishlist": "Wishlist",
+    "hotelOption": "Hotel Option",
+    "hotelOptions": "Hotel Options",
+    "tripDetails": "Trip Details",
+    "offerDate": "Offer Date",
+    "available": "Available",
+    "downloadPdf": "Full Offer (PDF)",
+    "contactWhatsApp": "Contact via WhatsApp",
+    "priceNotice": "Prices vary based on hotel choice and room configuration. See hotel options below for detailed pricing.",
+    "photo": "Photo",
+    "photos": "Photos",
+    "availableText": "Available"
+  },
+  "offersList": {
+    "filter": "Filter",
+    "clearAllFilters": "Clear all filters",
+    "from": "From",
+    "contactUs": "Contact us",
+    "hotel": "Hotel",
+    "hotels": "Hotels",
+    "noOffersFound": "No offers found",
+    "noOffersDescription": "Try adjusting your filters to find more offers",
+    "showingResults": "Showing results",
+    "of": "of",
+    "pageTitle": "Travel Offers & Packages",
+    "pageDescription": "Discover our handpicked selection of exclusive travel offers and vacation packages",
+    "destination": "Destination",
+    "travelMonth": "Travel Month",
+    "noDestinationsAvailable": "No destinations available"
   }
 }

@@ -47,9 +47,7 @@
       },
       "multiple": false,
       "required": false,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"]
     },
     "location": {
       "type": "relation",
@@ -61,7 +59,7 @@
       "type": "enumeration",
       "pluginOptions": {
         "i18n": {
-          "localized": true
+          "localized": false
         }
       },
       "enum": [
@@ -76,18 +74,7 @@
         "September",
         "October",
         "November",
-        "December",
-        "يناير",
-        "فبراير",
-        "مارس",
-        "ابريل",
-        "مايو",
-        "يونيو",
-        "يوليو",
-        "أغسطس",
-        "أكتوبر",
-        "نوفبر",
-        "ديسمبر"
+        "December"
       ]
     },
     "year": {
@@ -108,9 +95,7 @@
       },
       "multiple": true,
       "required": false,
-      "allowedTypes": [
-        "images"
-      ]
+      "allowedTypes": ["images"]
     },
     "pdfFile": {
       "type": "media",
@@ -121,9 +106,7 @@
       },
       "multiple": false,
       "required": true,
-      "allowedTypes": [
-        "files"
-      ]
+      "allowedTypes": ["files"]
     },
     "hotelOptions": {
       "type": "component",

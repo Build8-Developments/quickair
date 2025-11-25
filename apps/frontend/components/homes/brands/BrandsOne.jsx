@@ -1,19 +1,28 @@
 "use client";
 import { Autoplay } from "swiper/modules";
-
 import { Swiper, SwiperSlide } from "swiper/react";
 import { clients } from "@/data/clients";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useTranslation } from "react-i18next";
 import Image from "next/image";
 import React from "react";
 
 export default function BrandsOne() {
+  const { isRTL } = useLanguage();
+  const { t } = useTranslation();
+
   return (
     <section className="layout-pt-xl ">
       <div className="container">
         <div className="row justify-center text-center">
           <div className="col-auto">
-            <h2 data-aos="fade-up" data-aos-delay="" className="text-30">
-              Trusted by all the largest travel brands
+            <h2
+              data-aos="fade-up"
+              data-aos-delay=""
+              className="text-30"
+              style={{ textAlign: isRTL ? "right" : "left" }}
+            >
+              {t("home.trustedBrands")}
             </h2>
           </div>
         </div>
@@ -45,13 +54,19 @@ export default function BrandsOne() {
           >
             {clients.map((elm, i) => (
               <SwiperSlide key={i}>
-                <div key={i} className=" d-flex justify-center items-center ">
+                <div
+                  key={i}
+                  className="d-flex justify-center items-center"
+                  style={{ height: "120px" }}
+                >
                   <Image
-                    width={140}
-                    height={90}
+                    width={200}
+                    height={120}
                     style={{
-                      height: "30px",
-                      width: "100px",
+                      maxHeight: "100px",
+                      maxWidth: "180px",
+                      width: "auto",
+                      height: "auto",
                       objectFit: "contain",
                     }}
                     src={elm}

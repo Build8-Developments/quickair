@@ -34,14 +34,16 @@ export const API_URLS = {
 // Default fetch options
 export const DEFAULT_FETCH_OPTIONS = {
   headers: {
-    "Content-Type": "application/json",
+    "Content-Type": "application/json; charset=utf-8",
+    "Accept-Charset": "utf-8",
   },
 };
 
 // Authenticated fetch options
 export const AUTHENTICATED_FETCH_OPTIONS = {
   headers: {
-    "Content-Type": "application/json",
+    "Content-Type": "application/json; charset=utf-8",
+    "Accept-Charset": "utf-8",
     Authorization: `Bearer ${STRAPI_CONFIG.apiToken}`,
   },
 };

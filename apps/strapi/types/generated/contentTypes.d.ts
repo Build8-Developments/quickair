@@ -839,22 +839,11 @@ export interface ApiOfferOffer extends Struct.CollectionTypeSchema {
         'October',
         'November',
         'December',
-        '\u064A\u0646\u0627\u064A\u0631',
-        '\u0641\u0628\u0631\u0627\u064A\u0631',
-        '\u0645\u0627\u0631\u0633',
-        '\u0627\u0628\u0631\u064A\u0644',
-        '\u0645\u0627\u064A\u0648',
-        '\u064A\u0648\u0646\u064A\u0648',
-        '\u064A\u0648\u0644\u064A\u0648',
-        '\u0623\u063A\u0633\u0637\u0633',
-        '\u0623\u0643\u062A\u0648\u0628\u0631',
-        '\u0646\u0648\u0641\u0628\u0631',
-        '\u062F\u064A\u0633\u0645\u0628\u0631',
       ]
     > &
       Schema.Attribute.SetPluginOptions<{
         i18n: {
-          localized: true;
+          localized: false;
         };
       }>;
     optionalTrips: Schema.Attribute.Component<'offer.optional-trip', true> &
