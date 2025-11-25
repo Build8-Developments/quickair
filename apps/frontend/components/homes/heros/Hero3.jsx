@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
+import { AlertCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/contexts/LanguageContext";
 import FlightCalendar from "./FlightCalendar";
@@ -30,10 +31,27 @@ export default function Hero3() {
     infants: 0,
   });
   const [flightClass, setFlightClass] = useState("Y");
+  const [errors, setErrors] = useState({
+    from: "",
+    to: "",
+    departureDate: "",
+    returnDate: "",
+    sameCity: "",
+    multiCity: {},
+  });
 
   useEffect(() => {
     setCurrentActiveDD("");
-  }, [fromAirport, toAirport, departureDate, returnDate]);
+    // Clear errors when fields change
+    setErrors({
+      from: "",
+      to: "",
+      departureDate: "",
+      returnDate: "",
+      sameCity: "",
+      multiCity: {},
+    });
+  }, [fromAirport, toAirport, departureDate, returnDate, tripType]);
 
   const dropDownContainer = useRef();
   useEffect(() => {
@@ -56,6 +74,16 @@ export default function Hero3() {
   const handleSearch = () => {
     const baseUrl = "https://www.skysync.travel/flight/search";
     const params = new URLSearchParams();
+
+    // Reset errors
+    const newErrors = {
+      from: "",
+      to: "",
+      departureDate: "",
+      returnDate: "",
+      sameCity: "",
+      multiCity: {},
+    };
 
     const formatDate = (date) => {
       if (!date) return "";
@@ -81,10 +109,51 @@ export default function Hero3() {
       const validSegments = multiCitySegments.filter(
         (seg) => seg.from && seg.to && seg.date
       );
+
+      // Validate each segment
+      let hasErrors = false;
+      multiCitySegments.forEach((seg, index) => {
+        const segmentErrors = [];
+        if (!seg.from)
+          segmentErrors.push(
+            language === "ar" ? "المدينة مطلوبة" : "City required"
+          );
+        if (!seg.to)
+          segmentErrors.push(
+            language === "ar" ? "المدينة مطلوبة" : "City required"
+          );
+        if (!seg.date)
+          segmentErrors.push(
+            language === "ar" ? "التاريخ مطلوب" : "Date required"
+          );
+
+        if (seg.from && seg.to && seg.from.iata === seg.to.iata) {
+          segmentErrors.push(
+            language === "ar"
+              ? "يرجى اختيار مدينة مختلفة"
+              : "Cities must be different"
+          );
+        }
+
+        if (segmentErrors.length > 0) {
+          newErrors.multiCity[index] = segmentErrors.join(", ");
+          hasErrors = true;
+        }
+      });
+
       if (validSegments.length < 2) {
-        alert("Please fill in at least 2 flight segments");
+        newErrors.multiCity.general =
+          language === "ar"
+            ? "يرجى ملء رحلتين على الأقل"
+            : "Please fill in at least 2 flights";
+        hasErrors = true;
+      }
+
+      if (hasErrors) {
+        setErrors(newErrors);
         return;
       }
+
       validSegments.forEach((seg, i) => {
         const segNum = i + 1;
         params.append(`dep${segNum}`, seg.from.iata);
@@ -93,11 +162,42 @@ export default function Hero3() {
         params.append(`cl${segNum}`, flightClass);
       });
       params.append("triptype", "3");
+      params.append("key", "NMC");
     } else {
-      if (!fromAirport || !toAirport || !departureDate) {
-        alert("Please fill in all required fields");
+      // Validate single segment
+      if (!fromAirport) {
+        newErrors.from =
+          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
+      }
+      if (!toAirport) {
+        newErrors.to =
+          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
+      }
+      if (!departureDate) {
+        newErrors.departureDate =
+          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
+      }
+      if (tripType === "roundtrip" && !returnDate) {
+        newErrors.returnDate =
+          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
+      }
+
+      if (fromAirport && toAirport && fromAirport.iata === toAirport.iata) {
+        newErrors.sameCity =
+          language === "ar"
+            ? "يرجى اختيار مدينة مختلفة للوصول"
+            : "Departure and arrival cities must be different";
+      }
+
+      if (
+        Object.values(newErrors).some(
+          (error) => error !== "" && typeof error === "string"
+        )
+      ) {
+        setErrors(newErrors);
         return;
       }
+
       params.append("dep1", fromAirport.iata);
       params.append("ret1", toAirport.iata);
       params.append("dtt1", formatDate(departureDate));
@@ -109,8 +209,10 @@ export default function Hero3() {
         params.append("dtt2", formatDate(returnDate));
         params.append("cl2", flightClass);
         params.append("triptype", "2");
+        params.append("key", "IRT");
       } else {
         params.append("triptype", "1");
+        params.append("key", "OW");
       }
     }
 
@@ -120,7 +222,6 @@ export default function Hero3() {
     params.append("direct", "false");
     params.append("baggage", "false");
     params.append("pft", "");
-    params.append("key", "NMC");
     params.append("airlines", "");
     params.append("ref", "false");
     params.append("lc", language.toUpperCase());
@@ -374,6 +475,75 @@ export default function Hero3() {
                           />
                         </div>
                       </div>
+
+                      {/* Error Messages for Single Segment */}
+                      {(errors.from ||
+                        errors.to ||
+                        errors.departureDate ||
+                        errors.returnDate ||
+                        errors.sameCity) && (
+                        <div className="flight-search__error-container">
+                          {errors.from && (
+                            <div
+                              className="flight-search__error"
+                              dir={language === "ar" ? "rtl" : "ltr"}
+                            >
+                              <AlertCircle size={16} />
+                              <span>
+                                {language === "ar" ? "من: " : "From: "}
+                                {errors.from}
+                              </span>
+                            </div>
+                          )}
+                          {errors.to && (
+                            <div
+                              className="flight-search__error"
+                              dir={language === "ar" ? "rtl" : "ltr"}
+                            >
+                              <AlertCircle size={16} />
+                              <span>
+                                {language === "ar" ? "إلى: " : "To: "}
+                                {errors.to}
+                              </span>
+                            </div>
+                          )}
+                          {errors.departureDate && (
+                            <div
+                              className="flight-search__error"
+                              dir={language === "ar" ? "rtl" : "ltr"}
+                            >
+                              <AlertCircle size={16} />
+                              <span>
+                                {language === "ar"
+                                  ? "المغادرة: "
+                                  : "Departure: "}
+                                {errors.departureDate}
+                              </span>
+                            </div>
+                          )}
+                          {errors.returnDate && (
+                            <div
+                              className="flight-search__error"
+                              dir={language === "ar" ? "rtl" : "ltr"}
+                            >
+                              <AlertCircle size={16} />
+                              <span>
+                                {language === "ar" ? "العودة: " : "Return: "}
+                                {errors.returnDate}
+                              </span>
+                            </div>
+                          )}
+                          {errors.sameCity && (
+                            <div
+                              className="flight-search__error"
+                              dir={language === "ar" ? "rtl" : "ltr"}
+                            >
+                              <AlertCircle size={16} />
+                              <span>{errors.sameCity}</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </>
                   ) : (
                     <>
@@ -460,6 +630,10 @@ export default function Hero3() {
                                 setAirport={(airport) => {
                                   const newSegments = [...multiCitySegments];
                                   newSegments[index].to = airport;
+                                  // Auto-calculate next segment's 'from' field
+                                  if (index < multiCitySegments.length - 1) {
+                                    newSegments[index + 1].from = airport;
+                                  }
                                   setMultiCitySegments(newSegments);
                                 }}
                                 active={currentActiveDD === `mc-to-${index}`}
@@ -555,14 +729,43 @@ export default function Hero3() {
                         </div>
                       ))}
 
+                      {/* Multi-city error messages */}
+                      {Object.keys(errors.multiCity).length > 0 && (
+                        <div className="flight-search__error-container">
+                          {Object.entries(errors.multiCity).map(
+                            ([key, value]) => (
+                              <div
+                                key={key}
+                                className="flight-search__error"
+                                dir={language === "ar" ? "rtl" : "ltr"}
+                              >
+                                <AlertCircle size={16} />
+                                <span>
+                                  {key === "general"
+                                    ? value
+                                    : `${
+                                        language === "ar"
+                                          ? `رحلة ${parseInt(key) + 1}`
+                                          : `Flight ${parseInt(key) + 1}`
+                                      }: ${value}`}
+                                </span>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      )}
+
                       {multiCitySegments.length < 6 && (
                         <button
-                          onClick={() =>
+                          onClick={() => {
+                            const lastSegment =
+                              multiCitySegments[multiCitySegments.length - 1];
+                            const newSegmentFrom = lastSegment.to || null;
                             setMultiCitySegments([
                               ...multiCitySegments,
-                              { from: null, to: null, date: null },
-                            ])
-                          }
+                              { from: newSegmentFrom, to: null, date: null },
+                            ]);
+                          }}
                           style={{
                             marginTop: "12px",
                             marginBottom: "12px",

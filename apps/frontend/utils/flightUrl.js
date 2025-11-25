@@ -44,7 +44,8 @@ export function buildFlightSearchUrl({
         params.append(`cl${segNum}`, flightClass);
       }
 
-      params.append("triptype", "2"); // Multi-city trip type
+      params.append("triptype", "3"); // Multi-city trip type
+      params.append("key", "NMC"); // Multi-city key
     } else if (tripType === "roundtrip") {
       // Round trip
       if (
@@ -69,6 +70,7 @@ export function buildFlightSearchUrl({
       params.append("cl2", flightClass);
 
       params.append("triptype", "2"); // Round trip type
+      params.append("key", "IRT"); // Round trip key
     } else if (tripType === "oneway") {
       // One way trip
       if (
@@ -85,6 +87,7 @@ export function buildFlightSearchUrl({
       params.append("cl1", flightClass);
 
       params.append("triptype", "1"); // One way trip type
+      params.append("key", "OW"); // One way key
     } else {
       return null;
     }
@@ -98,7 +101,6 @@ export function buildFlightSearchUrl({
     params.append("direct", "false");
     params.append("baggage", "false");
     params.append("pft", "");
-    params.append("key", "IRT");
     params.append("airlines", "");
     params.append("ref", "false");
     params.append("lc", "EN");

@@ -30,6 +30,27 @@
       "targetField": "title",
       "required": true
     },
+    "description": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "coverImage": {
+      "type": "media",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
     "location": {
       "type": "relation",
       "relation": "manyToOne",
@@ -87,7 +108,9 @@
       },
       "multiple": true,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "pdfFile": {
       "type": "media",
@@ -98,18 +121,9 @@
       },
       "multiple": false,
       "required": true,
-      "allowedTypes": ["files"]
-    },
-    "coverImage": {
-      "type": "media",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      },
-      "multiple": false,
-      "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "files"
+      ]
     },
     "hotelOptions": {
       "type": "component",

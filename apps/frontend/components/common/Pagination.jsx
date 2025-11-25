@@ -1,14 +1,39 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-export default function Pagination({ range = 20 }) {
-  const [activeIndex, setActiveIndex] = useState(1);
+export default function Pagination({
+  range = 20,
+  currentPage,
+  totalPages,
+  onPageChange,
+}) {
+  // Support both controlled and uncontrolled modes
+  const [internalPage, setInternalPage] = useState(1);
+  const isControlled = currentPage !== undefined && onPageChange !== undefined;
+  const activePage = isControlled ? currentPage : internalPage;
+  const totalPagesCount = totalPages || range;
+
+  useEffect(() => {
+    if (isControlled) {
+      setInternalPage(currentPage);
+    }
+  }, [currentPage, isControlled]);
+
+  const handlePageChange = (newPage) => {
+    if (isControlled) {
+      onPageChange(newPage);
+    } else {
+      setInternalPage(newPage);
+    }
+  };
+
   return (
     <div className="pagination justify-center">
       <button
-        onClick={() => setActiveIndex((pre) => (pre > 1 ? pre - 1 : 1))}
+        onClick={() => handlePageChange(activePage > 1 ? activePage - 1 : 1)}
         className="pagination__button customStylePaginationPre button -accent-1 mr-15 -prev"
+        disabled={activePage === 1}
       >
         <i className="icon-arrow-left text-15"></i>
       </button>
@@ -16,74 +41,74 @@ export default function Pagination({ range = 20 }) {
       <div className="pagination__count">
         <div
           style={{ cursor: "pointer" }}
-          onClick={() => setActiveIndex(1)}
-          className={activeIndex == 1 ? `is-active` : ""}
+          onClick={() => handlePageChange(1)}
+          className={activePage == 1 ? `is-active` : ""}
         >
           1
         </div>
-        {range > 1 && (
+        {totalPagesCount > 1 && (
           <div
             style={{ cursor: "pointer" }}
-            href="#"
-            onClick={() => setActiveIndex(2)}
-            className={activeIndex == 2 ? `is-active` : ""}
+            onClick={() => handlePageChange(2)}
+            className={activePage == 2 ? `is-active` : ""}
           >
             2
           </div>
         )}
-        {range > 2 && (
+        {totalPagesCount > 2 && (
           <div
             style={{ cursor: "pointer" }}
-            href="#"
-            onClick={() => setActiveIndex(3)}
-            className={activeIndex == 3 ? `is-active` : ""}
+            onClick={() => handlePageChange(3)}
+            className={activePage == 3 ? `is-active` : ""}
           >
             3
           </div>
         )}
-        {range > 3 && (
+        {totalPagesCount > 3 && (
           <div
             style={{ cursor: "pointer" }}
-            href="#"
-            onClick={() => setActiveIndex(4)}
-            className={activeIndex == 4 ? `is-active` : ""}
+            onClick={() => handlePageChange(4)}
+            className={activePage == 4 ? `is-active` : ""}
           >
             4
           </div>
         )}
 
-        {activeIndex == 5 && range != 5 && (
+        {activePage == 5 && totalPagesCount != 5 && (
           <div
             style={{ cursor: "pointer" }}
-            href="#"
-            onClick={() => setActiveIndex(5)}
-            className={activeIndex == 5 ? `is-active` : ""}
+            onClick={() => handlePageChange(5)}
+            className={activePage == 5 ? `is-active` : ""}
           >
             5
           </div>
         )}
 
-        {range > 5 && <div>...</div>}
-        {activeIndex > 5 && activeIndex < range && (
-          <div style={{ cursor: "pointer" }} href="#" className="is-active">
-            {activeIndex}
+        {totalPagesCount > 5 && <div>...</div>}
+        {activePage > 5 && activePage < totalPagesCount && (
+          <div style={{ cursor: "pointer" }} className="is-active">
+            {activePage}
           </div>
         )}
-        {range > 4 && (
+        {totalPagesCount > 4 && (
           <div
             style={{ cursor: "pointer" }}
-            href="#"
-            onClick={() => setActiveIndex(range)}
-            className={activeIndex == range ? `is-active` : ""}
+            onClick={() => handlePageChange(totalPagesCount)}
+            className={activePage == totalPagesCount ? `is-active` : ""}
           >
-            {range}
+            {totalPagesCount}
           </div>
         )}
       </div>
 
       <button
-        onClick={() => setActiveIndex((pre) => (pre < range ? pre + 1 : pre))}
+        onClick={() =>
+          handlePageChange(
+            activePage < totalPagesCount ? activePage + 1 : activePage
+          )
+        }
         className="pagination__button customStylePaginationNext button -accent-1 ml-15 -next"
+        disabled={activePage === totalPagesCount}
       >
         <i className="icon-arrow-right text-15"></i>
       </button>

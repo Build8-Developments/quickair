@@ -373,6 +373,47 @@
   font-size: 13px;
 }
 
+/* Error Messages */
+.flight-search__error-container {
+  margin: 0 0 16px 0;
+}
+
+.flight-search__error {
+  color: #ef4444;
+  font-size: 13px;
+  padding: 8px 12px;
+  background: #fef2f2;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.flight-search__error svg {
+  flex-shrink: 0;
+  stroke-width: 2;
+}
+
+.flight-search__error span {
+  flex: 1;
+}
+
+.flight-search__error::before {
+  content: "";
+  display: none;
+}
+
+[dir="ltr"] .flight-search__error {
+  border-left: 3px solid #ef4444;
+  text-align: left;
+}
+
+[dir="rtl"] .flight-search__error {
+  border-right: 3px solid #ef4444;
+  text-align: right;
+}
+
 /* Passengers Dropdown */
 .flight-search__passengers-dropdown {
   position: absolute;

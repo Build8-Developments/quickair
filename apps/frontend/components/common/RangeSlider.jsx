@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Slider from "@mui/material/Slider";
 import { ThemeProvider } from "@mui/material/styles";
 
@@ -16,23 +16,47 @@ const theme = createTheme({
   },
 });
 
-export default function RangeSlider() {
-  const [value, setValue] = useState([200, 60000]);
+export default function RangeSlider({
+  value: externalValue,
+  onChange: externalOnChange,
+  min = 0,
+  max = 10000,
+  step = 50,
+}) {
+  const [internalValue, setInternalValue] = useState([min, max]);
+
+  // Support both controlled and uncontrolled modes
+  const isControlled =
+    externalValue !== undefined && externalOnChange !== undefined;
+  const currentValue = isControlled ? externalValue : internalValue;
+
+  useEffect(() => {
+    if (isControlled) {
+      setInternalValue(externalValue);
+    }
+  }, [externalValue, isControlled]);
+
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    if (isControlled) {
+      externalOnChange(newValue);
+    } else {
+      setInternalValue(newValue);
+    }
   };
+
   return (
     <>
       <div className="js-price-rangeSlider" style={{ padding: "20px 15px" }}>
         <div className="px-5">
           <ThemeProvider theme={theme}>
             <Slider
-              getAriaLabel={() => "Minimum distance"}
-              value={value}
+              getAriaLabel={() => "Price range"}
+              value={currentValue}
               onChange={handleChange}
               valueLabelDisplay="auto"
-              max={100000}
-              min={0}
+              max={max}
+              min={min}
+              step={step}
               disableSwap
             />
           </ThemeProvider>
@@ -41,9 +65,9 @@ export default function RangeSlider() {
         <div className="d-flex justify-between mt-20">
           <div className="">
             <span className="">Price:</span>
-            <span className="fw-500 js-lower">{value[0]}</span>
+            <span className="fw-500 js-lower"> ${currentValue[0]}</span>
             <span> - </span>
-            <span className="fw-500 js-upper">{value[1]}</span>
+            <span className="fw-500 js-upper">${currentValue[1]}</span>
           </div>
         </div>
       </div>

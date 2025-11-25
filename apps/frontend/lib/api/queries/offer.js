@@ -11,6 +11,7 @@ export const GET_ALL_OFFERS = `
       documentId
       title
       slug
+      description
       month
       year
       coverImage {
@@ -23,6 +24,16 @@ export const GET_ALL_OFFERS = `
         slug
         type
         country
+      }
+      hotelOptions {
+        hotel {
+          documentId
+        }
+        nights
+        currency
+        roomPricing {
+          doublePrice
+        }
       }
     }
   }
