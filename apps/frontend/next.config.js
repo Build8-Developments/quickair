@@ -10,6 +10,11 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: "quickair-admin.build8.dev",
+        pathname: "/uploads/**",
+      },
+      {
+        protocol: "https",
         hostname: "placehold.co",
       },
     ],

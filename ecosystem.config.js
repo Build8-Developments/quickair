@@ -26,6 +26,8 @@ module.exports = {
       env: {
         NODE_ENV: "production",
         PORT: 3000,
+        NEXT_PUBLIC_STRAPI_URL: "https://quickair-admin.build8.dev",
+        NEXT_PUBLIC_SITE_URL: "https://quickair.build8.dev",
       },
       instances: 1,
       autorestart: true,
