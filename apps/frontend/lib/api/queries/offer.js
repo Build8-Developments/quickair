@@ -32,9 +32,9 @@ export const GET_ALL_OFFERS = `
         nights
         currency
         roomPricing {
-          doublePrice
-          singlePrice
-          triplePrice
+          singleOccupancyPrice
+          doubleOccupancyPrice
+          tripleOccupancyPrice
         }
       }
     }
@@ -114,9 +114,9 @@ export const GET_OFFER_BY_ID = `
         currency
         roomPricing {
           roomType
-          doublePrice
-          singlePrice
-          triplePrice
+          singleOccupancyPrice
+          doubleOccupancyPrice
+          tripleOccupancyPrice
           notes
         }
         kidsPricing {
@@ -258,9 +258,9 @@ export const GET_FILTERED_OFFERS = `
         nights
         currency
         roomPricing {
-          doublePrice
-          singlePrice
-          triplePrice
+          singleOccupancyPrice
+          doubleOccupancyPrice
+          tripleOccupancyPrice
         }
       }
     }

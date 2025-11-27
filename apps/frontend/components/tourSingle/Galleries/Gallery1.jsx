@@ -5,24 +5,34 @@ import ImageLightBox from "./ImageLightBox";
 import Image from "next/image";
 import { getStrapiURL } from "@/lib/strapi";
 
-export default function Gallery1({ offer }) {
+export default function Gallery1({ offer, hotel }) {
   const [activeLightBox, setActiveLightBox] = useState(false);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(1);
 
-  // Prepare images array - use gallery if available, otherwise fallback to coverImage
+  // Determine which data to use
+  const data = hotel || offer;
+  const title = data?.title || data?.name || "Gallery";
+
+  // Prepare images array - prioritize images/gallery, then fallback to coverImage
   const images =
-    offer?.gallery && offer.gallery.length > 0
-      ? offer.gallery.map((img, index) => ({
+    data?.images && data.images.length > 0
+      ? data.images.map((img, index) => ({
           id: index,
           image: getStrapiURL(img.url),
-          alt: img.alternativeText || offer.title,
+          alt: img.alternativeText || title,
         }))
-      : offer?.coverImage
+      : data?.gallery && data.gallery.length > 0
+      ? data.gallery.map((img, index) => ({
+          id: index,
+          image: getStrapiURL(img.url),
+          alt: img.alternativeText || title,
+        }))
+      : data?.coverImage
       ? [
           {
             id: 0,
-            image: getStrapiURL(offer.coverImage.url),
-            alt: offer.coverImage.alternativeText || offer.title,
+            image: getStrapiURL(data.coverImage.url),
+            alt: data.coverImage.alternativeText || title,
           },
         ]
       : [];
@@ -44,7 +54,7 @@ export default function Gallery1({ offer }) {
                 width={index === 0 ? 1155 : index === 1 ? 765 : 375}
                 height={index === 0 ? 765 : index === 1 ? 375 : 375}
                 src={img.image}
-                alt={img.alt || `${offer.title} - Image ${index + 1}`}
+                alt={img.alt || `${title} - Image ${index + 1}`}
                 className="w-100 h-100 object-cover"
               />
             </div>

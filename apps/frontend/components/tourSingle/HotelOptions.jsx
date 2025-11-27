@@ -95,15 +95,17 @@ export default function HotelOptions({ hotelOptions }) {
             {/* Room Pricing */}
             {option.roomPricing && option.roomPricing.length > 0 && (
               <div className="mt-30">
-                <h4 className="text-18 fw-500 mb-15">Room Pricing</h4>
+                <h4 className="text-18 fw-500 mb-15">
+                  Room Pricing (Per Person)
+                </h4>
                 <div className="overflow-scroll">
                   <table className="table-3 -border-bottom col-12 text-14">
                     <thead className="bg-light-1">
                       <tr>
                         <th>Room Type</th>
-                        <th className="text-center">Single</th>
-                        <th className="text-center">Double</th>
-                        <th className="text-center">Triple</th>
+                        <th className="text-center">Single Occupancy</th>
+                        <th className="text-center">Double Occupancy</th>
+                        <th className="text-center">Triple Occupancy</th>
                         <th>Notes</th>
                       </tr>
                     </thead>
@@ -112,22 +114,22 @@ export default function HotelOptions({ hotelOptions }) {
                         <tr key={idx}>
                           <td className="fw-500">{pricing.roomType}</td>
                           <td className="text-center">
-                            {pricing.singlePrice
-                              ? `${formatPrice(pricing.singlePrice)} ${
+                            {pricing.singleOccupancyPrice
+                              ? `${formatPrice(pricing.singleOccupancyPrice)} ${
                                   option.currency
                                 }`
                               : "-"}
                           </td>
                           <td className="text-center">
-                            {pricing.doublePrice
-                              ? `${formatPrice(pricing.doublePrice)} ${
+                            {pricing.doubleOccupancyPrice
+                              ? `${formatPrice(pricing.doubleOccupancyPrice)} ${
                                   option.currency
                                 }`
                               : "-"}
                           </td>
                           <td className="text-center">
-                            {pricing.triplePrice
-                              ? `${formatPrice(pricing.triplePrice)} ${
+                            {pricing.tripleOccupancyPrice
+                              ? `${formatPrice(pricing.tripleOccupancyPrice)} ${
                                   option.currency
                                 }`
                               : "-"}

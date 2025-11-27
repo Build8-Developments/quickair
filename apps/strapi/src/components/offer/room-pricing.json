@@ -2,7 +2,7 @@
   "collectionName": "components_offer_room_pricings",
   "info": {
     "displayName": "Room Pricing",
-    "description": "Detailed pricing for different room types and occupancy"
+    "description": "Per-person pricing based on room occupancy for different room categories"
   },
   "options": {},
   "attributes": {
@@ -10,13 +10,14 @@
       "type": "string",
       "required": true
     },
-    "singlePrice": {
+    "singleOccupancyPrice": {
       "type": "decimal"
     },
-    "doublePrice": {
-      "type": "decimal"
+    "doubleOccupancyPrice": {
+      "type": "decimal",
+      "required": true
     },
-    "triplePrice": {
+    "tripleOccupancyPrice": {
       "type": "decimal"
     },
     "notes": {

@@ -169,9 +169,9 @@ export default function OffersList({
       .flatMap(
         (option) =>
           option.roomPricing?.flatMap((room) => [
-            room.doublePrice || 0,
-            room.singlePrice || 0,
-            room.triplePrice || 0,
+            room.doubleOccupancyPrice || 0,
+            room.singleOccupancyPrice || 0,
+            room.tripleOccupancyPrice || 0,
           ]) || [0]
       )
       .filter((price) => price > 0);

@@ -24,7 +24,7 @@ export default function HotelCards({ hotelOptions }) {
         return (
           <div key={index} className="col-lg-6 col-md-6">
             <Link
-              href={`/hotel/${hotel.documentId}`}
+              href={`/hotels/${hotel.documentId}`}
               className="tourCard -type-1 -hover-shadow border-1 rounded-12 bg-white"
             >
               <div className="tourCard__header">
@@ -125,9 +125,9 @@ export default function HotelCards({ hotelOptions }) {
                           ...option.roomPricing
                             .map((p) =>
                               Math.min(
-                                p.singlePrice || Infinity,
-                                p.doublePrice || Infinity,
-                                p.triplePrice || Infinity
+                                p.singleOccupancyPrice || Infinity,
+                                p.doubleOccupancyPrice || Infinity,
+                                p.tripleOccupancyPrice || Infinity
                               )
                             )
                             .filter((p) => p !== Infinity)

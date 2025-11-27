@@ -46,9 +46,9 @@ export default function TourSlider5() {
         currency = option.currency || currency;
         option.roomPricing.forEach((room) => {
           const prices = [
-            room.singlePrice,
-            room.doublePrice,
-            room.triplePrice,
+            room.singleOccupancyPrice,
+            room.doubleOccupancyPrice,
+            room.tripleOccupancyPrice,
           ].filter((p) => p > 0);
           if (prices.length > 0) {
             minPrice = Math.min(minPrice, ...prices);

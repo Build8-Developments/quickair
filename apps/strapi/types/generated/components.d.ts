@@ -126,15 +126,15 @@ export interface OfferOptionalTrip extends Struct.ComponentSchema {
 export interface OfferRoomPricing extends Struct.ComponentSchema {
   collectionName: 'components_offer_room_pricings';
   info: {
-    description: 'Detailed pricing for different room types and occupancy';
+    description: 'Per-person pricing based on room occupancy for different room categories';
     displayName: 'Room Pricing';
   };
   attributes: {
-    doublePrice: Schema.Attribute.Decimal;
+    doubleOccupancyPrice: Schema.Attribute.Decimal & Schema.Attribute.Required;
     notes: Schema.Attribute.Text;
     roomType: Schema.Attribute.String & Schema.Attribute.Required;
-    singlePrice: Schema.Attribute.Decimal;
-    triplePrice: Schema.Attribute.Decimal;
+    singleOccupancyPrice: Schema.Attribute.Decimal;
+    tripleOccupancyPrice: Schema.Attribute.Decimal;
   };
 }
 
