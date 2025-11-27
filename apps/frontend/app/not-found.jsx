@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Link from "next/link";
+import SEO from "@/components/common/SEO";
 
 export default function NotFound() {
   const { t } = useTranslation();
@@ -14,6 +15,7 @@ export default function NotFound() {
 
   return (
     <>
+      <SEO page="notFound" />
       <main dir={isRTL ? "rtl" : "ltr"}>
         <Header3 />
         <section className="nopage mt-header">

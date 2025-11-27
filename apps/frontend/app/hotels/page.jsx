@@ -7,6 +7,7 @@ import FooterTwo from "@/components/layout/footers/FooterTwo";
 import HotelsList from "@/components/hotels/HotelsList";
 import { getAllHotels } from "@/lib/api/services/hotel";
 import { useLanguage } from "@/contexts/LanguageContext";
+import SEO from "@/components/common/SEO";
 
 export default function HotelsPage() {
   const { t } = useTranslation();
@@ -27,6 +28,7 @@ export default function HotelsPage() {
 
   return (
     <>
+      <SEO page="hotelsList" />
       <main style={{ overflowX: "hidden" }}>
         <div className="header-margin"></div>
         <Header3 />

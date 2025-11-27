@@ -130,7 +130,7 @@ export interface OfferRoomPricing extends Struct.ComponentSchema {
     displayName: 'Room Pricing';
   };
   attributes: {
-    doubleOccupancyPrice: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    doubleOccupancyPrice: Schema.Attribute.Decimal;
     notes: Schema.Attribute.Text;
     roomType: Schema.Attribute.String & Schema.Attribute.Required;
     singleOccupancyPrice: Schema.Attribute.Decimal;

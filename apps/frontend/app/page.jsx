@@ -10,12 +10,17 @@ import TourSlider5 from "@/components/homes/tours/TourSlider5";
 import FooterTwo from "@/components/layout/footers/FooterTwo";
 import Header3 from "@/components/layout/header/Header3";
 import Faq from "@/components/common/Faq";
-import SEO from "@/components/common/SEO";
+import { generatePageMetadata } from "@/utils/seo";
+import { getServerLocale } from "@/lib/locale";
 
-const page = () => {
+export async function generateMetadata() {
+  const locale = await getServerLocale();
+  return generatePageMetadata("home", locale);
+}
+
+export default async function page() {
   return (
     <>
-      <SEO page="home" />
       <main>
         <Header3 />
         <Hero3 />
@@ -33,6 +38,4 @@ const page = () => {
       </main>
     </>
   );
-};
-
-export default page;
+}

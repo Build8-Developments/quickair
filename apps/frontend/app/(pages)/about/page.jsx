@@ -7,12 +7,14 @@ import Header3 from "@/components/layout/header/Header3";
 import Banner from "@/components/pages/about/Banner";
 import Hero from "@/components/pages/about/Hero";
 import Information from "@/components/pages/about/Information";
+import { generatePageMetadata } from "@/utils/seo";
+import { getServerLocale } from "@/lib/locale";
 import React from "react";
 
-export const metadata = {
-  title: "About || ViaTour - Travel & Tour React NextJS Template",
-  description: "ViaTour - Travel & Tour React NextJS Template",
-};
+export async function generateMetadata() {
+  const locale = await getServerLocale();
+  return generatePageMetadata("about", locale);
+}
 
 export default function page() {
   return (

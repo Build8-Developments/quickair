@@ -165,6 +165,81 @@ export const seoConfig = {
       ogImage: "/img/seo/dashboard-og-ar.jpg",
     },
   },
+
+  // Offers List
+  offersList: {
+    en: {
+      title: "Exclusive Travel Offers & Packages | QuickAir",
+      description:
+        "Discover our handpicked selection of exclusive travel offers and vacation packages. Find the best deals for your next adventure.",
+      keywords:
+        "travel offers, vacation packages, travel deals, holiday packages, special offers",
+      ogImage: "/img/seo/offers-og.jpg",
+    },
+    ar: {
+      title: "عروض وباقات السفر الحصرية | QuickAir",
+      description:
+        "اكتشف مجموعتنا المختارة من عروض السفر الحصرية وباقات العطلات. اعثر على أفضل الصفقات لمغامرتك القادمة.",
+      keywords:
+        "عروض السفر, باقات العطلات, صفقات السفر, باقات العطلات, عروض خاصة",
+      ogImage: "/img/seo/offers-og-ar.jpg",
+    },
+  },
+
+  // Hotels List
+  hotelsList: {
+    en: {
+      title: "Premium Hotels Worldwide | QuickAir",
+      description:
+        "Explore our curated collection of premium hotels worldwide. Find the perfect accommodation for your next trip.",
+      keywords:
+        "hotels, accommodation, luxury hotels, hotel booking, premium hotels",
+      ogImage: "/img/seo/hotels-og.jpg",
+    },
+    ar: {
+      title: "الفنادق الفاخرة حول العالم | QuickAir",
+      description:
+        "استكشف مجموعتنا المنتقاة من الفنادق الفاخرة حول العالم. اعثر على الإقامة المثالية لرحلتك القادمة.",
+      keywords: "فنادق, إقامة, فنادق فاخرة, حجز فنادق, فنادق ممتازة",
+      ogImage: "/img/seo/hotels-og-ar.jpg",
+    },
+  },
+
+  // Terms & Conditions
+  terms: {
+    en: {
+      title: "Terms & Conditions | QuickAir",
+      description:
+        "Read QuickAir's terms and conditions for using our travel services and booking platform.",
+      keywords: "terms and conditions, terms of service, legal, booking terms",
+      ogImage: "/img/seo/terms-og.jpg",
+    },
+    ar: {
+      title: "الشروط والأحكام | QuickAir",
+      description:
+        "اقرأ شروط وأحكام QuickAir لاستخدام خدمات السفر ومنصة الحجز الخاصة بنا.",
+      keywords: "الشروط والأحكام, شروط الخدمة, قانوني, شروط الحجز",
+      ogImage: "/img/seo/terms-og-ar.jpg",
+    },
+  },
+
+  // 404 Not Found
+  notFound: {
+    en: {
+      title: "Page Not Found | QuickAir",
+      description:
+        "The page you're looking for doesn't exist. Explore our travel offers and destinations.",
+      keywords: "404, not found, page not found",
+      ogImage: "/img/seo/404-og.jpg",
+    },
+    ar: {
+      title: "الصفحة غير موجودة | QuickAir",
+      description:
+        "الصفحة التي تبحث عنها غير موجودة. استكشف عروض السفر والوجهات لدينا.",
+      keywords: "404, غير موجود, صفحة غير موجودة",
+      ogImage: "/img/seo/404-og-ar.jpg",
+    },
+  },
 };
 
 // Default fallback metadata

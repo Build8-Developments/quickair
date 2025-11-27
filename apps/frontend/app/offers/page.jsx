@@ -7,6 +7,7 @@ import FooterTwo from "@/components/layout/footers/FooterTwo";
 import OffersList from "@/components/offers/OffersList";
 import { getAllOffers } from "@/lib/api/services/offer";
 import { useLanguage } from "@/contexts/LanguageContext";
+import SEO from "@/components/common/SEO";
 
 export default function OffersPage() {
   const { t } = useTranslation();
@@ -31,6 +32,7 @@ export default function OffersPage() {
 
   return (
     <>
+      <SEO page="offersList" />
       <main style={{ overflowX: "hidden" }}>
         <div className="header-margin"></div>
         <Header3 />

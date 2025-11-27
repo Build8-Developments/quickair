@@ -15,7 +15,7 @@
     },
     "doubleOccupancyPrice": {
       "type": "decimal",
-      "required": true
+      "required": false
     },
     "tripleOccupancyPrice": {
       "type": "decimal"
