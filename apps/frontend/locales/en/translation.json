@@ -277,6 +277,23 @@
     "travelMonth": "Travel Month",
     "noDestinationsAvailable": "No destinations available"
   },
+  "hotelsList": {
+    "filter": "Filter",
+    "clearAllFilters": "Clear all filters",
+    "from": "From",
+    "viewDetails": "View Details",
+    "amenity": "Amenity",
+    "amenities": "Amenities",
+    "noHotelsFound": "No hotels found",
+    "noHotelsDescription": "Try adjusting your filters to find more hotels",
+    "showingResults": "Showing results",
+    "of": "of",
+    "pageTitle": "Premium Hotels",
+    "pageDescription": "Explore our curated collection of premium hotels worldwide",
+    "destination": "Destination",
+    "noDestinationsAvailable": "No destinations available",
+    "noAmenitiesAvailable": "No amenities available"
+  },
   "booking": {
     "confirmBooking": "Confirm Your Booking",
     "bookingSummary": "Booking Summary",

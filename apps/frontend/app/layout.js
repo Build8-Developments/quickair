@@ -4,6 +4,7 @@ import "../public/css/hero-search.css";
 import "../public/css/mega-menu-cards.css";
 import "../public/css/flight-search.css";
 import "../public/css/offer-skeleton.css";
+import "../public/css/hotel-skeleton.css";
 
 import { Rubik } from "next/font/google";
 import ScrollTopBehaviour from "@/components/common/ScrollTopBehavier";

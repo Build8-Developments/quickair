@@ -277,6 +277,23 @@
     "travelMonth": "شهر السفر",
     "noDestinationsAvailable": "لا توجد وجهات متاحة"
   },
+  "hotelsList": {
+    "filter": "تصفية",
+    "clearAllFilters": "مسح جميع الفلاتر",
+    "from": "من",
+    "viewDetails": "عرض التفاصيل",
+    "amenity": "ميزة",
+    "amenities": "المرافق",
+    "noHotelsFound": "لم يتم العثور على فنادق",
+    "noHotelsDescription": "حاول تعديل الفلاتر للعثور على المزيد من الفنادق",
+    "showingResults": "عرض النتائج",
+    "of": "من",
+    "pageTitle": "الفنادق الفاخرة",
+    "pageDescription": "استكشف مجموعتنا المنتقاة من الفنادق الفاخرة حول العالم",
+    "destination": "الوجهة",
+    "noDestinationsAvailable": "لا توجد وجهات متاحة",
+    "noAmenitiesAvailable": "لا توجد مرافق متاحة"
+  },
   "booking": {
     "confirmBooking": "تأكيد حجزك",
     "bookingSummary": "ملخص الحجز",

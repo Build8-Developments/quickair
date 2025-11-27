@@ -12,6 +12,13 @@ export const GET_ALL_HOTELS = `
     name
     shortDescription
     stars
+    location {
+      documentId
+      name
+      slug
+      type
+      country
+    }
   }
 }
 `;
