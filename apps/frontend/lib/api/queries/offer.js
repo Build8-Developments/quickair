@@ -104,12 +104,7 @@ export const GET_OFFER_BY_ID = `
         mealPlan {
           documentId
           name
-          code
-          description
-          inclusions {
-            item
-            description
-          }
+          
         }
         currency
         roomPricing {

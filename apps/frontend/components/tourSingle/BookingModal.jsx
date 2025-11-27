@@ -3,6 +3,30 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  X,
+  FileText,
+  Hotel,
+  Calendar,
+  Users,
+  Ticket,
+  CheckCircle,
+  ArrowRight,
+  Moon,
+  User,
+  Mail,
+  Phone,
+  FileEdit,
+  Info,
+  Shield,
+  Clock,
+  Headphones,
+  ArrowLeft,
+  ArrowUpRight,
+  ShieldCheck,
+  AlertCircle,
+} from "lucide-react";
+import styles from "./BookingModal.module.css";
 
 export default function BookingModal({
   isOpen,
@@ -18,10 +42,12 @@ export default function BookingModal({
     fullName: "",
     email: "",
     phone: "",
+    specialRequests: "",
   });
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSummaryExpanded, setIsSummaryExpanded] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,19 +62,23 @@ export default function BookingModal({
     const newErrors = {};
 
     if (!formData.fullName.trim()) {
-      newErrors.fullName = t("booking.fullNameRequired");
+      newErrors.fullName =
+        t("booking.fullNameRequired") || "Full name is required";
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = t("booking.emailRequired");
+      newErrors.email = t("booking.emailRequired") || "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = t("booking.emailInvalid");
+      newErrors.email =
+        t("booking.emailInvalid") || "Please enter a valid email";
     }
 
     if (!formData.phone.trim()) {
-      newErrors.phone = t("booking.phoneRequired");
+      newErrors.phone =
+        t("booking.phoneRequired") || "Phone number is required";
     } else if (!/^[+]?[\d\s-()]+$/.test(formData.phone)) {
-      newErrors.phone = t("booking.phoneInvalid");
+      newErrors.phone =
+        t("booking.phoneInvalid") || "Please enter a valid phone number";
     }
 
     setErrors(newErrors);
@@ -65,7 +95,7 @@ export default function BookingModal({
     try {
       await onSubmit({ ...formData, ...bookingDetails });
       // Reset form
-      setFormData({ fullName: "", email: "", phone: "" });
+      setFormData({ fullName: "", email: "", phone: "", specialRequests: "" });
       onClose();
     } catch (error) {
       console.error("Booking submission error:", error);
@@ -77,364 +107,377 @@ export default function BookingModal({
   if (!isOpen) return null;
 
   return (
-    <div className="modalOverlay" onClick={onClose}>
+    <div className={styles.modalOverlay} onClick={onClose}>
       <div
-        className="modalContent -booking"
+        className={styles.modalContent}
         onClick={(e) => e.stopPropagation()}
         dir={isRTL ? "rtl" : "ltr"}
       >
-        <div className="modalHeader">
-          <h3 className="text-22 fw-600">{t("booking.confirmBooking")}</h3>
-          <button className="modalClose" onClick={onClose}>
-            <i className="icon-close text-20"></i>
+        {/* Enhanced Header with Gradient */}
+        <div className={styles.modalHeader}>
+          <div>
+            <h3 className="text-24 fw-700 mb-5">
+              {t("booking.confirmBooking") || "Confirm Your Booking"}
+            </h3>
+            <p className="text-14 text-light-2">
+              {t("booking.almostDone") ||
+                "You're almost done! Complete your booking details"}
+            </p>
+          </div>
+          <button className={styles.modalClose} onClick={onClose}>
+            <X size={20} />
           </button>
         </div>
 
-        <div className="modalBody">
+        <div className={styles.modalBody}>
           {/* Booking Summary */}
           <div className="bookingSummary mb-30">
-            <h5 className="text-18 fw-600 mb-20">
-              {t("booking.bookingSummary")}
-            </h5>
-
-            {/* Hotel Name Card */}
-            <div className="summary-card mb-15">
-              <div className="d-flex items-center">
-                <div className="summary-icon">
-                  <i className="icon-hotel text-22"></i>
-                </div>
-                <div className="ml-15">
-                  <div className="text-12 text-light-2 mb-5">
-                    {t("hotel.hotel")}
-                  </div>
-                  <div className="text-16 fw-600">
-                    {bookingDetails.hotelName}
-                  </div>
-                </div>
-              </div>
+            <div className={styles["summary-header"]}>
+              <FileText size={20} className="text-accent-1" />
+              <h5 className="text-18 fw-700 ml-10">
+                {t("booking.bookingSummary") || "Booking Summary"}
+              </h5>
             </div>
 
-            {/* Dates Card */}
-            {bookingDetails.checkInDate && bookingDetails.checkOutDate && (
-              <div className="summary-card mb-15">
+            <div className={styles["summary-grid"]}>
+              {/* Hotel Name Card */}
+              <div className={styles["summary-card"]}>
                 <div className="d-flex items-center">
-                  <div className="summary-icon">
-                    <i className="icon-calendar text-22"></i>
+                  <div className={styles["summary-icon"]}>
+                    <Hotel size={22} />
                   </div>
-                  <div className="ml-15 flex-1">
+                  <div className="ml-15">
                     <div className="text-12 text-light-2 mb-5">
-                      {t("hotel.dates")}
+                      {t("hotel.hotel") || "Hotel"}
                     </div>
-                    <div className="d-flex items-center gap-10">
-                      <div>
-                        <div className="text-13 fw-500">
-                          {bookingDetails.checkInDate}
-                        </div>
-                      </div>
-                      <i className="icon-arrow-right text-12 text-light-2"></i>
-                      <div>
-                        <div className="text-13 fw-500">
-                          {bookingDetails.checkOutDate}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-12 text-accent-1 mt-5">
-                      {bookingDetails.nights} {t("hotel.nights")}
+                    <div className="text-16 fw-700">
+                      {bookingDetails.hotelName}
                     </div>
                   </div>
                 </div>
               </div>
-            )}
 
-            {/* Guests Card */}
-            <div className="summary-card mb-15">
-              <div className="d-flex items-center">
-                <div className="summary-icon">
-                  <i className="icon-user text-22"></i>
-                </div>
-                <div className="ml-15">
-                  <div className="text-12 text-light-2 mb-5">
-                    {t("hotel.guests")}
-                  </div>
-                  <div className="text-15 fw-500">
-                    {bookingDetails.adults} {t("hotel.adult")}
-                    {bookingDetails.children > 0 &&
-                      `, ${bookingDetails.children} ${t("hotel.children")}`}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Optional Trips */}
-            {bookingDetails.optionalTrips &&
-              bookingDetails.optionalTrips.length > 0 && (
-                <div className="summary-card mb-15">
-                  <div className="d-flex items-start">
-                    <div className="summary-icon">
-                      <i className="icon-ticket text-22"></i>
+              {/* Dates Card */}
+              {bookingDetails.checkInDate && bookingDetails.checkOutDate && (
+                <div className={styles["summary-card"]}>
+                  <div className="d-flex items-center">
+                    <div className={styles["summary-icon"]}>
+                      <Calendar size={22} />
                     </div>
                     <div className="ml-15 flex-1">
-                      <div className="text-12 text-light-2 mb-10">
-                        {t("hotel.addExtra")}
+                      <div className="text-12 text-light-2 mb-5">
+                        {t("hotel.dates") || "Dates"}
                       </div>
-                      {bookingDetails.optionalTrips.map((trip, index) => (
-                        <div
-                          key={index}
-                          className="d-flex items-center justify-between mb-8"
-                        >
-                          <span className="text-14">• {trip.title}</span>
-                          <span className="text-13 text-light-2">
-                            {trip.persons}{" "}
-                            {trip.persons > 1
-                              ? t("hotel.persons")
-                              : t("hotel.person")}
+                      <div className={styles["dates-display"]}>
+                        <div className={styles["date-item"]}>
+                          <span className="text-13 fw-600">
+                            {bookingDetails.checkInDate}
                           </span>
                         </div>
-                      ))}
+                        <ArrowRight size={12} className="text-accent-1 mx-10" />
+                        <div className={styles["date-item"]}>
+                          <span className="text-13 fw-600">
+                            {bookingDetails.checkOutDate}
+                          </span>
+                        </div>
+                      </div>
+                      <div className={styles["nights-indicator"]}>
+                        <Moon
+                          size={12}
+                          className={`${styles.inline} ${styles["mr-5"]}`}
+                        />
+                        {bookingDetails.nights} {t("hotel.nights") || "nights"}
+                      </div>
                     </div>
                   </div>
                 </div>
               )}
 
-            {/* Total Price Card */}
-            <div className="summary-card-total">
-              <div className="d-flex justify-between items-center">
-                <div>
-                  <div className="text-12 text-light-2 mb-5">
-                    {t("hotel.total")}
+              {/* Guests Card */}
+              <div className={styles["summary-card"]}>
+                <div className="d-flex items-center">
+                  <div className={styles["summary-icon"]}>
+                    <Users size={22} />
                   </div>
-                  <div className="text-24 fw-700 text-accent-1">
-                    {bookingDetails.total} {bookingDetails.currency}
+                  <div className="ml-15">
+                    <div className="text-12 text-light-2 mb-5">
+                      {t("hotel.guests") || "Guests"}
+                    </div>
+                    <div className={styles["guests-display"]}>
+                      <span
+                        className={`${styles["guest-badge"]} ${styles.adults}`}
+                      >
+                        {bookingDetails.adults} {t("hotel.adult") || "Adults"}
+                      </span>
+                      {bookingDetails.children > 0 && (
+                        <span
+                          className={`${styles["guest-badge"]} ${styles.children}`}
+                        >
+                          {bookingDetails.children}{" "}
+                          {t("hotel.children") || "Children"}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
-                <div className="total-icon">
-                  <i className="icon-check text-28"></i>
+              </div>
+
+              {/* Optional Trips */}
+              {bookingDetails.optionalTrips &&
+                bookingDetails.optionalTrips.length > 0 && (
+                  <div
+                    className={`${styles["summary-card"]} ${styles["full-width"]}`}
+                  >
+                    <div className="d-flex items-start">
+                      <div className={styles["summary-icon"]}>
+                        <Ticket size={22} />
+                      </div>
+                      <div className="ml-15 flex-1">
+                        <div className="text-12 text-light-2 mb-10">
+                          {t("hotel.addExtra") || "Optional Extras"}
+                        </div>
+                        {bookingDetails.optionalTrips.map((trip, index) => (
+                          <div key={index} className={styles["trip-item"]}>
+                            <CheckCircle
+                              size={14}
+                              className="text-accent-1 mr-6"
+                            />
+                            <span className="text-14 fw-500">{trip.title}</span>
+                            <span className={styles["trip-persons"]}>
+                              {trip.persons}{" "}
+                              {trip.persons > 1
+                                ? t("hotel.persons") || "persons"
+                                : t("hotel.person") || "person"}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+            </div>
+
+            {/* Total Price Card */}
+            <div className={styles["summary-card-total"]}>
+              <div className="d-flex justify-between items-center">
+                <div>
+                  <div className="text-13 text-light-2 mb-5">
+                    {t("booking.totalPrice") || "Total Price"}
+                  </div>
+                  <div className={styles["price-display"]}>
+                    <span className={styles["currency-symbol"]}>
+                      {bookingDetails.currency}
+                    </span>
+                    <span className={styles["price-amount"]}>
+                      {bookingDetails.total}
+                    </span>
+                  </div>
+                  <div className="text-11 text-light-2 mt-5">
+                    {t("booking.taxesIncluded") ||
+                      "All taxes and fees included"}
+                  </div>
+                </div>
+                <div className={styles["total-icon"]}>
+                  <CheckCircle size={32} />
                 </div>
               </div>
             </div>
           </div>
+
           {/* Contact Form */}
           <form onSubmit={handleSubmit}>
-            <h5 className="text-18 fw-600 mb-20">
-              {t("booking.contactDetails") || "Contact Details"}
-            </h5>
-            <div className="form-group mb-20">
-              <label className="text-14 fw-500 mb-10">
-                {t("booking.fullName")} *
-              </label>
-              <input
-                type="text"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
-                className={`form-control ${
-                  errors.fullName ? "is-invalid" : ""
-                }`}
-                placeholder={t("booking.fullNamePlaceholder")}
-              />
-              {errors.fullName && (
-                <span className="text-12 text-red mt-5">{errors.fullName}</span>
-              )}
+            <div className={styles["form-section-header"]}>
+              <User size={18} className="text-accent-1" />
+              <h5 className="text-18 fw-700 ml-10">
+                {t("booking.contactDetails") || "Contact Details"}
+              </h5>
             </div>
 
-            <div className="form-group mb-20">
-              <label className="text-14 fw-500 mb-10">
-                {t("booking.email")} *
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className={`form-control ${errors.email ? "is-invalid" : ""}`}
-                placeholder={t("booking.emailPlaceholder")}
-              />
-              {errors.email && (
-                <span className="text-12 text-red mt-5">{errors.email}</span>
-              )}
+            <div className={styles["form-grid"]}>
+              <div className={styles["form-group"]}>
+                <label className={styles["form-label"]}>
+                  <User size={18} className={styles["mr-6"]} />
+                  <span>{t("booking.fullName") || "Full Name"} *</span>
+                </label>
+                <input
+                  type="text"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  className={`${styles["form-control"]} ${
+                    errors.fullName ? styles["is-invalid"] : ""
+                  }`}
+                  placeholder={
+                    t("booking.fullNamePlaceholder") || "Enter your full name"
+                  }
+                />
+                {errors.fullName && (
+                  <span className={styles["error-message"]}>
+                    <AlertCircle
+                      size={12}
+                      className={`${styles.inline} ${styles["mr-5"]}`}
+                    />
+                    {errors.fullName}
+                  </span>
+                )}
+              </div>
+
+              <div className={styles["form-group"]}>
+                <label className={styles["form-label"]}>
+                  <Mail
+                    size={14}
+                    className={`${styles.inline} ${styles["mr-6"]}`}
+                  />
+                  {t("booking.email") || "Email"} *
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className={`${styles["form-control"]} ${
+                    errors.email ? styles["is-invalid"] : ""
+                  }`}
+                  placeholder={
+                    t("booking.emailPlaceholder") || "your@email.com"
+                  }
+                />
+                {errors.email && (
+                  <span className={styles["error-message"]}>
+                    <AlertCircle
+                      size={12}
+                      className={`${styles.inline} ${styles["mr-5"]}`}
+                    />
+                    {errors.email}
+                  </span>
+                )}
+              </div>
+
+              <div className={styles["form-group"]}>
+                <label className={styles["form-label"]}>
+                  <Phone
+                    size={14}
+                    className={`${styles.inline} ${styles["mr-6"]}`}
+                  />
+                  {t("booking.phone") || "Phone"} *
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className={`${styles["form-control"]} ${
+                    errors.phone ? styles["is-invalid"] : ""
+                  }`}
+                  placeholder={
+                    t("booking.phonePlaceholder") || "+1 (555) 000-0000"
+                  }
+                />
+                {errors.phone && (
+                  <span className={styles["error-message"]}>
+                    <AlertCircle
+                      size={12}
+                      className={`${styles.inline} ${styles["mr-5"]}`}
+                    />
+                    {errors.phone}
+                  </span>
+                )}
+              </div>
+
+              <div
+                className={`${styles["form-group"]} ${styles["full-width"]}`}
+              >
+                <label className={styles["form-label"]}>
+                  <FileEdit
+                    size={14}
+                    className={`${styles.inline} ${styles["mr-6"]}`}
+                  />
+                  {t("booking.specialRequests") || "Special Requests"} (
+                  {t("booking.optional") || "Optional"})
+                </label>
+                <textarea
+                  name="specialRequests"
+                  value={formData.specialRequests}
+                  onChange={handleChange}
+                  className={`${styles["form-control"]} ${styles.textarea}`}
+                  placeholder={
+                    t("booking.specialRequestsPlaceholder") ||
+                    "Any special requirements or preferences?"
+                  }
+                  rows="3"
+                />
+              </div>
             </div>
 
-            <div className="form-group mb-20">
-              <label className="text-14 fw-500 mb-10">
-                {t("booking.phone")} *
-              </label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                className={`form-control ${errors.phone ? "is-invalid" : ""}`}
-                placeholder={t("booking.phonePlaceholder")}
-              />
-              {errors.phone && (
-                <span className="text-12 text-red mt-5">{errors.phone}</span>
-              )}
+            {/* What Happens Next */}
+            <div className={styles["info-box"]}>
+              <div className={styles["info-box-header"]}>
+                <Info size={18} className="text-accent-1" />
+                <span className="text-15 fw-600 ml-10">
+                  {t("booking.whatHappensNext") || "What happens next?"}
+                </span>
+              </div>
+              <div className={styles["info-steps"]}>
+                <div className={styles["info-step"]}>
+                  <div className={styles["step-dot"]}>1</div>
+                  <span>
+                    {t("booking.step1") ||
+                      "We'll receive your booking request instantly"}
+                  </span>
+                </div>
+                <div className={styles["info-step"]}>
+                  <div className={styles["step-dot"]}>2</div>
+                  <span>
+                    {t("booking.step2") ||
+                      "Our team will contact you  to confirm"}
+                  </span>
+                </div>
+                <div className={styles["info-step"]}>
+                  <div className={styles["step-dot"]}>3</div>
+                  <span>
+                    {t("booking.step3") || "Receive your booking confirmation"}
+                  </span>
+                </div>
+              </div>
             </div>
 
-            <div className="d-flex gap-15 mt-30">
+            {/* Action Buttons */}
+            <div className={styles["action-buttons"]}>
               <button
                 type="button"
                 onClick={onClose}
-                className="button col-6 -outline-accent-1 text-accent-1 py-15 rounded-8"
+                className={styles["btn-secondary"]}
               >
-                {t("common.cancel")}
+                <ArrowLeft
+                  size={14}
+                  className={`${styles.inline} ${styles["mr-6"]}`}
+                />
+                {t("common.cancel") || "Cancel"}
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="button col-6 -accent-1 text-white py-15 rounded-8"
-                style={{
-                  backgroundColor: "var(--color-accent-1)",
-                  opacity: isSubmitting ? 0.7 : 1,
-                }}
+                className={styles["btn-primary"]}
               >
-                {isSubmitting ? t("booking.sending") : t("booking.sendBooking")}
+                {isSubmitting ? (
+                  <>
+                    <span className={styles.spinner}></span>
+                    {t("booking.sending") || "Sending..."}
+                  </>
+                ) : (
+                  <>
+                    {t("booking.sendBooking") || "Send Booking Request"}
+                    <ArrowUpRight
+                      size={14}
+                      className={`${styles.inline} ${styles["ml-8"]}`}
+                    />
+                  </>
+                )}
               </button>
             </div>
           </form>
         </div>
       </div>
-
-      <style jsx>{`
-        .modalOverlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.5);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 9999;
-          padding: 20px;
-        }
-
-        .modalContent {
-          background: white;
-          border-radius: 12px;
-          max-width: 600px;
-          width: 100%;
-          max-height: 90vh;
-          overflow-y: auto;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .modalHeader {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 24px 30px;
-          border-bottom: 1px solid #e5e7eb;
-        }
-
-        .modalClose {
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 50%;
-          transition: background 0.2s;
-        }
-
-        .modalClose:hover {
-          background: #f3f4f6;
-        }
-
-        .modalBody {
-          padding: 30px;
-        }
-
-        .form-control {
-          width: 100%;
-          padding: 12px 16px;
-          border: 1px solid #d1d5db;
-          border-radius: 8px;
-          font-size: 14px;
-          transition: all 0.2s;
-        }
-
-        .form-control:focus {
-          outline: none;
-          border-color: var(--color-accent-1);
-          box-shadow: 0 0 0 3px rgba(var(--color-accent-1-rgb), 0.1);
-        }
-
-        .form-control.is-invalid {
-          border-color: #ef4444;
-        }
-
-        .text-red {
-          color: #ef4444;
-          display: block;
-        }
-
-        .summary-card {
-          background: #f9fafb;
-          border: 1px solid #e5e7eb;
-          border-radius: 12px;
-          padding: 16px 20px;
-          transition: all 0.3s;
-        }
-
-        .summary-card:hover {
-          background: #f3f4f6;
-          border-color: var(--color-accent-1);
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .summary-card-total {
-          background: linear-gradient(
-            135deg,
-            rgba(var(--color-accent-1-rgb), 0.1) 0%,
-            rgba(var(--color-accent-1-rgb), 0.05) 100%
-          );
-          border: 2px solid var(--color-accent-1);
-          border-radius: 12px;
-          padding: 20px;
-        }
-
-        .summary-icon {
-          width: 48px;
-          height: 48px;
-          background: white;
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--color-accent-1);
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        .total-icon {
-          width: 56px;
-          height: 56px;
-          background: var(--color-accent-1);
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: white;
-        }
-
-        @media (max-width: 768px) {
-          .modalContent {
-            max-width: 100%;
-            margin: 0;
-            border-radius: 12px 12px 0 0;
-            max-height: 95vh;
-          }
-
-          .modalHeader,
-          .modalBody {
-            padding: 20px;
-          }
-        }
-      `}</style>
     </div>
   );
 }

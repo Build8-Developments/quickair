@@ -94,7 +94,6 @@ export const GET_LOCATION_BY_SLUG = `
           nights
           mealPlan {
             code
-            name
           }
         }
       }

@@ -7449,8 +7449,24 @@ h6 {
   margin-bottom: 10px !important;
 }
 
+.ml-6 {
+  margin-left: 6px !important;
+}
+
+.ml-8 {
+  margin-left: 8px !important;
+}
+
 .ml-10 {
   margin-left: 10px !important;
+}
+
+.mr-6 {
+  margin-right: 6px !important;
+}
+
+.mr-8 {
+  margin-right: 8px !important;
 }
 
 .mr-10 {
@@ -12842,7 +12858,7 @@ table.table-4.-border-bottom tbody > tr {
   background-color: white;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1199px) {
   .tourSingleSidebar {
     width: 100%;
   }

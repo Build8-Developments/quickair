@@ -60,8 +60,8 @@ export default function HotelDetail({ hotel, offer, hotelOption }) {
           >
             {/* Sidebar - shows first in RTL */}
             {isRTL && (
-              <div className="col-lg-4">
-                <div className="d-flex justify-start js-pin-content">
+              <div className="col-xl-4">
+                <div className="d-block d-xl-flex justify-content-xl-start js-pin-content">
                   <HotelSidebar
                     hotel={hotel}
                     offer={offer}
@@ -73,7 +73,7 @@ export default function HotelDetail({ hotel, offer, hotelOption }) {
 
             {/* Main Content */}
             <div
-              className="col-lg-8"
+              className="col-xl-8"
               dir={isRTL ? "rtl" : "ltr"}
               style={{ textAlign: isRTL ? "right" : "left" }}
             >
@@ -108,40 +108,6 @@ export default function HotelDetail({ hotel, offer, hotelOption }) {
                   <div className="line mt-60 mb-60"></div>
                 </>
               )}
-
-              {/* Meal Plan Details (if available) */}
-              {hotelOption?.mealPlan &&
-                hotelOption.mealPlan.inclusions &&
-                hotelOption.mealPlan.inclusions.length > 0 && (
-                  <>
-                    <h2 className="text-30">{hotelOption.mealPlan.name}</h2>
-                    {hotelOption.mealPlan.description && (
-                      <p className="mt-10 text-15 text-light-2">
-                        {hotelOption.mealPlan.description}
-                      </p>
-                    )}
-                    <div className="y-gap-15 mt-20">
-                      {hotelOption.mealPlan.inclusions.map((item, i) => (
-                        <div key={i} className="d-flex">
-                          <i
-                            className={`icon-check flex-center text-10 size-24 rounded-full text-green-2 bg-green-1 ${
-                              isRTL ? "ml-15" : "mr-15"
-                            }`}
-                          ></i>
-                          <div>
-                            <span className="text-15 fw-500">{item.item}</span>
-                            {item.description && (
-                              <p className="text-14 text-light-2 mt-5">
-                                {item.description}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="line mt-60 mb-60"></div>
-                  </>
-                )}
 
               {/* Hotel Location Map */}
               {mapCoordinates && hotel.address && (
@@ -221,8 +187,8 @@ export default function HotelDetail({ hotel, offer, hotelOption }) {
 
             {/* Sidebar - shows last in LTR */}
             {!isRTL && (
-              <div className="col-lg-4">
-                <div className="d-flex justify-end js-pin-content">
+              <div className="col-xl-4">
+                <div className="d-block d-xl-flex justify-content-xl-end js-pin-content">
                   <HotelSidebar
                     hotel={hotel}
                     offer={offer}

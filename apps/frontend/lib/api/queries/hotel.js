@@ -105,12 +105,6 @@ export const GET_HOTEL_WITH_OFFER = `
         mealPlan {
           documentId
           name
-          code
-          description
-          inclusions {
-            item
-            description
-          }
         }
         currency
         roomPricing {
@@ -191,7 +185,6 @@ export const GET_FEATURED_TRIPS = `
         }
         mealPlan {
           name
-          code
         }
         roomPricing {
           roomType
