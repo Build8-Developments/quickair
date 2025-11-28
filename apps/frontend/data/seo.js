@@ -150,6 +150,26 @@ export const seoConfig = {
     },
   },
 
+  // FAQ Page
+  faq: {
+    en: {
+      title: "Frequently Asked Questions | QuickAir",
+      description:
+        "Get answers to common questions about bookings, payments, travel, flights, hotels, Hajj & Omra packages, and customer support at QuickAir.",
+      keywords:
+        "FAQ, frequently asked questions, travel questions, booking help, customer support, travel support",
+      ogImage: "/img/seo/faq-og.jpg",
+    },
+    ar: {
+      title: "الأسئلة الشائعة | QuickAir",
+      description:
+        "احصل على إجابات للأسئلة الشائعة حول الحجوزات والدفع والسفر والرحلات الجوية والفنادق وباقات الحج والعمرة ودعم العملاء في QuickAir.",
+      keywords:
+        "الأسئلة الشائعة, أسئلة متكررة, أسئلة السفر, مساعدة الحجز, دعم العملاء, دعم السفر",
+      ogImage: "/img/seo/faq-og-ar.jpg",
+    },
+  },
+
   // Dashboard
   dashboard: {
     en: {

@@ -1,0 +1,55 @@
+{
+  "language": "en",
+  "category": "Visas",
+  "total_questions": 12,
+  "faqs": [
+    {
+      "question": "How can I obtain a travel visa ?",
+      "answer": "You can apply for a visa through our website by selecting the country, entering traveler details, and following the visa instructions."
+    },
+    {
+      "question": "What documents are required for a visa ?",
+      "answer": "A valid passport for at least 6 months, personal photos, visa application form, and sometimes flight and hotel bookings."
+    },
+    {
+      "question": "Do you provide urgent visas ?",
+      "answer": "Yes, some countries offer urgent visa services according to embassy regulations."
+    },
+    {
+      "question": "How long does visa processing take ?",
+      "answer": "Visa processing time varies depending on the country and type of visa, usually from a few d ays to a few weeks."
+    },
+    {
+      "question": "Can I apply for a visa on behalf of someone else ?",
+      "answer": "Yes, as long as you enter the traveler’s cor rect details and provide the required documents."
+    },
+    {
+      "question": "Can a visa be extended after arrival ?",
+      "answer": "It depends on the laws of the issuing country. You should check with the relevant authorities before traveling."
+    },
+    {
+      "question": "What types of visas are available ?",
+      "answer": "They include tourist, business, and family visas."
+    },
+    {
+      "question": "Can a visa be denied ?",
+      "answer": "Yes, visa approval or d enial is at the discretion of the embassy or consulate. Applicants are usually informed of the reasons."
+    },
+    {
+      "question": "Are there fees for obtaining a visa ?",
+      "answer": "Yes, fees vary depending on the visa type and country, and are usually paid upon application or issuance."
+    },
+    {
+      "question": "How can I track my visa applicati on status ?",
+      "answer": "You can track your application status on the website using the application number or by contacting customer support."
+    },
+    {
+      "question": "Do I need a visa to travel to certain countries ?",
+      "answer": "It depends on your nationality and destination country; some countries allow v isa-free entry or visa -on-arrival."
+    },
+    {
+      "question": "Can I apply for a group visa ?",
+      "answer": "Yes, some countries provide group visa services for groups or companies according to their regulations."
+    }
+  ]
+}

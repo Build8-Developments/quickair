@@ -1,0 +1,47 @@
+{
+  "language": "en",
+  "category": "Aviation",
+  "total_questions": 10,
+  "faqs": [
+    {
+      "question": "How can I book a flight on the website ?",
+      "answer": "You can easily book a flight by entering your destination, departure and return dates, and the number of passengers, then clicking “Search Flights.” Choose the flight that suits you and complete the payment to confirm your booking."
+    },
+    {
+      "question": "Do I need to create an account to complete my booking ?",
+      "answer": "Not necessarily. You can book as a guest, but creating an account helps you manage your bookings easily and receive special offers."
+    },
+    {
+      "question": "What payment methods are available ?",
+      "answer": "We accept major credit cards (Visa, MasterCard), e -wallets, and bank transfer s."
+    },
+    {
+      "question": "How do I know if my booking is confirmed ?",
+      "answer": "Once your payment is completed, you will receive a confirmation email with your flight details and booking reference number."
+    },
+    {
+      "question": "Can I modify or cancel my booking after it’s confirmed ?",
+      "answer": "Yes, you can modify or cancel your booking through the “Manage Booking” page. Please note that change or cancellation fees may apply depending on the airl ine’s policy."
+    },
+    {
+      "question": "I didn’t receive a confirmation email. What should I do ?",
+      "answer": "Please  check your spam or junk mail folder first. If you still haven’t received it, contact our customer support team for assistance."
+    },
+    {
+      "question": "Are the prices inclusive of taxes and fees ?",
+      "answer": "Yes, all displayed prices include taxes and basic fees unless stated otherwise."
+    },
+    {
+      "question": "Can I book a multi -destination fligh t?",
+      "answer": "Yes, you can select the type of trip (one -way, round -trip, or multi -destination) on the search page."
+    },
+    {
+      "question": "How can I choose my seat or add extra baggage ?",
+      "answer": "You can do this after confirming your booking through the “Manage Booking” page or during online check -in."
+    },
+    {
+      "question": "Can I book a ticket for someone else ?",
+      "answer": "Yes, you can book a ticket for another person as long as you enter  their personal details exactly as shown in their passport."
+    }
+  ]
+}

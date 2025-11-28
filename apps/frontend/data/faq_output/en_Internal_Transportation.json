@@ -1,0 +1,31 @@
+{
+  "language": "en",
+  "category": "Internal Transportation",
+  "total_questions": 6,
+  "faqs": [
+    {
+      "question": "What types of vehicles are available for internal transportation ?",
+      "answer": "Our company provides minibuses, Hiace vans, and buses to suit all individual and group travel needs."
+    },
+    {
+      "question": "Can I book transportation in advanc e?",
+      "answer": "Yes, transportation can be booked in advance through the website or customer support to confirm the reservation."
+    },
+    {
+      "question": "Does transportation cover short intercity trips or governorates ?",
+      "answer": "Yes, internal transportation covers trips between nearby cities and governorates upon passenger request."
+    },
+    {
+      "question": "Can I choose the vehicle type based on the number of passengers ?",
+      "answer": "Yes, you can choose a minibus for small groups, a Hiace van for medium groups, or a bus for large groups."
+    },
+    {
+      "question": "Are all drivers professional ?",
+      "answer": "Yes, all drivers are licensed and have extensive experience in safe and comfortable transportation."
+    },
+    {
+      "question": "Can internal transportation be combined with tourism or hotel packages ?",
+      "answer": "Yes, internal transportation can be combin ed with tourism and hotel packages to facilitate travel and mobility."
+    }
+  ]
+}

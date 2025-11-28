@@ -1,0 +1,19 @@
+{
+  "language": "en",
+  "category": "Land Transportation",
+  "total_questions": 3,
+  "faqs": [
+    {
+      "question": "What land trips are available ?",
+      "answer": "We offer land trips to Nuweiba, Aqaba, Jordan, and Saudi Arabia, with multiple vehicle options and passenger capacities."
+    },
+    {
+      "question": "Can land trips be combined with tourism or hotel packages ?",
+      "answer": "Yes, bookings can be combined with tourism packages or hotel reservations for convenience."
+    },
+    {
+      "question": "Can I book a trip ticket (TripTik) ?",
+      "answer": "Yes, we provide TripTik ticket booking for land trips to Jordan and Saudi Arabia via Nuweiba and Aqaba."
+    }
+  ]
+}

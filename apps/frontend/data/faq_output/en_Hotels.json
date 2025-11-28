@@ -1,0 +1,79 @@
+{
+  "language": "en",
+  "category": "Hotels",
+  "total_questions": 18,
+  "faqs": [
+    {
+      "question": "How can I book a hotel through the website ?",
+      "answer": "You can easily book by entering the city or hotel name, check -in and check -out dates, and number of guests, then clicking “Search.” Select your preferred hotel and room, and c omplete the payment to confirm your booking."
+    },
+    {
+      "question": "Are taxes and tourist fees included in the room rate ?",
+      "answer": "Most rates include taxes and fees, but in some destinations, a local or tourist tax may be charged upon check -in."
+    },
+    {
+      "question": "Can I modify or cancel my h otel booking after confirmation ?",
+      "answer": "Yes, you can do so through the “Manage Booking” page. Cancellation policies vary depending on the hotel and room type."
+    },
+    {
+      "question": "Can I pay at the hotel upon arrival ?",
+      "answer": "Some hotels allow payment upon arrival, while others require prepayment to c onfirm the booking. This will be clearly stated during the booking process."
+    },
+    {
+      "question": "Is breakfast included in the room rate ?",
+      "answer": "It depends on the room type and rate plan you choose (roo m only, bed & breakfast, half board, etc.)."
+    },
+    {
+      "question": "How can I find the exact location of the hotel ?",
+      "answer": "You can view the hotel’s location on the map shown on the booking page, along with distances from major landmarks and the airport."
+    },
+    {
+      "question": "Can I book more than one room at the same time ?",
+      "answer": "Yes, you can select the number of rooms you need during the sea rch or booking process."
+    },
+    {
+      "question": "Can I book a hotel for someone else ?",
+      "answer": "Yes, as long as you enter the guest’s name exactly as shown on  their ID or passport."
+    },
+    {
+      "question": "What should I do if I face a problem during check -in?",
+      "answer": "Please contact our customer support team or the hotel’s front desk immediately. We’ll assist you in resolving the issue as quickly as possible."
+    },
+    {
+      "question": "Can I request an extra  bed or special amenities ?",
+      "answer": "Yes, you can request an extra bed, baby cot, or special facilities such as an accessible room durin g booking or by contacting the hotel directly."
+    },
+    {
+      "question": "Can I request early check -in or late check -out?",
+      "answer": "This depends on the hotel’s policy and room availability. Additional charges may apply in some cases."
+    },
+    {
+      "question": "Is Wi -Fi available at the hotel ?",
+      "answer": "Most hotels offer free Wi -Fi, but some may charge extra for high -speed internet or access in certain areas."
+    },
+    {
+      "question": "Can I book a hotel without a credit card ?",
+      "answer": "Some hotels allow bookings without a credit card, but most require a valid card to secure your reservation."
+    },
+    {
+      "question": "What happens if I don’t show up at the hotel ?",
+      "answer": "If you fail to cancel your booking in advance and do not check in, a “no -show” fee may be charged according to the hotel’s policy."
+    },
+    {
+      "question": "Are the hotels family -friendly and safe ?",
+      "answer": "Yes, we partner only with verified and secure hotels, and most properties offer family - friendly options and child facilities."
+    },
+    {
+      "question": "Can I see photos of the hotel and rooms before booking ?",
+      "answer": "Yes, we provide high -quality photos of the hotel, rooms, and facilities  so you can review them before booking."
+    },
+    {
+      "question": "Does the room rate include airport transfers ?",
+      "answer": "Some hotels offer free or paid airport transfer services. You can check this information in the hotel details section."
+    },
+    {
+      "question": "Can I book a long -term stay ?",
+      "answer": "Yes, you can book a long -term stay, and many hotels offer special rates for extended stays."
+    }
+  ]
+}

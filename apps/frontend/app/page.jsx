@@ -9,7 +9,7 @@ import TestimonialsThree from "@/components/homes/testimonials/TestimonialsThree
 import TourSlider5 from "@/components/homes/tours/TourSlider5";
 import FooterTwo from "@/components/layout/footers/FooterTwo";
 import Header3 from "@/components/layout/header/Header3";
-import Faq from "@/components/common/Faq";
+import HomeFaq from "@/components/homes/faq/HomeFaq";
 import { generatePageMetadata } from "@/utils/seo";
 import { getServerLocale } from "@/lib/locale";
 
@@ -33,7 +33,7 @@ export default async function page() {
         <TourSlider5 />
         <FeaturesThree />
         <TestimonialsThree />
-        <Faq />
+        <HomeFaq />
         <FooterTwo />
       </main>
     </>

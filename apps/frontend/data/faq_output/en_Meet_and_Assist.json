@@ -1,0 +1,35 @@
+{
+  "language": "en",
+  "category": "Meet and Assist",
+  "total_questions": 7,
+  "faqs": [
+    {
+      "question": "How can I book the service ?",
+      "answer": "Book via the website by specifying arrival time and flight number."
+    },
+    {
+      "question": "Is the service suitable for children and elderly passengers ?",
+      "answer": "Yes, it’s ideal for anyone needing extra assistance ."
+    },
+    {
+      "question": "Are there any special offers or discounts on flights?",
+      "answer": "Yes, we offer seasonal prom otions and discounts on both domestic and international flights. Visit our website regularly or subscribe to our newsletter to stay updated on the latest deals."
+    },
+    {
+      "question": "How can I  get the best fares when booking?",
+      "answer": "We recommend booking early and comparing flights across different dates. You can also take advantag e of exclusive online deals available on our website."
+    },
+    {
+      "question": "Are there discounts for children or students?",
+      "answer": "Some airlines offer special discounts for children and students. You can check this option during the booking process or contact our customer support team for more information."
+    },
+    {
+      "question": "Can I use a promo code during the booking process?",
+      "answer": "Yes, if you have a valid promo code, you can enter it in the “Promo  Code” field before completing the payment to apply the discount instantly."
+    },
+    {
+      "question": "Can I combine more than one offer or discount?",
+      "answer": "In most cases, you cannot combine multiple promotions in a single booking unless stated otherwise in the offer’s terms and conditions."
+    }
+  ]
+}

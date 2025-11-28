@@ -1,0 +1,47 @@
+{
+  "language": "en",
+  "category": "Hajj and Umrah",
+  "total_questions": 10,
+  "faqs": [
+    {
+      "question": "How can I book a Hajj or Umrah trip ?",
+      "answer": "You can book by selecting the suitable package on our website, entering traveler details, and completing the payment to confirm your reservation."
+    },
+    {
+      "question": "What documents are required for booking ?",
+      "answer": "A valid passport for at least 6 months, personal photos, flight and hotel bookings."
+    },
+    {
+      "question": "Does the package include accom modation and transportation ?",
+      "answer": "Yes, our packages usually include accommodation in Mecca and Medina, transportation between holy sites, and a dditional services depending on the package."
+    },
+    {
+      "question": "Do I need a special visa ?",
+      "answer": "Yes, Hajj and Umrah trips require an official visa issued by the Kingdom of Saudi Arabia."
+    },
+    {
+      "question": "Can I modify or cancel my booking ?",
+      "answer": "Bookings can be modified or canceled according to the package’s terms. Additional fees may apply if canceled after a certain period."
+    },
+    {
+      "question": "Are there tour guides or supervisors during the trip ?",
+      "answer": "Yes, all Hajj and Umrah packages include guides and supervisors to assist with rituals and answer questions."
+    },
+    {
+      "question": "Does the package inc lude meals ?",
+      "answer": "It depends on the selected package. Some include daily meals, while others do not."
+    },
+    {
+      "question": "Can I book a group H ajj or Umrah trip ?",
+      "answer": "Yes, we provide group packages for families and groups with special booking arrangements."
+    },
+    {
+      "question": "What are the health tips during the pilgrimage ?",
+      "answer": "Stay hydrated, wear comfortable clothing, avoid overcrowded areas when possible, and follow the supervisors ’ instructions."
+    },
+    {
+      "question": "How do I receive the visa after booking ?",
+      "answer": "After completing the booki ng, you will be contacted to receive your visa electronically or through official embassy procedures."
+    }
+  ]
+}
