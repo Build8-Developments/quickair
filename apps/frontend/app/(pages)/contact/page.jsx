@@ -2,7 +2,7 @@ import FooterTwo from "@/components/layout/footers/FooterTwo";
 import Header3 from "@/components/layout/header/Header3";
 import ContactForm from "@/components/pages/contact/ContactForm";
 import Locations from "@/components/pages/contact/Locations";
-import Map from "@/components/pages/contact/Map";
+import MapWidget from "@/components/pages/contact/MapWidget";
 import { generatePageMetadata } from "@/utils/seo";
 import { getServerLocale } from "@/lib/locale";
 import React from "react";
@@ -17,10 +17,9 @@ export default function page() {
     <>
       <main>
         <Header3 />
-        <Map />
-        <Locations />
         <ContactForm />
-
+        <Locations />
+        <MapWidget />
         <FooterTwo />
       </main>
     </>

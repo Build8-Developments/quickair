@@ -11,10 +11,47 @@ export default function FooterTwo() {
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
   const [year, setYear] = useState(2024);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
 
   useEffect(() => {
     setYear(new Date().getFullYear());
   }, []);
+
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: newsletterEmail }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setSubmitStatus('success');
+        setNewsletterEmail('');
+        setTimeout(() => setSubmitStatus(null), 5000);
+      } else {
+        setSubmitStatus('error');
+        setTimeout(() => setSubmitStatus(null), 5000);
+      }
+    } catch (error) {
+      console.error('Error subscribing to newsletter:', error);
+      setSubmitStatus('error');
+      setTimeout(() => setSubmitStatus(null), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <footer
       className="footer -type-1 -dark bg-dark-1 text-white"
@@ -92,13 +129,29 @@ export default function FooterTwo() {
                 <h4 className="text-20 fw-500">{t("footer.newsletter")}</h4>
                 <p className="mt-20">{t("footer.newsletterText")}</p>
 
-                <div className="footer__newsletter">
+                <form onSubmit={handleNewsletterSubmit} className="footer__newsletter">
                   <input
-                    type="Email"
+                    type="email"
+                    value={newsletterEmail}
+                    onChange={(e) => setNewsletterEmail(e.target.value)}
                     placeholder={t("footer.emailPlaceholder")}
+                    required
+                    disabled={isSubmitting}
                   />
-                  <button>{t("footer.send")}</button>
-                </div>
+                  <button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? '...' : t("footer.send")}
+                  </button>
+                </form>
+                {submitStatus === 'success' && (
+                  <p style={{ color: '#22c55e', marginTop: '10px', fontSize: '14px' }}>
+                    ✓ {t("Subscribed successfully!", "Subscribed successfully!")}
+                  </p>
+                )}
+                {submitStatus === 'error' && (
+                  <p style={{ color: '#ef4444', marginTop: '10px', fontSize: '14px' }}>
+                    ✗ {t("Failed to subscribe. Please try again.", "Failed to subscribe. Please try again.")}
+                  </p>
+                )}
               </div>
             </div>
           </div>

@@ -68,18 +68,40 @@
 }
 
 /* Mobile Select */
+.faq-mobile-select {
+  position: relative;
+}
+
 .faq-mobile-select select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 20px center;
+  background: none;
   padding-right: 50px;
 }
 
+.faq-mobile-select::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid #666;
+  border-bottom: 2px solid #666;
+  transform: translateY(-50%) rotate(45deg);
+  pointer-events: none;
+  transition: border-color 0.2s ease;
+}
+
 [dir="rtl"] .faq-mobile-select select {
-  background-position: left 20px center;
-  padding-left: 50px;
   padding-right: 20px;
+  padding-left: 50px;
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .faq-mobile-select::after {
+  right: auto;
+  left: 20px;
 }
 
 /* FAQ Content Area */

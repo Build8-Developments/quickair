@@ -1,0 +1,227 @@
+.visaNotice {
+  background: linear-gradient(135deg, rgba(1, 159, 177, 0.1) 0%, rgba(1, 192, 212, 0.1) 100%);
+  border: 2.5px solid #019fb1;
+  border-radius: 20px;
+  padding: 30px;
+}
+
+.noticeContent {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.noticeIcon {
+  min-width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.noticeInfo {
+  flex: 1;
+}
+
+.noticeTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #019fb1;
+  margin: 0 0 8px 0;
+}
+
+.noticeDesc {
+  font-size: 15px;
+  color: #666;
+  margin: 0 0 12px 0;
+}
+
+.visaCost {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #019fb1;
+  margin: 0;
+}
+
+.visaCost svg {
+  color: #019fb1;
+}
+
+.visaQuestion {
+  margin-bottom: 40px;
+}
+
+.questionLabel {
+  font-size: 19px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.visaOption {
+  background: #fff;
+  border: 2.5px solid #e8e8e8;
+  border-radius: 20px;
+  padding: 35px 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.visaOption:hover {
+  border-color: #019fb1;
+  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
+  transform: translateY(-3px);
+}
+
+.visaOptionSelected {
+  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
+  border-color: #019fb1;
+  box-shadow: 0 8px 25px rgba(1, 159, 177, 0.3);
+  transform: translateY(-3px);
+}
+
+.optionIcon {
+  width: 70px;
+  height: 70px;
+  background: rgba(1, 159, 177, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #019fb1;
+  margin-bottom: 20px;
+}
+
+.visaOptionSelected .optionIcon {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.optionTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 10px 0;
+}
+
+.visaOptionSelected .optionTitle {
+  color: #fff;
+}
+
+.optionDesc {
+  font-size: 15px;
+  color: #666;
+  margin: 0;
+}
+
+.visaOptionSelected .optionDesc {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.visaOptionNeedHelp .optionIcon {
+  background: rgba(255, 152, 0, 0.1);
+  color: #ff9800;
+}
+
+.visaOptionNeedHelp:hover {
+  border-color: #ff9800;
+}
+
+.visaOptionNeedHelpSelected {
+  background: linear-gradient(135deg, #ff9800 0%, #ffa726 100%);
+  border-color: #ff9800;
+  box-shadow: 0 8px 25px rgba(255, 152, 0, 0.3);
+}
+
+.visaOptionNeedHelpSelected .optionIcon {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.contactInfo {
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 167, 38, 0.1) 100%);
+  border: 2.5px solid #ff9800;
+  border-radius: 20px;
+  padding: 30px;
+  animation: slideInVisa 0.4s ease;
+}
+
+.contactContent {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.contactIcon {
+  min-width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #ff9800 0%, #ffa726 100%);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.contactText {
+  flex: 1;
+}
+
+.contactTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ff9800;
+  margin: 0 0 8px 0;
+}
+
+.contactDesc {
+  font-size: 15px;
+  color: #666;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.continueButton:disabled {
+  cursor: not-allowed;
+}
+
+@keyframes slideInVisa {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .noticeContent,
+  .contactContent {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .noticeIcon,
+  .contactIcon {
+    margin: 0 auto;
+  }
+
+  .visaOption {
+    padding: 30px 20px;
+  }
+}

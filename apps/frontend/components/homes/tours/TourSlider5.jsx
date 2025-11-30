@@ -108,7 +108,7 @@ export default function TourSlider5() {
                   }}
                 >
                   <SwiperSlide>
-                    <Link href={`/`} className=" -type-3 ">
+                    <Link href={`/create-trip`} className=" -type-3 ">
                       <div className="tourCard__image ratio  ratio-41:45 rounded-12  ">
                         <div className="img-ratio rounded-12 d-flex items-center justify-center bg-light-1">
                           <span className="text-black text-24 fw-500 text-center px-20">

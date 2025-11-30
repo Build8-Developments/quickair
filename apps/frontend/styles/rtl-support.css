@@ -1,0 +1,137 @@
+/* RTL Support for Create Trip Flow */
+
+/* Common RTL utilities */
+
+.create-trip-section[dir="rtl"] .mr-5 { margin-left: 5px !important; margin-right: 0 !important; }
+.create-trip-section[dir="rtl"] .mr-10 { margin-left: 10px !important; margin-right: 0 !important; }
+.create-trip-section[dir="rtl"] .mr-15 { margin-left: 15px !important; margin-right: 0 !important; }
+.create-trip-section[dir="rtl"] .mr-20 { margin-left: 20px !important; margin-right: 0 !important; }
+
+.create-trip-section[dir="rtl"] .ml-5 { margin-right: 5px !important; margin-left: 0 !important; }
+.create-trip-section[dir="rtl"] .ml-10 { margin-right: 10px !important; margin-left: 0 !important; }
+.create-trip-section[dir="rtl"] .ml-15 { margin-right: 15px !important; margin-left: 0 !important; }
+.create-trip-section[dir="rtl"] .ml-20 { margin-right: 20px !important; margin-left: 0 !important; }
+
+.create-trip-section[dir="rtl"] .pl-5 { padding-right: 5px !important; padding-left: 0 !important; }
+.create-trip-section[dir="rtl"] .pr-5 { padding-left: 5px !important; padding-right: 0 !important; }
+
+/* Button icon flipping for RTL */
+.create-trip-section[dir="rtl"] .button .icon-arrow-left {
+  transform: scaleX(-1);
+}
+
+.create-trip-section[dir="rtl"] .button .icon-arrow-right {
+  transform: scaleX(-1);
+}
+
+/* Input fields RTL support */
+.create-trip-section[dir="rtl"] input,
+.create-trip-section[dir="rtl"] textarea {
+  text-align: right;
+}
+
+.create-trip-section[dir="rtl"] input::placeholder,
+.create-trip-section[dir="rtl"] textarea::placeholder {
+  text-align: right;
+}
+
+/* Flexbox alignment for RTL */
+/* Keep flex utilities natural; prefer component-level adjustments */
+
+/* Card content alignment */
+.create-trip-section[dir="rtl"] .step-content {
+  text-align: right;
+}
+
+.create-trip-section[dir="ltr"] .step-content {
+  text-align: left;
+}
+
+/* Smooth transitions */
+.create-trip-section * {
+  transition: margin 0.3s ease, padding 0.3s ease, text-align 0.3s ease !important;
+}
+
+/* Step Indicator RTL fixes */
+.create-trip-section[dir="rtl"] .step-indicator {
+  direction: rtl;
+}
+
+.create-trip-section[dir="rtl"] .step-line {
+  left: auto !important;
+  right: 50% !important;
+}
+
+/* Grid helpers */
+.create-trip-section[dir="rtl"] .row {
+  flex-direction: row-reverse;
+}
+
+.create-trip-section[dir="rtl"] .row > [class*="col"] {
+  text-align: right;
+}
+
+/* Price and number display */
+.create-trip-section .price-amount,
+.create-trip-section .counter-value,
+.create-trip-section .stat-value,
+.create-trip-section .summary-value,
+.create-trip-section .duration-value {
+  direction: ltr !important;
+  display: inline-block;
+}
+
+/* Search inputs keep their direction */
+.searchMenu-loc input,
+.search-input,
+.amount-input {
+  /* Direction controlled by component */
+}
+
+/* Filter buttons should not reverse */
+.create-trip-section[dir="rtl"] .filter-buttons-group,
+.create-trip-section[dir="rtl"] .destinations-tags {
+  flex-direction: row;
+}
+
+/* Summary cards */
+.create-trip-section[dir="rtl"] .summary-item {
+  text-align: right;
+}
+
+.create-trip-section[dir="rtl"] .summary-item .label {
+  text-align: right;
+}
+
+.create-trip-section[dir="rtl"] .summary-item .value {
+  text-align: left;
+}
+
+/* Hotel cards */
+.create-trip-section[dir="rtl"] .hotel-card {
+  text-align: right;
+}
+
+.create-trip-section[dir="rtl"] .hotel-info {
+  text-align: right;
+}
+
+.create-trip-section[dir="rtl"] .hotel-price-wrapper {
+  text-align: left;
+}
+
+/* Activity and meal cards */
+.create-trip-section[dir="rtl"] .activity-card,
+.create-trip-section[dir="rtl"] .meal-card {
+  text-align: right;
+}
+
+/* Icons that should not flip */
+.create-trip-section .icon-check,
+.create-trip-section .icon-location,
+.create-trip-section .icon-star,
+.create-trip-section .icon-calendar,
+.create-trip-section .icon-user,
+.create-trip-section .icon-wallet {
+  transform: none !important;
+}

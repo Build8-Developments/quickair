@@ -163,7 +163,7 @@ export default function Menu() {
           </div>
 
           <div className="desktopNav__item">
-            <a href="/flow">{t("navbar.createTrip")}</a>
+            <Link href="/create-trip">{t("navbar.createTrip")}</Link>
           </div>
 
           <div className="desktopNav__item">

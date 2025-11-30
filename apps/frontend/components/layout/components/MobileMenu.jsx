@@ -167,7 +167,7 @@ export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen }) {
             </li>
 
             <li className="menuNav__item">
-              <Link href="/flow">{t("navbar.createTrip")}</Link>
+              <Link href="/create-trip">{t("navbar.createTrip")}</Link>
             </li>
 
             <li className="menuNav__item">
@@ -179,7 +179,7 @@ export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen }) {
             </li>
 
             <li className="menuNav__item">
-              <Link href="/contact">{t("navbar.help")}</Link>
+              <Link href="/faq">{t("navbar.faq")}</Link>
             </li>
           </ul>
         </div>

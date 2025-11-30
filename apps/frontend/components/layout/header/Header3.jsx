@@ -63,10 +63,10 @@ export default function Header3() {
           <div className="header__right">
             <LanguageSwitcherButton />
             <Link
-              href="/contact"
+              href="/faq"
               className="button -sm -outline-dark-1 rounded-200 text-dark-1 header__help-btn"
             >
-              {t("navbar.help")}
+              {t("navbar.faq")}
             </Link>
             <button
               onClick={() => setMobileMenuOpen(true)}

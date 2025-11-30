@@ -10,6 +10,7 @@ import TourSlider5 from "@/components/homes/tours/TourSlider5";
 import FooterTwo from "@/components/layout/footers/FooterTwo";
 import Header3 from "@/components/layout/header/Header3";
 import HomeFaq from "@/components/homes/faq/HomeFaq";
+import ContactForm from "@/components/pages/contact/ContactForm";
 import { generatePageMetadata } from "@/utils/seo";
 import { getServerLocale } from "@/lib/locale";
 
@@ -34,6 +35,7 @@ export default async function page() {
         <FeaturesThree />
         <TestimonialsThree />
         <HomeFaq />
+        <ContactForm />
         <FooterTwo />
       </main>
     </>

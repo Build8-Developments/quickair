@@ -1,0 +1,22 @@
+.createTripSection {
+  background: #f8fafc;
+}
+
+.pageTitle {
+  font-size: 40px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.pageSubtitle {
+  font-size: 16px;
+  color: #334155;
+  margin-top: 15px;
+}
+
+@media (max-width: 768px) {
+  .pageTitle {
+    font-size: 32px;
+  }
+}

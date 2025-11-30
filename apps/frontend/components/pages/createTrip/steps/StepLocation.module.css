@@ -1,0 +1,237 @@
+.locationCard {
+  padding: 40px 30px;
+  border: 3px solid #e5e7eb;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.locationCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #019fb1 0%, #00b4c8 100%);
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.selected::before {
+  transform: scaleX(1);
+}
+
+.locationCard:hover {
+  border-color: #019fb1;
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(1, 159, 177, 0.15);
+}
+
+.selected {
+  border-color: #019fb1;
+  background: linear-gradient(135deg, #e6f7f9 0%, #d0f0f4 50%, #e6f7f9 100%);
+  box-shadow: 0 12px 32px rgba(1, 159, 177, 0.2);
+  transform: translateY(-4px);
+}
+
+.content {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.iconWrapper {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  border-radius: 30px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(230, 247, 249, 0.8) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 24px rgba(1, 159, 177, 0.15);
+}
+
+.locationCard:hover .iconWrapper {
+  background: linear-gradient(135deg, #019fb1 0%, #00b4c8 100%);
+  transform: scale(1.05);
+  box-shadow: 0 12px 32px rgba(1, 159, 177, 0.3);
+}
+
+.selected .iconWrapper {
+  background: linear-gradient(135deg, #019fb1 0%, #00b4c8 100%);
+  transform: scale(1.1);
+  box-shadow: 0 12px 32px rgba(1, 159, 177, 0.4);
+}
+
+.locationTitle {
+  transition: font-size 0.3s ease;
+}
+
+.cardDescription {
+  color: #0f172a;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.destinationsPreview {
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.selected .destinationsPreview {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: #019fb1;
+}
+
+.previewLabel {
+  text-align: center;
+  color: #0f172a;
+}
+
+.previewLabelEn {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+
+.destinationsTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.destinationTag {
+  padding: 6px 14px;
+  background: #e6f7f9;
+  color: #019fb1;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.destinationTagMore {
+  background: #019fb1;
+  color: #fff;
+}
+
+.locationCard:hover .destinationTag {
+  background: #d0f0f4;
+}
+
+.selected .destinationTag {
+  background: #019fb1;
+  color: #fff;
+}
+
+.selected .destinationTagMore {
+  background: #b71c38;
+}
+
+.locationStats {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.statItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.statIcon {
+  color: #019fb1;
+  font-size: 18px;
+}
+
+.statLabel {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.statValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  display: block;
+}
+
+.statValueNote {
+  display: block;
+  font-size: 11px;
+  color: #475569;
+  margin-top: 4px;
+}
+
+.selectedCheck {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #019fb1 0%, #00b4c8 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.4);
+  animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.disabledButton {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .locationCard {
+    min-height: 350px;
+    padding: 30px 20px;
+  }
+
+  .iconWrapper {
+    width: 100px;
+    height: 100px;
+  }
+
+  .locationTitle {
+    font-size: 20px !important;
+  }
+}

@@ -1,0 +1,209 @@
+.sectionTitle {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+}
+
+.sectionDesc {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.preferenceSection {
+  margin-bottom: 40px;
+}
+
+.activityCard {
+  background: #fff;
+  border: 2.5px solid #e8e8e8;
+  border-radius: 20px;
+  padding: 30px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.activityCard:hover {
+  border-color: #019fb1;
+  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
+  transform: translateY(-3px);
+}
+
+.activityCardSelected {
+  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
+  border-color: #019fb1;
+  box-shadow: 0 8px 25px rgba(1, 159, 177, 0.3);
+  transform: translateY(-3px);
+}
+
+.activityIcon {
+  width: 70px;
+  height: 70px;
+  background: rgba(1, 159, 177, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #019fb1;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.activityCardSelected .activityIcon {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.activityTitle {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+}
+
+.activityCardSelected .activityTitle {
+  color: #fff;
+}
+
+.activitySubtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.activityCardSelected .activitySubtitle {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.checkBadge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #019fb1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mealCard {
+  background: #fff;
+  border: 2.5px solid #e8e8e8;
+  border-radius: 20px;
+  padding: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mealCard:hover {
+  border-color: #019fb1;
+  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
+  transform: translateY(-2px);
+}
+
+.mealCardSelected {
+  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
+  border-color: #019fb1;
+  box-shadow: 0 8px 25px rgba(1, 159, 177, 0.3);
+  transform: translateY(-2px);
+}
+
+.mealContent {
+  flex: 1;
+}
+
+.mealTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+}
+
+.mealCardSelected .mealTitle {
+  color: #fff;
+}
+
+.mealDesc {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.mealCardSelected .mealDesc {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.checkIcon {
+  color: #019fb1;
+  margin-left: 15px;
+}
+
+.mealCardSelected .checkIcon {
+  color: #fff;
+}
+
+.specialRequestsInput {
+  width: 100%;
+  padding: 20px 25px;
+  border: 2.5px solid #e8e8e8;
+  border-radius: 20px;
+  font-size: 16px;
+  font-family: inherit;
+  resize: vertical;
+  transition: all 0.3s ease;
+  line-height: 1.6;
+}
+
+.specialRequestsInput:focus {
+  outline: none;
+  border-color: #019fb1;
+  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
+}
+
+.specialRequestsInput::placeholder {
+  color: #999;
+}
+
+@media (max-width: 768px) {
+  .activityCard {
+    padding: 25px 15px;
+  }
+
+  .activityIcon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .activityIcon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .mealCard {
+    padding: 20px;
+  }
+
+  .checkBadge {
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+  }
+}

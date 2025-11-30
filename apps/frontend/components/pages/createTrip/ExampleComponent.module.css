@@ -1,0 +1,145 @@
+.exampleContainer {
+  padding: 40px;
+  background: #fff;
+  border-radius: 16px;
+}
+
+.searchWrapper {
+  position: relative;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 12px 20px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #019fb1;
+}
+
+.optionCard {
+  padding: 24px;
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.optionCard:hover {
+  border-color: #019fb1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.15);
+}
+
+.buttonRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 30px;
+  border: 2px solid #019fb1;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.actionButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.outlineButton {
+  background: #fff;
+  color: #019fb1;
+}
+
+.accentButton {
+  background: #019fb1;
+  border-color: #019fb1;
+  color: #fff;
+}
+
+.priceSection {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.priceLabel {
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.priceValue {
+  font-size: 20px;
+  font-weight: 700;
+  color: #019fb1;
+  direction: ltr;
+  display: inline-block;
+  margin-inline: 10px;
+}
+
+.dateSection {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.dateValue {
+  margin-inline: 10px;
+}
+
+.infoBox {
+  padding: 20px;
+  background: linear-gradient(135deg, #e6f7f9 0%, #f0fbfc 100%);
+  border: 2px solid #019fb1;
+  border-radius: 16px;
+}
+
+.infoBox h4 {
+  margin: 0 0 10px 0;
+  color: #019fb1;
+}
+
+.infoBox p {
+  margin: 0;
+  color: #6b7280;
+}
+
+:global([dir="rtl"]) .searchInput {
+  text-align: right;
+}
+
+:global([dir="rtl"]) .optionCard {
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .exampleContainer {
+    padding: 20px;
+  }
+
+  .buttonRow {
+    flex-direction: column;
+  }
+
+  .actionButton {
+    width: 100%;
+    justify-content: center;
+  }
+}

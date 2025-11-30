@@ -1,0 +1,111 @@
+.cardsRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.cardsRowRtl {
+  direction: rtl;
+}
+
+.card {
+  position: relative;
+  padding: 30px 24px;
+  border-radius: 16px;
+  border: 2px solid #edf1f7;
+  background: #ffffff;
+  cursor: pointer;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease,
+    background 0.3s ease;
+  text-align: center;
+  min-height: 220px;
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.05);
+}
+
+.card:hover {
+  border-color: var(--accent-primary);
+  transform: translateY(-4px);
+  box-shadow: 0 18px 35px rgba(10, 99, 122, 0.18);
+}
+
+.cardSelected {
+  border-color: var(--accent-primary);
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.9), var(--accent-ghost));
+  box-shadow: 0 22px 45px rgba(7, 104, 123, 0.25);
+}
+
+.iconBox {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto;
+  border-radius: 32px;
+  background: linear-gradient(135deg, #ffffff 0%, var(--accent-ghost) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-primary);
+  position: relative;
+  overflow: visible;
+  box-shadow: 0 4px 20px rgba(1, 159, 177, 0.12);
+  transition: all 0.3s ease;
+}
+
+.iconBox svg {
+  width: 64px;
+  height: 64px;
+  position: relative;
+  z-index: 2;
+}
+
+.card:hover .iconBox {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 28px rgba(1, 159, 177, 0.2);
+}
+
+.cardSelected .iconBox {
+  background: linear-gradient(135deg, var(--accent-ghost) 0%, #ffffff 100%);
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 12px 32px rgba(1, 159, 177, 0.25);
+}
+
+.selectedCheck {
+  position: absolute;
+  top: 16px;
+  inset-inline-start: 16px;
+  width: 30px;
+  height: 30px;
+  background: #3b82f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.controlsRtl {
+  direction: rtl;
+}
+
+.disabledButton {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 24px 20px;
+  }
+
+  .iconBox {
+    width: 96px;
+    height: 96px;
+  }
+}

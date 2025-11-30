@@ -48,8 +48,16 @@ export function LanguageProvider({ children, initialLanguage }) {
     return language === "ar" ? "ar" : "en";
   };
 
+  // Helper function for translations
+  const t = (ar, en) => {
+    return language === "ar" ? ar : en;
+  };
+
+  // Check if current language is RTL
+  const isRTL = language === "ar";
+
   return (
-    <LanguageContext.Provider value={{ language, changeLanguage, getLocale }}>
+    <LanguageContext.Provider value={{ language, changeLanguage, getLocale, t, isRTL }}>
       {children}
     </LanguageContext.Provider>
   );

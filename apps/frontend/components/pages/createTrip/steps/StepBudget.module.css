@@ -1,0 +1,377 @@
+.sectionLabel {
+  display: block;
+  font-size: 17px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+}
+
+.currencyCard {
+  background: #fff;
+  border: 2.5px solid #e8e8e8;
+  border-radius: 20px;
+  padding: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 100%;
+}
+
+.currencyCard:hover {
+  border-color: #019fb1;
+  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
+  transform: translateY(-2px);
+}
+
+.currencyCardSelected {
+  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
+  border-color: #019fb1;
+  box-shadow: 0 8px 25px rgba(1, 159, 177, 0.3);
+  transform: translateY(-2px);
+}
+
+.currencySymbol {
+  font-size: 32px;
+  font-weight: 700;
+  color: #019fb1;
+  min-width: 50px;
+  text-align: center;
+}
+
+.currencyCardSelected .currencySymbol {
+  color: #fff;
+}
+
+.currencyInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.currencyLabel {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.currencyCardSelected .currencyLabel {
+  color: #fff;
+}
+
+.currencyCode {
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+}
+
+.currencyCardSelected .currencyCode {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.budgetRangeCard {
+  background: #fff;
+  border: 2.5px solid #e8e8e8;
+  border-radius: 20px;
+  padding: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  height: 100%;
+}
+
+.budgetRangeCard:hover {
+  border-color: #019fb1;
+  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
+  transform: translateY(-2px);
+}
+
+.budgetRangeCardSelected {
+  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
+  border-color: #019fb1;
+  box-shadow: 0 8px 25px rgba(1, 159, 177, 0.3);
+  transform: translateY(-2px);
+}
+
+.budgetIconWrapper {
+  min-width: 56px;
+  height: 56px;
+  background: rgba(1, 159, 177, 0.1);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #019fb1;
+}
+
+.budgetRangeCardSelected .budgetIconWrapper {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.budgetContent {
+  flex: 1;
+}
+
+.budgetTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.budgetRangeCardSelected .budgetTitle {
+  color: #fff;
+}
+
+.budgetPrice {
+  font-size: 16px;
+  font-weight: 600;
+  color: #019fb1;
+  margin-bottom: 10px;
+}
+
+.budgetRangeCardSelected .budgetPrice {
+  color: #fff;
+}
+
+.budgetDesc {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.budgetRangeCardSelected .budgetDesc {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.amountInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 2.5px solid #e8e8e8;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.amountInputWrapper:focus-within {
+  border-color: #019fb1;
+  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
+}
+
+.currencyPrefix {
+  padding: 0 25px;
+  background: rgba(1, 159, 177, 0.1);
+  height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;
+  color: #019fb1;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.amountInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0 25px;
+  height: 65px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.amountInput::placeholder {
+  color: #999;
+}
+
+.toggleCard {
+  background: #fff;
+  border: 2.5px solid #e8e8e8;
+  border-radius: 20px;
+  padding: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggleCard:hover {
+  border-color: #019fb1;
+  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
+}
+
+.toggleContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toggleInfo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.iconWrapper {
+  min-width: 56px;
+  height: 56px;
+  background: rgba(1, 159, 177, 0.1);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #019fb1;
+}
+
+.toggleText {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.toggleTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.toggleDesc {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.toggleSwitch {
+  position: relative;
+  width: 64px;
+  height: 34px;
+}
+
+.toggleInput {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e8e8e8;
+  transition: 0.3s;
+  border-radius: 34px;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.toggleInput:checked + .slider {
+  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
+}
+
+.toggleInput:checked + .slider::before {
+  transform: translateX(30px);
+}
+
+.budgetSummary {
+  background: linear-gradient(135deg, rgba(1, 159, 177, 0.1) 0%, rgba(1, 192, 212, 0.1) 100%);
+  border: 2.5px solid #019fb1;
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 30px;
+  animation: fadeInBudget 0.3s ease;
+}
+
+.summaryContent {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.summaryIcon {
+  min-width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.summaryInfo {
+  flex: 1;
+}
+
+.summaryLabel {
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  margin: 0 0 8px 0;
+}
+
+.summaryAmount {
+  font-size: 32px;
+  font-weight: 700;
+  color: #019fb1;
+  margin: 0 0 5px 0;
+}
+
+.summaryType {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+@keyframes fadeInBudget {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.continueButton:disabled {
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .currencyCard,
+  .budgetRangeCard,
+  .toggleCard {
+    padding: 20px;
+  }
+
+  .summaryContent {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .summaryIcon {
+    margin: 0 auto;
+  }
+}

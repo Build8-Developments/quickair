@@ -1,0 +1,235 @@
+.toggleCard {
+  background: white;
+  border: 2.5px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 28px 32px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.toggleCard:hover {
+  border-color: #019fb1;
+  box-shadow: 0 8px 24px rgba(1, 159, 177, 0.12);
+  transform: translateY(-2px);
+}
+
+.toggleCardActive {
+  border-color: #019fb1;
+  background: linear-gradient(135deg, #e6f7f9 0%, #f0fbfc 100%);
+  box-shadow: 0 8px 24px rgba(1, 159, 177, 0.2);
+}
+
+.toggleContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toggleInfo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.iconWrapper {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #e6f7f9 0%, #d0f0f4 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #019fb1;
+  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.15);
+}
+
+.toggleText {
+  flex: 1;
+}
+
+.toggleTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.3px;
+}
+
+.toggleDesc {
+  font-size: 15px;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0;
+}
+
+.toggleSwitch {
+  position: relative;
+  width: 64px;
+  height: 36px;
+  min-width: 64px;
+}
+
+.toggleInput {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #e5e7eb;
+  transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 34px;
+}
+
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 28px;
+  width: 28px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.toggleInput:checked + .slider {
+  background: linear-gradient(135deg, #019fb1 0%, #00b4c8 100%);
+}
+
+.toggleInput:checked + .slider::before {
+  transform: translateX(28px);
+}
+
+.datesBox {
+  background: white;
+  border: 2.5px solid #e5e7eb;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.dateField {
+  padding: 24px 0;
+}
+
+.dateLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 16px;
+}
+
+.dateLabel svg {
+  color: #019fb1;
+}
+
+.divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #e5e7eb 20%, #e5e7eb 80%, transparent 100%);
+  margin: 0;
+}
+
+.dateInput {
+  width: 100%;
+  padding: 16px 20px;
+  border: 2.5px solid #e5e7eb;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #f9fafb;
+}
+
+.dateInput:focus {
+  outline: none;
+  border-color: #019fb1;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(1, 159, 177, 0.1);
+}
+
+.durationSummary {
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 2px solid #e5e7eb;
+}
+
+.durationContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, #e6f7f9 0%, #f0fbfc 100%);
+  border-radius: 16px;
+  border: 2px solid #019fb1;
+}
+
+.durationIcon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 12px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #019fb1;
+}
+
+.durationLabel {
+  flex: 1;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.durationValue {
+  font-size: 22px;
+  font-weight: 800;
+  color: #019fb1;
+  letter-spacing: -0.3px;
+}
+
+.continueButton:disabled {
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .toggleContent {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .toggleInfo {
+    width: 100%;
+  }
+
+  .datesBox {
+    padding: 28px 24px;
+  }
+
+  .iconWrapper {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+  }
+
+  .durationContent {
+    flex-direction: column;
+    text-align: center;
+  }
+}

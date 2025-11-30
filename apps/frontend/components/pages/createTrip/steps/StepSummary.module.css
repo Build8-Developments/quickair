@@ -1,0 +1,269 @@
+.summaryIconWrapper {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, rgba(1, 159, 177, 0.1) 0%, rgba(1, 192, 212, 0.1) 100%);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #019fb1;
+}
+
+.summaryCard {
+  background: #fff;
+  border: 2.5px solid #e8e8e8;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.summaryCard:hover {
+  border-color: #019fb1;
+  box-shadow: 0 8px 25px rgba(1, 159, 177, 0.12);
+}
+
+.cardHeader {
+  padding: 24px 28px;
+  background: linear-gradient(135deg, rgba(1, 159, 177, 0.08) 0%, rgba(1, 192, 212, 0.08) 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2.5px solid #e8e8e8;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cardIconWrapper {
+  width: 45px;
+  height: 45px;
+  background: #fff;
+  border: 2.5px solid #019fb1;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #019fb1;
+}
+
+.editButton {
+  background: #fff;
+  border: 2.5px solid #019fb1;
+  color: #019fb1;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.editButton:hover {
+  background: #019fb1;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.3);
+}
+
+.cardContent {
+  padding: 28px;
+}
+
+.summaryItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1.5px solid #f3f4f6;
+}
+
+.summaryItem:last-child {
+  border-bottom: none;
+}
+
+.summaryLabel {
+  font-size: 15px;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.summaryValue {
+  font-size: 15px;
+  color: #1f2937;
+  font-weight: 700;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.summaryValueHighlight {
+  color: #019fb1;
+  font-size: 19px;
+}
+
+.contactNotice {
+  background: linear-gradient(135deg, rgba(1, 159, 177, 0.05) 0%, rgba(1, 192, 212, 0.05) 100%);
+  border: 2.5px solid #019fb1;
+  animation: summaryFadeIn 0.5s ease;
+}
+
+.contactNoticeIcon {
+  width: 70px;
+  height: 70px;
+  background: #fff;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #019fb1;
+  box-shadow: 0 4px 15px rgba(1, 159, 177, 0.15);
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2.5px solid;
+}
+
+.actionButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.outlineButton:hover {
+  background: #1a1a1a;
+  color: #fff !important;
+}
+
+.accentButton {
+  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
+  border-color: transparent;
+}
+
+.accentButton:hover {
+  box-shadow: 0 8px 25px rgba(1, 159, 177, 0.4);
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: summarySpin 0.8s linear infinite;
+}
+
+.actionButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+@keyframes summaryFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes summarySpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 991px) {
+  .summaryIconWrapper {
+    width: 70px;
+    height: 70px;
+  }
+
+  .cardHeader {
+    padding: 20px 24px;
+  }
+
+  .cardIconWrapper {
+    width: 40px;
+    height: 40px;
+  }
+
+  .cardContent {
+    padding: 24px;
+  }
+
+  .summaryItem {
+    padding: 14px 0;
+  }
+
+  .contactNoticeIcon {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .summaryItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .summaryValue {
+    text-align: left;
+  }
+
+  .actionButton {
+    padding: 12px 24px !important;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 575px) {
+  .summaryIconWrapper {
+    width: 60px;
+    height: 60px;
+  }
+
+  .summaryCard {
+    border-radius: 16px;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .editButton {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .contactNoticeIcon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .buttonStack {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .fullWidthButton {
+    width: 100%;
+    justify-content: center;
+  }
+}

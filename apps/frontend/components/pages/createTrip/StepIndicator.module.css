@@ -1,0 +1,136 @@
+.wrapper {
+  margin-bottom: 40px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  min-width: max-content;
+  padding: 20px 0;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex: 1;
+  min-width: 100px;
+  transition: all 0.3s ease;
+}
+
+.itemClickable:hover .circle {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.3);
+}
+
+.circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border: 2px solid #e2e8f0;
+  color: #94a3b8;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+
+.circle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.itemActive .circle {
+  background: #019fb1;
+  border-color: #019fb1;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.3);
+}
+
+.itemCompleted .circle {
+  background: #10b981;
+  border-color: #10b981;
+  color: #fff;
+}
+
+.title {
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748b;
+  text-align: center;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.itemActive .title {
+  color: #019fb1;
+  font-weight: 600;
+}
+
+.itemCompleted .title {
+  color: #10b981;
+}
+
+.line {
+  position: absolute;
+  top: 25px;
+  width: 100%;
+  height: 2px;
+  background: #e2e8f0;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.itemCompleted .line {
+  background: #10b981;
+}
+
+@media (max-width: 1200px) {
+  .circle {
+    width: 45px;
+    height: 45px;
+  }
+
+  .title {
+    font-size: 12px;
+  }
+
+  .item {
+    min-width: 90px;
+  }
+}
+
+@media (max-width: 768px) {
+  .indicator {
+    padding: 15px 0;
+  }
+
+  .circle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .title {
+    font-size: 11px;
+    margin-top: 8px;
+  }
+
+  .item {
+    min-width: 70px;
+  }
+
+  .line {
+    top: 20px;
+  }
+}
