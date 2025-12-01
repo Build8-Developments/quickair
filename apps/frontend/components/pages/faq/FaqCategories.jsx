@@ -12,55 +12,37 @@ export default function FaqCategories({
   const { t } = useTranslation();
 
   return (
-    <>
-      {/* Desktop Sidebar */}
-      <div className="faq-sidebar js-faq-sidebar d-none lg:d-block">
-        <div className="faq-sidebar__title">
-          <h3 className="text-20 fw-600">
-            {isRTL ? "الفئات" : "Categories"}
-          </h3>
-        </div>
-        <div className="faq-sidebar__list mt-30">
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => onCategoryChange(category.id)}
-              className={`faq-sidebar__item ${
-                activeCategory === category.id ? "is-active" : ""
-              }`}
-            >
-              <span className="flex items-center gap-2">
-                <FaqCategoryIcon iconKey={category.icon} size={18} />
-                <span>{category.name}</span>
-              </span>
-            </button>
-          ))}
-        </div>
+    <div className="faq-sidebar js-faq-sidebar">
+      <div className="faq-sidebar__list">
+        {categories.map((category) => (
+          <button
+            key={category.id}
+            onClick={() => onCategoryChange(category.id)}
+            className={`faq-sidebar__item ${
+              activeCategory === category.id ? "is-active" : ""
+            }`}
+            style={{
+              width: "100%",
+              padding: "12px 0",
+              textAlign: isRTL ? "right" : "left",
+              border: "none",
+              background: "none",
+              cursor: "pointer",
+              display: "block",
+              fontSize: "15px",
+              fontWeight: activeCategory === category.id ? "500" : "400",
+              color: activeCategory === category.id ? "#00A9A5" : "#1A2B48",
+              borderLeft: activeCategory === category.id && !isRTL ? "3px solid #00A9A5" : "none",
+              borderRight: activeCategory === category.id && isRTL ? "3px solid #00A9A5" : "none",
+              paddingLeft: !isRTL ? "16px" : "0",
+              paddingRight: isRTL ? "16px" : "0",
+              transition: "all 0.3s ease",
+            }}
+          >
+            {category.name}
+          </button>
+        ))}
       </div>
-
-      {/* Mobile Dropdown */}
-      <div className="faq-mobile-select d-block lg:d-none mb-30">
-        <select
-          value={activeCategory}
-          onChange={(e) => onCategoryChange(e.target.value)}
-          className="form-select"
-          style={{
-            width: "100%",
-            padding: "12px 20px",
-            fontSize: "15px",
-            borderRadius: "8px",
-            border: "1px solid var(--color-border)",
-            backgroundColor: "white",
-            cursor: "pointer",
-          }}
-        >
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-      </div>
-    </>
+    </div>
   );
 }

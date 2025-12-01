@@ -8,7 +8,7 @@ const sections = [
     links: [
       { id: 1, textKey: "footer.aboutUs", href: "/about" },
       { id: 3, textKey: "footer.contactUs", href: "/contact" },
-      { id: 7, textKey: "footer.legal", href: "/legal" },
+      { id: 7, textKey: "footer.terms", href: "/terms" },
     ],
   },
   {
@@ -18,7 +18,7 @@ const sections = [
       {
         id: 11,
         textKey: "footer.liveChat",
-        href: "https://wa.me/+201007004828",
+        onClick: "openChatbot",
       },
     ],
   },
@@ -27,6 +27,13 @@ const sections = [
 export default function FooterLinks() {
   const { t } = useTranslation();
   const { isRTL } = useLanguage();
+
+  const handleOpenChatbot = () => {
+    const chatbotButton = document.querySelector('[aria-label="Open chat"]');
+    if (chatbotButton) {
+      chatbotButton.click();
+    }
+  };
 
   return (
     <>
@@ -40,7 +47,16 @@ export default function FooterLinks() {
 
           <div className="y-gap-10 mt-20">
             {elm.links.map((elm2, i2) =>
-              elm2.href.startsWith("https://") ? (
+              elm2.onClick === "openChatbot" ? (
+                <a
+                  key={i2}
+                  className="d-block fw-500"
+                  onClick={handleOpenChatbot}
+                  style={{ cursor: "pointer" }}
+                >
+                  {t(elm2.textKey)}
+                </a>
+              ) : elm2.href?.startsWith("https://") ? (
                 <a
                   key={i2}
                   target="_blank"

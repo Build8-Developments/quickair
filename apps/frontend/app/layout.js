@@ -1,4 +1,5 @@
 import ScrollToTop from "@/components/common/ScrollToTop";
+import AIChatbot from "@/components/chatbot/AIChatbot";
 import "../public/css/style.css";
 import "../public/css/hero-search.css";
 import "../public/css/mega-menu-cards.css";
@@ -58,6 +59,7 @@ export default async function RootLayout({ children }) {
         <BootstrapClient />
         <LanguageProvider initialLanguage={language}>
           <Wrapper>{children}</Wrapper>
+          <AIChatbot />
           <ScrollToTop />
           <ScrollTopBehaviour />
         </LanguageProvider>
