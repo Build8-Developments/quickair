@@ -25,23 +25,95 @@ import arVisasFAQ from "@/data/faq_output/ar_قسم_التأشيرات.json";
 import enVisasFAQ from "@/data/faq_output/en_Visas.json";
 
 /**
- * خريطة صفحات الموقع
- * Site Pages Map
+ * خريطة صفحات الموقع الكاملة مع الوصف
+ * Complete Site Pages Map with Descriptions
  */
 const SITE_PAGES = {
-  home: "/",
-  tours: "/tours-list",
-  hotels: "/hotels",
-  offers: "/offers",
-  createTrip: "/create-trip",
-  contact: "/contact",
-  about: "/about",
-  faq: "/faq",
-  terms: "/terms",
+  home: {
+    url: "/",
+    name_ar: "الرئيسية",
+    name_en: "Home",
+    desc_ar: "الصفحة الرئيسية - عروض، وجهات، وكل خدماتنا",
+    desc_en: "Home page - offers, destinations, and all our services",
+    keywords_ar: ["رئيسية", "البداية", "الصفحة الأولى", "home"],
+    keywords_en: ["home", "main", "homepage", "start"]
+  },
+  tours: {
+    url: "/tours-list",
+    name_ar: "الرحلات",
+    name_en: "Tours",
+    desc_ar: "جميع الرحلات والوجهات السياحية المتاحة",
+    desc_en: "All available tours and destinations",
+    keywords_ar: ["رحلات", "جولات", "وجهات", "سياحة", "tours"],
+    keywords_en: ["tours", "trips", "destinations", "travel"]
+  },
+  hotels: {
+    url: "/hotels",
+    name_ar: "الفنادق",
+    name_en: "Hotels",
+    desc_ar: "حجز الفنادق في جميع الوجهات",
+    desc_en: "Book hotels in all destinations",
+    keywords_ar: ["فنادق", "فندق", "إقامة", "حجز فندق", "hotels"],
+    keywords_en: ["hotels", "hotel", "accommodation", "booking"]
+  },
+  offers: {
+    url: "/offers",
+    name_ar: "العروض",
+    name_en: "Offers",
+    desc_ar: "أحدث العروض والخصومات الخاصة",
+    desc_en: "Latest offers and special discounts",
+    keywords_ar: ["عروض", "خصومات", "تخفيضات", "offers"],
+    keywords_en: ["offers", "deals", "discounts", "promotions"]
+  },
+  createTrip: {
+    url: "/create-trip",
+    name_ar: "خطط رحلتك",
+    name_en: "Plan Your Trip",
+    desc_ar: "صمم رحلتك الخاصة حسب احتياجاتك",
+    desc_en: "Design your custom trip",
+    keywords_ar: ["تخطيط", "رحلة مخصصة", "خطط", "plan"],
+    keywords_en: ["plan", "create", "custom trip", "design"]
+  },
+  contact: {
+    url: "/contact",
+    name_ar: "اتصل بنا",
+    name_en: "Contact Us",
+    desc_ar: "تواصل معنا - خدمة عملاء 24/7",
+    desc_en: "Contact us - 24/7 customer service",
+    keywords_ar: ["اتصال", "تواصل", "خدمة عملاء", "مساعدة", "contact"],
+    keywords_en: ["contact", "support", "help", "customer service"]
+  },
+  about: {
+    url: "/about",
+    name_ar: "من نحن",
+    name_en: "About Us",
+    desc_ar: "تعرف على شركة Quick Air وخدماتنا",
+    desc_en: "Learn about Quick Air and our services",
+    keywords_ar: ["من نحن", "عن الشركة", "about"],
+    keywords_en: ["about", "company", "who we are"]
+  },
+  faq: {
+    url: "/faq",
+    name_ar: "الأسئلة الشائعة",
+    name_en: "FAQs",
+    desc_ar: "أسئلة وأجوبة حول خدماتنا",
+    desc_en: "Questions and answers about our services",
+    keywords_ar: ["أسئلة", "استفسارات", "faq", "مساعدة"],
+    keywords_en: ["faq", "questions", "help", "answers"]
+  },
+  terms: {
+    url: "/terms",
+    name_ar: "الشروط والأحكام",
+    name_en: "Terms & Conditions",
+    desc_ar: "شروط الاستخدام وسياسة الخصوصية",
+    desc_en: "Terms of use and privacy policy",
+    keywords_ar: ["شروط", "أحكام", "سياسة", "terms"],
+    keywords_en: ["terms", "conditions", "policy", "privacy"]
+  },
   
   // صفحات الوجهات
   destinations: {
-    bali: "/tours/1", // مثال - يمكن تعديل الـ ID حسب البيانات الفعلية
+    bali: "/tours/1",
     istanbul: "/tours/2",
     sharm: "/tours/3",
     hurghada: "/tours/4",
@@ -160,7 +232,17 @@ export function analyzeUserMessage(message, language = "ar") {
     intent = "help_request";
     confidence = 0.9;
   }
-  // 9. تغيير التاريخ - Date Change
+  // 9. السؤال عن صفحة معينة - Page Navigation
+  else if (
+    msg.includes("صفحة") || msg.includes("page") ||
+    msg.includes("أين") || msg.includes("where") ||
+    msg.includes("كيف أذهب") || msg.includes("how to go") ||
+    msg.includes("وديني") || msg.includes("take me")
+  ) {
+    intent = "navigate_page";
+    confidence = 0.85;
+  }
+  // 10. تغيير التاريخ - Date Change
   else if (
     msg.includes("تغيير") || msg.includes("change") ||
     msg.includes("تعديل") || msg.includes("modify") ||
@@ -867,72 +949,147 @@ export function buildRAGContext(userAnalysis, language = "ar") {
 }
 
 /**
+ * البحث عن صفحة مناسبة بناءً على الرسالة
+ * Find appropriate page based on message
+ */
+export function findMatchingPage(message, language = "ar") {
+  const msg = message.toLowerCase();
+  const isArabic = language === "ar";
+  
+  // البحث في كل صفحة
+  for (const [key, pageInfo] of Object.entries(SITE_PAGES)) {
+    if (key === "destinations") continue; // تخطي الوجهات
+    
+    const keywords = isArabic ? pageInfo.keywords_ar : pageInfo.keywords_en;
+    const name = isArabic ? pageInfo.name_ar : pageInfo.name_en;
+    
+    // تحقق من الكلمات المفتاحية
+    for (const keyword of keywords) {
+      if (msg.includes(keyword.toLowerCase())) {
+        return {
+          page: key,
+          url: pageInfo.url,
+          name: name,
+          description: isArabic ? pageInfo.desc_ar : pageInfo.desc_en,
+          confidence: 0.9
+        };
+      }
+    }
+  }
+  
+  return null;
+}
+
+/**
+ * الحصول على جميع الصفحات المتاحة
+ * Get all available pages
+ */
+export function getAllPages(language = "ar") {
+  const isArabic = language === "ar";
+  const pages = [];
+  
+  for (const [key, pageInfo] of Object.entries(SITE_PAGES)) {
+    if (key === "destinations") continue;
+    
+    pages.push({
+      key,
+      url: pageInfo.url,
+      name: isArabic ? pageInfo.name_ar : pageInfo.name_en,
+      description: isArabic ? pageInfo.desc_ar : pageInfo.desc_en
+    });
+  }
+  
+  return pages;
+}
+
+/**
  * الحصول على روابط مناسبة حسب النية
  * Get relevant page links based on intent
  */
 export function getSuggestedPages(userAnalysis, language = "ar") {
-  const { intent, destination } = userAnalysis;
+  const { intent, destination, originalMessage } = userAnalysis;
   const isArabic = language === "ar";
   const links = [];
+
+  // إذا كان يبحث عن صفحة معينة
+  if (intent === "navigate_page") {
+    const matchedPage = findMatchingPage(originalMessage, language);
+    if (matchedPage) {
+      links.push({
+        url: matchedPage.url,
+        text: matchedPage.name,
+        description: matchedPage.description,
+        icon: "🔗",
+        isPrimary: true
+      });
+      return links; // رجع الصفحة المطلوبة فقط
+    }
+  }
 
   // حسب النية
   if (intent === "search_hotels" || intent === "book_hotel") {
     links.push({
-      url: SITE_PAGES.hotels,
-      text: isArabic ? "تصفح جميع الفنادق" : "Browse All Hotels",
+      url: SITE_PAGES.hotels.url,
+      text: SITE_PAGES.hotels[isArabic ? "name_ar" : "name_en"],
+      description: SITE_PAGES.hotels[isArabic ? "desc_ar" : "desc_en"],
       icon: "🏨"
     });
   }
 
-  if (intent === "search_destination" || intent === "get_info") {
+  if (intent === "search_destination" || intent === "get_info" || intent === "general_inquiry") {
     links.push({
-      url: SITE_PAGES.tours,
-      text: isArabic ? "استكشف جميع الوجهات" : "Explore All Destinations",
+      url: SITE_PAGES.tours.url,
+      text: SITE_PAGES.tours[isArabic ? "name_ar" : "name_en"],
+      description: SITE_PAGES.tours[isArabic ? "desc_ar" : "desc_en"],
       icon: "🌍"
     });
   }
 
-  if (intent === "book_trip" || intent === "request_quote") {
+  if (intent === "book_trip" || intent === "request_quote" || intent === "recommendation_request") {
     links.push({
-      url: SITE_PAGES.createTrip,
-      text: isArabic ? "خطط رحلتك الآن" : "Plan Your Trip Now",
+      url: SITE_PAGES.createTrip.url,
+      text: SITE_PAGES.createTrip[isArabic ? "name_ar" : "name_en"],
+      description: SITE_PAGES.createTrip[isArabic ? "desc_ar" : "desc_en"],
       icon: "✈️"
     });
   }
 
-  if (intent === "check_offers") {
+  if (intent === "price_inquiry" || intent === "budget_query") {
     links.push({
-      url: SITE_PAGES.offers,
-      text: isArabic ? "شاهد جميع العروض" : "View All Offers",
+      url: SITE_PAGES.offers.url,
+      text: SITE_PAGES.offers[isArabic ? "name_ar" : "name_en"],
+      description: SITE_PAGES.offers[isArabic ? "desc_ar" : "desc_en"],
       icon: "🎁"
     });
   }
 
-  if (intent === "contact" || intent === "support") {
+  if (intent === "help_request") {
     links.push({
-      url: SITE_PAGES.contact,
-      text: isArabic ? "تواصل معنا" : "Contact Us",
+      url: SITE_PAGES.contact.url,
+      text: SITE_PAGES.contact[isArabic ? "name_ar" : "name_en"],
+      description: SITE_PAGES.contact[isArabic ? "desc_ar" : "desc_en"],
       icon: "📞"
+    });
+    links.push({
+      url: SITE_PAGES.faq.url,
+      text: SITE_PAGES.faq[isArabic ? "name_ar" : "name_en"],
+      description: SITE_PAGES.faq[isArabic ? "desc_ar" : "desc_en"],
+      icon: "❓"
     });
   }
 
   // إضافة رابط الوجهة إذا كانت محددة
   if (destination && SITE_PAGES.destinations[destination]) {
+    const destName = ALL_DESTINATIONS[destination]?.location || destination;
     links.push({
       url: SITE_PAGES.destinations[destination],
-      text: isArabic ? `تفاصيل ${destination}` : `${destination} Details`,
+      text: isArabic ? `رحلات ${destName}` : `${destName} Tours`,
+      description: isArabic ? `تفاصيل الرحلات إلى ${destName}` : `Trip details to ${destName}`,
       icon: "📍"
     });
   }
 
-  // روابط عامة دائمًا
-  links.push({
-    url: SITE_PAGES.faq,
-    text: isArabic ? "الأسئلة الشائعة" : "FAQs",
-    icon: "❓"
-  });
-
-  return links;
+  return links.slice(0, 3); // أقصى 3 روابط
 }
 
 export { SITE_PAGES };

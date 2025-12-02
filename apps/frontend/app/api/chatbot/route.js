@@ -9,6 +9,8 @@ import {
   getAllDestinations,
   suggestDestinationsByBudget,
   getSuggestedPages,
+  findMatchingPage,
+  getAllPages,
   SITE_PAGES
 } from "@/services/ragService";
 import sessionManager from "@/services/sessionManager";
@@ -93,15 +95,33 @@ function buildSystemPrompt(language = "ar") {
 ⚡ بدون قوائم أو تفاصيل طويلة
 ⚡ إيموجي واحد فقط
 
+معرفة الصفحات:
+📄 الرئيسية: /
+🌍 الرحلات: /tours-list
+🏨 الفنادق: /hotels
+🎁 العروض: /offers
+✈️ خطط رحلتك: /create-trip
+📞 اتصل بنا: /contact
+❓ الأسئلة الشائعة: /faq
+
 قواعد صارمة:
 ❌ لا تعيد كل المعلومات
-❌ لا تشرح بالتفصيل
-❌ لا تعرض خيارات متعددة
-✅ سؤال واحد مباشر فقط
+Response Style:
+⚡ One short sentence only (10-15 words)
+⚡ One clear direct question
+⚡ No lists or long details
+⚡ One emoji only
 
-مثال جيد: "رائع! متى تريد السفر؟ 🗓️"
-مثال سيء: "ممتاز! شرم الشيخ وجهة رائعة. يمكنك الاختيار من عدة فنادق..."`;
-  } else {
+Page Knowledge:
+📄 Home: /
+🌍 Tours: /tours-list
+🏨 Hotels: /hotels
+🎁 Offers: /offers
+✈️ Plan Trip: /create-trip
+📞 Contact: /contact
+❓ FAQs: /faq
+
+Strict Rules:
     return `You are "Quick" - travel assistant for Quick Air.
 
 Response Style:
@@ -186,6 +206,37 @@ export async function POST(request) {
     
     // ✅ Step 3.5: الحصول على الروابط المقترحة
     const suggestedPages = getSuggestedPages(userAnalysis, language);
+    
+    // ✅ Step 3.6: فحص إذا كان يطلب التوجيه لصفحة معينة
+    let navigationAction = null;
+    if (userAnalysis.intent === "navigate_page") {
+      const matchedPage = findMatchingPage(messageText, language);
+      if (matchedPage) {
+        navigationAction = {
+          action: "navigate",
+          url: matchedPage.url,
+          pageName: matchedPage.name,
+          shouldNavigate: true
+        };
+        
+        // رد مختصر مع التوجيه
+        const navReply = isArabic 
+          ? `جاري فتح ${matchedPage.name}... 🔗`
+          : `Opening ${matchedPage.name}... 🔗`;
+        
+        return Response.json({
+          reply: navReply,
+          success: true,
+          navigation: navigationAction,
+          suggestedPages: [matchedPage],
+          sessionId: session.sessionId,
+          metadata: {
+            intent: "navigate_page",
+            page: matchedPage.page
+          }
+        });
+      }
+    }
 
     // ✅ Step 4: بناء Prompt للـ AI
     const systemPrompt = buildSystemPrompt(language);
@@ -270,6 +321,7 @@ export async function POST(request) {
       reply,
       success: true,
       suggestedPages,
+      navigation: navigationAction, // إضافة navigation action
       quickOptions: widgetData ? null : generateQuickOptions(userAnalysis, language, reply), // Hide quick options when widget is shown
       widget: widgetData, // Include widget data
       sessionId: session.sessionId, // Return session ID
