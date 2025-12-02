@@ -1,0 +1,174 @@
+.widget {
+  width: 100%;
+  margin-top: 12px;
+  padding: 16px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.summaryHeader {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #019fb1;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section {
+  padding: 16px;
+  background: white;
+  border-radius: 12px;
+  border: 2px solid #f0f9ff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 14px;
+  }
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #019fb1;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 480px) {
+  .sectionTitle {
+    font-size: 13px;
+  }
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  font-size: 14px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f9ff;
+}
+
+.detailRow:last-child {
+  border-bottom: none;
+}
+
+@media (max-width: 480px) {
+  .detailRow {
+    font-size: 13px;
+  }
+}
+
+.label {
+  font-weight: 600;
+  color: #6b7280;
+  min-width: 90px;
+}
+
+@media (max-width: 480px) {
+  .label {
+    min-width: 80px;
+  }
+}
+
+.value {
+  font-weight: 600;
+  color: #1f2937;
+  text-align: end;
+  flex: 1;
+}
+
+.valuePrice {
+  font-weight: 700;
+  font-size: 15px;
+  color: #019fb1;
+  text-align: end;
+  flex: 1;
+}
+
+@media (max-width: 480px) {
+  .valuePrice {
+    font-size: 14px;
+  }
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+@media (max-width: 480px) {
+  .actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+.editButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  background: white;
+  border: 1.5px solid #019fb1;
+  color: #019fb1;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editButton:hover {
+  background: #f0fdff;
+}
+
+.confirmButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  background: #019fb1;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.confirmButton:hover {
+  background: #018090;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.3);
+}

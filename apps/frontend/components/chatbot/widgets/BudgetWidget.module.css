@@ -1,0 +1,75 @@
+.widget {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.budgetGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 480px) {
+  .budgetGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.budgetCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: white;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+@media (max-width: 480px) {
+  .budgetCard {
+    padding: 14px;
+  }
+}
+
+.budgetCard:hover {
+  border-color: #019fb1;
+  background: #f0fdff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.1);
+}
+
+.icon {
+  font-size: 28px;
+}
+
+.content {
+  flex: 1;
+  text-align: start;
+}
+
+.label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 5px;
+}
+
+@media (max-width: 480px) {
+  .label {
+    font-size: 14px;
+  }
+}
+
+.price {
+  font-size: 13px;
+  font-weight: 600;
+  color: #019fb1;
+}
+
+@media (max-width: 480px) {
+  .price {
+    font-size: 12px;
+  }
+}

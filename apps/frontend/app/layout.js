@@ -53,9 +53,9 @@ export default async function RootLayout({ children }) {
   const dir = language === "ar" ? "rtl" : "ltr";
 
   return (
-    <html lang={language} dir={dir}>
+    <html lang={language} dir={dir} suppressHydrationWarning>
       <head></head>
-      <body className={rubik.className}>
+      <body className={rubik.className} suppressHydrationWarning>
         <BootstrapClient />
         <LanguageProvider initialLanguage={language}>
           <Wrapper>{children}</Wrapper>
