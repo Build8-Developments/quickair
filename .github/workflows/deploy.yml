@@ -81,6 +81,17 @@ jobs:
             # Return to deployment directory
             cd "$DEPLOY_DIR"
 
+            # Ensure we're using Node v20 via nvm
+            echo "🔧 Setting up Node.js environment..."
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use 20 || nvm install 20
+            nvm alias default 20
+
+            # Verify Node version
+            echo "Node version: $(node -v)"
+            echo "npm version: $(npm -v)"
+
             # Clone or pull latest code
             if [ -d ".git" ]; then
               echo "📥 Pulling latest changes..."
@@ -149,6 +160,10 @@ jobs:
             echo "🔧 Rebuilding native modules..."
             npm rebuild
 
+            # Specifically rebuild better-sqlite3 to ensure compatibility
+            echo "🔧 Rebuilding better-sqlite3 for Node $(node -v)..."
+            npm rebuild better-sqlite3
+
             # Build applications
             echo "🔨 Building applications..."
             NODE_OPTIONS="--max-old-space-size=2048" npm run build
@@ -174,7 +189,9 @@ jobs:
             # Restart applications with PM2
             echo "🔄 Restarting applications..."
             pm2 delete all || true
-            pm2 start ecosystem.config.js
+
+            # Ensure PM2 uses the correct Node version
+            pm2 start ecosystem.config.js --update-env
             pm2 save
 
             echo "✅ Deployment completed successfully!"
