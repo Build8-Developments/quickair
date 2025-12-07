@@ -8,7 +8,9 @@ export default [
       enabled: true,
       origin: [
         "https://quickair.build8.dev",
+        "https://quickair-new.build8.dev",
         "https://quickair-admin.build8.dev",
+        "https://quickair-admin-new.build8.dev",
         "http://localhost:3000",
         "http://localhost:1337",
       ],
