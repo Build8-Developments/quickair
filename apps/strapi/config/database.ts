@@ -69,14 +69,15 @@ export default ({ env }) => {
         max: env.int("DATABASE_POOL_MAX", 10),
         afterCreate: (conn, cb) => {
           // Enable WAL mode for better concurrent performance
-          conn.run("PRAGMA journal_mode = WAL;", (err) => {
-            if (err) {
-              console.error("Failed to enable WAL mode:", err);
-            } else {
-              console.log("SQLite WAL mode enabled");
-            }
+          // The connection object from Knex wraps the raw better-sqlite3 connection
+          try {
+            conn.pragma('journal_mode = WAL');
+            console.log("SQLite WAL mode enabled");
+            cb(null, conn);
+          } catch (err) {
+            console.error("Failed to enable WAL mode:", err);
             cb(err, conn);
-          });
+          }
         },
       },
     },
