@@ -68,9 +68,9 @@ export const CACHE_CONFIG = {
 
 // Timeout configuration (in milliseconds)
 export const TIMEOUT_CONFIG = {
-  default: 10000, // 10 seconds
-  upload: 30000, // 30 seconds for file uploads
-  long: 60000, // 1 minute for long operations
+  default: 30000, // 30 seconds (increased for production)
+  upload: 60000, // 60 seconds for file uploads
+  long: 120000, // 2 minutes for long operations
 };
 
 // Error messages
