@@ -164,6 +164,10 @@ jobs:
             echo "🔧 Rebuilding better-sqlite3 for Node $(node -v)..."
             npm rebuild better-sqlite3
 
+            # Apply database indexes for performance
+            echo "🗄️  Applying database performance indexes..."
+            node apps/strapi/scripts/apply-indexes.js || echo "⚠️  Index application skipped (will run on Strapi startup)"
+
             # Build applications
             echo "🔨 Building applications..."
             NODE_OPTIONS="--max-old-space-size=2048" npm run build
