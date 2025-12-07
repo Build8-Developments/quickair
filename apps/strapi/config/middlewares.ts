@@ -5,6 +5,10 @@ export default [
   "strapi::cors",
   "strapi::poweredBy",
   "strapi::query",
+  {
+    name: "global::graphql-logger",
+    config: {},
+  },
   "strapi::body",
   "strapi::session",
   "strapi::favicon",
