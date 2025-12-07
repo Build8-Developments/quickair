@@ -1842,6 +1842,9 @@ progress {
 .p-5 {
   padding: 3rem !important;
 }
+.p-10 {
+  padding: 10rem !important;
+}
 .px-0 {
   padding-right: 0 !important;
   padding-left: 0 !important;

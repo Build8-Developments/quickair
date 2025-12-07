@@ -21,7 +21,7 @@ export default function Content() {
   }, [currentTab]);
 
   return (
-    <section className="layout-pt-md layout-pb-lg">
+    <section className="layout-pt-md layout-pb-lg p-10">
       <div className="container">
         <div className="tabs -terms js-tabs">
           <div className="row y-gap-30">

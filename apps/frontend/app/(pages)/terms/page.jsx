@@ -16,7 +16,6 @@ export default function page() {
     <>
       <main>
         <Header3 />
-        <PageHeader />
         <Content />
         <FooterTwo />
       </main>
