@@ -1,0 +1,71 @@
+.widget {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.roomGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .roomGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.roomCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 12px;
+  background: white;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.roomCard:hover {
+  border-color: #019fb1;
+  background: #f0fdff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.1);
+}
+
+.icon {
+  font-size: 24px;
+}
+
+.content {
+  width: 100%;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 5px;
+}
+
+@media (max-width: 480px) {
+  .label {
+    font-size: 13px;
+  }
+}
+
+.desc {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+@media (max-width: 480px) {
+  .desc {
+    font-size: 11px;
+  }
+}

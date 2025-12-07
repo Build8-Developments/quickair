@@ -1,0 +1,192 @@
+.widget {
+  width: 100%;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.hotelCard {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: white;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+@media (max-width: 480px) {
+  .hotelCard {
+    flex-direction: column;
+  }
+}
+
+.hotelCard:hover {
+  border-color: #019fb1;
+  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.1);
+}
+
+.hotelCard.selected {
+  border-color: #019fb1;
+  background: #f0fdff;
+}
+
+.hotelImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  position: relative;
+}
+
+@media (max-width: 480px) {
+  .hotelImage {
+    width: 100%;
+    height: 160px;
+  }
+}
+
+.hotelImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.selectedBadge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  background: #019fb1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hotelInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hotelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.hotelName {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 480px) {
+  .hotelName {
+    font-size: 14px;
+  }
+}
+
+.stars {
+  font-size: 11px;
+  white-space: nowrap;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.location {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .location {
+    font-size: 12px;
+  }
+}
+
+.roomType {
+  font-size: 13px;
+  font-weight: 600;
+  color: #019fb1;
+  padding: 6px 10px;
+  background: linear-gradient(135deg, #f0fdff 0%, #e0f7fa 100%);
+  border-radius: 8px;
+  display: inline-block;
+  width: fit-content;
+  border: 1px solid rgba(1, 159, 177, 0.2);
+}
+
+@media (max-width: 480px) {
+  .roomType {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+}
+
+.priceSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 2px solid #f0f9ff;
+}
+
+.price {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.priceEGP {
+  font-size: 16px;
+  font-weight: 700;
+  color: #019fb1;
+}
+
+@media (max-width: 480px) {
+  .priceEGP {
+    font-size: 15px;
+  }
+}
+
+.priceUSD {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.selectButton {
+  padding: 6px 14px;
+  background: #019fb1;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.selectButton:hover {
+  background: #018090;
+}
+
+.hotelCard.selected .selectButton {
+  background: #10b981;
+}

@@ -1,0 +1,177 @@
+.widget {
+  width: 100%;
+  margin-top: 12px;
+  padding: 18px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 480px) {
+  .widget {
+    padding: 16px;
+  }
+}
+
+.dateInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.dateField {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.dateField:hover {
+  border-color: #019fb1;
+  background: #f0fdff;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.label::before {
+  content: "📅";
+  font-size: 16px;
+}
+
+.dateInput {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  background: white;
+}
+
+.dateInput:hover {
+  border-color: #019fb1;
+  box-shadow: 0 2px 8px rgba(1, 159, 177, 0.15);
+}
+
+.dateInput:focus {
+  outline: none;
+  border-color: #019fb1;
+  box-shadow: 0 0 0 4px rgba(1, 159, 177, 0.12);
+}
+
+.dateInput::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  font-size: 20px;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.dateInput::-webkit-calendar-picker-indicator:hover {
+  background: #f0fdff;
+}
+
+.nightsInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #f0fdff 0%, #e0f7fa 100%);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #019fb1;
+  border: 2px solid #019fb1;
+  animation: slideIn 0.3s ease-out;
+  justify-content: center;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nightsInfo svg {
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(1, 159, 177, 0.2));
+}
+
+.errorInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: #fff5f5;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ef4444;
+  border: 2px solid #ef4444;
+  animation: slideIn 0.3s ease-out;
+  text-align: center;
+  justify-content: center;
+}
+
+@media (max-width: 480px) {
+  .nightsInfo,
+  .errorInfo {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+}
+
+.confirmButton {
+  width: 100%;
+  padding: 16px 24px;
+  background: #019fb1;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.25);
+}
+
+.confirmButton:hover:not(:disabled) {
+  background: #018090;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.35);
+}
+
+.confirmButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.confirmButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+}
