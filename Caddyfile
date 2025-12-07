@@ -43,3 +43,22 @@ quickair-admin.build8.dev {
         format json
     }
 }
+
+# Backend Chat Bot API
+quickair-bot.build8.dev {
+    reverse_proxy localhost:9090
+
+    encode gzip
+
+    header {
+        X-Frame-Options "SAMEORIGIN"
+        X-Content-Type-Options "nosniff"
+        X-XSS-Protection "1; mode=block"
+    }
+
+    # Logging
+    log {
+        output file /var/log/caddy/quickair-bot.log
+        format json
+    }
+}

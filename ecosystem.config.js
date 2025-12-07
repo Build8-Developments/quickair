@@ -6,6 +6,7 @@ module.exports = {
       script: "./node_modules/.bin/strapi",
       args: "start",
       interpreter: "node",
+      node_args: "--no-deprecation",
       env: {
         NODE_ENV: "production",
       },

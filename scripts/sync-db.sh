@@ -3,7 +3,7 @@
 # Sync Strapi database from remote VPS to local
 # Usage: ./sync-db.sh [pull|push]
 
-REMOTE_HOST="dep-quickair"
+REMOTE_HOST="deploy@157.230.18.2"
 REMOTE_DB_PATH="/var/www/quickair/apps/strapi/.tmp/data.db"
 LOCAL_DB_PATH="./apps/strapi/.tmp/data.db"
 BACKUP_DIR="./database-backups"
