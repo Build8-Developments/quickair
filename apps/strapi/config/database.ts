@@ -71,7 +71,7 @@ export default ({ env }) => {
           // Enable WAL mode for better concurrent performance
           // The connection object from Knex wraps the raw better-sqlite3 connection
           try {
-            conn.pragma('journal_mode = WAL');
+            conn.pragma("journal_mode = WAL");
             console.log("SQLite WAL mode enabled");
             cb(null, conn);
           } catch (err) {
