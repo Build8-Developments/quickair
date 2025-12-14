@@ -57,7 +57,7 @@
   border-bottom: 2px solid #f0f0f0;
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .modalClose {
@@ -582,7 +582,7 @@
 /* Terms Notice */
 .terms-notice {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
   background: var(--color-light-1);
   padding: 15px;
   border-radius: 10px;
