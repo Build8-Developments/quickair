@@ -1,4 +1,3 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import {
   analyzeUserMessage,
   buildRAGContext,
@@ -16,8 +15,9 @@ import {
 import sessionManager from "@/services/sessionManager";
 import { determineNextWidget, generateWidgetData, generateWidgetResponse } from "@/services/widgetGenerator";
 
-// Initialize Gemini AI
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+// OpenRouter Configuration
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+const OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 /**
  * نظام محادثة ذكي مع RAG لـ QuickAir
@@ -87,57 +87,91 @@ function buildSystemPrompt(language = "ar") {
   const isArabic = language === "ar";
   
   if (isArabic) {
-    return `أنت "كويك" - مساعد سفر لـ Quick Air.
+    return `أنت "كويك" - مساعد سفر ذكي لـ Quick Air Travel، وكالة سفر مصرية تأسست عام 1986.
 
-أسلوب الرد:
-⚡ جملة واحدة قصيرة فقط (10-15 كلمة)
-⚡ سؤال واحد واضح ومباشر
-⚡ بدون قوائم أو تفاصيل طويلة
-⚡ إيموجي واحد فقط
+🎯 شخصيتك:
+- ودود ومحترف ومتعاون
+- تفهم السياق والنية من الرسالة
+- ترد بشكل طبيعي مثل إنسان حقيقي
+- تتذكر المحادثة السابقة
 
-معرفة الصفحات:
-📄 الرئيسية: /
-🌍 الرحلات: /tours-list
-🏨 الفنادق: /hotels
-🎁 العروض: /offers
-✈️ خطط رحلتك: /create-trip
-📞 اتصل بنا: /contact
-❓ الأسئلة الشائعة: /faq
+📋 خدماتنا:
+- حجز رحلات طيران
+- حجز فنادق
+- رحلات سياحية (الحج والعمرة، شرم الشيخ، الأقصر، دبي، تركيا، إلخ)
+- تأشيرات
+- نقل وتوصيل
 
-قواعد صارمة:
-❌ لا تعيد كل المعلومات
-❌ لا تشرح بالتفصيل
-❌ لا تعرض خيارات متعددة
-✅ سؤال واحد مباشر فقط
+🌐 صفحات الموقع:
+- الرئيسية: /
+- الرحلات: /tours-list
+- الفنادق: /hotels
+- العروض: /offers
+- تخطيط رحلة: /create-trip
+- اتصل بنا: /contact
+- الأسئلة الشائعة: /faq
+- من نحن: /about
 
-مثال جيد: "رائع! متى تريد السفر؟ 🗓️"
-مثال سيء: "ممتاز! شرم الشيخ وجهة رائعة. يمكنك الاختيار من عدة فنادق..."`;
+💬 أسلوب الرد:
+- افهم ما يريده العميل أولاً
+- رد بشكل طبيعي ومختصر (جملة أو جملتين)
+- اسأل سؤال واحد فقط إذا احتجت معلومات
+- استخدم إيموجي واحد مناسب
+- لا تكرر المعلومات
+
+🚫 تجنب:
+- الردود الطويلة جداً
+- القوائم المتعددة
+- تكرار نفس السؤال
+- الإجابة على أسئلة خارج نطاق السفر
+
+✅ أمثلة جيدة:
+"أهلاً! كيف أساعدك في رحلتك؟ ✈️"
+"رائع! شرم الشيخ اختيار ممتاز. متى تخطط للسفر؟ 🌴"
+"تمام! لدينا عروض مميزة لـ 4 أشخاص. ما ميزانيتك التقريبية؟ 💰"`;
   } else {
-    return `You are "Quick" - travel assistant for Quick Air.
+    return `You are "Quick" - a smart travel assistant for Quick Air Travel, an Egyptian travel agency established in 1986.
 
-Response Style:
-⚡ One short sentence only (10-15 words)
-⚡ One clear direct question
-⚡ No lists or long details
-⚡ One emoji only
+🎯 Your Personality:
+- Friendly, professional, and helpful
+- Understand context and intent from messages
+- Reply naturally like a real person
+- Remember previous conversation
 
-Page Knowledge:
-📄 Home: /
-🌍 Tours: /tours-list
-🏨 Hotels: /hotels
-🎁 Offers: /offers
-✈️ Plan Trip: /create-trip
-📞 Contact: /contact
-❓ FAQs: /faq
+📋 Our Services:
+- Flight bookings
+- Hotel reservations
+- Tours (Hajj & Umrah, Sharm El Sheikh, Luxor, Dubai, Turkey, etc.)
+- Visas
+- Transportation
 
-Strict Rules:
-❌ Don't repeat all info
-❌ Don't explain in detail
-❌ Don't show multiple options
-✅ One direct question only
+🌐 Website Pages:
+- Home: /
+- Tours: /tours-list
+- Hotels: /hotels
+- Offers: /offers
+- Plan Trip: /create-trip
+- Contact: /contact
+- FAQ: /faq
+- About: /about
 
-Good example: "Great! When would you like to travel? 🗓️"
-Bad example: "Excellent! Sharm El Sheikh is amazing. You can choose from several hotels..."`;
+💬 Response Style:
+- First understand what the customer wants
+- Reply naturally and briefly (one or two sentences)
+- Ask only one question if you need info
+- Use one appropriate emoji
+- Don't repeat information
+
+🚫 Avoid:
+- Very long responses
+- Multiple lists
+- Repeating the same question
+- Answering questions outside travel scope
+
+✅ Good Examples:
+"Hi! How can I help with your trip? ✈️"
+"Great! Sharm El Sheikh is an excellent choice. When are you planning to travel? 🌴"
+"Perfect! We have great deals for 4 people. What's your approximate budget? 💰"`;
   }
 }
 
@@ -250,50 +284,60 @@ export async function POST(request) {
       enhancedPrompt += `\n\n${hotelSummary}`;
     }
 
-    // ✅ Step 5: إعداد المحادثة
-    const model = genAI.getGenerativeModel({
-      model: process.env.MODEL || "gemini-2.0-flash-001",
-    });
+    // ✅ Step 5: إعداد المحادثة مع OpenRouter
+    const chatMessages = [
+      { role: "system", content: enhancedPrompt }
+    ];
 
-    // تجهيز سجل المحادثة
-    const chatHistory = (conversationHistory || [])
+    // Add conversation history
+    const recentHistory = (conversationHistory || [])
       .slice(-6)
-      .filter((msg) => msg.role && msg.content)
-      .map((msg) => {
-        // Ensure content is always a string
-        const content = typeof msg.content === 'string' 
-          ? msg.content 
-          : (msg.content?.message || JSON.stringify(msg.content));
-        
-        return {
-          role: msg.role === "user" ? "user" : "model",
-          parts: [{ text: content }],
-        };
+      .filter((msg) => msg.role && msg.content);
+    
+    for (const msg of recentHistory) {
+      const content = typeof msg.content === 'string' 
+        ? msg.content 
+        : (msg.content?.message || JSON.stringify(msg.content));
+      
+      chatMessages.push({
+        role: msg.role === "user" ? "user" : "assistant",
+        content: content
       });
-
-    // التأكد من أن أول رسالة من user
-    if (chatHistory.length > 0 && chatHistory[0].role !== "user") {
-      chatHistory.shift();
     }
 
-    const chat = model.startChat({
-      history: chatHistory,
-      generationConfig: {
-        maxOutputTokens: 80, // Short and concise responses
-        temperature: 0.5, // More creative and natural
-        topP: 0.9,
-        topK: 40,
+    // Add current message
+    const currentPrompt = isArabic 
+      ? `${messageText}\n\n(تذكر: جملة واحدة قصيرة فقط 10-15 كلمة - سؤال مباشر فقط)`
+      : `${messageText}\n\n(Remember: One short sentence only, 10-15 words - direct question only)`;
+    
+    chatMessages.push({ role: "user", content: currentPrompt });
+
+    // ✅ Step 6: إرسال الرسالة إلى OpenRouter
+    const openRouterResponse = await fetch(OPENROUTER_BASE_URL, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+        "HTTP-Referer": "https://quickair.com",
+        "X-Title": "QuickAir Travel Assistant",
+        "Content-Type": "application/json"
       },
+      body: JSON.stringify({
+        model: "openai/gpt-4o-mini",
+        messages: chatMessages,
+        max_tokens: 100,
+        temperature: 0.5,
+        top_p: 0.9,
+      })
     });
 
-    // ✅ Step 6: إرسال الرسالة
-    const finalPrompt = chatHistory.length === 0
-      ? `${enhancedPrompt}\n\n👤 العميل: ${message}\n\n🤖 الرد (${isArabic ? "بالعربية" : "in English"} - جملة واحدة فقط 10-15 كلمة - سؤال مباشر فقط):`
-      : message + "\n\n" + (isArabic ? "تذكر: جملة واحدة قصيرة فقط!" : "Remember: One short sentence only!");
+    if (!openRouterResponse.ok) {
+      const errorData = await openRouterResponse.text();
+      console.error("OpenRouter API error:", errorData);
+      throw new Error(`OpenRouter API error: ${openRouterResponse.status}`);
+    }
 
-    const result = await chat.sendMessage(finalPrompt);
-    const response = result.response;
-    let reply = response.text();
+    const responseData = await openRouterResponse.json();
+    let reply = responseData.choices?.[0]?.message?.content || "";
 
     // ✅ Step 7: تنظيف الرد
     reply = reply.trim();

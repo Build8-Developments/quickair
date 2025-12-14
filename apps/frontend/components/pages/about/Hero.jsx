@@ -1,7 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Hero() {
+  const { language } = useLanguage();
+  const isArabic = language === "ar";
+
   return (
     <section className="pageHeader -type-1">
       <div className="pageHeader__bg">
@@ -24,11 +30,14 @@ export default function Hero() {
         <div className="row justify-center">
           <div className="col-12">
             <div className="pageHeader__content">
-              <h1 className="pageHeader__title">About Us</h1>
+              <h1 className="pageHeader__title">
+                {isArabic ? "من نحن" : "About Us"}
+              </h1>
 
               <p className="pageHeader__text">
-                A tropical paradise made for animal lovers replete with monkey
-                caves, dog foundations, and dolphins in the wild.
+                {isArabic 
+                  ? "شريكك الموثوق في السفر منذ عام 1986 - خدمة أكثر من مليوني عميل"
+                  : "Your Trusted Travel Partner Since 1986 - Serving Over 2 Million Customers"}
               </p>
             </div>
           </div>
