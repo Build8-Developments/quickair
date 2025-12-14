@@ -187,13 +187,13 @@ jobs:
 
             # Restart applications with PM2
             echo "🔄 Restarting applications..."
-            pm2 delete all || true
+            npx pm2 delete all || true
 
             # Ensure PM2 uses the correct Node version
-            pm2 start ecosystem.config.js --update-env
-            pm2 save
+            npx pm2 start ecosystem.config.js --update-env
+            npx pm2 save
 
             echo "✅ Deployment completed successfully!"
             echo ""
             echo "📊 Application Status:"
-            pm2 status
+            npx pm2 status
