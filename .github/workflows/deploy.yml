@@ -153,11 +153,10 @@ jobs:
             # Aggressive cleanup to avoid symlink conflicts
             echo "📦 Cleaning old dependencies..."
             find . -name "node_modules" -type d -prune -exec rm -rf {} +
-            rm -f package-lock.json
 
             # Install with optimized settings for memory-constrained environments
             echo "📦 Running npm install (this may take several minutes)..."
-            NODE_OPTIONS="--max-old-space-size=2048" npm install --legacy-peer-deps --no-audit --progress=false
+            NODE_OPTIONS="--max-old-space-size=2048" npm install --maxsockets=1 --legacy-peer-deps --no-audit --progress=false
 
             # Rebuild native modules at root level
             echo "🔧 Rebuilding native modules..."
@@ -167,9 +166,12 @@ jobs:
             echo "🔧 Rebuilding better-sqlite3 for Node $(node -v)..."
             npm rebuild better-sqlite3
 
-            # Build applications
+            # Build applications separately to avoid memory issues
             echo "🔨 Building applications..."
-            NODE_OPTIONS="--max-old-space-size=2048" npx turbo run build
+            echo "🔨 Building Strapi..."
+            NODE_OPTIONS="--max-old-space-size=4096" npm run build:strapi
+            echo "🔨 Building Frontend..."
+            NODE_OPTIONS="--max-old-space-size=4096" npm run build:frontend
 
             # Apply database indexes for performance (after build so better-sqlite3 is available)
             echo "🗄️  Applying database performance indexes..."

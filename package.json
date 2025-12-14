@@ -7,6 +7,8 @@
   ],
   "scripts": {
     "build": "turbo run build",
+    "build:frontend": "turbo run build --filter=frontend",
+    "build:strapi": "turbo run build --filter=strapi",
     "dev": "turbo run dev",
     "start": "turbo run start",
     "lint": "turbo run lint",
