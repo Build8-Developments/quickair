@@ -150,23 +150,21 @@ jobs:
             # Install dependencies
             echo "📦 Installing dependencies..."
 
-            # Aggressive cleanup to avoid symlink conflicts
-            echo "📦 Cleaning old dependencies..."
+            # Aggressive cleanup to avoid cross-platform issues
+            echo "📦 Cleaning old dependencies and builds..."
             find . -name "node_modules" -type d -prune -exec rm -rf {} +
+            rm -rf apps/frontend/.next
+            rm -rf apps/strapi/dist
+            rm -rf apps/strapi/build
 
             # Install with optimized settings for memory-constrained environments
             echo "📦 Running npm install (this may take several minutes)..."
             NODE_OPTIONS="--max-old-space-size=2048" npm install --maxsockets=1 --legacy-peer-deps --no-audit --progress=false
 
-            # Rebuild native modules for Linux platform
-            echo "🔧 Rebuilding native modules for Linux..."
-            npm rebuild
-
-            # Rebuild sharp specifically for Strapi uploads
-            echo "🔧 Rebuilding sharp for Linux..."
-            cd apps/strapi
-            npm rebuild sharp
-            cd ../..
+            # Force reinstall sharp for Linux (critical for Strapi)
+            echo "🔧 Installing sharp for Linux platform..."
+            npm uninstall sharp
+            npm install --os=linux --cpu=x64 sharp
 
             # Rebuild better-sqlite3 for Strapi database
             echo "🔧 Rebuilding better-sqlite3 for Node $(node -v)..."
