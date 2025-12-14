@@ -158,11 +158,17 @@ jobs:
             echo "📦 Running npm install (this may take several minutes)..."
             NODE_OPTIONS="--max-old-space-size=2048" npm install --maxsockets=1 --legacy-peer-deps --no-audit --progress=false
 
-            # Rebuild native modules at root level
-            echo "🔧 Rebuilding native modules..."
+            # Rebuild native modules for Linux platform
+            echo "🔧 Rebuilding native modules for Linux..."
             npm rebuild
 
-            # Specifically rebuild better-sqlite3 to ensure compatibility
+            # Rebuild sharp specifically for Strapi uploads
+            echo "🔧 Rebuilding sharp for Linux..."
+            cd apps/strapi
+            npm rebuild sharp
+            cd ../..
+
+            # Rebuild better-sqlite3 for Strapi database
             echo "🔧 Rebuilding better-sqlite3 for Node $(node -v)..."
             npm rebuild better-sqlite3
 
