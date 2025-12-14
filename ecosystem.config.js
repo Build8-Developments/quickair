@@ -3,8 +3,8 @@ module.exports = {
     {
       name: "quickair-strapi",
       cwd: "/var/www/quickair/apps/strapi",
-      script: "./node_modules/.bin/strapi",
-      args: "start",
+      script: "npm",
+      args: "run start",
       interpreter: "/root/.nvm/versions/node/v20.19.6/bin/node",
       node_args: "--no-deprecation",
       env: {
@@ -21,8 +21,8 @@ module.exports = {
     {
       name: "quickair-frontend",
       cwd: "/var/www/quickair/apps/frontend",
-      script: "./node_modules/.bin/next",
-      args: "start",
+      script: "npm",
+      args: "run start",
       interpreter: "/root/.nvm/versions/node/v20.19.6/bin/node",
       env: {
         NODE_ENV: "production",
