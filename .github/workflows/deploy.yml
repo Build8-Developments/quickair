@@ -1,9 +1,6 @@
 name: Deploy to VPS
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
@@ -16,7 +13,7 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.VPS_PASSWORD }}
           port: ${{ secrets.VPS_PORT }}
           script: |
             echo "🔄 Starting deployment..."
@@ -27,17 +24,15 @@ jobs:
             TIMESTAMP=$(date +%Y%m%d_%H%M%S)
             BACKUP_PATH="$BACKUP_DIR/backup_$TIMESTAMP"
 
-            # Create backup directory with proper permissions if it doesn't exist
+            # Create backup directory if it doesn't exist
             if [ ! -d "$BACKUP_DIR" ]; then
-              sudo mkdir -p "$BACKUP_DIR"
-              sudo chown -R deploy:deploy "$BACKUP_DIR"
+              mkdir -p "$BACKUP_DIR"
             fi
 
             # Navigate to deployment directory
             cd "$DEPLOY_DIR" || {
               echo "📁 Creating deployment directory..."
-              sudo mkdir -p "$DEPLOY_DIR"
-              sudo chown -R deploy:deploy "$DEPLOY_DIR"
+              mkdir -p "$DEPLOY_DIR"
               cd "$DEPLOY_DIR"
             }            # Backup current deployment before updating
             if [ -d "$DEPLOY_DIR/apps" ]; then

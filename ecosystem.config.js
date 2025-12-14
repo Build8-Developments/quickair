@@ -5,7 +5,7 @@ module.exports = {
       cwd: "/var/www/quickair/apps/strapi",
       script: "./node_modules/.bin/strapi",
       args: "start",
-      interpreter: "/home/deploy/.nvm/versions/node/v20.19.6/bin/node",
+      interpreter: "/root/.nvm/versions/node/v20.19.6/bin/node",
       node_args: "--no-deprecation",
       env: {
         NODE_ENV: "production",
@@ -23,7 +23,7 @@ module.exports = {
       cwd: "/var/www/quickair/apps/frontend",
       script: "./node_modules/.bin/next",
       args: "start",
-      interpreter: "/home/deploy/.nvm/versions/node/v20.19.6/bin/node",
+      interpreter: "/root/.nvm/versions/node/v20.19.6/bin/node",
       env: {
         NODE_ENV: "production",
         PORT: 3000,
