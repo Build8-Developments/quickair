@@ -144,7 +144,15 @@ export default function BookingSummaryWidget({
             <div className={styles.details}>
               <div className={styles.detailRow}>
                 <span className={styles.label}>{t("النطاق:", "Range:")}</span>
-                <span className={styles.value}>{budget.label}</span>
+                <span className={styles.value}>
+                  {budget.label || budget.message || (
+                    budget.minEGP && budget.maxEGP 
+                      ? `${(budget.minEGP / 1000).toFixed(0)}-${(budget.maxEGP / 1000).toFixed(0)}${t(" ألف", "K")}` 
+                      : budget.minEGP 
+                        ? `${(budget.minEGP / 1000).toFixed(0)}+${t(" ألف", "K")}`
+                        : budget.budget || t("غير محدد", "Not specified")
+                  )}
+                </span>
               </div>
             </div>
           </div>
@@ -153,7 +161,7 @@ export default function BookingSummaryWidget({
 
       {/* Action Buttons */}
       <div className={styles.actions}>
-        <button className={styles.editButton} onClick={onEdit}>
+        <button className={styles.editButton} onClick={() => onEdit && onEdit("trip")}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>

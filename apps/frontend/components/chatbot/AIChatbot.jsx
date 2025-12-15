@@ -419,9 +419,13 @@ export default function AIChatbot() {
               }
             }}
             onEdit={(field) => {
+              const fieldName = typeof field === 'string' ? field : 'booking';
+              const editMessage = isChatArabic 
+                ? `أريد تعديل ${fieldName === 'trip' ? 'تفاصيل الرحلة' : 'الحجز'}`
+                : `I want to edit ${fieldName === 'trip' ? 'trip details' : 'booking'}`;
               setMessages((prev) => [
                 ...prev,
-                { role: "user", content: `Edit ${field}` }
+                { role: "user", content: editMessage }
               ]);
             }}
           />
