@@ -1,18 +1,8 @@
-import CreateTripFlow from "@/components/pages/createTrip/CreateTripFlow";
-import Header3 from "@/components/layout/header/Header3";
-import FooterTwo from "@/components/layout/footers/FooterTwo";
+import { redirect } from "next/navigation";
 
-export const metadata = {
-  title: "Create Your Dream Trip - QuickAir",
-  description: "Plan your perfect journey with our interactive trip builder. Get visa assistance, choose packages, set your budget, and explore amazing destinations.",
-};
-
+/**
+ * Legacy create-trip page - redirects to locale version
+ */
 export default function CreateTripPage() {
-  return (
-    <>
-      <Header3 />
-      <CreateTripFlow />
-      <FooterTwo />
-    </>
-  );
+  redirect("/en/create-trip");
 }

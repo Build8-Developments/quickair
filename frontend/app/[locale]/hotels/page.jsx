@@ -5,6 +5,9 @@ import { getAllHotels } from "@/lib/api/services/hotel";
 import { generateLocalizedMetadata } from "@/utils/seo";
 import { siteInfo } from "@/data/seo";
 
+// Force dynamic rendering - this page fetches data from Strapi
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ params }) {
   const { locale } = await params;
   const metadata = generateLocalizedMetadata("hotelsList", locale);
