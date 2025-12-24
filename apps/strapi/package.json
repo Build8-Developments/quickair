@@ -4,7 +4,7 @@
   "private": true,
   "description": "A Strapi application",
   "scripts": {
-    "build": "strapi build",
+    "build": "NODE_OPTIONS=\"--max-old-space-size=4096\" strapi build",
     "console": "strapi console",
     "deploy": "strapi deploy",
     "dev": "strapi develop",
@@ -16,11 +16,11 @@
     "postinstall": "npm rebuild @swc/core"
   },
   "dependencies": {
-    "@strapi/plugin-cloud": "5.30.0",
-    "@strapi/plugin-graphql": "^5.30.0",
-    "@strapi/plugin-seo": "^2.0.8",
-    "@strapi/plugin-users-permissions": "5.30.0",
-    "@strapi/strapi": "5.30.0",
+    "@strapi/plugin-cloud": "5.33.0",
+    "@strapi/plugin-graphql": "5.33.0",
+    "@strapi/plugin-seo": "1.9.7",
+    "@strapi/plugin-users-permissions": "5.33.0",
+    "@strapi/strapi": "5.33.0",
     "better-sqlite3": "^12.5.0",
     "lru-cache": "^11.2.2",
     "react": "^18.0.0",

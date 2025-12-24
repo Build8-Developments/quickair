@@ -65,13 +65,14 @@ export default ({ env }) => {
       },
       useNullAsDefault: true,
       pool: {
-        min: env.int("DATABASE_POOL_MIN", 2),
-        max: env.int("DATABASE_POOL_MAX", 10),
+        min: env.int("DATABASE_POOL_MIN", 1),
+        max: env.int("DATABASE_POOL_MAX", 1),
         afterCreate: (conn, cb) => {
           // Enable WAL mode for better concurrent performance
           // The connection object from Knex wraps the raw better-sqlite3 connection
           try {
             conn.pragma("journal_mode = WAL");
+            conn.pragma("busy_timeout = 30000");
             console.log("SQLite WAL mode enabled");
             cb(null, conn);
           } catch (err) {

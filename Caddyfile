@@ -12,12 +12,6 @@ quickair.build8.dev {
         X-Content-Type-Options "nosniff"
         X-XSS-Protection "1; mode=block"
     }
-    
-    # Logging
-    log {
-        output file /var/log/caddy/quickair-frontend.log
-        format json
-    }
 }
 
 # Strapi Admin & API
@@ -42,12 +36,6 @@ quickair-admin.build8.dev {
         X-Content-Type-Options "nosniff"
         X-XSS-Protection "1; mode=block"
     }
-    
-    # Logging
-    log {
-        output file /var/log/caddy/quickair-strapi.log
-        format json
-    }
 }
 
 # Backend Chat Bot API
@@ -60,11 +48,5 @@ quickair-bot.build8.dev {
         X-Frame-Options "SAMEORIGIN"
         X-Content-Type-Options "nosniff"
         X-XSS-Protection "1; mode=block"
-    }
-
-    # Logging
-    log {
-        output file /var/log/caddy/quickair-bot.log
-        format json
     }
 }
