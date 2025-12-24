@@ -260,6 +260,46 @@ export const seoConfig = {
       ogImage: "/img/seo/404-og-ar.jpg",
     },
   },
+
+  // Hajj Page
+  haj: {
+    en: {
+      title: "Hajj Packages - Sacred Pilgrimage | QuickAir",
+      description:
+        "Discover comprehensive Hajj packages with QuickAir. Experience a sacred spiritual journey to Makkah and Madinah with our expert guidance.",
+      keywords:
+        "hajj, hajj packages, pilgrimage, makkah, madinah, islamic travel, hajj 2025",
+      ogImage: "/img/seo/haj-og.jpg",
+    },
+    ar: {
+      title: "باقات الحج - الرحلة المقدسة | QuickAir",
+      description:
+        "اكتشف باقات الحج الشاملة مع كويك إير. عش تجربة رحلة روحانية مقدسة إلى مكة المكرمة والمدينة المنورة مع إرشادنا المتخصص.",
+      keywords:
+        "الحج, باقات الحج, الحج المبرور, مكة المكرمة, المدينة المنورة, السفر الإسلامي, حج 2025",
+      ogImage: "/img/seo/haj-og-ar.jpg",
+    },
+  },
+
+  // Omra Page
+  omra: {
+    en: {
+      title: "Omra Packages - Spiritual Journey | QuickAir",
+      description:
+        "Discover premium Omra packages with QuickAir. A spiritual journey to the Holy House of Allah with comfortable accommodations and expert guidance.",
+      keywords:
+        "omra, umrah, omra packages, umrah packages, makkah, islamic travel, spiritual journey",
+      ogImage: "/img/seo/omra-og.jpg",
+    },
+    ar: {
+      title: "باقات العمرة - رحلة روحانية | QuickAir",
+      description:
+        "اكتشف باقات العمرة المميزة مع كويك إير. رحلة روحانية إلى بيت الله الحرام مع إقامة مريحة وإرشاد متخصص.",
+      keywords:
+        "العمرة, باقات العمرة, مكة المكرمة, السفر الإسلامي, رحلة روحانية",
+      ogImage: "/img/seo/omra-og-ar.jpg",
+    },
+  },
 };
 
 // Default fallback metadata

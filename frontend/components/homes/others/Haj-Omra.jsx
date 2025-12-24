@@ -5,7 +5,7 @@ import React from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTranslation } from "react-i18next";
 
-export default function HajOmra() {
+export default function HajOmra({ locale = "en" }) {
   const { isRTL } = useLanguage();
   const { t } = useTranslation();
   return (
@@ -29,7 +29,7 @@ export default function HajOmra() {
             data-aos="fade-up"
             data-aos-delay=""
           >
-            <Link href="/haj" className="d-block overflow-hidden rounded-12">
+            <Link href={`/${locale}/haj`} className="d-block overflow-hidden rounded-12">
               <Image
                 src="https://placehold.co/750x600/png?text=Haj 750x600"
                 alt={t("home.haj")}
@@ -56,7 +56,7 @@ export default function HajOmra() {
             data-aos="fade-up"
             data-aos-delay="100"
           >
-            <Link href="/omra" className="d-block overflow-hidden rounded-12">
+            <Link href={`/${locale}/omra`} className="d-block overflow-hidden rounded-12">
               <Image
                 src="https://placehold.co/750x600/png?text=Omra 750x600"
                 alt={t("home.omra")}

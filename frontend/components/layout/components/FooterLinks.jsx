@@ -39,6 +39,11 @@ export default function FooterLinks({ locale: serverLocale }) {
     }
   };
 
+  const linkStyle = {
+    color: 'rgba(255, 255, 255, 0.85)',
+    transition: 'color 0.3s ease',
+  };
+
   return (
     <>
       {sections.map((elm, i) => (
@@ -47,7 +52,7 @@ export default function FooterLinks({ locale: serverLocale }) {
           className="col-lg-auto col-6"
           style={{ textAlign: isRTL ? "right" : "left" }}
         >
-          <h4 className="text-20 fw-500">{t(elm.titleKey)}</h4>
+          <h4 className="text-20 fw-500" style={{ color: '#ffffff' }}>{t(elm.titleKey)}</h4>
 
           <div className="y-gap-10 mt-20">
             {elm.links.map((elm2, i2) =>
@@ -56,7 +61,7 @@ export default function FooterLinks({ locale: serverLocale }) {
                   key={i2}
                   className="d-block fw-500"
                   onClick={handleOpenChatbot}
-                  style={{ cursor: "pointer" }}
+                  style={{ ...linkStyle, cursor: "pointer" }}
                 >
                   {t(elm2.textKey)}
                 </a>
@@ -66,11 +71,12 @@ export default function FooterLinks({ locale: serverLocale }) {
                   target="_blank"
                   className="d-block fw-500"
                   href={elm2.href}
+                  style={linkStyle}
                 >
                   {t(elm2.textKey)}
                 </a>
               ) : (
-                <a key={i2} className="d-block fw-500" href={localePath(elm2.href)}>
+                <a key={i2} className="d-block fw-500" href={localePath(elm2.href)} style={linkStyle}>
                   {t(elm2.textKey)}
                 </a>
               )

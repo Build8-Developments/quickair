@@ -6,11 +6,23 @@ const socialMediaLinks = [
 ];
 
 export default function Socials() {
+  const iconStyle = {
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontSize: '18px',
+    marginRight: '12px',
+    transition: 'color 0.3s ease',
+  };
+
   return (
-    <>
+    <div style={{ display: 'flex', gap: '12px' }}>
       {socialMediaLinks.map((elm, i) => (
-        <a key={i} href={elm.href} className={elm.class}></a>
+        <a 
+          key={i} 
+          href={elm.href} 
+          className={elm.class}
+          style={iconStyle}
+        ></a>
       ))}
-    </>
+    </div>
   );
 }

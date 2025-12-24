@@ -135,28 +135,24 @@ export default function FooterTwo({ locale: serverLocale }) {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    color: '#ffffff',
                   }}>
                     <i className="icon-headphone text-24"></i>
                   </div>
                 </div>
                 <div className="col-auto">
-                  <div className="text-14" style={{ opacity: 0.8 }}>{t("footer.speakToExpert")}</div>
-                  <div className="text-20 fw-600">1-800-453-6744</div>
+                  <div className="text-14" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>{t("footer.speakToExpert")}</div>
+                  <div className="text-20 fw-600" style={{ color: '#ffffff' }}>1-800-453-6744</div>
                 </div>
               </div>
             </div>
 
             <div className="col-lg-3 col-md-6">
-              <div
-                className={`footerSocials ${isRTL ? "text-right" : ""}`}
-                style={{ direction: isRTL ? "rtl" : "ltr" }}
-              >
-                <div className="text-16 fw-500 mb-15">
+              <div style={{ textAlign: isRTL ? "right" : "left" }}>
+                <div className="text-16 fw-500 mb-15" style={{ color: '#ffffff' }}>
                   {t("footer.followUs")}
                 </div>
-                <div className="footerSocials__icons">
-                  <Socials />
-                </div>
+                <Socials />
               </div>
             </div>
           </div>
