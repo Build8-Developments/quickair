@@ -174,7 +174,7 @@ export default function Menu({ locale: serverLocale }) {
           </div>
 
           <div className="desktopNav__item">
-            <Link href={localePath("/contact")}>{t("navbar.contact")}</Link>
+            <Link href={localePath("/faq")}>{t("navbar.faq")}</Link>
           </div>
 
           <div className="desktopNav__item">

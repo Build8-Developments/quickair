@@ -179,10 +179,6 @@ export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen, locale: 
             </li>
 
             <li className="menuNav__item">
-              <Link href={localePath("/contact")}>{t("navbar.contact")}</Link>
-            </li>
-
-            <li className="menuNav__item">
               <Link href={localePath("/faq")}>{t("navbar.faq")}</Link>
             </li>
 

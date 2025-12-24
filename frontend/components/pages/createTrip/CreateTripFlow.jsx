@@ -219,7 +219,7 @@ export default function CreateTripFlow() {
   };
 
   return (
-    <section className={`layout-pt-md layout-pb-lg ${styles.createTripSection}`} dir={isArabic ? "rtl" : "ltr"}>
+    <section className={`layout-pb-lg ${styles.createTripSection}`} style={{ paddingTop: "140px" }} dir={isArabic ? "rtl" : "ltr"}>
       <div className="container">
         <div className="row justify-center">
           <div className="col-xl-10">

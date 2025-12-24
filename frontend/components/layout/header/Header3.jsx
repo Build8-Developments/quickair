@@ -67,10 +67,10 @@ export default function Header3({ locale: serverLocale }) {
           <div className="header__right">
             <LanguageSwitcher />
             <Link
-              href={`/${locale}/faq`}
+              href={`/${locale}/contact`}
               className="button -sm -outline-dark-1 rounded-200 text-dark-1 header__help-btn"
             >
-              {t("navbar.faq")}
+              {t("navbar.contact")}
             </Link>
             <button
               onClick={() => setMobileMenuOpen(true)}
