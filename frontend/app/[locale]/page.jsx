@@ -11,6 +11,7 @@ import FooterTwo from "@/components/layout/footers/FooterTwo";
 import Header3 from "@/components/layout/header/Header3";
 import HomeFaq from "@/components/homes/faq/HomeFaq";
 import ContactForm from "@/components/pages/contact/ContactForm";
+import LatestBlog from "@/components/homes/blog/LatestBlog";
 import { generateLocalizedMetadata } from "@/utils/seo";
 import { siteInfo } from "@/data/seo";
 
@@ -49,6 +50,7 @@ export default async function HomePage({ params }) {
         <FeaturesThree locale={locale} />
         <TestimonialsThree locale={locale} />
         <HomeFaq locale={locale} />
+        <LatestBlog locale={locale} />
         <ContactForm locale={locale} />
         <FooterTwo locale={locale} />
       </main>

@@ -144,7 +144,7 @@ export default function BlogDetailContent({ post, locale }) {
   return (
     <>
       {/* Featured Image - Full Width */}
-      <section style={{ paddingTop: "80px", paddingBottom: "50px" }}>
+      <section style={{ paddingTop: "140px", paddingBottom: "50px" }}>
         <div className="container">
           <div
             style={{

@@ -29,7 +29,7 @@ export default function BlogPageContent({ locale }) {
   return (
     <>
       {/* Header Section */}
-      <section className="layout-pt-lg layout-pb-md">
+      <section className="layout-pb-md" style={{ paddingTop: "140px" }}>
         <div className="container">
           <div className="row justify-center text-center">
             <div className="col-lg-8">
