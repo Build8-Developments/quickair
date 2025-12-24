@@ -12,6 +12,9 @@ import {
  * Centralized GraphQL request handler with error handling, timeout, and logging
  */
 
+// Helper to log errors only at runtime (not during build)
+const shouldLog = () => process.env.NODE_ENV !== "production" || typeof window !== "undefined";
+
 /**
  * Execute a GraphQL query
  * @param {string} query - GraphQL query string
@@ -63,7 +66,7 @@ export async function graphqlRequest(query, variables = {}, options = {}) {
     const result = await response.json();
 
     if (result.errors) {
-      console.error("❌ GraphQL Errors:", result.errors);
+      if (shouldLog()) console.error("❌ GraphQL Errors:", result.errors);
       throw new GraphQLError(result.errors);
     }
 
@@ -76,7 +79,7 @@ export async function graphqlRequest(query, variables = {}, options = {}) {
     clearTimeout(timeoutId);
 
     if (error.name === "AbortError") {
-      console.error("⏱️ Request timeout");
+      if (shouldLog()) console.error("⏱️ Request timeout");
       throw new Error(ERROR_MESSAGES.timeout);
     }
 
@@ -84,7 +87,7 @@ export async function graphqlRequest(query, variables = {}, options = {}) {
       throw error;
     }
 
-    console.error("❌ GraphQL Request failed:", error);
+    if (shouldLog()) console.error("❌ GraphQL Request failed:", error);
     throw new Error(ERROR_MESSAGES.network);
   }
 }
@@ -139,7 +142,7 @@ export async function graphqlBatch(queries, options = {}) {
 
     return results;
   } catch (error) {
-    console.error("❌ Batch request failed:", error);
+    if (shouldLog()) console.error("❌ Batch request failed:", error);
     throw error;
   }
 }

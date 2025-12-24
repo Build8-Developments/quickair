@@ -15,7 +15,9 @@ const GRAPHQL_ENDPOINT = `${STRAPI_URL}/graphql`;
  * @returns {Promise<any>} Query result
  */
 export async function executeGraphQL(query, variables = {}, options = {}) {
-  const { cache = "no-store", next = {}, headers = {} } = options;
+  // Use force-cache during build, no-store at runtime for fresh data
+  const defaultCache = process.env.NODE_ENV === "production" ? "force-cache" : "no-store";
+  const { cache = defaultCache, next = { revalidate: 60 }, headers = {} } = options;
 
   try {
     const response = await fetch(GRAPHQL_ENDPOINT, {
@@ -46,7 +48,10 @@ export async function executeGraphQL(query, variables = {}, options = {}) {
 
     return result.data;
   } catch (error) {
-    console.error("GraphQL Request Failed:", error);
+    // Only log errors at runtime, not during build
+    if (process.env.NODE_ENV !== "production" || typeof window !== "undefined") {
+      console.error("GraphQL Request Failed:", error);
+    }
     throw error;
   }
 }

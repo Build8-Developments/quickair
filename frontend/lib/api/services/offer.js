@@ -14,6 +14,13 @@ import {
   GET_FILTERED_OFFERS,
 } from "../queries/offer";
 
+// Helper to log errors only at runtime (not during build)
+const logError = (message, error) => {
+  if (process.env.NODE_ENV !== "production" || typeof window !== "undefined") {
+    console.error(message, error);
+  }
+};
+
 /**
  * Get all offers
  * @param {object} params - Query parameters
@@ -39,7 +46,7 @@ export async function getAllOffers({
 
     return data?.offers || [];
   } catch (error) {
-    console.error("[OfferService] Error fetching all offers:", error);
+    logError("[OfferService] Error fetching all offers:", error);
     return [];
   }
 }
@@ -64,7 +71,7 @@ export async function getOfferById({ id, locale = "en" } = {}) {
 
     return data?.offer || null;
   } catch (error) {
-    console.error("[OfferService] Error fetching offer by id:", error);
+    logError("[OfferService] Error fetching offer by id:", error);
     return null;
   }
 }
@@ -100,7 +107,7 @@ export async function getOffersByLocation({
 
     return data?.offers || [];
   } catch (error) {
-    console.error("[OfferService] Error fetching offers by location:", error);
+    logError("[OfferService] Error fetching offers by location:", error);
     return [];
   }
 }
@@ -121,7 +128,7 @@ export async function getFeaturedOffers({ locale = "en", limit = 10 } = {}) {
 
     return data?.offers || [];
   } catch (error) {
-    console.error("[OfferService] Error fetching featured offers:", error);
+    logError("[OfferService] Error fetching featured offers:", error);
     return [];
   }
 }
@@ -153,7 +160,7 @@ export async function searchOffers({ query, locale = "en", limit = 20 } = {}) {
 
     return data?.offers || [];
   } catch (error) {
-    console.error("[OfferService] Error searching offers:", error);
+    logError("[OfferService] Error searching offers:", error);
     return [];
   }
 }
@@ -187,7 +194,7 @@ export async function getOffersByDate({
 
     return data?.offers || [];
   } catch (error) {
-    console.error("[OfferService] Error fetching offers by date:", error);
+    logError("[OfferService] Error fetching offers by date:", error);
     return [];
   }
 }
@@ -233,7 +240,7 @@ export async function getFilteredOffers({
 
     return data?.offers || [];
   } catch (error) {
-    console.error("[OfferService] Error fetching filtered offers:", error);
+    logError("[OfferService] Error fetching filtered offers:", error);
     return [];
   }
 }
