@@ -5,9 +5,16 @@ import { getHotelsForDestination } from "@/data/toursData";
 import { useLanguage } from "@/contexts/LanguageContext";
 import styles from "./StepHotel.module.css";
 
-export default function StepHotel({ data, destination, locationType, onUpdate, onNext, onPrev }) {
+export default function StepHotel({
+  data,
+  destination,
+  locationType,
+  onUpdate,
+  onNext,
+  onPrev,
+}) {
   const [selectedHotel, setSelectedHotel] = useState(data);
-  const [selectedRoomType, setSelectedRoomType] = useState('double');
+  const [selectedRoomType, setSelectedRoomType] = useState("double");
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStars, setFilterStars] = useState(0);
   const { language, t } = useLanguage();
@@ -17,12 +24,12 @@ export default function StepHotel({ data, destination, locationType, onUpdate, o
   const hotels = destination?.data?.hotels || [];
 
   const filteredHotels = hotels.filter((hotel) => {
-    const matchesSearch = 
+    const matchesSearch =
       hotel.hotel_name_en.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (hotel.hotel_name_ar && hotel.hotel_name_ar.includes(searchQuery));
-    
+
     const matchesStars = filterStars === 0 || hotel.stars === filterStars;
-    
+
     return matchesSearch && matchesStars;
   });
 
@@ -49,6 +56,63 @@ export default function StepHotel({ data, destination, locationType, onUpdate, o
 
   return (
     <div className="step-content" dir={isRTL ? "rtl" : "ltr"}>
+      {/* Action Buttons (moved above hotel list) */}
+      <div className="d-flex justify-between items-center mt-20 mb-30">
+        <button
+          type="button"
+          className="button -md -outline-accent-1 text-accent-1 px-35"
+          onClick={onPrev}
+          style={{ display: "flex", alignItems: "center", gap: "10px" }}
+        >
+          <i className={`icon-arrow-${isRTL ? "left" : "right"} text-16`}></i>
+          {t("رجوع", "Back")}
+        </button>
+        <button
+          className={`button -md -dark-1 bg-accent-1 text-white px-50 py-15 rounded-12 ${
+            !selectedHotel ? styles.disabledButton : ""
+          }`}
+          onClick={handleContinue}
+          disabled={!selectedHotel}
+          style={{ display: "flex", alignItems: "center", gap: "8px" }}
+        >
+          {isRTL ? (
+            <>
+              {t("متابعة", "Continue")}
+              <svg
+                style={{ marginRight: 2, marginLeft: 0 }}
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </>
+          ) : (
+            <>
+              {t("متابعة", "Continue")}
+              <svg
+                style={{ marginLeft: 2, marginRight: 0 }}
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </>
+          )}
+        </button>
+      </div>
+
       <div className="text-center mb-40">
         <h2 className="text-30 fw-600 text-dark-1 mb-10">
           {t(
@@ -65,16 +129,25 @@ export default function StepHotel({ data, destination, locationType, onUpdate, o
       <div className={`${styles.filtersSection} mb-40`}>
         {/* Search */}
         <div className={styles.filterGroup}>
-          <h4 className={styles.filterLabel}>{t('ابحث عن الفندق', 'Search for Hotel')}</h4>
+          <h4 className={styles.filterLabel}>
+            {t("ابحث عن الفندق", "Search for Hotel")}
+          </h4>
           <div className={styles.searchField}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="m21 21-4.35-4.35"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#6b7280"
+              strokeWidth="2"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
             </svg>
             <input
               type="text"
               className={styles.searchInput}
-              placeholder={t('ابحث عن الفندق...', 'Search for hotel...')}
+              placeholder={t("ابحث عن الفندق...", "Search for hotel...")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{ direction: isRTL ? "rtl" : "ltr" }}
@@ -84,60 +157,98 @@ export default function StepHotel({ data, destination, locationType, onUpdate, o
 
         {/* Room Type Filter */}
         <div className={styles.filterGroup}>
-          <h4 className={styles.filterLabel}>{t('نوع الغرفة', 'Room Type')}</h4>
+          <h4 className={styles.filterLabel}>{t("نوع الغرفة", "Room Type")}</h4>
           <div className={styles.filterButtons}>
             <button
-              className={`${styles.filterButton} ${selectedRoomType === 'double' ? styles.activeButton : ''}`.trim()}
-              onClick={() => setSelectedRoomType('double')}
+              className={`${styles.filterButton} ${
+                selectedRoomType === "double" ? styles.activeButton : ""
+              }`.trim()}
+              onClick={() => setSelectedRoomType("double")}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M9 2a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H9z"/>
-                <path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v13H4V7z"/>
-                <path d="M12 7v6"/>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path d="M9 2a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H9z" />
+                <path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v13H4V7z" />
+                <path d="M12 7v6" />
               </svg>
-              <span>{t('مزدوج', 'Double')}</span>
+              <span>{t("مزدوج", "Double")}</span>
             </button>
             <button
-              className={`${styles.filterButton} ${selectedRoomType === 'single' ? styles.activeButton : ''}`.trim()}
-              onClick={() => setSelectedRoomType('single')}
+              className={`${styles.filterButton} ${
+                selectedRoomType === "single" ? styles.activeButton : ""
+              }`.trim()}
+              onClick={() => setSelectedRoomType("single")}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M9 2a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H9z"/>
-                <path d="M6 7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13H6V7z"/>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path d="M9 2a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H9z" />
+                <path d="M6 7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13H6V7z" />
               </svg>
-              <span>{t('فردي', 'Single')}</span>
+              <span>{t("فردي", "Single")}</span>
             </button>
             <button
-              className={`${styles.filterButton} ${selectedRoomType === 'triple' ? styles.activeButton : ''}`.trim()}
-              onClick={() => setSelectedRoomType('triple')}
+              className={`${styles.filterButton} ${
+                selectedRoomType === "triple" ? styles.activeButton : ""
+              }`.trim()}
+              onClick={() => setSelectedRoomType("triple")}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v13H3V7z"/>
-                <path d="M8 7v6"/>
-                <path d="M16 7v6"/>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v13H3V7z" />
+                <path d="M8 7v6" />
+                <path d="M16 7v6" />
               </svg>
-              <span>{t('ثلاثي', 'Triple')}</span>
+              <span>{t("ثلاثي", "Triple")}</span>
             </button>
           </div>
         </div>
 
         {/* Stars Filter */}
         <div className={styles.filterGroup}>
-          <h4 className={styles.filterLabel}>{t('تقييم الفندق', 'Hotel Rating')}</h4>
+          <h4 className={styles.filterLabel}>
+            {t("تقييم الفندق", "Hotel Rating")}
+          </h4>
           <div className={styles.filterButtons}>
             {[0, 3, 4, 5].map((stars) => (
               <button
                 key={stars}
-                className={`${styles.filterButton} ${filterStars === stars ? styles.activeButton : ''}`.trim()}
+                className={`${styles.filterButton} ${
+                  filterStars === stars ? styles.activeButton : ""
+                }`.trim()}
                 onClick={() => setFilterStars(stars)}
               >
                 {stars === 0 ? (
-                  <span>{t('الكل', 'All')}</span>
+                  <span>{t("الكل", "All")}</span>
                 ) : (
                   <>
                     <span className={styles.starsCount}>{stars}</span>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill={filterStars === stars ? "#ffffff" : "#fbbf24"} stroke={filterStars === stars ? "#ffffff" : "#fbbf24"} strokeWidth="1.5">
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill={filterStars === stars ? "#ffffff" : "#fbbf24"}
+                      stroke={filterStars === stars ? "#ffffff" : "#fbbf24"}
+                      strokeWidth="1.5"
+                    >
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                     </svg>
                   </>
                 )}
@@ -151,21 +262,33 @@ export default function StepHotel({ data, destination, locationType, onUpdate, o
       <div className={styles.hotelsList}>
         {filteredHotels.map((hotel, index) => {
           const price = getPrice(hotel);
-          const isSelected = selectedHotel?.hotel_name_en === hotel.hotel_name_en;
+          const isSelected =
+            selectedHotel?.hotel_name_en === hotel.hotel_name_en;
 
           return (
             <div key={index} className={styles.hotelCardWrapper}>
               <div
-                className={`${styles.hotelCard} ${isSelected ? styles.selectedCard : ""}`.trim()}
+                className={`${styles.hotelCard} ${
+                  isSelected ? styles.selectedCard : ""
+                }`.trim()}
                 onClick={() => handleSelect(hotel)}
               >
                 {/* Hotel Icon */}
                 <div className={styles.hotelIcon}>
-                  <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M2 4v16"/>
-                    <path d="M2 8h18a2 2 0 0 1 2 2v10"/>
-                    <path d="M2 17h20"/>
-                    <path d="M6 8V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/>
+                  <svg
+                    width="36"
+                    height="36"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M2 4v16" />
+                    <path d="M2 8h18a2 2 0 0 1 2 2v10" />
+                    <path d="M2 17h20" />
+                    <path d="M6 8V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4" />
                   </svg>
                 </div>
 
@@ -178,8 +301,16 @@ export default function StepHotel({ data, destination, locationType, onUpdate, o
                     {/* Stars */}
                     <div className={styles.hotelStars}>
                       {[...Array(hotel.stars)].map((_, i) => (
-                        <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill="#fbbf24" stroke="#fbbf24" strokeWidth="1">
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        <svg
+                          key={i}
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="#fbbf24"
+                          stroke="#fbbf24"
+                          strokeWidth="1"
+                        >
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                         </svg>
                       ))}
                     </div>
@@ -187,29 +318,64 @@ export default function StepHotel({ data, destination, locationType, onUpdate, o
 
                   <div className={styles.hotelDetails}>
                     <div className={styles.detailItem}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                        <circle cx="12" cy="10" r="3"/>
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#6b7280"
+                        strokeWidth="2"
+                      >
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                        <circle cx="12" cy="10" r="3" />
                       </svg>
                       <span>{hotel.area}</span>
                     </div>
                     <div className={styles.detailItem}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2">
-                        <polyline points="20 6 9 17 4 12"/>
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#10b981"
+                        strokeWidth="2"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
                       </svg>
-                      <span>{isRTL ? hotel.room_type_ar : hotel.room_type_en}</span>
+                      <span>
+                        {isRTL ? hotel.room_type_ar : hotel.room_type_en}
+                      </span>
                     </div>
                   </div>
 
                   {hotel.valid_from && hotel.valid_to && (
                     <div className={styles.hotelValidity}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/>
-                        <line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#6b7280"
+                        strokeWidth="2"
+                      >
+                        <rect
+                          x="3"
+                          y="4"
+                          width="18"
+                          height="18"
+                          rx="2"
+                          ry="2"
+                        />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
                       </svg>
-                      <span>{t(`صالح من ${hotel.valid_from} إلى ${hotel.valid_to}`, `Valid from ${hotel.valid_from} to ${hotel.valid_to}`)}</span>
+                      <span>
+                        {t(
+                          `صالح من ${hotel.valid_from} إلى ${hotel.valid_to}`,
+                          `Valid from ${hotel.valid_from} to ${hotel.valid_to}`
+                        )}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -217,19 +383,33 @@ export default function StepHotel({ data, destination, locationType, onUpdate, o
                 {/* Hotel Price */}
                 {price && (
                   <div className={styles.priceWrapper}>
-                    <div className={styles.priceLabel}>{t('السعر للفرد', 'Price per Person')}</div>
-                    <div className={styles.priceAmount}>
-                      {price.toLocaleString()} <span className={styles.currency}>{t('جنيه', 'EGP')}</span>
+                    <div className={styles.priceLabel}>
+                      {t("السعر للفرد", "Price per Person")}
                     </div>
-                    <div className={styles.priceUsd}>≈ ${Math.round(price / 50)} USD</div>
+                    <div className={styles.priceAmount}>
+                      {price.toLocaleString()}{" "}
+                      <span className={styles.currency}>
+                        {t("جنيه", "EGP")}
+                      </span>
+                    </div>
+                    <div className={styles.priceUsd}>
+                      ≈ ${Math.round(price / 50)} USD
+                    </div>
                   </div>
                 )}
 
                 {/* Selected Check */}
                 {isSelected && (
                   <div className={styles.selectedCheck}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                      <polyline points="20 6 9 17 4 12"/>
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
                     </svg>
                   </div>
                 )}
@@ -243,37 +423,15 @@ export default function StepHotel({ data, destination, locationType, onUpdate, o
         <div className="text-center py-60">
           <i className="icon-search text-60 text-dark-3"></i>
           <h3 className="text-20 fw-500 text-dark-2 mt-20">
-            {t('لا توجد فنادق متطابقة', 'No matching hotels')}
+            {t("لا توجد فنادق متطابقة", "No matching hotels")}
           </h3>
           <p className="text-15 text-dark-3 mt-10">
-            {t('جرب تغيير معايير البحث', 'Try changing the search criteria')}
+            {t("جرب تغيير معايير البحث", "Try changing the search criteria")}
           </p>
         </div>
       )}
 
-      {/* Action Buttons */}
-      <div className="d-flex justify-between items-center mt-40">
-        <button
-          type="button"
-          className="button -md -outline-accent-1 text-accent-1 px-35"
-          onClick={onPrev}
-          style={{ display: "flex", alignItems: "center", gap: "10px" }}
-        >
-          <i className={`icon-arrow-${isRTL ? 'left' : 'right'} text-16`}></i>
-          {t('رجوع', 'Back')}
-        </button>
-        <button
-          className={`button -md -dark-1 bg-accent-1 text-white px-50 py-15 rounded-12 ${
-            !selectedHotel ? styles.disabledButton : ""
-          }`}
-          onClick={handleContinue}
-          disabled={!selectedHotel}
-          style={{ display: "flex", alignItems: "center", gap: "10px" }}
-        >
-          {t('متابعة', 'Continue')}
-          <i className={`icon-arrow-${isRTL ? 'right' : 'left'}`}></i>
-        </button>
-      </div>
+      {/* Action Buttons (moved above) */}
 
       <style jsx>{`
         .filters-section {

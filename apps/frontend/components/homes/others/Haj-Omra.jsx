@@ -31,7 +31,7 @@ export default function HajOmra() {
           >
             <Link href="/haj" className="d-block overflow-hidden rounded-12">
               <Image
-                src="https://placehold.co/750x600/png?text=Haj"
+                src="https://placehold.co/750x600/png?text=Haj 750x600"
                 alt={t("home.haj")}
                 width={750}
                 height={600}
@@ -58,7 +58,7 @@ export default function HajOmra() {
           >
             <Link href="/omra" className="d-block overflow-hidden rounded-12">
               <Image
-                src="https://placehold.co/750x600/png?text=Omra"
+                src="https://placehold.co/750x600/png?text=Omra 750x600"
                 alt={t("home.omra")}
                 width={750}
                 height={600}
