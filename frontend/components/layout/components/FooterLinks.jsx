@@ -24,9 +24,13 @@ const sections = [
   },
 ];
 
-export default function FooterLinks() {
+export default function FooterLinks({ locale: serverLocale }) {
   const { t } = useTranslation();
-  const { isRTL } = useLanguage();
+  const { isRTL, language: contextLocale } = useLanguage();
+  const locale = serverLocale || contextLocale;
+
+  // Helper to create localized links
+  const localePath = (path) => `/${locale}${path}`;
 
   const handleOpenChatbot = () => {
     const chatbotButton = document.querySelector('[aria-label="Open chat"]');
@@ -66,7 +70,7 @@ export default function FooterLinks() {
                   {t(elm2.textKey)}
                 </a>
               ) : (
-                <a key={i2} className="d-block fw-500" href={elm2.href}>
+                <a key={i2} className="d-block fw-500" href={localePath(elm2.href)}>
                   {t(elm2.textKey)}
                 </a>
               )

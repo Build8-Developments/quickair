@@ -13,12 +13,16 @@ const socialMediaLinks = [
   { id: 3, class: "icon-instagram", href: "#" },
   { id: 4, class: "icon-linkedin", href: "#" },
 ];
-export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen }) {
+export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen, locale: serverLocale }) {
   const [activeSub, setActiveSub] = useState("");
   const pathname = usePathname();
   const { t } = useTranslation();
-  const { language } = useLanguage();
-  const isRTL = language === "ar";
+  const { language: contextLocale, isRTL } = useLanguage();
+  const locale = serverLocale || contextLocale;
+
+  // Helper to create localized links
+  const localePath = (path) => `/${locale}${path}`;
+
   return (
     <div
       data-aos="fade"
@@ -53,7 +57,7 @@ export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen }) {
             style={{ maxHeight: "calc(100vh - 262px)", overflowY: "auto" }}
           >
             <li className="menuNav__item">
-              <Link href="/">{t("navbar.home")}</Link>
+              <Link href={localePath("")}>{t("navbar.home")}</Link>
             </li>
 
             <li className="menuNav__item -has-submenu js-has-submenu">
@@ -82,7 +86,7 @@ export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen }) {
                 dir={isRTL ? "rtl" : "ltr"}
               >
                 <li className="mobile-bento-item">
-                  <Link href="/offers" className="mobile-bento-link">
+                  <Link href={localePath("/offers")} className="mobile-bento-link">
                     <div className="mobile-bento-icon">
                       <Tag size={18} strokeWidth={1.5} />
                     </div>
@@ -98,7 +102,7 @@ export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen }) {
                 </li>
 
                 <li className="mobile-bento-item">
-                  <Link href="/hotels" className="mobile-bento-link">
+                  <Link href={localePath("/hotels")} className="mobile-bento-link">
                     <div className="mobile-bento-icon">
                       <Hotel size={18} strokeWidth={1.5} />
                     </div>
@@ -114,7 +118,7 @@ export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen }) {
                 </li>
 
                 <li className="mobile-bento-item">
-                  <Link href="/haj" className="mobile-bento-link">
+                  <Link href={localePath("/haj")} className="mobile-bento-link">
                     <div className="mobile-bento-icon">
                       <Compass size={18} strokeWidth={1.5} />
                     </div>
@@ -130,7 +134,7 @@ export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen }) {
                 </li>
 
                 <li className="mobile-bento-item">
-                  <Link href="/omra" className="mobile-bento-link">
+                  <Link href={localePath("/omra")} className="mobile-bento-link">
                     <div className="mobile-bento-icon">
                       <MapPin size={18} strokeWidth={1.5} />
                     </div>
@@ -167,19 +171,19 @@ export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen }) {
             </li>
 
             <li className="menuNav__item">
-              <Link href="/create-trip">{t("navbar.createTrip")}</Link>
+              <Link href={localePath("/create-trip")}>{t("navbar.createTrip")}</Link>
             </li>
 
             <li className="menuNav__item">
-              <Link href="/about">{t("navbar.about")}</Link>
+              <Link href={localePath("/about")}>{t("navbar.about")}</Link>
             </li>
 
             <li className="menuNav__item">
-              <Link href="/contact">{t("navbar.contact")}</Link>
+              <Link href={localePath("/contact")}>{t("navbar.contact")}</Link>
             </li>
 
             <li className="menuNav__item">
-              <Link href="/faq">{t("navbar.faq")}</Link>
+              <Link href={localePath("/faq")}>{t("navbar.faq")}</Link>
             </li>
           </ul>
         </div>

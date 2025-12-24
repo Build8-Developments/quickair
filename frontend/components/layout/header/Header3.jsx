@@ -4,16 +4,19 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Menu from "../components/Menu";
 import MobileMenu from "../components/MobileMenu";
-import LanguageSwitcherButton from "@/components/common/LanguageSwitcherButton";
+import LanguageSwitcher from "@/components/common/LanguageSwitcher";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function Header3() {
+export default function Header3({ locale: serverLocale }) {
   const router = useRouter();
   const { t } = useTranslation();
-  const { language } = useLanguage();
+  // Use server-provided locale or fall back to context
+  const { language: contextLocale } = useLanguage();
+  const locale = serverLocale || contextLocale;
+
   const pageNavigate = (pageName) => {
     router.push(pageName);
   };
@@ -38,6 +41,7 @@ export default function Header3() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   return (
     <>
       <header
@@ -45,25 +49,25 @@ export default function Header3() {
       >
         <div className="header__container container">
           <div className="header__logo">
-            <Link href="/" className="header__logo">
+            <Link href={`/${locale}`} className="header__logo">
               <Image
                 width="167"
                 height="32"
                 src={`/img/general/${
-                  language === "ar" ? "ar-logo" : "en-logo"
+                  locale === "ar" ? "ar-logo" : "en-logo"
                 }.svg`}
                 alt="logo icon"
                 priority
               />
             </Link>
 
-            <Menu />
+            <Menu locale={locale} />
           </div>
 
           <div className="header__right">
-            <LanguageSwitcherButton />
+            <LanguageSwitcher />
             <Link
-              href="/faq"
+              href={`/${locale}/faq`}
               className="button -sm -outline-dark-1 rounded-200 text-dark-1 header__help-btn"
             >
               {t("navbar.faq")}
@@ -80,6 +84,7 @@ export default function Header3() {
       <MobileMenu
         setMobileMenuOpen={setMobileMenuOpen}
         mobileMenuOpen={mobileMenuOpen}
+        locale={locale}
       />
     </>
   );

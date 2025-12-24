@@ -8,9 +8,10 @@ import Socials from "../components/Socials";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function FooterTwo() {
+export default function FooterTwo({ locale: serverLocale }) {
   const { t } = useTranslation();
-  const { isRTL, language } = useLanguage();
+  const { isRTL, language: contextLocale } = useLanguage();
+  const locale = serverLocale || contextLocale;
   const [year, setYear] = useState(2024);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -109,11 +110,11 @@ export default function FooterTwo() {
         <div style={footerStyles.topSection}>
           <div className="row y-gap-30 justify-between items-center">
             <div className="col-lg-4 col-md-6">
-              <Link href="/" className="d-block mb-20">
+              <Link href={`/${locale}`} className="d-block mb-20">
                 <Image
                   width="180"
                   height="45"
-                  src={`/img/general/${language === "ar" ? "ar-logo" : "en-logo"}.svg`}
+                  src={`/img/general/${locale === "ar" ? "ar-logo" : "en-logo"}.svg`}
                   alt="QuickAir Logo"
                   style={{ filter: 'brightness(0) invert(1)' }}
                 />
@@ -184,7 +185,7 @@ export default function FooterTwo() {
               </div>
             </div>
 
-            <FooterLinks />
+            <FooterLinks locale={locale} />
 
             <div
               className="col-lg-3 col-md-6"

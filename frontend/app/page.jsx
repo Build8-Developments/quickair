@@ -1,43 +1,10 @@
-import BrandsOne from "@/components/homes/brands/BrandsOne";
-import OfferDestinations from "@/components/homes/destinations/OfferDestinations";
-import TrendingDestinations from "@/components/homes/destinations/TrendingDestinations";
-import FeaturesFour from "@/components/homes/features/FeaturesFour";
-import FeaturesThree from "@/components/homes/features/FeaturesThree";
-import Hero3 from "@/components/homes/heros/Hero3";
-import HajOmra from "@/components/homes/others/Haj-Omra";
-import TestimonialsThree from "@/components/homes/testimonials/TestimonialsThree";
-import TourSlider5 from "@/components/homes/tours/TourSlider5";
-import FooterTwo from "@/components/layout/footers/FooterTwo";
-import Header3 from "@/components/layout/header/Header3";
-import HomeFaq from "@/components/homes/faq/HomeFaq";
-import ContactForm from "@/components/pages/contact/ContactForm";
-import { generatePageMetadata } from "@/utils/seo";
-import { getServerLocale } from "@/lib/locale";
+import { redirect } from "next/navigation";
+import { i18nConfig } from "@/lib/i18n-config";
 
-export async function generateMetadata() {
-  const locale = await getServerLocale();
-  return generatePageMetadata("home", locale);
-}
-
-export default async function page() {
-  return (
-    <>
-      <main>
-        <Header3 />
-        <Hero3 />
-        <OfferDestinations />
-        <BrandsOne />
-
-        <HajOmra />
-        <TrendingDestinations />
-        <FeaturesFour />
-        <TourSlider5 />
-        <FeaturesThree />
-        <TestimonialsThree />
-        <HomeFaq />
-        <ContactForm />
-        <FooterTwo />
-      </main>
-    </>
-  );
+/**
+ * Root page - redirects to default locale
+ * All actual content is served from /[locale]/ routes
+ */
+export default function RootPage() {
+  redirect(`/${i18nConfig.defaultLocale}`);
 }

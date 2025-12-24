@@ -9,18 +9,21 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { Tag, Hotel, Compass, MapPin, Globe } from "lucide-react";
 
-export default function Menu() {
+export default function Menu({ locale: serverLocale }) {
   const pathname = usePathname();
   const { t } = useTranslation();
-  const { language } = useLanguage();
-  const isRTL = language === "ar";
+  const { language: contextLocale, isRTL } = useLanguage();
+  const locale = serverLocale || contextLocale;
+
+  // Helper to create localized links
+  const localePath = (path) => `/${locale}${path}`;
 
   return (
     <>
       <div className="xl:d-none ml-30">
         <div className="desktopNav">
           <div className="desktopNav__item">
-            <Link href="/">{t("navbar.home")}</Link>
+            <Link href={localePath("")}>{t("navbar.home")}</Link>
           </div>
 
           <div className="desktopNav__item">
@@ -32,7 +35,7 @@ export default function Menu() {
               <div className="desktopNavMega__container">
                 <div className="desktopNavMega__lists">
                   <div className="bento-menu-grid">
-                    <Link href="/offers" className="bento-menu-item">
+                    <Link href={localePath("/offers")} className="bento-menu-item">
                       <div className="bento-menu-icon">
                         <Tag size={20} strokeWidth={1.5} />
                       </div>
@@ -46,7 +49,7 @@ export default function Menu() {
                       </div>
                     </Link>
 
-                    <Link href="/hotels" className="bento-menu-item">
+                    <Link href={localePath("/hotels")} className="bento-menu-item">
                       <div className="bento-menu-icon">
                         <Hotel size={20} strokeWidth={1.5} />
                       </div>
@@ -60,7 +63,7 @@ export default function Menu() {
                       </div>
                     </Link>
 
-                    <Link href="/haj" className="bento-menu-item">
+                    <Link href={localePath("/haj")} className="bento-menu-item">
                       <div className="bento-menu-icon">
                         <Compass size={20} strokeWidth={1.5} />
                       </div>
@@ -74,7 +77,7 @@ export default function Menu() {
                       </div>
                     </Link>
 
-                    <Link href="/omra" className="bento-menu-item">
+                    <Link href={localePath("/omra")} className="bento-menu-item">
                       <div className="bento-menu-icon">
                         <MapPin size={20} strokeWidth={1.5} />
                       </div>
@@ -163,15 +166,15 @@ export default function Menu() {
           </div>
 
           <div className="desktopNav__item">
-            <Link href="/create-trip">{t("navbar.createTrip")}</Link>
+            <Link href={localePath("/create-trip")}>{t("navbar.createTrip")}</Link>
           </div>
 
           <div className="desktopNav__item">
-            <a href="/about">{t("navbar.about")}</a>
+            <Link href={localePath("/about")}>{t("navbar.about")}</Link>
           </div>
 
           <div className="desktopNav__item">
-            <Link href="/contact">{t("navbar.contact")}</Link>
+            <Link href={localePath("/contact")}>{t("navbar.contact")}</Link>
           </div>
         </div>
       </div>
