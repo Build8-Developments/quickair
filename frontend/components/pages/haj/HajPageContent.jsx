@@ -18,7 +18,7 @@ export default function HajPageContent({ locale }) {
   return (
     <>
       {/* About Section */}
-      <section className="layout-pt-lg layout-pb-lg bg-light-1">
+      <section className="layout-pb-lg bg-light-1" style={{ paddingTop: "120px" }}>
         <div className="container">
           <div className="row y-gap-30 items-center">
             <div className="col-lg-6" data-aos="fade-right">
