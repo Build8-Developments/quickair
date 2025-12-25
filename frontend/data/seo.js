@@ -300,6 +300,26 @@ export const seoConfig = {
       ogImage: "/img/seo/omra-og-ar.jpg",
     },
   },
+
+  // Branches Page
+  branches: {
+    en: {
+      title: "Our Branches - Quick Air Travel Locations | QuickAir",
+      description:
+        "Find Quick Air branches near you across Egypt and UAE. Contact our offices in Mansoura, Cairo, Talkha, Dekernes, Sherbin, Belqas, Faraskour, and El Rawda.",
+      keywords:
+        "quick air branches, travel agency locations, egypt travel offices, uae travel agency, mansoura travel, cairo travel agency",
+      ogImage: "/img/seo/branches-og.jpg",
+    },
+    ar: {
+      title: "فروعنا - مواقع كويك إير للسفر | QuickAir",
+      description:
+        "اعثر على فروع كويك إير بالقرب منك في جميع أنحاء مصر والإمارات. تواصل مع مكاتبنا في المنصورة والقاهرة وطلخا ودكرنس وشربين وبلقاس وفارسكور والروضة.",
+      keywords:
+        "فروع كويك إير, مواقع وكالات السفر, مكاتب السفر مصر, وكالة سفر الإمارات, سفر المنصورة, وكالة سفر القاهرة",
+      ogImage: "/img/seo/branches-og-ar.jpg",
+    },
+  },
 };
 
 // Default fallback metadata

@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { Tag, Hotel, Compass, MapPin, Globe } from "lucide-react";
+import { Tag, Hotel, Compass, MapPin, Globe, Building2 } from "lucide-react";
 
 export default function Menu({ locale: serverLocale }) {
   const pathname = usePathname();
@@ -179,6 +179,10 @@ export default function Menu({ locale: serverLocale }) {
 
           <div className="desktopNav__item">
             <Link href={localePath("/blog")}>{t("navbar.blog")}</Link>
+          </div>
+
+          <div className="desktopNav__item">
+            <Link href={localePath("/branches")}>{t("navbar.branches")}</Link>
           </div>
         </div>
       </div>

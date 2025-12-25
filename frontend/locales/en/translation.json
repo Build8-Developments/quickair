@@ -62,6 +62,7 @@
     "send": "Send",
     "copyright": "Copyright Quickair Travel",
     "aboutUs": "About Us",
+    "branches": "Our Branches",
     "contactUs": "Contact Us",
     "dataPolicy": "Data Policy",
     "cookiePolicy": "Cookie Policy",
@@ -104,7 +105,9 @@
     "promoCard1Title": "60 % OFF",
     "promoCard1Text": "on Your Booking",
     "promoCard2Subtitle": "80% Discount",
-    "promoCard2Title": "Are You Ready To Turkey Tour"
+    "promoCard2Title": "Are You Ready To Turkey Tour",
+    "branches": "Our Branches",
+    "branchesDesc": "Find us near you"
   },
   "flightSearch": {
     "tripTypes": {
@@ -328,6 +331,15 @@
     "browseOffers": "Browse Offers",
     "viewDetails": "View Details",
     "days": "Days"
+  },
+  "branches": {
+    "pageTitle": "Our Branches",
+    "pageDescription": "Find Quick Air branches near you. We're here to serve you across Egypt and UAE.",
+    "viewOnMap": "View on Map",
+    "customerService": "Customer Service",
+    "hotline": "Hotline",
+    "egyptNumbers": "Egypt Numbers",
+    "uaeBranch": "UAE Branch"
   },
   "booking": {
     "confirmBooking": "Confirm Your Booking",

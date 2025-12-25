@@ -62,6 +62,7 @@
     "send": "إرسال",
     "copyright": "حقوق النشر كويك إير للسفر",
     "aboutUs": "من نحن",
+    "branches": "فروعنا",
     "contactUs": "اتصل بنا",
     "dataPolicy": "سياسة البيانات",
     "cookiePolicy": "سياسة ملفات تعريف الارتباط",
@@ -104,7 +105,9 @@
     "promoCard1Title": "60٪ خصم",
     "promoCard1Text": "على حجزك",
     "promoCard2Subtitle": "خصم 80٪",
-    "promoCard2Title": "هل أنت مستعد لجولة تركيا"
+    "promoCard2Title": "هل أنت مستعد لجولة تركيا",
+    "branches": "فروعنا",
+    "branchesDesc": "اعثر علينا بالقرب منك"
   },
   "flightSearch": {
     "tripTypes": {
@@ -328,6 +331,15 @@
     "browseOffers": "تصفح العروض",
     "viewDetails": "عرض التفاصيل",
     "days": "أيام"
+  },
+  "branches": {
+    "pageTitle": "فروعنا",
+    "pageDescription": "اعثر على فروع كويك إير بالقرب منك. نحن هنا لخدمتك في جميع أنحاء مصر والإمارات.",
+    "viewOnMap": "عرض على الخريطة",
+    "customerService": "خدمة العملاء",
+    "hotline": "الخط الساخن",
+    "egyptNumbers": "أرقام مصر",
+    "uaeBranch": "فرع الإمارات"
   },
   "booking": {
     "confirmBooking": "تأكيد حجزك",

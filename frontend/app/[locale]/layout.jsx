@@ -7,6 +7,7 @@ import "../../public/css/flight-search.css";
 import "../../public/css/offer-skeleton.css";
 import "../../public/css/hotel-skeleton.css";
 import "../../public/css/faq-page.css";
+import "../../public/css/branches.css";
 import "../../styles/rtl-support.css";
 
 import { Rubik } from "next/font/google";

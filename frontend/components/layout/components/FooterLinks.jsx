@@ -7,6 +7,7 @@ const sections = [
     titleKey: "footer.company",
     links: [
       { id: 1, textKey: "footer.aboutUs", href: "/about" },
+      { id: 2, textKey: "footer.branches", href: "/branches" },
       { id: 3, textKey: "footer.contactUs", href: "/contact" },
       { id: 7, textKey: "footer.terms", href: "/terms" },
     ],

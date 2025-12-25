@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Tag, Hotel, Compass, MapPin, Globe } from "lucide-react";
+import { Tag, Hotel, Compass, MapPin, Globe, Building2 } from "lucide-react";
 
 const socialMediaLinks = [
   { id: 1, class: "icon-facebook", href: "#" },
@@ -184,6 +184,10 @@ export default function MobileMenu({ mobileMenuOpen, setMobileMenuOpen, locale: 
 
             <li className="menuNav__item">
               <Link href={localePath("/blog")}>{t("navbar.blog")}</Link>
+            </li>
+
+            <li className="menuNav__item">
+              <Link href={localePath("/branches")}>{t("navbar.branches")}</Link>
             </li>
           </ul>
         </div>
