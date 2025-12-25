@@ -18,7 +18,7 @@ export default function LatestBlog({ locale }) {
   };
 
   return (
-    <section className="layout-pt-lg layout-pb-lg">
+    <section className="layout-pt-lg">
       <div className="container">
         <div className="row justify-center text-center mb-40">
           <div className="col-lg-8">
@@ -167,18 +167,29 @@ export default function LatestBlog({ locale }) {
           ))}
         </div>
 
-        <div className="text-center mt-40" data-aos="fade-up">
+        <div className="text-center mt-30" data-aos="fade-up">
           <Link
             href={`/${locale}/blog`}
-            className="button -md -accent-1 text-white"
+            className="d-inline-flex items-center gap-10"
             style={{
-              padding: "14px 32px",
-              borderRadius: "10px",
+              padding: "16px 40px",
+              borderRadius: "12px",
               fontWeight: "600",
-              fontSize: "15px",
+              fontSize: "16px",
+              backgroundColor: "#13b5b0",
+              color: "#ffffff",
+              textDecoration: "none",
+              transition: "background-color 0.3s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "#0e8a86";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "#13b5b0";
             }}
           >
             {isRTL ? "عرض جميع المقالات" : "View All Articles"}
+            <span style={{ transform: isRTL ? "rotate(180deg)" : "none" }}>→</span>
           </Link>
         </div>
       </div>
