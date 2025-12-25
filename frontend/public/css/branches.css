@@ -115,19 +115,30 @@
 
 /* Contact Info Box */
 .contact-info-box {
-  background: #fff;
+  background: linear-gradient(135deg, var(--color-accent-1, #019fb1) 0%, var(--color-accent-1-dark, #017a89) 100%);
   border-radius: 20px;
   padding: 40px;
-  color: #333;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(1, 159, 177, 0.3);
+}
+
+.contact-info-box__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.contact-info-box__icon {
+  color: #fff;
 }
 
 .contact-info-box__title {
   font-size: 24px;
   font-weight: 600;
-  margin-bottom: 30px;
-  text-align: center;
-  color: var(--color-accent-1, #019fb1);
+  color: #fff;
+  margin: 0;
 }
 
 .contact-info-box__grid {
@@ -150,27 +161,27 @@
 .contact-info-box__label {
   display: block;
   font-size: 14px;
-  color: #777;
+  color: rgba(255, 255, 255, 0.8);
   margin-bottom: 12px;
 }
 
 .contact-info-box__value {
   display: block;
-  color: #333;
+  color: #fff;
   font-size: 16px;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: opacity 0.2s ease;
   direction: ltr;
 }
 
 .contact-info-box__value:hover {
-  color: var(--color-accent-1, #019fb1);
+  opacity: 0.8;
 }
 
 .contact-info-box__hotline {
   font-size: 32px;
   font-weight: 700;
-  color: var(--color-accent-1, #019fb1);
+  color: #fff;
 }
 
 .contact-info-box__numbers {
@@ -178,6 +189,11 @@
   flex-direction: column;
   gap: 8px;
   align-items: center;
+}
+
+/* RTL Support for Contact Info Box */
+[dir="rtl"] .contact-info-box__header {
+  flex-direction: row-reverse;
 }
 
 /* RTL Support */

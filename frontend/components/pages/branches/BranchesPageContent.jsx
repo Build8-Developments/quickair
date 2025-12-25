@@ -164,9 +164,12 @@ export default function BranchesPageContent({ locale }) {
         <div className="row justify-center mt-60">
           <div className="col-lg-10">
             <div className="contact-info-box">
-              <h3 className="contact-info-box__title">
-                {t("branches.customerService")}
-              </h3>
+              <div className="contact-info-box__header">
+                <Phone size={24} className="contact-info-box__icon" />
+                <h3 className="contact-info-box__title">
+                  {t("branches.customerService")}
+                </h3>
+              </div>
               
               <div className="contact-info-box__grid">
                 <div className="contact-info-box__item">
