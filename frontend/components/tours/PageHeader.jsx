@@ -1,17 +1,18 @@
-import React from "react";
+"use client";
 
-export default function PageHeader() {
+import React from "react";
+import PageHeaderComponent from "@/components/common/PageHeader";
+
+export default function PageHeader({ locale }) {
+  const isRTL = locale === "ar";
+
   return (
-    <section className="pageHeader -type-3">
-      <div className="container">
-        <div className="row pt-30">
-          <div className="col-auto">
-            <h1 className="pageHeader__title">
-              Explore all things to do in {""}
-            </h1>
-          </div>
-        </div>
-      </div>
-    </section>
+    <PageHeaderComponent
+      icon="tours"
+      title={isRTL ? "الرحلات السياحية" : "Tours"}
+      description={isRTL 
+        ? "اكتشف أفضل الرحلات السياحية والوجهات المميزة"
+        : "Explore the best tours and featured destinations"}
+    />
   );
 }

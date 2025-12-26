@@ -29,6 +29,7 @@ export default async function TermsPage({ params }) {
     <>
       <main>
         <Header3 locale={locale} />
+        <div className="header-margin"></div>
         <Content locale={locale} />
         <FooterTwo locale={locale} />
       </main>

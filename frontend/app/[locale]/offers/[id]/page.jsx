@@ -67,6 +67,7 @@ export default async function OfferDetailPage({ params }) {
     <>
       <main>
         <Header3 locale={locale} />
+        <div className="header-margin"></div>
         <OfferDetail offer={offer} locale={locale} />
         <FooterTwo locale={locale} />
       </main>

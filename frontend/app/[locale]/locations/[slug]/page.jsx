@@ -31,6 +31,7 @@ export default async function LocationPage({ params }) {
     <>
       <main>
         <Header3 locale={locale} />
+        <div className="header-margin"></div>
         {/* Location content component */}
         <div className="location-page-content">
           {/* Your location component here */}

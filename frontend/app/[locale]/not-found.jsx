@@ -7,7 +7,8 @@ export default function NotFound() {
     <>
       <main>
         <Header3 />
-        <section className="nopage mt-header">
+        <div className="header-margin"></div>
+        <section className="nopage">
           <div className="container">
             <div className="row y-gap-30 justify-between items-center">
               <div className="col-lg-6">

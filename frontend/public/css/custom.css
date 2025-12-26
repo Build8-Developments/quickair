@@ -319,7 +319,7 @@
   background: linear-gradient(
     180deg,
     rgba(1, 159, 177, 0.3) 0%,
-    rgba(183, 28, 56, 0.2) 40%,
+    rgba(1, 159, 177, 0.2) 40%,
     rgba(255, 255, 255, 0.8) 75%,
     rgba(255, 255, 255, 1) 100%
   );
@@ -954,5 +954,34 @@
   .hero.-type-3 .hero__search-empty-btn {
     padding: 8px 16px;
     font-size: 13px;
+  }
+}
+/* Header margin adjustment for pages with icons */
+.header-margin {
+  margin-top: 20px;
+}
+
+/* Reduce hero section padding for pages with icons */
+.layout-pt-md {
+  padding-top: 40px;
+}
+
+@media (max-width: 767px) {
+  .header-margin {
+    margin-top: 15px;
+  }
+  
+  .layout-pt-md {
+    padding-top: 25px;
+  }
+}
+
+@media (max-width: 575px) {
+  .header-margin {
+    margin-top: 10px;
+  }
+  
+  .layout-pt-md {
+    padding-top: 20px;
   }
 }

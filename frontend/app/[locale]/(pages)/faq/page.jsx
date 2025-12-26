@@ -30,6 +30,7 @@ export default async function FaqPage({ params }) {
     <>
       <main>
         <Header3 locale={locale} />
+        <div className="header-margin"></div>
         <FaqHero locale={locale} />
         <FaqContent locale={locale} />
         <FooterTwo locale={locale} />

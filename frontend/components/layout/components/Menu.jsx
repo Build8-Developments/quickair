@@ -118,21 +118,9 @@ export default function Menu({ locale: serverLocale }) {
                           <Image
                             width={615}
                             height={300}
-                            src="/img/cta/10/1.jpg"
+                            src="/1.png"
                             alt="image"
                           />
-                        </div>
-
-                        <div className="specialCard__content">
-                          <div className="specialCard__subtitle">
-                            {t("navbar.promoCard1Subtitle")}
-                          </div>
-                          <h3 className="specialCard__title">
-                            {t("navbar.promoCard1Title")}
-                          </h3>
-                          <div className="specialCard__text">
-                            {t("navbar.promoCard1Text")}
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -143,19 +131,9 @@ export default function Menu({ locale: serverLocale }) {
                           <Image
                             width={615}
                             height={300}
-                            src="/img/cta/10/2.jpg"
+                            src="/2.png"
                             alt="image"
                           />
-                        </div>
-
-                        <div className="specialCard__content">
-                          <div className="specialCard__subtitle">
-                            {t("navbar.promoCard2Subtitle")}
-                          </div>
-                          <h3 className="specialCard__title">
-                            {t("navbar.promoCard2Title")}
-                          </h3>
-                          <div className="specialCard__text"></div>
                         </div>
                       </div>
                     </div>
@@ -179,10 +157,6 @@ export default function Menu({ locale: serverLocale }) {
 
           <div className="desktopNav__item">
             <Link href={localePath("/blog")}>{t("navbar.blog")}</Link>
-          </div>
-
-          <div className="desktopNav__item">
-            <Link href={localePath("/branches")}>{t("navbar.branches")}</Link>
           </div>
         </div>
       </div>

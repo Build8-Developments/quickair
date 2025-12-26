@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import PageHeader from "@/components/common/PageHeader";
+
 const tabs = [
   "Account & Payments",
   "Manage Orders",
@@ -8,7 +10,8 @@ const tabs = [
   "COVID-19",
   "Other",
 ];
-export default function Content() {
+export default function Content({ locale }) {
+  const isRTL = locale === "ar";
   const [currentTab, setCurrentTab] = useState("Account & Payments");
   useEffect(() => {
     const termsContainer = document.getElementById("termsContainer");
@@ -16,13 +19,21 @@ export default function Content() {
       termsContainer.style.opacity = 0;
       setTimeout(() => {
         termsContainer.style.opacity = 1;
-      }, 300); // Change the time (in milliseconds) as needed
+      }, 300);
     }
   }, [currentTab]);
 
   return (
-    <section className="layout-pt-md layout-pb-lg p-10">
-      <div className="container">
+    <>
+      <PageHeader
+        icon="terms"
+        title={isRTL ? "الشروط والأحكام" : "Terms & Conditions"}
+        description={isRTL 
+          ? "اقرأ شروط وأحكام استخدام خدماتنا"
+          : "Read our terms and conditions of service"}
+      />
+      <section className="layout-pb-lg">
+        <div className="container">
         <div className="tabs -terms js-tabs">
           <div className="row y-gap-30">
             <div className="col-lg-3">
@@ -144,5 +155,6 @@ export default function Content() {
         </div>
       </div>
     </section>
+    </>
   );
 }

@@ -30,6 +30,7 @@ export default async function ToursListPage({ params }) {
     <>
       <main>
         <Header3 locale={locale} />
+        <div className="header-margin"></div>
         <PageHeader locale={locale} />
         <TourList3 locale={locale} />
         <FooterTwo locale={locale} />

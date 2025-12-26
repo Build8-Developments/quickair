@@ -1,20 +1,19 @@
 "use client";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-
 import { Navigation, Pagination } from "swiper/modules";
-
 import React, { useEffect, useRef, useState } from "react";
 import { testimonialsThree } from "@/data/testimonials";
-import Image from "next/image";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function TestimonialsThree() {
   const swiperRef = useRef(null);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const { language, t } = useLanguage();
 
   useEffect(() => {
     if (swiperRef.current) {
-      swiperRef.current.slideTo(0); // Set the initial slide to index 0
+      swiperRef.current.slideTo(0);
     }
   }, []);
 
@@ -27,18 +26,18 @@ export default function TestimonialsThree() {
 
   const handleSlideChange = (swiper) => {
     setCurrentSlideIndex(swiper.activeIndex);
-
-    if (swiper.activeIndex >= 5) {
-      setCurrentSlideIndex(swiper.activeIndex - 5);
+    if (swiper.activeIndex >= testimonialsThree.length) {
+      setCurrentSlideIndex(swiper.activeIndex - testimonialsThree.length);
     }
   };
+
   return (
     <section className="layout-pt-xl layout-pb-xl bg-light-3">
       <div className="container">
         <div className="row justify-center text-center">
           <div className="col-auto">
             <h2 data-aos="fade-up" data-aos-delay="" className="text-30">
-              Customer Reviews
+              {t('آراء عملائنا', 'Customer Reviews')}
             </h2>
           </div>
         </div>
@@ -55,7 +54,7 @@ export default function TestimonialsThree() {
                   spaceBetween={30}
                   className="w-100"
                   onSwiper={(swiper) => {
-                    swiperRef.current = swiper; // Store the Swiper instance in the ref
+                    swiperRef.current = swiper;
                   }}
                   onSlideChange={handleSlideChange}
                   modules={[Pagination]}
@@ -93,12 +92,36 @@ export default function TestimonialsThree() {
                         </div>
 
                         <div className="text-20 lh-18 md:text-18 fw-500 mt-60 md:mt-30">
-                          {elm.comment}
+                          {language === "ar" ? elm.comment.ar : elm.comment.en}
                         </div>
 
                         <div className="mt-60 md:mt-30">
                           <div className="text-16 fw-500 lh-14">{elm.name}</div>
-                          <div className="lh-14">{elm.role}</div>
+                          <div className="lh-14 d-flex align-items-center justify-center gap-2">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/>
+                              <line x1="4" y1="22" x2="4" y2="15"/>
+                            </svg>
+                            {language === "ar" ? elm.country.ar : elm.country.en}
+                          </div>
+                          <div className="rating-stars mt-2">
+                            {[...Array(5)].map((_, starIndex) => (
+                              <svg 
+                                key={starIndex} 
+                                width="14" 
+                                height="14" 
+                                viewBox="0 0 24 24" 
+                                fill={starIndex < elm.rating ? "#ffc107" : "#e0e0e0"}
+                                stroke="none"
+                                style={{ marginRight: '2px' }}
+                              >
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                              </svg>
+                            ))}
+                          </div>
+                          <div className="review-meta mt-2 text-12 text-light-1">
+                            {elm.reviewsCount} {t('مراجعة', 'reviews')} • {language === "ar" ? elm.timeAgo.ar : elm.timeAgo.en}
+                          </div>
                         </div>
                       </div>
                     </SwiperSlide>
@@ -122,14 +145,8 @@ export default function TestimonialsThree() {
                     currentSlideIndex == i ? "is-active" : ""
                   } `}
                 >
-                  <div>
-                    <Image
-                      width={70}
-                      height={71}
-                      src={elm.imgSrc}
-                      style={{ height: "auto" }}
-                      alt="person"
-                    />
+                  <div className="avatar-circle">
+                    <span className="avatar-initials">{elm.initials}</span>
                   </div>
                 </div>
               ))}
@@ -137,6 +154,56 @@ export default function TestimonialsThree() {
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        .rating-stars {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .review-meta {
+          opacity: 0.7;
+        }
+
+        .avatar-circle {
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #019fb1, #01c0d4);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+
+        .avatar-initials {
+          color: white;
+          font-weight: 600;
+          font-size: 18px;
+        }
+
+        .testimonialsPagination__item.is-active .avatar-circle {
+          transform: scale(1.1);
+          box-shadow: 0 4px 15px rgba(1, 159, 177, 0.3);
+        }
+
+        .testimonialsPagination__item:hover .avatar-circle {
+          transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+          .avatar-circle {
+            width: 60px;
+            height: 60px;
+          }
+
+          .avatar-initials {
+            font-size: 16px;
+          }
+        }
+      `}</style>
     </section>
   );
 }

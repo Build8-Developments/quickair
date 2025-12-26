@@ -1,8 +1,8 @@
 import FooterTwo from "@/components/layout/footers/FooterTwo";
 import Header3 from "@/components/layout/header/Header3";
 import ContactForm from "@/components/pages/contact/ContactForm";
-import Locations from "@/components/pages/contact/Locations";
 import MapWidget from "@/components/pages/contact/MapWidget";
+import PageHeader from "@/components/common/PageHeader";
 import { generateLocalizedMetadata } from "@/utils/seo";
 import { siteInfo } from "@/data/seo";
 
@@ -31,8 +31,15 @@ export default async function ContactPage({ params }) {
     <>
       <main>
         <Header3 locale={locale} />
+        <div className="header-margin"></div>
+        <PageHeader
+          icon="contact"
+          title={locale === "ar" ? "تواصل معنا" : "Contact Us"}
+          description={locale === "ar" 
+            ? "نحن هنا لمساعدتك في تخطيط رحلتك المثالية"
+            : "We're here to help you plan your perfect trip"}
+        />
         <ContactForm locale={locale} />
-        <Locations locale={locale} />
         <MapWidget locale={locale} />
         <FooterTwo locale={locale} />
       </main>

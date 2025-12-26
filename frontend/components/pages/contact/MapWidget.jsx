@@ -1,200 +1,292 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import dynamic from "next/dynamic";
+
+const MapContainer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.MapContainer),
+  { ssr: false }
+);
+const TileLayer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.TileLayer),
+  { ssr: false }
+);
+const Marker = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Marker),
+  { ssr: false }
+);
+
+const branchesData = [
+  {
+    id: 1,
+    name: { ar: "المنصورة", en: "Mansoura" },
+    address: { ar: "ش بن بطوطة أمام الجوازات", en: "Ibn Battuta St., in front of Passports Office" },
+    phones: ["0502310023", "0502310054", "0502312040"],
+    mobiles: ["01282221011", "01282221012", "01282221013", "01282221014", "01282221015"],
+    coordinates: [31.0429308, 31.3926999]
+  },
+  {
+    id: 2,
+    name: { ar: "القاهرة", en: "Cairo" },
+    address: { ar: "مدينة الشروق 162 مجاورة 2", en: "El Shorouk City, 162 Neighborhood 2" },
+    phones: ["0220300813", "0220300814", "0220301361", "0220301306"],
+    mobiles: ["01282221005", "01282221037"],
+    coordinates: [30.1127, 31.6089]
+  },
+  {
+    id: 3,
+    name: { ar: "طلخا", en: "Talkha" },
+    address: { ar: "ش عاطف الشرقاوى تقسيم غنام", en: "Atef El Sharkawy St., Ghannam Division" },
+    phones: ["0502534996", "0502534071"],
+    mobiles: ["01000093388"],
+    coordinates: [31.0519261, 31.3792183]
+  },
+  {
+    id: 4,
+    name: { ar: "دكرنس", en: "Dekernes" },
+    address: { ar: "سور النادى الرياضى - ش مجلس المدينة", en: "Sports Club Wall - City Council St." },
+    phones: ["0503481211"],
+    mobiles: ["01282221021"],
+    coordinates: [31.0895277, 31.6005811]
+  },
+  {
+    id: 5,
+    name: { ar: "شربين", en: "Sherbin" },
+    address: { ar: "ش الجيش بجوار مسجد الرحمة", en: "El Geish St., next to Al Rahma Mosque" },
+    phones: ["0503936090", "0503929090"],
+    mobiles: ["01000093378"],
+    coordinates: [31.1956035, 31.5210009]
+  },
+  {
+    id: 6,
+    name: { ar: "بلقاس", en: "Belqas" },
+    address: { ar: "ش سامح الرفاعى بلقاس", en: "Sameh El Refaey St., Belqas" },
+    phones: ["0502786348", "0502786371"],
+    mobiles: ["01282221033"],
+    coordinates: [31.2138865, 31.3616052]
+  },
+  {
+    id: 7,
+    name: { ar: "فارسكور", en: "Faraskour" },
+    address: { ar: "3 ش ترعة البلد خلف مسجد المحطة", en: "3 Terat El Balad St., behind Station Mosque" },
+    phones: ["0573458200", "0573458500"],
+    mobiles: ["01094323439"],
+    coordinates: [31.3308506, 31.7188225]
+  },
+  {
+    id: 8,
+    name: { ar: "الروضة", en: "El Rawda" },
+    address: { ar: "الروضة 3 ش العروبة - دمياط", en: "El Rawda, 3 El Orouba St. - Damietta" },
+    phones: ["0573477115"],
+    mobiles: ["01093535224"],
+    coordinates: [31.3232822, 31.75811]
+  }
+];
+
+// Fix Leaflet default marker icon issue in Next.js
+const fixLeafletIcon = async () => {
+  const L = (await import("leaflet")).default;
+  delete L.Icon.Default.prototype._getIconUrl;
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
+    iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+    shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
+  });
+};
 
 export default function MapWidget() {
-  const { language, t } = useLanguage();
-  const mapRef = useRef(null);
-  const mapInstance = useRef(null);
+  const { t, language } = useLanguage();
+  const [selectedBranch, setSelectedBranch] = useState(branchesData[0]);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    // Dynamically load Leaflet CSS and JS
-    if (typeof window !== "undefined") {
-      // Load CSS
-      if (!document.getElementById("leaflet-css")) {
-        const link = document.createElement("link");
-        link.id = "leaflet-css";
-        link.rel = "stylesheet";
-        link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
-        document.head.appendChild(link);
-      }
-
-      // Load JS
-      const script = document.createElement("script");
-      script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
-      script.async = true;
-      script.onload = initMap;
-      document.body.appendChild(script);
-
-      return () => {
-        if (mapInstance.current) {
-          mapInstance.current.remove();
-        }
-      };
-    }
+    setIsClient(true);
+    fixLeafletIcon();
   }, []);
 
-  const initMap = () => {
-    if (mapRef.current && window.L && !mapInstance.current) {
-      // Ibn Battuta Street, Heliopolis, Cairo coordinates
-      const ibnBattutaCoords = [30.0876, 31.3257];
-
-      // Initialize map
-      mapInstance.current = window.L.map(mapRef.current).setView(ibnBattutaCoords, 15);
-
-      // Add OpenStreetMap tile layer
-      window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-        maxZoom: 19,
-      }).addTo(mapInstance.current);
-
-      // Create custom icon
-      const customIcon = window.L.divIcon({
-        className: "custom-marker",
-        html: `
-          <div class="marker-pin">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-              <circle cx="12" cy="10" r="3"/>
-            </svg>
-          </div>
-        `,
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-      });
-
-      // Add marker
-      window.L.marker(ibnBattutaCoords, { icon: customIcon })
-        .addTo(mapInstance.current)
-        .bindPopup(
-          `
-          <div class="popup-content">
-            <h3>QuickAir</h3>
-            <p>${language === "ar" ? "شارع ابن بطوطة، مصر الجديدة" : "Ibn Battuta Street, Heliopolis"}</p>
-            <p>${language === "ar" ? "القاهرة، مصر" : "Cairo, Egypt"}</p>
-          </div>
-        `
-        );
-    }
-  };
-
   return (
-    <section className="layout-pt-md layout-pb-md">
+    <section className="layout-pt-md layout-pb-lg">
       <div className="container">
-        <div className="row justify-center mb-40">
-          <div className="col-auto">
-            <h2 className="section-title">{t("موقعنا", "Our Location")}</h2>
-            <p className="section-subtitle">{t("تفضل بزيارتنا في مقرنا الرئيسي", "Visit us at our main office")}</p>
+        {/* Title */}
+        <div className="row justify-center mb-30">
+          <div className="col-auto text-center">
+            <h2 style={{ fontSize: '32px', fontWeight: 700, color: '#1a1a1a', marginBottom: '10px' }}>
+              {t("فروعنا", "Our Branches")}
+            </h2>
+            <p style={{ fontSize: '16px', color: '#666' }}>
+              {t("اختر فرع لعرضه على الخريطة", "Select a branch to view on the map")}
+            </p>
           </div>
         </div>
-        <div className="row justify-center">
-          <div className="col-xl-10 col-lg-11">
-            <div className="map-container">
-              <div ref={mapRef} className="map-canvas"></div>
+
+        {/* Branch Selection Cards */}
+        <div className="row y-gap-15 mb-30">
+          {branchesData.map((branch) => (
+            <div key={branch.id} className="col-lg-3 col-md-4 col-sm-6">
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => setSelectedBranch(branch)}
+                onKeyDown={(e) => e.key === "Enter" && setSelectedBranch(branch)}
+                style={{
+                  background: selectedBranch.id === branch.id ? '#019fb1' : '#fff',
+                  color: selectedBranch.id === branch.id ? '#fff' : '#1a1a1a',
+                  borderRadius: '12px',
+                  padding: '15px 18px',
+                  border: selectedBranch.id === branch.id ? '2px solid #019fb1' : '2px solid #e8e8e8',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  minHeight: '90px'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  <span style={{ fontWeight: 600, fontSize: '15px' }}>
+                    {language === "ar" ? branch.name.ar : branch.name.en}
+                  </span>
+                </div>
+                <p style={{ 
+                  fontSize: '13px', 
+                  margin: 0, 
+                  opacity: selectedBranch.id === branch.id ? 0.9 : 0.7,
+                  lineHeight: 1.4
+                }}>
+                  {language === "ar" ? branch.address.ar : branch.address.en}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Map and Details */}
+        <div className="row y-gap-30">
+          {/* Map */}
+          <div className="col-lg-8">
+            <div style={{ 
+              borderRadius: '16px', 
+              overflow: 'hidden', 
+              height: '450px',
+              border: '2px solid #e8e8e8'
+            }}>
+              {isClient && (
+                <MapContainer
+                  center={selectedBranch.coordinates}
+                  zoom={15}
+                  style={{ height: '100%', width: '100%' }}
+                  key={selectedBranch.id}
+                >
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                  />
+                  <Marker position={selectedBranch.coordinates} />
+                </MapContainer>
+              )}
+            </div>
+          </div>
+
+          {/* Branch Details Panel */}
+          <div className="col-lg-4">
+            <div style={{
+              background: '#019fb1',
+              borderRadius: '16px',
+              padding: '25px',
+              color: '#fff',
+              height: '100%',
+              minHeight: '450px'
+            }}>
+              <h3 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '25px' }}>
+                {language === "ar" ? selectedBranch.name.ar : selectedBranch.name.en}
+              </h3>
+
+              {/* Address */}
+              <div style={{ marginBottom: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  <span style={{ fontSize: '14px', opacity: 0.9 }}>{t("العنوان", "Address")}</span>
+                </div>
+                <p style={{ fontSize: '15px', margin: 0, paddingRight: language === "ar" ? '28px' : 0, paddingLeft: language === "en" ? '28px' : 0 }}>
+                  {language === "ar" ? selectedBranch.address.ar : selectedBranch.address.en}
+                </p>
+              </div>
+
+              {/* Phones */}
+              <div style={{ marginBottom: '20px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                  <span style={{ fontSize: '16px', opacity: 0.9, fontWeight: 600 }}>{t("التليفون", "Phone")}</span>
+                </div>
+                <div style={{ paddingRight: language === "ar" ? '28px' : 0, paddingLeft: language === "en" ? '28px' : 0 }}>
+                  {selectedBranch.phones.map((phone, i) => (
+                    <a 
+                      key={i} 
+                      href={`tel:${phone}`} 
+                      style={{ 
+                        display: 'block', 
+                        color: '#fff', 
+                        fontSize: '16px', 
+                        textDecoration: 'none',
+                        marginBottom: '6px',
+                        padding: '4px 0',
+                        borderRadius: '4px',
+                        transition: 'all 0.2s ease'
+                      }} 
+                      dir="ltr"
+                      onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                    >
+                      📞 {phone}
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mobiles */}
+              <div style={{ marginBottom: '25px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                    <line x1="12" y1="18" x2="12.01" y2="18"/>
+                  </svg>
+                  <span style={{ fontSize: '16px', opacity: 0.9, fontWeight: 600 }}>{t("الموبايل", "Mobile")}</span>
+                </div>
+                <div style={{ paddingRight: language === "ar" ? '28px' : 0, paddingLeft: language === "en" ? '28px' : 0 }}>
+                  {selectedBranch.mobiles.map((mobile, i) => (
+                    <a 
+                      key={i} 
+                      href={`tel:${mobile}`} 
+                      style={{ 
+                        display: 'block', 
+                        color: '#fff', 
+                        fontSize: '16px', 
+                        textDecoration: 'none',
+                        marginBottom: '6px',
+                        padding: '4px 0',
+                        borderRadius: '4px',
+                        transition: 'all 0.2s ease'
+                      }} 
+                      dir="ltr"
+                      onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+                      onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                    >
+                      📱 {mobile}
+                    </a>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        .section-title {
-          font-size: 32px;
-          font-weight: 700;
-          color: #1a1a1a;
-          margin-bottom: 10px;
-          text-align: center;
-        }
-
-        .section-subtitle {
-          font-size: 16px;
-          color: #666;
-          text-align: center;
-          margin: 0;
-        }
-
-        .map-container {
-          border-radius: 20px;
-          overflow: hidden;
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-          border: 2px solid #e8e8e8;
-        }
-
-        :global(.map-canvas) {
-          width: 100%;
-          height: 500px;
-          z-index: 1;
-        }
-
-        :global(.custom-marker) {
-          background: none;
-          border: none;
-        }
-
-        :global(.marker-pin) {
-          width: 40px;
-          height: 40px;
-          background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
-          border-radius: 50% 50% 50% 0;
-          transform: rotate(-45deg);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 0 4px 10px rgba(1, 159, 177, 0.4);
-        }
-
-        :global(.marker-pin svg) {
-          transform: rotate(45deg);
-          width: 24px;
-          height: 24px;
-        }
-
-        :global(.leaflet-popup-content-wrapper) {
-          border-radius: 15px;
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-        }
-
-        :global(.popup-content) {
-          padding: 5px;
-        }
-
-        :global(.popup-content h3) {
-          margin: 0 0 8px 0;
-          font-size: 16px;
-          font-weight: 700;
-          color: #019fb1;
-        }
-
-        :global(.popup-content p) {
-          margin: 4px 0;
-          font-size: 13px;
-          color: #666;
-        }
-
-        @media (max-width: 991px) {
-          .section-title {
-            font-size: 28px;
-          }
-
-          :global(.map-canvas) {
-            height: 400px;
-          }
-        }
-
-        @media (max-width: 575px) {
-          .section-title {
-            font-size: 24px;
-          }
-
-          :global(.map-canvas) {
-            height: 350px;
-          }
-
-          .map-container {
-            border-radius: 15px;
-          }
-        }
-      `}</style>
     </section>
   );
 }

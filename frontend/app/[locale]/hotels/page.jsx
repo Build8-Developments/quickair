@@ -1,6 +1,7 @@
 import Header3 from "@/components/layout/header/Header3";
 import FooterTwo from "@/components/layout/footers/FooterTwo";
 import HotelsList from "@/components/hotels/HotelsList";
+import PageHeader from "@/components/common/PageHeader";
 import { getAllHotels } from "@/lib/api/services/hotel";
 import { generateLocalizedMetadata } from "@/utils/seo";
 import { siteInfo } from "@/data/seo";
@@ -41,29 +42,14 @@ export default async function HotelsPage({ params }) {
   return (
     <>
       <main style={{ overflowX: "hidden" }}>
-        <div className="header-margin"></div>
         <Header3 locale={locale} />
+        <div className="header-margin"></div>
 
-        {/* Page Header */}
-        <section className="pageHeader -type-3">
-          <div className="pageHeader__bg">
-            <div className="bg-image js-lazy"></div>
-          </div>
-
-          <div className="container">
-            <div className="row justify-center">
-              <div className="col-12">
-                <div
-                  className="pageHeader__content"
-                  style={{ textAlign: isRTL ? "right" : "left" }}
-                >
-                  <h1 className="pageHeader__title">{pageTitle}</h1>
-                  <p className="pageHeader__text">{pageDescription}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <PageHeader
+          icon="hotels"
+          title={pageTitle}
+          description={pageDescription}
+        />
 
         {/* Hotels List */}
         <HotelsList

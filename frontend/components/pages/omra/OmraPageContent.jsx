@@ -2,6 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import PageHeader from "@/components/common/PageHeader";
 
 const omraSteps = [
   { stepEn: "Ihram", stepAr: "الإحرام", descEn: "Enter the state of Ihram at the Miqat", descAr: "الدخول في حالة الإحرام عند الميقات" },
@@ -15,14 +16,22 @@ export default function OmraPageContent({ locale }) {
 
   return (
     <>
+      <PageHeader
+        icon="hajj"
+        title={isRTL ? "العمرة" : "Omra"}
+        description={isRTL 
+          ? "سنة مؤكدة - فرصة للتقرب إلى الله وتجديد الإيمان"
+          : "A Confirmed Sunnah - An opportunity to draw closer to Allah"}
+      />
+
       {/* About Section */}
-      <section className="layout-pb-lg bg-light-1" style={{ paddingTop: "120px" }}>
+      <section className="layout-pb-lg bg-light-1">
         <div className="container">
           <div className="row y-gap-30 items-center">
             <div className="col-lg-6 order-lg-2" data-aos="fade-left">
               <div className="ratio ratio-4:3 rounded-12 overflow-hidden shadow-1">
                 <Image
-                  src="https://placehold.co/800x600.png"
+                  src="/omra.png"
                   alt={isRTL ? "المسجد الحرام" : "Masjid Al Haram"}
                   fill
                   className="object-cover"

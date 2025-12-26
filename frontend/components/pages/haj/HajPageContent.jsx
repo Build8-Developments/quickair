@@ -2,6 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import PageHeader from "@/components/common/PageHeader";
 
 const hajSteps = [
   { stepEn: "Ihram", stepAr: "الإحرام", descEn: "Enter the state of Ihram at the Miqat", descAr: "الدخول في حالة الإحرام عند الميقات" },
@@ -17,14 +18,22 @@ export default function HajPageContent({ locale }) {
 
   return (
     <>
+      <PageHeader
+        icon="hajj"
+        title={isRTL ? "الحج" : "Hajj"}
+        description={isRTL 
+          ? "الركن الخامس من أركان الإسلام - رحلة روحانية عميقة"
+          : "The Fifth Pillar of Islam - A profound spiritual journey"}
+      />
+
       {/* About Section */}
-      <section className="layout-pb-lg bg-light-1" style={{ paddingTop: "120px" }}>
+      <section className="layout-pb-lg bg-light-1">
         <div className="container">
           <div className="row y-gap-30 items-center">
             <div className="col-lg-6" data-aos="fade-right">
               <div className="ratio ratio-4:3 rounded-12 overflow-hidden shadow-1">
                 <Image
-                  src="https://placehold.co/800x600.png"
+                  src="/hij.png"
                   alt={isRTL ? "الكعبة المشرفة" : "The Holy Kaaba"}
                   fill
                   className="object-cover"

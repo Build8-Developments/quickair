@@ -68,11 +68,6 @@ export default function ContactForm() {
   return (
     <section className={styles.contactSection}>
       <div className="container">
-        <div className="text-center py-20">
-          <h1 className="text-30 fw-700 text-blue-1">
-            {t('صفحة التواصل', 'Contact Page')}
-          </h1>
-        </div>
         <div className="row justify-center">
           <div className="col-xl-10 col-lg-11">
             <div className={styles.contactCard}>

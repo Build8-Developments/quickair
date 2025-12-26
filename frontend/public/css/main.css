@@ -13276,11 +13276,11 @@ table.table-4.-border-bottom tbody > tr {
 }
 
 .specialCardGrid > *:nth-child(1) .specialCard {
-  color: white;
+  color: #019fb1;
 }
 
 .specialCardGrid > *:nth-child(2) .specialCard {
-  color: white;
+  color: #019fb1;
 }
 
 .specialCardGrid > *:nth-child(2) .specialCard__content {
@@ -13338,7 +13338,7 @@ table.table-4.-border-bottom tbody > tr {
 .specialCard__title {
   font-size: 24px;
   font-weight: 700;
-  color: white;
+  color: #019fb1;
   line-height: 1.3;
   text-transform: capitalize;
 }

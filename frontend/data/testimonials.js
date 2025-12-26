@@ -70,44 +70,116 @@ export const testimonialsTwo = [
 export const testimonialsThree = [
   {
     id: 1,
-    imgSrc: "/img/avatars/2/1.jpg",
-    name: "Ali Tufan",
-    role: "Product Manager, Apple Inc.",
-    comment:
-      "The tours in this website are great. I had been really enjoy with my family! The team is very professional and taking care of the customers. Will surely recommend to my freind to join this company!",
+    name: "Ahmed Taman",
+    country: { ar: "مصر", en: "Egypt" },
+    rating: 5,
+    reviewsCount: 68,
+    photosCount: 11,
+    timeAgo: { ar: "قبل 4 سنوات", en: "4 years ago" },
+    comment: { 
+      ar: "شركة محترمة والخدمة ممتازة", 
+      en: "Respectable company with excellent service" 
+    },
+    initials: "AT"
   },
   {
     id: 2,
-    imgSrc: "/img/avatars/2/2.jpg",
-    name: "Ali Tufan",
-    role: "Product Manager, Apple Inc.",
-    comment:
-      "The tours in this website are great. I had been really enjoy with my family! The team is very professional and taking care of the customers. Will surely recommend to my freind to join this company!",
+    name: "Abu Hmmad",
+    country: { ar: "مصر", en: "Egypt" },
+    rating: 4,
+    reviewsCount: 74,
+    photosCount: 23,
+    timeAgo: { ar: "قبل 4 سنوات", en: "4 years ago" },
+    comment: { 
+      ar: "مكتب شركات منظم ومعتدل وصادق", 
+      en: "Organized, moderate and honest travel office" 
+    },
+    initials: "AH"
   },
   {
     id: 3,
-    imgSrc: "/img/avatars/2/3.jpg",
-    name: "Ali Tufan",
-    role: "Product Manager, Apple Inc.",
-    comment:
-      "The tours in this website are great. I had been really enjoy with my family! The team is very professional and taking care of the customers. Will surely recommend to my freind to join this company!",
+    name: "Eslam Shehabi",
+    country: { ar: "مصر", en: "Egypt" },
+    rating: 5,
+    reviewsCount: 90,
+    photosCount: 90,
+    timeAgo: { ar: "قبل 6 سنوات", en: "6 years ago" },
+    comment: { 
+      ar: "عندهم ناس كويس ونلس محترمين", 
+      en: "They have good and respectable people" 
+    },
+    initials: "ES"
   },
   {
     id: 4,
-    imgSrc: "/img/avatars/2/4.jpg",
-    name: "Ali Tufan",
-    role: "Product Manager, Apple Inc.",
-    comment:
-      "The tours in this website are great. I had been really enjoy with my family! The team is very professional and taking care of the customers. Will surely recommend to my freind to join this company!",
+    name: "Emad Elatwil",
+    country: { ar: "مصر", en: "Egypt" },
+    rating: 5,
+    reviewsCount: 22,
+    photosCount: 1,
+    timeAgo: { ar: "قبل 3 سنوات", en: "3 years ago" },
+    comment: { 
+      ar: "مكتب حجز طيران", 
+      en: "Flight booking office" 
+    },
+    initials: "EE"
   },
   {
     id: 5,
-    imgSrc: "/img/avatars/2/5.jpg",
-    name: "Ali Tufan",
-    role: "Product Manager, Apple Inc.",
-    comment:
-      "The tours in this website are great. I had been really enjoy with my family! The team is very professional and taking care of the customers. Will surely recommend to my freind to join this company!",
+    name: "Emad Gad",
+    country: { ar: "مصر", en: "Egypt" },
+    rating: 5,
+    reviewsCount: 309,
+    photosCount: 249,
+    timeAgo: { ar: "قبل 7 سنوات", en: "7 years ago" },
+    comment: { 
+      ar: "شركة كريمة", 
+      en: "Generous company" 
+    },
+    initials: "EG"
   },
+  {
+    id: 6,
+    name: "Ahmed Aboali",
+    country: { ar: "مصر", en: "Egypt" },
+    rating: 5,
+    reviewsCount: 6,
+    photosCount: 5,
+    timeAgo: { ar: "قبل 8 سنوات", en: "8 years ago" },
+    comment: { 
+      ar: "Top Service", 
+      en: "Top Service" 
+    },
+    initials: "AA"
+  },
+  {
+    id: 7,
+    name: "Waleed Layka",
+    country: { ar: "مصر", en: "Egypt" },
+    rating: 5,
+    reviewsCount: 20,
+    photosCount: 0,
+    timeAgo: { ar: "قبل 11 شهراً", en: "11 months ago" },
+    comment: { 
+      ar: "انصح الجميع بزيارتها", 
+      en: "I recommend everyone to visit" 
+    },
+    initials: "WL"
+  },
+  {
+    id: 8,
+    name: "Wafaa Hassan",
+    country: { ar: "مصر", en: "Egypt" },
+    rating: 5,
+    reviewsCount: 45,
+    photosCount: 15,
+    timeAgo: { ar: "قبل سنة", en: "1 year ago" },
+    comment: { 
+      ar: "Excellent", 
+      en: "Excellent" 
+    },
+    initials: "WH"
+  }
 ];
 
 export const testimonialsFive = [

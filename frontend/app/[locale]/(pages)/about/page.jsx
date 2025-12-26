@@ -31,6 +31,7 @@ export default async function AboutPage({ params }) {
     <>
       <main>
         <Header3 locale={locale} />
+        <div className="header-margin"></div>
         <Hero locale={locale} />
         <Information locale={locale} />
         <BrandsOne locale={locale} />

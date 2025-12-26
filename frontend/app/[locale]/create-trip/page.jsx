@@ -37,6 +37,7 @@ export default async function CreateTripPage({ params }) {
   return (
     <>
       <Header3 locale={locale} />
+      <div className="header-margin"></div>
       <CreateTripFlow locale={locale} />
       <FooterTwo locale={locale} />
     </>

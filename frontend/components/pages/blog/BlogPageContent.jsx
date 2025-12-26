@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { blogPosts, categories } from "@/data/blogData";
+import PageHeader from "@/components/common/PageHeader";
 
 export default function BlogPageContent({ locale }) {
   const isRTL = locale === "ar";
@@ -29,25 +30,13 @@ export default function BlogPageContent({ locale }) {
   return (
     <>
       {/* Header Section */}
-      <section className="layout-pb-md" style={{ paddingTop: "140px" }}>
-        <div className="container">
-          <div className="row justify-center text-center">
-            <div className="col-lg-8">
-              <span className="text-accent-1 text-15 fw-500 mb-10 d-block" data-aos="fade-up">
-                {isRTL ? "مدونة السفر" : "Travel Blog"}
-              </span>
-              <h1 className="text-40 md:text-30 fw-700 text-dark-1 mb-20" data-aos="fade-up" data-aos-delay="100">
-                {isRTL ? "أحدث المقالات والنصائح" : "Latest Articles & Tips"}
-              </h1>
-              <p className="text-15 text-light-2" data-aos="fade-up" data-aos-delay="200">
-                {isRTL
-                  ? "اكتشف أحدث نصائح السفر والوجهات المميزة وأدلة الحج والعمرة"
-                  : "Discover the latest travel tips, featured destinations, and Hajj & Omra guides"}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <PageHeader
+        icon="blog"
+        title={isRTL ? "المدونة" : "Blog"}
+        description={isRTL
+          ? "اكتشف أحدث نصائح السفر والوجهات المميزة وأدلة الحج والعمرة"
+          : "Discover the latest travel tips, featured destinations, and Hajj & Omra guides"}
+      />
 
       {/* Categories Filter */}
       <section className="pb-30">
