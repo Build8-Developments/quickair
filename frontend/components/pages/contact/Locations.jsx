@@ -3,6 +3,7 @@
 // Updated: RTL layout, smaller cards, removed Google Maps button - v2.0
 
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useEffect, useRef } from "react";
 
 const branchesData = [
   {
@@ -74,6 +75,9 @@ const branchesData = [
 export default function Locations() {
   const { language, t } = useLanguage();
 
+  // Main branch (Mansoura) data
+  const mainBranch = branchesData.find(branch => branch.id === 1);
+
   return (
     <section className="layout-pt-md layout-pb-md">
       <div className="container">
@@ -87,8 +91,95 @@ export default function Locations() {
             </p>
           </div>
         </div>
+
+        {/* Main Section with Mansoura Branch and Map */}
+        <div className="row mb-50">
+          {/* Mansoura Branch Details */}
+          <div className="col-lg-6">
+            <div className="main-branch-card">
+              <div className="branch-header">
+                <div className="location-icon">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                </div>
+                <h3 className="branch-title">
+                  {language === "ar" ? mainBranch.name.ar : mainBranch.name.en}
+                </h3>
+              </div>
+
+              <div className="branch-details">
+                {/* Address */}
+                <div className="detail-row">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  <span>{language === "ar" ? mainBranch.address.ar : mainBranch.address.en}</span>
+                </div>
+                
+                {/* Phones */}
+                <div className="detail-section">
+                  <div className="detail-header">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                    <span className="detail-label">{t("التليفون", "Phone")}:</span>
+                  </div>
+                  <div className="phone-list">
+                    {mainBranch.phones.map((phone, i) => (
+                      <a 
+                        key={i} 
+                        href={`tel:${phone}`} 
+                        className="phone-link"
+                        dir="ltr"
+                      >
+                        {phone}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Mobiles */}
+                <div className="detail-section">
+                  <div className="detail-header">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                      <line x1="12" y1="18" x2="12.01" y2="18"/>
+                    </svg>
+                    <span className="detail-label">{t("الموبايل", "Mobile")}:</span>
+                  </div>
+                  <div className="phone-list">
+                    {mainBranch.mobiles.map((mobile, i) => (
+                      <a 
+                        key={i} 
+                        href={`tel:${mobile}`} 
+                        className="phone-link"
+                        dir="ltr"
+                      >
+                        {mobile}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Map Section */}
+          <div className="col-lg-6">
+            <div className="map-container">
+              <div id="map" style={{ width: '100%', height: '100%', minHeight: '400px' }}>
+                {/* Map will be loaded here */}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Other Branches */}
         <div className="row y-gap-30">
-          {branchesData.map((branch) => (
+          {branchesData.filter(branch => branch.id !== 1).map((branch) => (
             <div key={branch.id} className="col-lg-3 col-md-6 col-sm-6">
               <div className="location-card">
                 <div className="location-icon">
@@ -177,6 +268,131 @@ export default function Locations() {
           margin: 0;
         }
 
+        /* Main Branch Card Styles */
+        .main-branch-card {
+          background: #019fb1;
+          border-radius: 15px;
+          padding: 30px;
+          color: white;
+          height: 100%;
+          min-height: 400px;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .branch-header {
+          text-align: center;
+          margin-bottom: 25px;
+        }
+
+        .branch-header .location-icon {
+          width: 50px;
+          height: 50px;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 15px;
+          color: white;
+        }
+
+        .branch-title {
+          font-size: 24px;
+          font-weight: 700;
+          color: white;
+          margin: 0;
+        }
+
+        .branch-details {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          text-align: right;
+          direction: rtl;
+          flex: 1;
+        }
+
+        .branch-details .detail-row {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          font-size: 16px;
+          color: white;
+          flex-direction: row-reverse;
+        }
+
+        .branch-details .detail-row svg {
+          min-width: 20px;
+          color: rgba(255, 255, 255, 0.8);
+          margin-top: 2px;
+        }
+
+        .branch-details .detail-section {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .branch-details .detail-header {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          font-size: 16px;
+          color: white;
+          font-weight: 600;
+          flex-direction: row-reverse;
+        }
+
+        .branch-details .detail-header svg {
+          min-width: 20px;
+          color: rgba(255, 255, 255, 0.8);
+        }
+
+        .branch-details .phone-list {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          margin-right: 32px;
+        }
+
+        .branch-details .phone-link {
+          font-size: 15px;
+          color: rgba(255, 255, 255, 0.9);
+          text-decoration: none;
+          transition: all 0.2s ease;
+          padding: 2px 0;
+        }
+
+        .branch-details .phone-link:hover {
+          color: white;
+          text-decoration: underline;
+        }
+
+        /* Map Container Styles */
+        .map-container {
+          background: #f8f9fa;
+          border: 3px solid #019fb1;
+          border-radius: 15px;
+          overflow: hidden;
+          height: 100%;
+          min-height: 400px;
+          position: relative;
+        }
+
+        .map-container::before {
+          content: "الخريطة";
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 18px;
+          color: #019fb1;
+          font-weight: 600;
+          z-index: 1;
+        }
+
+        /* Regular Location Cards */
         .location-card {
           background: #fff;
           border: 3px solid #019fb1;
@@ -298,6 +514,20 @@ export default function Locations() {
             font-size: 28px;
           }
 
+          .main-branch-card {
+            padding: 25px;
+            min-height: 350px;
+            margin-bottom: 30px;
+          }
+
+          .branch-title {
+            font-size: 22px;
+          }
+
+          .map-container {
+            min-height: 350px;
+          }
+
           .location-card {
             padding: 18px 12px;
             min-height: 280px;
@@ -320,6 +550,31 @@ export default function Locations() {
         @media (max-width: 575px) {
           .section-title {
             font-size: 24px;
+          }
+
+          .main-branch-card {
+            padding: 20px;
+            min-height: 300px;
+          }
+
+          .branch-title {
+            font-size: 20px;
+          }
+
+          .branch-details .detail-row {
+            font-size: 14px;
+          }
+
+          .branch-details .detail-header {
+            font-size: 14px;
+          }
+
+          .branch-details .phone-link {
+            font-size: 13px;
+          }
+
+          .map-container {
+            min-height: 300px;
           }
 
           .location-card {

@@ -164,8 +164,8 @@ export default function MapWidget() {
 
         {/* Map and Details */}
         <div className="row y-gap-30">
-          {/* Map */}
-          <div className="col-lg-8">
+          {/* Map - Left side for Arabic, Right side for English */}
+          <div className={`col-lg-8 ${language === 'ar' ? 'order-lg-1' : 'order-lg-2'}`}>
             <div style={{ 
               borderRadius: '16px', 
               overflow: 'hidden', 
@@ -189,98 +189,101 @@ export default function MapWidget() {
             </div>
           </div>
 
-          {/* Branch Details Panel */}
-          <div className="col-lg-4">
+          {/* Branch Details Panel - Right side for Arabic, Left side for English */}
+          <div className={`col-lg-4 ${language === 'ar' ? 'order-lg-2' : 'order-lg-1'}`}>
             <div style={{
               background: '#019fb1',
               borderRadius: '16px',
               padding: '25px',
               color: '#fff',
-              height: '100%',
-              minHeight: '450px'
+              height: '450px',
+              display: 'flex',
+              flexDirection: 'column'
             }}>
               <h3 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '25px' }}>
                 {language === "ar" ? selectedBranch.name.ar : selectedBranch.name.en}
               </h3>
 
-              {/* Address */}
-              <div style={{ marginBottom: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                    <circle cx="12" cy="10" r="3"/>
-                  </svg>
-                  <span style={{ fontSize: '14px', opacity: 0.9 }}>{t("العنوان", "Address")}</span>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                {/* Address */}
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                      <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <span style={{ fontSize: '14px', opacity: 0.9 }}>{t("العنوان", "Address")}</span>
+                  </div>
+                  <p style={{ fontSize: '15px', margin: 0, paddingRight: language === "ar" ? '28px' : 0, paddingLeft: language === "en" ? '28px' : 0 }}>
+                    {language === "ar" ? selectedBranch.address.ar : selectedBranch.address.en}
+                  </p>
                 </div>
-                <p style={{ fontSize: '15px', margin: 0, paddingRight: language === "ar" ? '28px' : 0, paddingLeft: language === "en" ? '28px' : 0 }}>
-                  {language === "ar" ? selectedBranch.address.ar : selectedBranch.address.en}
-                </p>
-              </div>
 
-              {/* Phones */}
-              <div style={{ marginBottom: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                  </svg>
-                  <span style={{ fontSize: '16px', opacity: 0.9, fontWeight: 600 }}>{t("التليفون", "Phone")}</span>
+                {/* Phones */}
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                    <span style={{ fontSize: '16px', opacity: 0.9, fontWeight: 600 }}>{t("التليفون", "Phone")}</span>
+                  </div>
+                  <div style={{ paddingRight: language === "ar" ? '28px' : 0, paddingLeft: language === "en" ? '28px' : 0 }}>
+                    {selectedBranch.phones.map((phone, i) => (
+                      <a 
+                        key={i} 
+                        href={`tel:${phone}`} 
+                        style={{ 
+                          display: 'block', 
+                          color: '#fff', 
+                          fontSize: '16px', 
+                          textDecoration: 'none',
+                          marginBottom: '6px',
+                          padding: '4px 0',
+                          borderRadius: '4px',
+                          transition: 'all 0.2s ease'
+                        }} 
+                        dir="ltr"
+                        onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+                        onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                      >
+                        {phone}
+                      </a>
+                    ))}
+                  </div>
                 </div>
-                <div style={{ paddingRight: language === "ar" ? '28px' : 0, paddingLeft: language === "en" ? '28px' : 0 }}>
-                  {selectedBranch.phones.map((phone, i) => (
-                    <a 
-                      key={i} 
-                      href={`tel:${phone}`} 
-                      style={{ 
-                        display: 'block', 
-                        color: '#fff', 
-                        fontSize: '16px', 
-                        textDecoration: 'none',
-                        marginBottom: '6px',
-                        padding: '4px 0',
-                        borderRadius: '4px',
-                        transition: 'all 0.2s ease'
-                      }} 
-                      dir="ltr"
-                      onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.1)'}
-                      onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                    >
-                      📞 {phone}
-                    </a>
-                  ))}
-                </div>
-              </div>
 
-              {/* Mobiles */}
-              <div style={{ marginBottom: '25px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
-                    <line x1="12" y1="18" x2="12.01" y2="18"/>
-                  </svg>
-                  <span style={{ fontSize: '16px', opacity: 0.9, fontWeight: 600 }}>{t("الموبايل", "Mobile")}</span>
-                </div>
-                <div style={{ paddingRight: language === "ar" ? '28px' : 0, paddingLeft: language === "en" ? '28px' : 0 }}>
-                  {selectedBranch.mobiles.map((mobile, i) => (
-                    <a 
-                      key={i} 
-                      href={`tel:${mobile}`} 
-                      style={{ 
-                        display: 'block', 
-                        color: '#fff', 
-                        fontSize: '16px', 
-                        textDecoration: 'none',
-                        marginBottom: '6px',
-                        padding: '4px 0',
-                        borderRadius: '4px',
-                        transition: 'all 0.2s ease'
-                      }} 
-                      dir="ltr"
-                      onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.1)'}
-                      onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
-                    >
-                      📱 {mobile}
-                    </a>
-                  ))}
+                {/* Mobiles */}
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                      <line x1="12" y1="18" x2="12.01" y2="18"/>
+                    </svg>
+                    <span style={{ fontSize: '16px', opacity: 0.9, fontWeight: 600 }}>{t("الموبايل", "Mobile")}</span>
+                  </div>
+                  <div style={{ paddingRight: language === "ar" ? '28px' : 0, paddingLeft: language === "en" ? '28px' : 0 }}>
+                    {selectedBranch.mobiles.map((mobile, i) => (
+                      <a 
+                        key={i} 
+                        href={`tel:${mobile}`} 
+                        style={{ 
+                          display: 'block', 
+                          color: '#fff', 
+                          fontSize: '16px', 
+                          textDecoration: 'none',
+                          marginBottom: '6px',
+                          padding: '4px 0',
+                          borderRadius: '4px',
+                          transition: 'all 0.2s ease'
+                        }} 
+                        dir="ltr"
+                        onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+                        onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                      >
+                        {mobile}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
