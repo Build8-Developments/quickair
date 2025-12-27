@@ -110,18 +110,20 @@ export default function FooterTwo({ locale: serverLocale }) {
         <div style={footerStyles.topSection}>
           <div className="row y-gap-30 justify-between items-center">
             <div className="col-lg-4 col-md-6">
-              <Link href={`/${locale}`} className="d-block mb-20">
-                <Image
-                  width="180"
-                  height="45"
-                  src={`/img/general/${locale === "ar" ? "ar-logo" : "en-logo"}.svg`}
-                  alt="QuickAir Logo"
-                  style={{ filter: 'brightness(0) invert(1)' }}
-                />
-              </Link>
-              <p style={{ color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.8' }}>
-                {t("footer.companyDescription", "Your trusted travel partner for flights, hotels, and unforgettable experiences.")}
-              </p>
+              <div style={{ paddingRight: isRTL ? '0' : '20px', paddingLeft: isRTL ? '20px' : '0' }}>
+                <Link href={`/${locale}`} className="d-block mb-20">
+                  <Image
+                    width="180"
+                    height="45"
+                    src={`/img/general/${locale === "ar" ? "ar-logo" : "en-logo"}.svg`}
+                    alt="QuickAir Logo"
+                    style={{ filter: 'brightness(0) invert(1)' }}
+                  />
+                </Link>
+                <p style={{ color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.8' }}>
+                  {t("footer.companyDescription")}
+                </p>
+              </div>
             </div>
 
             <div className="col-lg-4 col-md-6">
@@ -149,10 +151,12 @@ export default function FooterTwo({ locale: serverLocale }) {
 
             <div className="col-lg-3 col-md-6">
               <div style={{ textAlign: isRTL ? "right" : "left" }}>
-                <div className="text-16 fw-500 mb-15" style={{ color: '#ffffff' }}>
-                  {t("footer.followUs")}
+                <div className="d-flex align-items-center" style={{ gap: '15px' }}>
+                  <div className="text-16 fw-500" style={{ color: '#ffffff' }}>
+                    {t("footer.followUs")}
+                  </div>
+                  <Socials />
                 </div>
-                <Socials />
               </div>
             </div>
           </div>
@@ -172,7 +176,7 @@ export default function FooterTwo({ locale: serverLocale }) {
               <div className="y-gap-10">
                 <a className="d-block" href="#" style={footerStyles.link}>
                   <i className="icon-location text-14 mr-10"></i>
-                  328 Queensberry Street, North Melbourne VIC3051, Australia.
+                  {locale === 'ar' ? t("footer.address") : '328 Queensberry Street, North Melbourne VIC3051, Australia.'}
                 </a>
                 <a className="d-block mt-15" href="mailto:hi@quickair.com" style={footerStyles.link}>
                   <i className="icon-email text-14 mr-10"></i>
