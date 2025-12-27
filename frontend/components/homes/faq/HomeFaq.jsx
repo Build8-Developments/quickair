@@ -56,7 +56,10 @@ export default function HomeFaq() {
                       onClick={() => toggleQuestion(item.categoryId)}
                       style={{ cursor: "pointer" }}
                     >
-                      <div className="d-flex items-center" style={{ gap: "12px" }}>
+                      <div
+                        className="d-flex items-center"
+                        style={{ gap: "12px" }}
+                      >
                         <div
                           className="size-40 flex-center rounded-full bg-accent-1-05"
                           style={{ flexShrink: 0 }}
@@ -71,7 +74,10 @@ export default function HomeFaq() {
                         </div>
                       </div>
 
-                      <div className="accordion__icon size-30 flex-center bg-light-2 rounded-full" style={{ flexShrink: 0 }}>
+                      <div
+                        className="accordion__icon size-30 flex-center bg-light-2 rounded-full"
+                        style={{ flexShrink: 0 }}
+                      >
                         <i className="icon-plus"></i>
                         <i className="icon-minus"></i>
                       </div>
@@ -85,7 +91,14 @@ export default function HomeFaq() {
                           : {}
                       }
                     >
-                      <div className="pt-20 pl-50" style={isRTL ? { paddingRight: '50px', paddingLeft: '0' } : {}}>
+                      <div
+                        className="pt-20 pl-50"
+                        style={
+                          isRTL
+                            ? { paddingRight: "50px", paddingLeft: "0" }
+                            : {}
+                        }
+                      >
                         <p className="text-15 text-dark-2 lh-17">
                           {item.question.answer}
                         </p>
@@ -102,13 +115,16 @@ export default function HomeFaq() {
                 <Link
                   href="/faq"
                   className="button -md -dark-1 bg-accent-1 text-white px-40 py-15 rounded-12"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    flexDirection: isRTL ? "row-reverse" : "row",
+                    gap: "10px",
+                  }}
                 >
                   {isRTL ? "عرض المزيد" : "View All FAQs"}
                   <i
-                    className={`ml-10 ${
-                      isRTL ? "icon-arrow-left" : "icon-arrow-right"
-                    }`}
-                    style={isRTL ? { marginLeft: 0, marginRight: '10px' } : {}}
+                    className={isRTL ? "icon-arrow-left" : "icon-arrow-right"}
                   ></i>
                 </Link>
               </div>

@@ -156,7 +156,9 @@ export default function LatestBlog({ locale }) {
                       }}
                     >
                       {isRTL ? "اقرأ المزيد" : "Read More"}
-                      <span style={{ transform: isRTL ? "rotate(180deg)" : "none" }}>
+                      <span
+                        style={{ transform: isRTL ? "rotate(180deg)" : "none" }}
+                      >
                         →
                       </span>
                     </span>
@@ -170,26 +172,30 @@ export default function LatestBlog({ locale }) {
         <div className="text-center mt-30" data-aos="fade-up">
           <Link
             href={`/${locale}/blog`}
-            className="d-inline-flex items-center gap-10"
+            className="d-inline-flex items-center"
             style={{
               padding: "16px 40px",
               borderRadius: "12px",
               fontWeight: "600",
               fontSize: "16px",
-              backgroundColor: "#13b5b0",
+              backgroundColor: "var(--color-accent-1)",
               color: "#ffffff",
               textDecoration: "none",
               transition: "background-color 0.3s ease",
+              gap: "12px",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#0e8a86";
+              e.currentTarget.style.backgroundColor =
+                "var(--color-accent-1-dark)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#13b5b0";
+              e.currentTarget.style.backgroundColor = "var(--color-accent-1)";
             }}
           >
             {isRTL ? "عرض جميع المقالات" : "View All Articles"}
-            <span style={{ transform: isRTL ? "rotate(180deg)" : "none" }}>→</span>
+            <span style={{ transform: isRTL ? "rotate(180deg)" : "none" }}>
+              →
+            </span>
           </Link>
         </div>
       </div>

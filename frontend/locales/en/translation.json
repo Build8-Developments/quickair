@@ -16,8 +16,11 @@
     "trustedBrands": "Trusted by all the largest travel brands",
     "spiritualJourneys": "Spiritual Journeys",
     "hajOmraPackages": "Haj & Omra Packages",
-    "haj": "Haj",
-    "omra": "Omra",
+    "haj": "Hajj",
+    "omra": "Umrah",
+    "hajDescription": "Embark on the sacred pilgrimage to Mecca. Experience the spiritual journey of a lifetime with our comprehensive Hajj packages.",
+    "omraDescription": "Perform the lesser pilgrimage at any time of the year. Discover our carefully curated Umrah packages for a blessed journey.",
+    "explorePackages": "Explore Packages",
     "trendingDestinations": "Trending Destinations",
     "stats": {
       "totalDonations": "Happy Travelers",
