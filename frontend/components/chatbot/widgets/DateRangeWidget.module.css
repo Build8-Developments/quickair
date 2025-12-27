@@ -1,113 +1,135 @@
 .widget {
   width: 100%;
-  margin-top: 12px;
-  padding: 18px;
+  padding: 12px;
   background: white;
-  border: 1px solid #e5e7eb;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-@media (max-width: 480px) {
-  .widget {
-    padding: 16px;
-  }
 }
 
 .dateInputs {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-.dateField {
-  display: flex;
-  flex-direction: column;
   gap: 10px;
-  background: #f9fafb;
-  padding: 16px;
-  border-radius: 12px;
-  border: 2px solid transparent;
-  transition: all 0.2s ease;
+  margin-bottom: 12px;
 }
 
-.dateField:hover {
-  border-color: #019fb1;
-  background: #f0fdff;
-}
-
-.label {
-  font-size: 14px;
-  font-weight: 700;
-  color: #1f2937;
+.dateSelector {
+  flex: 1;
   display: flex;
   align-items: center;
-  gap: 6px;
-}
-
-.label::before {
-  content: "📅";
-  font-size: 16px;
-}
-
-.dateInput {
-  width: 100%;
-  padding: 14px 16px;
+  justify-content: space-between;
+  padding: 12px;
   border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 600;
-  color: #1f2937;
-  font-family: inherit;
-  transition: all 0.2s ease;
+  border-radius: 10px;
+  background: #f9fafb;
   cursor: pointer;
-  background: white;
-}
-
-.dateInput:hover {
-  border-color: #019fb1;
-  box-shadow: 0 2px 8px rgba(1, 159, 177, 0.15);
-}
-
-.dateInput:focus {
-  outline: none;
-  border-color: #019fb1;
-  box-shadow: 0 0 0 4px rgba(1, 159, 177, 0.12);
-}
-
-.dateInput::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-  font-size: 20px;
-  padding: 6px;
-  border-radius: 6px;
   transition: all 0.2s ease;
 }
 
-.dateInput::-webkit-calendar-picker-indicator:hover {
+.dateSelector:hover {
+  border-color: #019fb1;
   background: #f0fdff;
+}
+
+.dateSelector.hasValue {
+  border-color: #019fb1;
+  background: #f0fdff;
+}
+
+.dateInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dateLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.dateValue {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.labelIcon {
+  width: 18px;
+  height: 18px;
+  color: #019fb1;
+  flex-shrink: 0;
 }
 
 .nightsInfo {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 16px;
-  background: linear-gradient(135deg, #f0fdff 0%, #e0f7fa 100%);
-  border-radius: 12px;
-  margin-bottom: 16px;
-  font-size: 15px;
+  justify-content: center;
+  padding: 8px 12px;
+  background: #f0fdff;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: #019fb1;
-  border: 2px solid #019fb1;
-  animation: slideIn 0.3s ease-out;
-  justify-content: center;
+  border: 1px solid #019fb1;
 }
 
-@keyframes slideIn {
+.confirmButton {
+  width: 100%;
+  padding: 12px;
+  background: #019fb1;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.confirmButton:hover:not(:disabled) {
+  background: #018090;
+}
+
+.confirmButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Calendar Modal Overlay */
+.calendarOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 16px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.calendarModal {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 320px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -115,63 +137,157 @@
   }
 }
 
-.nightsInfo svg {
-  flex-shrink: 0;
-  filter: drop-shadow(0 2px 4px rgba(1, 159, 177, 0.2));
-}
-
-.errorInfo {
+.calendarHeader {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
   padding: 14px 16px;
-  background: #fff5f5;
-  border-radius: 12px;
-  margin-bottom: 16px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #ef4444;
-  border: 2px solid #ef4444;
-  animation: slideIn 0.3s ease-out;
-  text-align: center;
-  justify-content: center;
-}
-
-@media (max-width: 480px) {
-  .nightsInfo,
-  .errorInfo {
-    padding: 12px 14px;
-    font-size: 13px;
-  }
-}
-
-.confirmButton {
-  width: 100%;
-  padding: 16px 24px;
   background: #019fb1;
   color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
+}
+
+.closeBtn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
 }
 
-.confirmButton:hover:not(:disabled) {
-  background: #018090;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.35);
+.closeBtn:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
-.confirmButton:active:not(:disabled) {
-  transform: translateY(0);
+.calendarWrapper {
+  padding: 12px;
 }
 
-.confirmButton:disabled {
-  background: #9ca3af;
-  cursor: not-allowed;
-  opacity: 0.6;
-  box-shadow: none;
+/* Calendar Styles */
+.calendarWrapper :global(.rmdp-wrapper) {
+  width: 100% !important;
+}
+
+.calendarWrapper :global(.rmdp-calendar) {
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+.calendarWrapper :global(.rmdp-header) {
+  padding: 8px 0 !important;
+  margin-bottom: 8px !important;
+}
+
+.calendarWrapper :global(.rmdp-header-values) {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #1f2937 !important;
+}
+
+.calendarWrapper :global(.rmdp-arrow) {
+  border-color: #019fb1 !important;
+}
+
+.calendarWrapper :global(.rmdp-arrow-container) {
+  width: 28px !important;
+  height: 28px !important;
+}
+
+.calendarWrapper :global(.rmdp-arrow-container:hover) {
+  background: #f0fdff !important;
+}
+
+.calendarWrapper :global(.rmdp-week-day) {
+  color: #6b7280 !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  width: 36px !important;
+  height: 28px !important;
+}
+
+.calendarWrapper :global(.rmdp-day) {
+  width: 36px !important;
+  height: 36px !important;
+}
+
+.calendarWrapper :global(.rmdp-day span) {
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  border-radius: 8px !important;
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.calendarWrapper :global(.rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:hover) {
+  background: #f0fdff !important;
+  color: #019fb1 !important;
+}
+
+.calendarWrapper :global(.rmdp-day.rmdp-selected span:not(.highlight)) {
+  background: #019fb1 !important;
+  color: white !important;
+}
+
+.calendarWrapper :global(.rmdp-day.rmdp-today span) {
+  background: #e0f7fa !important;
+  color: #019fb1 !important;
+}
+
+.calendarWrapper :global(.rmdp-day.rmdp-disabled span) {
+  color: #d1d5db !important;
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .widget {
+    padding: 10px;
+  }
+
+  .dateInputs {
+    gap: 8px;
+  }
+
+  .dateSelector {
+    padding: 10px;
+  }
+
+  .dateLabel {
+    font-size: 10px;
+  }
+
+  .dateValue {
+    font-size: 12px;
+  }
+
+  .labelIcon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .calendarModal {
+    max-width: 290px;
+  }
+
+  .calendarWrapper :global(.rmdp-day) {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .calendarWrapper :global(.rmdp-day span) {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 12px !important;
+  }
+
+  .calendarWrapper :global(.rmdp-week-day) {
+    width: 32px !important;
+    font-size: 10px !important;
+  }
 }

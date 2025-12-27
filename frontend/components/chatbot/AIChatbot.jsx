@@ -450,12 +450,12 @@ export default function AIChatbot() {
         return (
           <div className={styles.welcomeStep}>
             <div className={styles.welcomeIcon}>
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#019fb1" strokeWidth="2">
+              <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#019fb1" strokeWidth="2">
                 <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
               </svg>
             </div>
             <h2 className={styles.welcomeTitle}>
-              {t("مرحباً بك في QuickAir! ✈️", "Welcome to QuickAir! ")}
+              {t("مرحباً بك في QuickAir!", "Welcome to QuickAir!")}
             </h2>
             <p className={styles.welcomeText}>
               {t(
@@ -509,7 +509,7 @@ export default function AIChatbot() {
         return (
           <div className={styles.languageStep}>
             <div className={styles.stepIcon}>
-              <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#019fb1" strokeWidth="2">
+              <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#019fb1" strokeWidth="2">
                 <circle cx="12" cy="12" r="10"></circle>
                 <line x1="2" y1="12" x2="22" y2="12"></line>
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -659,7 +659,7 @@ export default function AIChatbot() {
         return (
           <div className={styles.summaryStep}>
             <div className={styles.summaryIcon}>
-              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2">
+              <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2">
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                 <polyline points="22 4 12 14.01 9 11.01"></polyline>
               </svg>
