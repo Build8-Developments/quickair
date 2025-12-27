@@ -103,18 +103,27 @@ export default function HotelInformation({ hotel, offer }) {
             )}
           </div>
 
-          <h1 className="text-40 sm:text-30 lh-14 mt-20">{hotel.name}</h1>
+          <h1
+            className="text-40 sm:text-30 lh-14 mt-20"
+            dir="ltr"
+            style={{ textAlign: isRTL ? "right" : "left" }}
+          >
+            {hotel.name}
+          </h1>
 
-          <div className="row x-gap-20 y-gap-20 items-center pt-20">
+          <div
+            className="row x-gap-20 y-gap-15 items-center pt-20"
+            style={{ direction: isRTL ? "rtl" : "ltr" }}
+          >
             {/* Location */}
             {hotel.location && (
               <div className="col-auto">
-                <div className="d-flex items-center">
-                  <i
-                    className={`icon-pin text-16 ${isRTL ? "ml-5" : "mr-5"}`}
-                  ></i>
-                  {hotel.location.name}
-                  {hotel.location.country && `, ${hotel.location.country}`}
+                <div className="d-flex items-center" style={{ gap: "8px" }}>
+                  <i className="icon-pin text-16 text-accent-1 flex-shrink-0"></i>
+                  <span>
+                    {hotel.location.name}
+                    {hotel.location.country && `, ${hotel.location.country}`}
+                  </span>
                 </div>
               </div>
             )}
@@ -122,13 +131,9 @@ export default function HotelInformation({ hotel, offer }) {
             {/* Address */}
             {hotel.address && (
               <div className="col-auto">
-                <div className="d-flex items-center">
-                  <i
-                    className={`icon-location text-16 ${
-                      isRTL ? "ml-5" : "mr-5"
-                    }`}
-                  ></i>
-                  {hotel.address}
+                <div className="d-flex items-center" style={{ gap: "8px" }}>
+                  <i className="icon-destination text-16 text-accent-1 flex-shrink-0"></i>
+                  <span>{hotel.address}</span>
                 </div>
               </div>
             )}
@@ -136,11 +141,11 @@ export default function HotelInformation({ hotel, offer }) {
             {/* Amenities Count */}
             {hotel.amenities && hotel.amenities.length > 0 && (
               <div className="col-auto">
-                <div className="d-flex items-center">
-                  <i
-                    className={`icon-check text-16 ${isRTL ? "ml-5" : "mr-5"}`}
-                  ></i>
-                  {hotel.amenities.length} {t("hotel.amenities")}
+                <div className="d-flex items-center" style={{ gap: "8px" }}>
+                  <i className="icon-check text-16 text-accent-1 flex-shrink-0"></i>
+                  <span>
+                    {hotel.amenities.length} {t("hotel.amenities")}
+                  </span>
                 </div>
               </div>
             )}
@@ -148,13 +153,11 @@ export default function HotelInformation({ hotel, offer }) {
             {/* Offer Badge */}
             {offer && (
               <div className="col-auto">
-                <div className="d-flex items-center">
-                  <i
-                    className={`icon-calendar text-16 ${
-                      isRTL ? "ml-5" : "mr-5"
-                    }`}
-                  ></i>
-                  <bdi>{translateMonth(offer.month)}</bdi> {offer.year}
+                <div className="d-flex items-center" style={{ gap: "8px" }}>
+                  <i className="icon-calendar text-16 text-accent-1 flex-shrink-0"></i>
+                  <span>
+                    <bdi>{translateMonth(offer.month)}</bdi> {offer.year}
+                  </span>
                 </div>
               </div>
             )}

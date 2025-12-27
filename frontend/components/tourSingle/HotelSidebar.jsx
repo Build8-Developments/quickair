@@ -336,13 +336,13 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
       </div>
 
       {/* What's Included Section */}
-      <div className="mt-20">
+      <div className="mt-20" style={{ direction: isRTL ? "rtl" : "ltr" }}>
         <div
           className="collapsible-header"
           onClick={() => setShowWhatsIncluded(!showWhatsIncluded)}
         >
-          <div className="d-flex items-center">
-            <CheckCircle size={20} className="text-accent-1 mr-10" />
+          <div className="d-flex items-center" style={{ gap: "10px" }}>
+            <CheckCircle size={20} className="text-accent-1 flex-shrink-0" />
             <h5 className="text-16 fw-600">
               {t("hotel.whatsIncluded") || "What's Included"}
             </h5>
@@ -354,21 +354,24 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
           )}
         </div>
         {showWhatsIncluded && (
-          <div className="included-list">
+          <div
+            className="included-list"
+            style={{ direction: isRTL ? "rtl" : "ltr" }}
+          >
             <div className="included-item">
-              <Moon size={14} className="text-accent-1" />
+              <Moon size={14} className="text-accent-1 flex-shrink-0" />
               <span>
                 {hotelOption?.nights || 0} {t("hotel.nights") || "nights"}{" "}
                 {t("hotel.accommodation") || "accommodation"}
               </span>
             </div>
             <div className="included-item">
-              <Headphones size={14} className="text-accent-1" />
+              <Headphones size={14} className="text-accent-1 flex-shrink-0" />
               <span>{t("hotel.support247") || "24/7 Customer Support"}</span>
             </div>
             {hotelOption?.mealPlan?.name && (
               <div className="included-item">
-                <Utensils size={14} className="text-accent-1" />
+                <Utensils size={14} className="text-accent-1 flex-shrink-0" />
                 <span>{hotelOption.mealPlan.name}</span>
               </div>
             )}
@@ -405,9 +408,17 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
       </div>
 
       {/* Guests Section */}
-      <h5 className="text-18 fw-600 mb-20 mt-25">
-        <Users size={18} className="text-accent-1 inline mr-10" />
-        {t("hotel.guests") || "Guests"}
+      <h5
+        className="text-18 fw-600 mb-20 mt-25"
+        style={{
+          direction: isRTL ? "rtl" : "ltr",
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+        }}
+      >
+        <Users size={18} className="text-accent-1 flex-shrink-0" />
+        <span>{t("hotel.guests") || "Guests"}</span>
       </h5>
 
       {/* Adults */}
@@ -567,9 +578,17 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
       {/* Optional Trips */}
       {offer?.optionalTrips && offer.optionalTrips.length > 0 && (
         <>
-          <h5 className="text-18 fw-600 mb-20 mt-25">
-            <Ticket size={18} className="text-accent-1 inline mr-10" />
-            {t("hotel.addExtra") || "Optional Extras"}
+          <h5
+            className="text-18 fw-600 mb-20 mt-25"
+            style={{
+              direction: isRTL ? "rtl" : "ltr",
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <Ticket size={18} className="text-accent-1 flex-shrink-0" />
+            <span>{t("hotel.addExtra") || "Optional Extras"}</span>
           </h5>
 
           {offer.optionalTrips.map((trip, index) => (
@@ -663,9 +682,16 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
       </button>
 
       {/* Important Notice */}
-      <div className="notice-card">
+      <div
+        className="notice-card"
+        style={{
+          direction: isRTL ? "rtl" : "ltr",
+          borderLeft: isRTL ? "none" : "3px solid var(--color-accent-1)",
+          borderRight: isRTL ? "3px solid var(--color-accent-1)" : "none",
+        }}
+      >
         <Info size={16} className="text-accent-1 flex-shrink-0" />
-        <div className="ml-10">
+        <div style={{ marginInlineStart: "10px" }}>
           <div className="text-13 fw-500 mb-5">
             {t("hotel.importantNotice") || "Important Notice"}
           </div>
@@ -677,21 +703,24 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
       </div>
 
       {/* Booking Policies */}
-      <div className="policies-section">
+      <div
+        className="policies-section"
+        style={{ direction: isRTL ? "rtl" : "ltr" }}
+      >
         <div className="policy-item">
-          <Calendar size={14} className="text-accent-1" />
+          <Calendar size={14} className="text-accent-1 flex-shrink-0" />
           <span className="text-12">
             {t("hotel.freeCancellation") || "Free cancellation up to 48 hours"}
           </span>
         </div>
         <div className="policy-item">
-          <Shield size={14} className="text-accent-1" />
+          <Shield size={14} className="text-accent-1 flex-shrink-0" />
           <span className="text-12">
             {t("hotel.secureBooking") || "Secure booking & payment"}
           </span>
         </div>
         <div className="policy-item">
-          <Clock size={14} className="text-accent-1" />
+          <Clock size={14} className="text-accent-1 flex-shrink-0" />
           <span className="text-12">
             {t("hotel.instantConfirmation") || "Instant confirmation"}
           </span>
@@ -700,10 +729,27 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
 
       {/* Back to Offer */}
       {offer && (
-        <div className="mt-15">
-          <Link href={`/offers/${offer.documentId}`} className="back-link">
-            <ArrowLeft size={14} className="inline mr-10" />
-            {t("hotel.backToOffer") || "Back to Offer"}
+        <div className="mt-15" style={{ direction: isRTL ? "rtl" : "ltr" }}>
+          <Link
+            href={`/offers/${offer.documentId}`}
+            className="back-link"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            {isRTL ? (
+              <>
+                <span>{t("hotel.backToOffer") || "Back to Offer"}</span>
+                <ArrowLeft size={14} style={{ transform: "rotate(180deg)" }} />
+              </>
+            ) : (
+              <>
+                <ArrowLeft size={14} />
+                <span>{t("hotel.backToOffer") || "Back to Offer"}</span>
+              </>
+            )}
           </Link>
         </div>
       )}

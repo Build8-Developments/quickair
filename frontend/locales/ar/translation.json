@@ -237,6 +237,8 @@
     "freeCancellation": "إلغاء مجاني حتى 48 ساعة",
     "secureBooking": "حجز وطريقة دفع آمنة",
     "instantConfirmation": "تأكيد فوري",
+    "included": "يشمل",
+    "notIncluded": "لا يشمل",
     "categories": {
       "general": "عام",
       "roomFeatures": "مميزات الغرفة",

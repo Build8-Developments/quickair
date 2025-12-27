@@ -237,6 +237,8 @@
     "freeCancellation": "Free cancellation up to 48 hours",
     "secureBooking": "Secure booking \u0026 payment",
     "instantConfirmation": "Instant confirmation",
+    "included": "Included",
+    "notIncluded": "Not Included",
     "categories": {
       "general": "General",
       "roomFeatures": "Room Features",

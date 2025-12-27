@@ -2,9 +2,13 @@
 
 import { faqData } from "@/data/tourSingleContent";
 import React, { useState } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Faq() {
   const [currentActiveFaq, setCurrentActiveFaq] = useState(0);
+  const { language } = useLanguage();
+  const isRTL = language === "ar";
+
   return (
     <>
       {faqData.map((elm, i) => (
@@ -17,6 +21,7 @@ export default function Faq() {
             <div
               className="accordion__button d-flex items-center justify-between"
               onClick={() => setCurrentActiveFaq((pre) => (pre == i ? -1 : i))}
+              style={{ direction: isRTL ? "rtl" : "ltr" }}
             >
               <div className="button text-16 text-dark-1">{elm.question}</div>
 
@@ -28,10 +33,17 @@ export default function Faq() {
 
             <div
               className="accordion__content"
-              style={currentActiveFaq == i ? { maxHeight: "150px" } : {}}
+              style={
+                currentActiveFaq == i
+                  ? { maxHeight: "500px", overflow: "visible" }
+                  : { maxHeight: 0 }
+              }
             >
-              <div className="pt-20">
-                <p>{elm.answer}</p>
+              <div
+                className="pt-20"
+                style={{ direction: isRTL ? "rtl" : "ltr" }}
+              >
+                <p className="text-dark-1">{elm.answer}</p>
               </div>
             </div>
           </div>

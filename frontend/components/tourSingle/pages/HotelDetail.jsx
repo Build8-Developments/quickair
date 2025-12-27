@@ -58,20 +58,18 @@ export default function HotelDetail({ hotel, offer, hotelOption }) {
             className="row y-gap-30 justify-between"
             style={{ direction: isRTL ? "rtl" : "ltr" }}
           >
-            {/* Sidebar - shows first in RTL */}
-            {isRTL && (
-              <div className="col-xl-4">
-                <div className="d-block d-xl-flex justify-content-xl-start js-pin-content">
-                  <HotelSidebar
-                    hotel={hotel}
-                    offer={offer}
-                    hotelOption={hotelOption}
-                  />
-                </div>
+            {/* Sidebar - shows on LEFT in EN, RIGHT in AR */}
+            <div className="col-xl-4">
+              <div className="d-block d-xl-flex js-pin-content">
+                <HotelSidebar
+                  hotel={hotel}
+                  offer={offer}
+                  hotelOption={hotelOption}
+                />
               </div>
-            )}
+            </div>
 
-            {/* Main Content */}
+            {/* Main Content - shows on RIGHT in EN, LEFT in AR */}
             <div
               className="col-xl-8"
               dir={isRTL ? "rtl" : "ltr"}
@@ -184,19 +182,6 @@ export default function HotelDetail({ hotel, offer, hotelOption }) {
                 <Faq />
               </div>
             </div>
-
-            {/* Sidebar - shows last in LTR */}
-            {!isRTL && (
-              <div className="col-xl-4">
-                <div className="d-block d-xl-flex justify-content-xl-end js-pin-content">
-                  <HotelSidebar
-                    hotel={hotel}
-                    offer={offer}
-                    hotelOption={hotelOption}
-                  />
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </section>
