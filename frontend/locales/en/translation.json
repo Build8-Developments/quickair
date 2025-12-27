@@ -481,21 +481,230 @@
     }
   },
   "omra": {
-    "pageTitle": "Omra",
-    "pageDescription": "Discover premium Omra packages with QuickAir. A spiritual journey to the Holy House of Allah",
-    "spiritualJourney": "The Spiritual Omra Journey",
-    "intro1": "Omra is a visit to the Holy House of Allah at any time of the year. It is a confirmed Sunnah of the Prophet (PBUH) and an opportunity to draw closer to Allah and renew faith.",
-    "intro2": "We offer diverse Omra packages to suit all budgets, with comprehensive services to ensure a comfortable and spiritual journey.",
+    "pageTitle": "Umrah",
+    "pageDescription": "Discover premium Umrah packages with QuickAir. A spiritual journey to the Holy House of Allah",
+    "spiritualJourney": "The Spiritual Umrah Journey",
+    "intro1": "Umrah is a visit to the Holy House of Allah at any time of the year. It is a confirmed Sunnah of the Prophet (PBUH) and an opportunity to draw closer to Allah and renew faith.",
+    "intro2": "We offer diverse Umrah packages to suit all budgets, with comprehensive services to ensure a comfortable and spiritual journey.",
     "explorePackages": "Explore Packages",
-    "rituals": "Omra Rituals",
-    "ritualsDesc": "Learn about the essential steps of performing Omra",
-    "packages": "Omra Packages",
+    "rituals": "Umrah Rituals",
+    "ritualsDesc": "Learn about the essential steps of performing Umrah",
+    "packages": "Umrah Packages",
     "packagesDesc": "Choose the package that suits your needs and budget",
-    "readyTitle": "Ready for Your Omra Journey?",
+    "readyTitle": "Ready for Your Umrah Journey?",
     "readyDesc": "Contact us today for a free consultation and book your package",
     "browseOffers": "Browse Offers",
     "viewDetails": "View Details",
-    "days": "Days"
+    "days": "Days",
+    "hero": {
+      "title": "Umrah",
+      "season": "1447 AH",
+      "subtitle": "A Confirmed Sunnah - An opportunity to draw closer to Allah and renew faith"
+    },
+    "about": {
+      "sectionTitle": "A Confirmed Sunnah",
+      "title": "The Spiritual Umrah Journey",
+      "paragraph1": "Umrah is a pilgrimage to Makkah that can be undertaken at any time of the year. It is a confirmed Sunnah of the Prophet Muhammad (PBUH) and holds great spiritual significance in Islam.",
+      "paragraph2": "The Prophet (PBUH) said: 'The performance of Umrah is an expiation for the sins committed between it and the previous Umrah.' We offer comprehensive Umrah packages to help you embark on this blessed journey.",
+      "imageAlt": "Masjid Al Haram"
+    },
+    "steps": {
+      "title": "Umrah Steps",
+      "subtitle": "Umrah Rituals",
+      "description": "Learn about the essential steps of performing Umrah",
+      "ihram": {
+        "title": "Ihram",
+        "description": "Enter the state of Ihram at the Miqat, wearing the prescribed garments and making the intention for Umrah"
+      },
+      "tawaf": {
+        "title": "Tawaf",
+        "description": "Circumambulate the Kaaba seven times in an anti-clockwise direction, starting from the Black Stone"
+      },
+      "sai": {
+        "title": "Sa'i",
+        "description": "Walk between the hills of Safa and Marwa seven times, commemorating Hajar's search for water"
+      },
+      "halq": {
+        "title": "Halq/Taqsir",
+        "description": "Shave the head (Halq) or trim the hair (Taqsir) to complete the Umrah rituals"
+      }
+    },
+    "premium": {
+      "badge": "Premium Umrah",
+      "title": "Premium Umrah Packages",
+      "duration": "7 Days / 6 Nights",
+      "haramainTrain": "Transfer via Haramain High-Speed Train",
+      "packages": [
+        {
+          "makkahHotel": "Fairmont Clock Tower",
+          "makkahNights": 3,
+          "makkahMeals": "Breakfast",
+          "madinahHotel": "Oberoi",
+          "madinahNights": 3,
+          "madinahMeals": "Breakfast + Dinner",
+          "prices": {
+            "double": 102500,
+            "triple": 92500,
+            "quad": null
+          }
+        },
+        {
+          "makkahHotel": "Fairmont Clock Tower",
+          "makkahNights": 3,
+          "makkahMeals": "Breakfast",
+          "madinahHotel": "Dar Al-Iman InterContinental",
+          "madinahNights": 3,
+          "madinahMeals": "Breakfast",
+          "prices": {
+            "double": 70000,
+            "triple": 60000,
+            "quad": null
+          }
+        },
+        {
+          "makkahHotel": "Fairmont Clock Tower",
+          "makkahNights": 3,
+          "makkahMeals": "Breakfast",
+          "madinahHotel": "Al-Harithia",
+          "madinahNights": 3,
+          "madinahMeals": "Breakfast",
+          "prices": {
+            "double": 57500,
+            "triple": 50000,
+            "quad": 46000
+          }
+        },
+        {
+          "makkahHotel": "Swiss Maqam",
+          "makkahNights": 3,
+          "makkahMeals": "Breakfast",
+          "madinahHotel": "Al-Harithia",
+          "madinahNights": 3,
+          "madinahMeals": "Breakfast",
+          "prices": {
+            "double": 55500,
+            "triple": 48500,
+            "quad": 45500
+          }
+        },
+        {
+          "makkahHotel": "Al-Massa Grand",
+          "makkahNights": 3,
+          "makkahMeals": "No meals",
+          "madinahHotel": "Grand Plaza",
+          "madinahNights": 3,
+          "madinahMeals": "No meals",
+          "prices": {
+            "double": 41000,
+            "triple": 36500,
+            "quad": 34000
+          }
+        },
+        {
+          "makkahHotel": "Saja Makkah",
+          "makkahNights": 3,
+          "makkahMeals": "No meals",
+          "madinahHotel": "Maysan Rehab Al-Misk",
+          "madinahNights": 3,
+          "madinahMeals": "No meals",
+          "prices": {
+            "double": 36500,
+            "triple": 33500,
+            "quad": 32000
+          }
+        }
+      ]
+    },
+    "economy": {
+      "badge": "Economy Umrah",
+      "title": "Economy Umrah Package",
+      "duration": "14 Days / 13 Nights",
+      "route": "Cairo / Jeddah – Madinah / Cairo",
+      "travelDates": ["10 August", "7 September"],
+      "fridayPrayers": ["Friday prayer in Madinah", "Friday prayer in Makkah"],
+      "package": {
+        "makkahHotel": "Sharikat Al-Khubr (or similar)",
+        "makkahNights": 10,
+        "makkahMeals": "Accommodation only",
+        "madinahHotel": "Arkan Al-Manar (or similar)",
+        "madinahNights": 3,
+        "madinahMeals": "Accommodation only",
+        "prices": {
+          "double": 34000,
+          "triple": 30000,
+          "quad": 28000
+        }
+      }
+    },
+    "policies": {
+      "title": "Program Policies",
+      "inclusions": {
+        "title": "Program Includes",
+        "items": [
+          "Accommodation in the mentioned hotels or similar of the same category",
+          "Visa issuance fees and tourism company service fees",
+          "Internal transportation within Saudi Arabia using modern air-conditioned buses",
+          "Transfer from Madinah to Makkah via Haramain High-Speed Train (Premium only)"
+        ]
+      },
+      "exclusions": {
+        "title": "Program Excludes",
+        "items": ["International airfare tickets (EgyptAir or Saudi Airlines)"]
+      },
+      "exchangeRate": {
+        "title": "Exchange Rate",
+        "rate": 13.5,
+        "note": "Any increase in the Saudi Riyal exchange rate will be added to the program price"
+      },
+      "roomPolicy": {
+        "title": "Room Policy",
+        "description": "All triple and quad rooms are double rooms with an extra bed. All advertised prices are for non-view rooms."
+      },
+      "paymentPolicy": {
+        "title": "Booking & Payment Policy",
+        "initialPayment": "75% initial payment required",
+        "finalPayment": "25% final payment before travel",
+        "note": "Full payment must be completed to avoid price changes due to exchange rate fluctuation"
+      },
+      "cancellation": {
+        "title": "Cancellation Policy",
+        "rules": [
+          {
+            "period": "20 to 14 days before travel",
+            "penalty": 50
+          },
+          {
+            "period": "14 to 7 days before travel",
+            "penalty": 75
+          },
+          {
+            "period": "Less than 7 days before travel",
+            "penalty": 100
+          }
+        ],
+        "penaltyText": "penalty"
+      },
+      "documents": {
+        "title": "Required Documents",
+        "items": [
+          "Valid passport (minimum 6 months validity from travel date)",
+          "3 personal photos with white background",
+          "Military service travel permit for males (responsibility of the traveler)"
+        ]
+      }
+    },
+    "pricing": {
+      "doubleRoom": "Double Room",
+      "tripleRoom": "Triple Room",
+      "quadRoom": "Quad Room",
+      "perPerson": "per person",
+      "notAvailable": "N/A",
+      "currency": "EGP",
+      "makkah": "Makkah",
+      "madinah": "Madinah",
+      "nights": "nights",
+      "meals": "Meals"
+    }
   },
   "branches": {
     "pageTitle": "Our Branches",
