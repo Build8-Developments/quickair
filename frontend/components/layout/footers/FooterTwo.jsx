@@ -56,7 +56,6 @@ export default function FooterTwo({ locale: serverLocale }) {
 
   const textAlign = isRTL ? "right" : "left";
   const flexDirection = isRTL ? "row-reverse" : "row";
-  const marginStart = isRTL ? { marginLeft: "10px" } : { marginRight: "10px" };
 
   const footerStyles = {
     footer: {
@@ -90,14 +89,6 @@ export default function FooterTwo({ locale: serverLocale }) {
       fontWeight: "600",
       textAlign: textAlign,
     },
-    link: {
-      color: "rgba(255, 255, 255, 0.85)",
-      transition: "all 0.3s ease",
-      display: "flex",
-      alignItems: "center",
-      flexDirection: flexDirection,
-      textAlign: textAlign,
-    },
     newsletterInput: {
       background: "rgba(255, 255, 255, 0.15)",
       border: "1px solid rgba(255, 255, 255, 0.3)",
@@ -120,9 +111,9 @@ export default function FooterTwo({ locale: serverLocale }) {
       cursor: "pointer",
       transition: "all 0.3s ease",
       fontSize: "15px",
-      display: "flex",
+      display: "inline-flex",
       alignItems: "center",
-      gap: "8px",
+      gap: "10px",
       flexDirection: flexDirection,
     },
     bottomBar: {
@@ -141,6 +132,7 @@ export default function FooterTwo({ locale: serverLocale }) {
       justifyContent: "center",
       color: "#ffffff",
       border: "1px solid rgba(255, 255, 255, 0.2)",
+      flexShrink: 0,
     },
     contactItem: {
       display: "flex",
@@ -149,6 +141,7 @@ export default function FooterTwo({ locale: serverLocale }) {
       flexDirection: flexDirection,
       textAlign: textAlign,
       marginBottom: "15px",
+      textDecoration: "none",
     },
     contactIcon: {
       width: "40px",
@@ -159,8 +152,35 @@ export default function FooterTwo({ locale: serverLocale }) {
       alignItems: "center",
       justifyContent: "center",
       flexShrink: 0,
+      color: "#ffffff",
     },
   };
+
+  // Arrow icon that points right in EN and left in AR
+  const ArrowIcon = () => (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {isRTL ? (
+        <>
+          <line x1="19" y1="12" x2="5" y2="12" />
+          <polyline points="12 19 5 12 12 5" />
+        </>
+      ) : (
+        <>
+          <line x1="5" y1="12" x2="19" y2="12" />
+          <polyline points="12 5 19 12 12 19" />
+        </>
+      )}
+    </svg>
+  );
 
   return (
     <footer
@@ -172,7 +192,8 @@ export default function FooterTwo({ locale: serverLocale }) {
       <div className="container" style={{ position: "relative", zIndex: 1 }}>
         {/* Logo and Contact Info Section */}
         <div style={footerStyles.topSection}>
-          <div className="row y-gap-30 justify-between items-center">
+          <div className="row y-gap-30 items-center">
+            {/* Logo Column */}
             <div className="col-lg-4 col-md-6" style={{ textAlign: textAlign }}>
               <Link href={`/${locale}`} className="d-block mb-20">
                 <Image
@@ -190,23 +211,21 @@ export default function FooterTwo({ locale: serverLocale }) {
                   color: "rgba(255, 255, 255, 0.9)",
                   lineHeight: "1.8",
                   textAlign: textAlign,
+                  margin: 0,
                 }}
               >
-                {t(
-                  "footer.companyDescription",
-                  "Your trusted travel partner for flights, hotels, and unforgettable experiences."
-                )}
+                {t("footer.companyDescription")}
               </p>
             </div>
 
-            <div className="col-lg-4 col-md-6">
+            {/* Phone Column */}
+            <div className="col-lg-4 col-md-6" style={{ textAlign: "center" }}>
               <div
                 style={{
-                  display: "flex",
+                  display: "inline-flex",
                   alignItems: "center",
                   gap: "15px",
                   flexDirection: flexDirection,
-                  justifyContent: isRTL ? "flex-end" : "flex-start",
                 }}
               >
                 <div style={footerStyles.iconBox}>
@@ -230,22 +249,36 @@ export default function FooterTwo({ locale: serverLocale }) {
               </div>
             </div>
 
-            <div className="col-lg-3 col-md-6">
-              <div style={{ textAlign: textAlign }}>
+            {/* Social Column */}
+            <div
+              className="col-lg-4 col-md-12 col-12"
+              style={{ textAlign: textAlign }}
+            >
+              <div
+                className="footer-social-wrapper"
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: isRTL ? "flex-end" : "flex-start",
+                }}
+              >
+                <style jsx>{`
+                  @media (max-width: 991px) {
+                    .footer-social-wrapper {
+                      align-items: center !important;
+                      text-align: center !important;
+                      width: 100%;
+                      margin-top: 10px;
+                    }
+                  }
+                `}</style>
                 <div
                   className="text-16 fw-500 mb-15"
-                  style={{ color: "#ffffff" }}
+                  style={{ color: "#ffffff", textAlign: "inherit" }}
                 >
                   {t("footer.followUs")}
                 </div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: isRTL ? "flex-end" : "flex-start",
-                  }}
-                >
-                  <Socials />
-                </div>
+                <Socials />
               </div>
             </div>
           </div>
@@ -262,7 +295,17 @@ export default function FooterTwo({ locale: serverLocale }) {
               <div className="y-gap-10">
                 <a href="#" style={footerStyles.contactItem}>
                   <div style={footerStyles.contactIcon}>
-                    <i className="icon-location text-16"></i>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
                   </div>
                   <span
                     style={{
@@ -270,7 +313,10 @@ export default function FooterTwo({ locale: serverLocale }) {
                       lineHeight: "1.6",
                     }}
                   >
-                    328 Queensberry Street, North Melbourne VIC3051, Australia.
+                    {t(
+                      "footer.address",
+                      "328 Queensberry Street, North Melbourne VIC3051, Australia."
+                    )}
                   </span>
                 </a>
                 <a
@@ -278,10 +324,20 @@ export default function FooterTwo({ locale: serverLocale }) {
                   style={footerStyles.contactItem}
                 >
                   <div style={footerStyles.contactIcon}>
-                    <i className="icon-email text-16"></i>
+                    <svg
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
                   </div>
                   <span style={{ color: "rgba(255, 255, 255, 0.85)" }}>
-                    hi@quickair.com
+                    {t("footer.email", "hi@quickair.com")}
                   </span>
                 </a>
               </div>
@@ -304,6 +360,11 @@ export default function FooterTwo({ locale: serverLocale }) {
               </p>
 
               <form onSubmit={handleNewsletterSubmit}>
+                <style jsx>{`
+                  input::placeholder {
+                    color: rgba(255, 255, 255, 0.5) !important;
+                  }
+                `}</style>
                 <input
                   type="email"
                   value={newsletterEmail}
@@ -326,18 +387,7 @@ export default function FooterTwo({ locale: serverLocale }) {
                   ) : (
                     <>
                       <span>{t("footer.send")}</span>
-                      <svg
-                        width="18"
-                        height="18"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        style={{ transform: isRTL ? "rotate(180deg)" : "none" }}
-                      >
-                        <line x1="22" y1="2" x2="11" y2="13" />
-                        <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                      </svg>
+                      <ArrowIcon />
                     </>
                   )}
                 </button>
@@ -365,7 +415,7 @@ export default function FooterTwo({ locale: serverLocale }) {
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                     <polyline points="22 4 12 14.01 9 11.01" />
                   </svg>
-                  {t("Subscribed successfully!", "Subscribed successfully!")}
+                  {t("footer.subscribedSuccess", "Subscribed successfully!")}
                 </p>
               )}
               {submitStatus === "error" && (
@@ -393,7 +443,7 @@ export default function FooterTwo({ locale: serverLocale }) {
                     <line x1="9" y1="9" x2="15" y2="15" />
                   </svg>
                   {t(
-                    "Failed to subscribe. Please try again.",
+                    "footer.subscribedError",
                     "Failed to subscribe. Please try again."
                   )}
                 </p>

@@ -4,18 +4,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import OffersSidebar from "./OffersSidebar";
 import OfferCardSkeleton from "./OfferCardSkeleton";
-import { speedFeatures } from "@/data/tourFilteringOptions";
 import Pagination from "../common/Pagination";
 import Image from "next/image";
 import Link from "next/link";
 import { STRAPI_CONFIG } from "@/config/api";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-export default function OffersList({
-  initialOffers = [],
-  totalCount = 0,
-  isLoading = false,
-}) {
+export default function OffersList({ initialOffers = [], isLoading = false }) {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const [offers, setOffers] = useState(initialOffers);

@@ -72,7 +72,11 @@
     "terms": "Terms",
     "getInTouch": "Get in Touch",
     "liveChat": "Live chat",
-    "companyDescription": "Your trusted travel partner for flights, hotels, and unforgettable experiences."
+    "address": "328 Queensberry Street, North Melbourne VIC3051, Australia.",
+    "email": "hi@quickair.com",
+    "companyDescription": "Your trusted travel partner for flights, hotels, and unforgettable experiences.",
+    "subscribedSuccess": "Subscribed successfully!",
+    "subscribedError": "Failed to subscribe. Please try again."
   },
   "hero": {
     "subtitle": "One site, 300,000+ experiences you'll remember",
@@ -317,7 +321,164 @@
     "readyDesc": "Contact us today for a free consultation and book your package",
     "browseOffers": "Browse Offers",
     "viewDetails": "View Details",
-    "days": "Days"
+    "days": "Days",
+    "hero": {
+      "title": "Hajj",
+      "date": "2026 / 1447H",
+      "subtitle": "Over 41 years of experience in organizing and executing Hajj and Umrah programs, having served more than 500,000 pilgrims, providing them with an unparalleled religious and spiritual experience"
+    },
+    "services": {
+      "sectionTitle": "Our Distinguished Services",
+      "sectionSubtitle": "Distinguished Services for Pilgrims",
+      "intro": "We strive to provide the highest levels of comfort and luxury for the guests of Allah through our services that ensure them a sacred journey free from any hardship or fatigue",
+      "comfort": {
+        "title": "Distinguished Services",
+        "description": "We strive to provide the highest levels of comfort and luxury for the guests of Allah through our services that ensure them a sacred journey free from any hardship or fatigue"
+      },
+      "vipLounge": {
+        "title": "VIP Lounge",
+        "description": "We offer you a luxurious and comfortable travel experience through the VIP lounge at Cairo International Airport with services that exceed expectations at a 5-star level"
+      },
+      "adminSupervision": {
+        "title": "Administrative Supervision",
+        "description": "We are proud to provide a selection of experienced and highly qualified supervisors to always be by your side throughout your blessed journey, specializing in caring for the elderly and special cases"
+      },
+      "haramainTrain": {
+        "title": "Haramain Train",
+        "description": "Transportation from Madinah to Makkah via the Haramain train to provide all means of comfort"
+      },
+      "religiousSupervision": {
+        "title": "Religious Supervision",
+        "description": "Each trip is accompanied by a group of senior Al-Azhar scholars under the supervision of Sheikh Dr. Mahmoud Al-Abidi to ensure the completion of Hajj and Umrah rituals in accordance with Islamic law"
+      },
+      "multiplePrograms": {
+        "title": "Multiple Programs",
+        "description": "The company provides various and multiple Hajj programs suitable for all levels in terms of service level and price, allowing you to choose the most suitable for your needs to make your journey the easiest and most comfortable"
+      }
+    },
+    "vipPackage": {
+      "title": "VIP Hajj Rituals - Special Services Under 5-Star Hotel Supervision",
+      "badge": "VIP",
+      "lotteryNote": "Your Hajj is guaranteed, God willing - Quick Hajj (10) days (9) nights (Ministry of Tourism Lottery)",
+      "lotteryDisclaimer": "In case of non-acceptance in the lottery, the direct visa value will be added according to the value determined by the Ministry of Tourism",
+      "featuresTitle": "Package Features",
+      "features": {
+        "arafatStay": "Stay in Arafat",
+        "outdoorSeating": "Outdoor Seating",
+        "fiveStarRestaurant": "5-Star Restaurant",
+        "kadanaStay": "Kadana Stay",
+        "roomCorridors": "Room Corridors in Kadana",
+        "kadanaMosque": "Kadana Mosque"
+      },
+      "hotelsTitle": "Hotels",
+      "pricingTitle": "Pricing",
+      "ritualsTitle": "Rituals",
+      "reservationAmount": "Reservation Amount",
+      "directVisaNote": "Luxury Hajj with direct visas available for those who have previously performed Hajj or those who were not successful in the lottery - multiple levels and different programs",
+      "minaNote": "Mina Kadana building rooms furnished with hotel beds 90cm capacity from 12 to 14 pilgrims per room",
+      "arafatRitual": {
+        "title": "Rituals at Arafat",
+        "description": "Equipped with luxurious VIP German tents furnished with elegant lounges and beds, open buffet (breakfast/lunch/dinner) under 5-star hotel supervision, shaded outdoor seating, mosque, private bathrooms with hot and cold beverages served throughout the day with distinguished hotel service staff"
+      },
+      "minaRitual": {
+        "title": "Rituals at Mina",
+        "featuresTitle": "Hotel rooms in Kadana Towers prepared as 5-star VIP",
+        "feature1": "Rooms with 12 to 14 hotel beds per room (rooms with 2 to 8 beds per room are also available upon request)",
+        "feature2": "Open buffet (breakfast, lunch, and dinner) under 5-star hotel supervision with hot and cold beverages served throughout the day",
+        "feature3": "Private bathrooms for men and women and a large mosque for worship and prayers"
+      }
+    },
+    "distinguishedPackage": {
+      "title": "Distinguished Hajj Rituals According to Egyptian Ministry of Tourism Specifications",
+      "badge": "Distinguished Hajj",
+      "ministryNote": "According to Egyptian Ministry of Tourism specifications",
+      "priceDisclaimer": "Price is indicative until determined according to Ministry of Tourism regulations",
+      "hotelsTitle": "Hotels",
+      "pricingTitle": "Pricing",
+      "ritualsTitle": "Rituals",
+      "reservationAmount": "Reservation Amount",
+      "priceWithoutAirfare": "Price without airfare",
+      "arafatRitual": {
+        "title": "Arafat Rituals",
+        "description": "Luxurious German tents with open buffet breakfast, lunch, dinner - 5-star level first row"
+      },
+      "minaRitual": {
+        "title": "Rituals at Mina",
+        "description": "Kadana Valley Towers furnished with 20 pilgrims per room with private bathrooms and meals provided (breakfast - lunch - dinner) lunch box and a private mosque"
+      }
+    },
+    "hotels": {
+      "madinah": {
+        "location": "Madinah",
+        "name": "Mövenpick Anwar Al Madinah",
+        "feature1": "Haram Tower (Haram Square)",
+        "feature2": "Open buffet breakfast and dinner",
+        "nights": "4 nights (from 4 to 8 Dhul Hijjah)"
+      },
+      "makkah": {
+        "location": "Makkah",
+        "name": "Mövenpick Hajar / Swiss",
+        "feature1": "Haram Square",
+        "feature2": "Open buffet breakfast and dinner",
+        "nights": "5 nights (from 8 to 13 Dhul Hijjah)"
+      }
+    },
+    "pricing": {
+      "doubleRoom": "Double Room",
+      "tripleRoom": "Triple Room",
+      "quadRoom": "Quad Room",
+      "doubleRoomDesc": "2 persons per room",
+      "tripleRoomDesc": "3 persons per room",
+      "quadRoomDesc": "4 persons per room",
+      "vip": {
+        "double": "970,000 EGP",
+        "triple": "850,000 EGP",
+        "quad": "770,000 EGP",
+        "reservation": "120,150 EGP"
+      },
+      "distinguished": {
+        "double": "845,000 EGP",
+        "triple": "745,000 EGP",
+        "quad": "645,000 EGP",
+        "reservation": "120,150 EGP"
+      }
+    },
+    "steps": {
+      "title": "Hajj Steps",
+      "subtitle": "Hajj Rituals",
+      "description": "Learn about the essential steps of performing Hajj",
+      "ihram": {
+        "title": "Ihram",
+        "description": "Enter the state of Ihram at the Miqat"
+      },
+      "tawaf": {
+        "title": "Tawaf",
+        "description": "Circumambulate the Kaaba seven times"
+      },
+      "sai": {
+        "title": "Sa'i",
+        "description": "Walk between Safa and Marwa"
+      },
+      "arafat": {
+        "title": "Arafat",
+        "description": "Stand at Mount Arafat on the 9th of Dhul Hijjah"
+      },
+      "muzdalifah": {
+        "title": "Muzdalifah",
+        "description": "Spend the night at Muzdalifah"
+      },
+      "rami": {
+        "title": "Rami",
+        "description": "Stone the pillars at Mina"
+      }
+    },
+    "about": {
+      "sectionTitle": "The Fifth Pillar of Islam",
+      "title": "The Sacred Hajj Journey",
+      "paragraph1": "Hajj is the fifth pillar of Islam, obligatory once in a lifetime for every able Muslim. It is a profound spiritual journey that brings Muslims from around the world together in Makkah.",
+      "paragraph2": "We offer comprehensive Hajj packages that ensure a comfortable and spiritual journey, with a dedicated team to accompany you every step of the way.",
+      "imageAlt": "The Holy Kaaba"
+    }
   },
   "omra": {
     "pageTitle": "Omra",
