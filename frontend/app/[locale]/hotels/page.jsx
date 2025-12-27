@@ -6,6 +6,9 @@ import { getAllHotels } from "@/lib/api/services/hotel";
 import { generateLocalizedMetadata } from "@/utils/seo";
 import { siteInfo } from "@/data/seo";
 
+// Force dynamic rendering to avoid build-time API calls
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ params }) {
   const { locale } = await params;
   const metadata = generateLocalizedMetadata("hotelsList", locale);
@@ -31,13 +34,12 @@ export default async function HotelsPage({ params }) {
   // Server-side data fetching with locale from URL
   const hotels = await getAllHotels({ locale });
 
-  const pageTitle = locale === "ar" 
-    ? "الفنادق الفاخرة" 
-    : "Premium Hotels";
-  
-  const pageDescription = locale === "ar"
-    ? "استكشف مجموعتنا المنتقاة من الفنادق الفاخرة حول العالم"
-    : "Explore our curated collection of premium hotels worldwide";
+  const pageTitle = locale === "ar" ? "الفنادق الفاخرة" : "Premium Hotels";
+
+  const pageDescription =
+    locale === "ar"
+      ? "استكشف مجموعتنا المنتقاة من الفنادق الفاخرة حول العالم"
+      : "Explore our curated collection of premium hotels worldwide";
 
   return (
     <>

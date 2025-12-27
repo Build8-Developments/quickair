@@ -6,6 +6,9 @@ import { getAllOffers } from "@/lib/api/services/offer";
 import { generateLocalizedMetadata } from "@/utils/seo";
 import { siteInfo } from "@/data/seo";
 
+// Force dynamic rendering to avoid build-time API calls
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ params }) {
   const { locale } = await params;
   const metadata = generateLocalizedMetadata("offersList", locale);
@@ -35,13 +38,13 @@ export default async function OffersPage({ params }) {
     sort: "createdAt:desc",
   });
 
-  const pageTitle = locale === "ar" 
-    ? "عروض السفر الحصرية" 
-    : "Exclusive Travel Offers";
-  
-  const pageDescription = locale === "ar"
-    ? "اكتشف مجموعتنا المختارة من عروض السفر الحصرية وباقات العطلات"
-    : "Discover our handpicked selection of exclusive travel offers and vacation packages";
+  const pageTitle =
+    locale === "ar" ? "عروض السفر الحصرية" : "Exclusive Travel Offers";
+
+  const pageDescription =
+    locale === "ar"
+      ? "اكتشف مجموعتنا المختارة من عروض السفر الحصرية وباقات العطلات"
+      : "Discover our handpicked selection of exclusive travel offers and vacation packages";
 
   return (
     <>
