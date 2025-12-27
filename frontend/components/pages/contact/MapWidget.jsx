@@ -106,15 +106,25 @@ export default function MapWidget() {
   }, []);
 
   return (
-    <section className="layout-pt-md layout-pb-lg">
+    <section className="layout-pt-md layout-pb-lg" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <div className="container">
         {/* Title */}
         <div className="row justify-center mb-30">
           <div className="col-auto text-center">
-            <h2 style={{ fontSize: '32px', fontWeight: 700, color: '#1a1a1a', marginBottom: '10px' }}>
+            <h2 style={{ 
+              fontSize: '32px', 
+              fontWeight: 700, 
+              color: '#019fb1', 
+              marginBottom: '10px',
+              textAlign: 'center'
+            }}>
               {t("فروعنا", "Our Branches")}
             </h2>
-            <p style={{ fontSize: '16px', color: '#666' }}>
+            <p style={{ 
+              fontSize: '16px', 
+              color: '#019fb1',
+              textAlign: 'center'
+            }}>
               {t("اختر فرع لعرضه على الخريطة", "Select a branch to view on the map")}
             </p>
           </div>
@@ -130,30 +140,45 @@ export default function MapWidget() {
                 onClick={() => setSelectedBranch(branch)}
                 onKeyDown={(e) => e.key === "Enter" && setSelectedBranch(branch)}
                 style={{
-                  background: selectedBranch.id === branch.id ? '#019fb1' : '#fff',
-                  color: selectedBranch.id === branch.id ? '#fff' : '#1a1a1a',
+                  background: selectedBranch.id === branch.id ? '#019fb1' : '#019fb1',
+                  color: '#fff',
                   borderRadius: '12px',
                   padding: '15px 18px',
-                  border: selectedBranch.id === branch.id ? '2px solid #019fb1' : '2px solid #e8e8e8',
+                  border: selectedBranch.id === branch.id ? '2px solid #017a8a' : '2px solid #019fb1',
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
-                  minHeight: '90px'
+                  minHeight: '120px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  textAlign: language === 'ar' ? 'right' : 'left',
+                  direction: language === 'ar' ? 'rtl' : 'ltr'
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                <div style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '8px', 
+                  marginBottom: '8px',
+                  flexWrap: 'wrap'
+                }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
                     <circle cx="12" cy="10" r="3"/>
                   </svg>
-                  <span style={{ fontWeight: 600, fontSize: '15px' }}>
+                  <span style={{ fontWeight: 600, fontSize: '16px' }}>
                     {language === "ar" ? branch.name.ar : branch.name.en}
                   </span>
                 </div>
                 <p style={{ 
-                  fontSize: '13px', 
+                  fontSize: '14px', 
                   margin: 0, 
-                  opacity: selectedBranch.id === branch.id ? 0.9 : 0.7,
-                  lineHeight: 1.4
+                  opacity: selectedBranch.id === branch.id ? 0.9 : 0.9,
+                  lineHeight: 1.5,
+                  textAlign: language === 'ar' ? 'right' : 'left',
+                  wordWrap: 'break-word',
+                  overflow: 'hidden',
+                  color: '#fff'
                 }}>
                   {language === "ar" ? branch.address.ar : branch.address.en}
                 </p>
@@ -165,7 +190,7 @@ export default function MapWidget() {
         {/* Map and Details */}
         <div className="row y-gap-30">
           {/* Map - Left side for Arabic, Right side for English */}
-          <div className={`col-lg-8 ${language === 'ar' ? 'order-lg-1' : 'order-lg-2'}`}>
+          <div className={`col-lg-8 ${language === 'ar' ? 'order-lg-2' : 'order-lg-1'}`}>
             <div style={{ 
               borderRadius: '16px', 
               overflow: 'hidden', 
@@ -190,7 +215,7 @@ export default function MapWidget() {
           </div>
 
           {/* Branch Details Panel - Right side for Arabic, Left side for English */}
-          <div className={`col-lg-4 ${language === 'ar' ? 'order-lg-2' : 'order-lg-1'}`}>
+          <div className={`col-lg-4 ${language === 'ar' ? 'order-lg-1' : 'order-lg-2'}`}>
             <div style={{
               background: '#019fb1',
               borderRadius: '16px',
@@ -198,9 +223,16 @@ export default function MapWidget() {
               color: '#fff',
               height: '450px',
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
+              textAlign: language === 'ar' ? 'right' : 'left',
+              direction: language === 'ar' ? 'rtl' : 'ltr'
             }}>
-              <h3 style={{ fontSize: '24px', fontWeight: 700, marginBottom: '25px' }}>
+              <h3 style={{ 
+                fontSize: '24px', 
+                fontWeight: 700, 
+                marginBottom: '25px',
+                textAlign: language === 'ar' ? 'right' : 'left'
+              }}>
                 {language === "ar" ? selectedBranch.name.ar : selectedBranch.name.en}
               </h3>
 
@@ -214,7 +246,13 @@ export default function MapWidget() {
                     </svg>
                     <span style={{ fontSize: '14px', opacity: 0.9 }}>{t("العنوان", "Address")}</span>
                   </div>
-                  <p style={{ fontSize: '15px', margin: 0, paddingRight: language === "ar" ? '28px' : 0, paddingLeft: language === "en" ? '28px' : 0 }}>
+                  <p style={{ 
+                    fontSize: '15px', 
+                    margin: 0, 
+                    paddingRight: language === "ar" ? '28px' : 0, 
+                    paddingLeft: language === "en" ? '28px' : 0,
+                    textAlign: language === 'ar' ? 'right' : 'left'
+                  }}>
                     {language === "ar" ? selectedBranch.address.ar : selectedBranch.address.en}
                   </p>
                 </div>
@@ -227,24 +265,31 @@ export default function MapWidget() {
                     </svg>
                     <span style={{ fontSize: '16px', opacity: 0.9, fontWeight: 600 }}>{t("التليفون", "Phone")}</span>
                   </div>
-                  <div style={{ paddingRight: language === "ar" ? '28px' : 0, paddingLeft: language === "en" ? '28px' : 0 }}>
+                  <div style={{ 
+                    paddingRight: language === "ar" ? '28px' : 0, 
+                    paddingLeft: language === "en" ? '28px' : 0,
+                    textAlign: language === 'ar' ? 'right' : 'left'
+                  }}>
                     {selectedBranch.phones.map((phone, i) => (
                       <a 
                         key={i} 
                         href={`tel:${phone}`} 
                         style={{ 
-                          display: 'block', 
+                          display: 'inline-block', 
                           color: '#fff', 
                           fontSize: '16px', 
                           textDecoration: 'none',
                           marginBottom: '6px',
-                          padding: '4px 0',
+                          padding: '4px 8px',
                           borderRadius: '4px',
-                          transition: 'all 0.2s ease'
+                          transition: 'all 0.2s ease',
+                          backgroundColor: 'rgba(255,255,255,0.1)',
+                          marginRight: language === 'ar' ? '0' : '8px',
+                          marginLeft: language === 'ar' ? '8px' : '0',
+                          width: 'fit-content'
                         }} 
-                        dir="ltr"
-                        onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.1)'}
-                        onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                        onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.2)'}
+                        onMouseLeave={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.1)'}
                       >
                         {phone}
                       </a>
@@ -261,24 +306,31 @@ export default function MapWidget() {
                     </svg>
                     <span style={{ fontSize: '16px', opacity: 0.9, fontWeight: 600 }}>{t("الموبايل", "Mobile")}</span>
                   </div>
-                  <div style={{ paddingRight: language === "ar" ? '28px' : 0, paddingLeft: language === "en" ? '28px' : 0 }}>
+                  <div style={{ 
+                    paddingRight: language === "ar" ? '28px' : 0, 
+                    paddingLeft: language === "en" ? '28px' : 0,
+                    textAlign: language === 'ar' ? 'right' : 'left'
+                  }}>
                     {selectedBranch.mobiles.map((mobile, i) => (
                       <a 
                         key={i} 
                         href={`tel:${mobile}`} 
                         style={{ 
-                          display: 'block', 
+                          display: 'inline-block', 
                           color: '#fff', 
                           fontSize: '16px', 
                           textDecoration: 'none',
                           marginBottom: '6px',
-                          padding: '4px 0',
+                          padding: '4px 8px',
                           borderRadius: '4px',
-                          transition: 'all 0.2s ease'
+                          transition: 'all 0.2s ease',
+                          backgroundColor: 'rgba(255,255,255,0.1)',
+                          marginRight: language === 'ar' ? '0' : '8px',
+                          marginLeft: language === 'ar' ? '8px' : '0',
+                          width: 'fit-content'
                         }} 
-                        dir="ltr"
-                        onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.1)'}
-                        onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                        onMouseEnter={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.2)'}
+                        onMouseLeave={(e) => e.target.style.backgroundColor = 'rgba(255,255,255,0.1)'}
                       >
                         {mobile}
                       </a>
