@@ -39,6 +39,8 @@ class SessionManager {
         lastPriceMentioned: null,
         displayedHotels: [],
         comparedHotels: [],
+        bookingMode: false, // ✅ New: Track if user is in booking flow
+        widgetsShown: false, // ✅ New: Track if widgets were shown initially
       },
       currentStep: "chat", // welcome, userInfo, language, chat, summary
       metadata: {
@@ -129,6 +131,38 @@ class SessionManager {
       return true;
     }
     return false;
+  }
+
+  /**
+   * تفعيل وضع الحجز - Enable booking mode
+   */
+  enableBookingMode(sessionId) {
+    const session = this.getSession(sessionId);
+    if (session) {
+      session.contextMemory.bookingMode = true;
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * إلغاء وضع الحجز - Disable booking mode
+   */
+  disableBookingMode(sessionId) {
+    const session = this.getSession(sessionId);
+    if (session) {
+      session.contextMemory.bookingMode = false;
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * التحقق من وضع الحجز - Check if in booking mode
+   */
+  isInBookingMode(sessionId) {
+    const session = this.getSession(sessionId);
+    return session?.contextMemory?.bookingMode === true;
   }
 
   /**

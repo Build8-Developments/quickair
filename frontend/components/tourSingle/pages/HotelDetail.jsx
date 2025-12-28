@@ -58,8 +58,8 @@ export default function HotelDetail({ hotel, offer, hotelOption }) {
             className="row y-gap-30 justify-between"
             style={{ direction: isRTL ? "rtl" : "ltr" }}
           >
-            {/* Sidebar - shows on LEFT in EN, RIGHT in AR */}
-            <div className="col-xl-4">
+            {/* Sidebar - shows on LEFT in EN, RIGHT in AR - Order 2 on mobile */}
+            <div className="col-xl-4 order-xl-1 order-2">
               <div className="d-block d-xl-flex js-pin-content">
                 <HotelSidebar
                   hotel={hotel}
@@ -69,9 +69,9 @@ export default function HotelDetail({ hotel, offer, hotelOption }) {
               </div>
             </div>
 
-            {/* Main Content - shows on RIGHT in EN, LEFT in AR */}
+            {/* Main Content - shows on RIGHT in EN, LEFT in AR - Order 1 on mobile */}
             <div
-              className="col-xl-8"
+              className="col-xl-8 order-xl-2 order-1"
               dir={isRTL ? "rtl" : "ltr"}
               style={{ textAlign: isRTL ? "right" : "left" }}
             >

@@ -368,7 +368,7 @@ export const blogsAPI = {
 
     const query = `
       query GetBlogs($locale: I18NLocaleCode!, $limit: Int, $start: Int) {
-        blogs(locale: $locale, pagination: { limit: $limit, start: $start }, sort: "createdAt:desc") {
+        blogs(locale: $locale, pagination: { limit: $limit, start: $start }, sort: "publishedAt:desc") {
           data {
             id
             attributes {
@@ -376,18 +376,15 @@ export const blogsAPI = {
               slug
               excerpt
               content
+              category
+              author
+              readTime
+              featured
               coverImage {
                 data {
                   attributes {
                     url
                     alternativeText
-                  }
-                }
-              }
-              author {
-                data {
-                  attributes {
-                    name
                   }
                 }
               }
@@ -425,31 +422,16 @@ export const blogsAPI = {
               slug
               excerpt
               content
+              category
+              author
+              readTime
+              featured
+              tags
               coverImage {
                 data {
                   attributes {
                     url
                     alternativeText
-                  }
-                }
-              }
-              author {
-                data {
-                  attributes {
-                    name
-                  }
-                }
-              }
-              seo {
-                metaTitle
-                metaDescription
-                keywords
-                ogImage {
-                  data {
-                    attributes {
-                      url
-                      alternativeText
-                    }
                   }
                 }
               }
@@ -472,6 +454,49 @@ export const blogsAPI = {
 
     const blogs = extractStrapiData(data, "blogs");
     return blogs?.[0] || null;
+  },
+
+  /**
+   * Get featured blog posts
+   */
+  async getFeatured(options = {}) {
+    const { locale = "en", limit = 3 } = options;
+
+    const query = `
+      query GetFeaturedBlogs($locale: I18NLocaleCode!, $limit: Int) {
+        blogs(locale: $locale, pagination: { limit: $limit }, filters: { featured: { eq: true } }, sort: "publishedAt:desc") {
+          data {
+            id
+            attributes {
+              title
+              slug
+              excerpt
+              category
+              coverImage {
+                data {
+                  attributes {
+                    url
+                    alternativeText
+                  }
+                }
+              }
+              publishedAt
+            }
+          }
+        }
+      }
+    `;
+
+    const data = await graphqlRequest(
+      query,
+      { locale, limit },
+      {
+        revalidate: CACHE_CONFIG.revalidate.dynamic,
+        tags: [CACHE_CONFIG.tags.blogs],
+      }
+    );
+
+    return extractStrapiData(data, "blogs");
   },
 };
 

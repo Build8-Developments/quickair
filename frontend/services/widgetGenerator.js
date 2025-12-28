@@ -2,37 +2,104 @@
  * Widget Generator Service
  * يولد الـ widgets المناسبة بناءً على السياق والخطوة الحالية
  * Generates appropriate widgets based on context and current step
+ * 
+ * ✅ Updated: Widgets only show when user explicitly wants to book/plan a trip
  */
 
 import { searchHotels } from "./ragService";
 
 /**
- * تحديد الـ widget التالي المناسب
- * Determine next appropriate widget
+ * التحقق إذا كان اليوزر يريد حجز أو تخطيط رحلة
+ * Check if user wants to book or plan a trip
  */
-export function determineNextWidget(sessionData, userAnalysis) {
-  if (!sessionData || !sessionData.tripData) {
-    return { type: "destinations", reason: "initial_state" };
+function isBookingIntent(intent, message = "") {
+  const bookingIntents = [
+    "book_hotel",
+    "book_trip",
+    "search_hotels",
+    "recommendation_request",
+    "budget_query",
+    "general_inquiry"
+  ];
+  
+  const bookingKeywords = [
+    // Arabic - booking
+    "حجز", "احجز", "عايز أحجز", "أريد حجز", "أبغى حجز",
+    "رحلة", "عايز رحلة", "أريد رحلة", "خطط رحلة",
+    "سافر", "عايز أسافر", "أريد السفر",
+    "فندق", "عايز فندق", "أريد فندق",
+    "باكج", "باقة", "عرض",
+    // Arabic - positive responses (to continue booking flow)
+    "اه", "أه", "آه", "ايوه", "أيوه", "نعم", "اوك", "أوك", "تمام", "ماشي", "يلا", "طيب", "حاضر",
+    "موافق", "اكيد", "أكيد", "بالتأكيد", "يب", "يس",
+    // English
+    "book", "booking", "reserve", "reservation",
+    "trip", "plan trip", "plan a trip",
+    "travel", "want to travel",
+    "hotel", "find hotel",
+    "package", "deal",
+    // English - positive responses
+    "yes", "yeah", "yep", "ok", "okay", "sure", "alright", "let's go", "go ahead"
+  ];
+  
+  // Check intent
+  if (bookingIntents.includes(intent)) {
+    return true;
   }
   
-  const { tripData, currentStep } = sessionData;
-  const { intent, destination, travelers, budget, hotelNames } = userAnalysis || {};
+  // Check message keywords
+  const msgLower = message.toLowerCase().trim();
+  return bookingKeywords.some(keyword => msgLower.includes(keyword) || msgLower === keyword);
+}
 
-  // 1. إذا لم تُحدد الوجهة بعد
-  if (!tripData.destination && (
-    intent === "general_inquiry" ||
-    intent === "greeting" ||
-    !destination
-  )) {
+/**
+ * تحديد الـ widget التالي المناسب
+ * Determine next appropriate widget
+ * 
+ * ✅ Now only shows widgets when:
+ * 1. User explicitly wants to book/plan a trip
+ * 2. User is already in booking flow (has tripData)
+ * 3. User responds positively to booking questions
+ */
+export function determineNextWidget(sessionData, userAnalysis) {
+  if (!sessionData) {
+    return null; // No widget for new sessions - let them chat first
+  }
+  
+  const { tripData, contextMemory } = sessionData;
+  const { intent, destination, travelers, budget, hotelNames, originalMessage } = userAnalysis || {};
+  
+  // Check if user is in booking mode
+  const isInBookingFlow = contextMemory?.bookingMode === true;
+  const wantsToBook = isBookingIntent(intent, originalMessage);
+  const hasStartedBooking = tripData?.destination || tripData?.selectedHotel;
+  
+  // ✅ If user is already in booking flow, continue showing widgets
+  if (isInBookingFlow || hasStartedBooking) {
+    // Continue with booking flow
+  }
+  // ✅ If user wants to book, start the flow
+  else if (wantsToBook) {
+    // Start booking flow
+  }
+  // ❌ Otherwise, don't show widgets - let them chat
+  else {
+    return null;
+  }
+  
+  // ✅ User wants to book or is in booking flow - show appropriate widget
+  
+  // 1. إذا لم تُحدد الوجهة بعد - Show destinations
+  if (!tripData?.destination && !destination) {
     return {
       type: "destinations",
-      reason: "destination_selection"
+      reason: "destination_selection",
+      startBookingFlow: true
     };
   }
 
   // 2. إذا حُددت الوجهة لكن لا توجد تواريخ
-  if (tripData.destination && !tripData.startDate && 
-      !intent.includes("price") && !intent.includes("hotel")) {
+  if ((tripData?.destination || destination) && !tripData?.dates) {
     return {
       type: "dateRange",
       reason: "date_selection"
@@ -40,7 +107,7 @@ export function determineNextWidget(sessionData, userAnalysis) {
   }
 
   // 3. إذا حُددت التواريخ لكن لا يوجد عدد مسافرين
-  if (tripData.startDate && !tripData.travelers) {
+  if (tripData?.dates && !tripData?.travelers) {
     return {
       type: "travelers",
       reason: "travelers_count"
@@ -48,25 +115,24 @@ export function determineNextWidget(sessionData, userAnalysis) {
   }
 
   // 4. إذا حُدد عدد المسافرين لكن لا توجد ميزانية
-  if (tripData.travelers && !tripData.budget && 
-      intent !== "search_hotels") {
+  if (tripData?.travelers && !tripData?.budget) {
     return {
       type: "budget",
       reason: "budget_selection"
     };
   }
 
-  // 5. إذا حُددت الميزانية أو طُلب البحث عن فنادق
-  if ((tripData.budget || intent === "search_hotels") && !tripData.selectedHotel) {
+  // 5. إذا حُددت الميزانية - Show hotels
+  if (tripData?.budget && !tripData?.selectedHotel) {
     return {
       type: "hotelCards",
       reason: "hotel_selection",
-      data: { destination: tripData.destination || destination }
+      data: { destination: tripData.destination?.id || tripData.destination || destination }
     };
   }
 
   // 6. إذا حُدد الفندق لكن لا يوجد نظام وجبات
-  if (tripData.selectedHotel && !tripData.mealPlan) {
+  if (tripData?.selectedHotel && !tripData?.mealPlan) {
     return {
       type: "mealPlan",
       reason: "meal_plan_selection"
@@ -74,22 +140,22 @@ export function determineNextWidget(sessionData, userAnalysis) {
   }
 
   // 7. إذا حُدد نظام الوجبات لكن لا يوجد نوع غرفة
-  if (tripData.mealPlan && !tripData.roomType) {
+  if (tripData?.mealPlan && !tripData?.roomType) {
     return {
       type: "roomType",
       reason: "room_type_selection"
     };
   }
 
-  // 8. إذا اكتملت كل البيانات
-  if (tripData.roomType) {
+  // 8. إذا اكتملت كل البيانات - Show summary
+  if (tripData?.roomType) {
     return {
       type: "bookingSummary",
       reason: "booking_complete"
     };
   }
 
-  // افتراضي: لا حاجة لـ widget
+  // افتراضي: لا حاجة لـ widget - continue chatting
   return null;
 }
 
@@ -98,7 +164,9 @@ export function determineNextWidget(sessionData, userAnalysis) {
  * Generate widget data
  */
 export function generateWidgetData(widgetType, sessionData, language = "ar") {
-  const { tripData } = sessionData;
+  if (!widgetType) return null;
+  
+  const tripData = sessionData?.tripData || {};
 
   switch (widgetType) {
     case "destinations":
@@ -130,8 +198,9 @@ export function generateWidgetData(widgetType, sessionData, language = "ar") {
       };
 
     case "hotelCards":
+      const destId = tripData.destination?.id || tripData.destination;
       const hotels = searchHotels({
-        destination: tripData.destination,
+        destination: destId,
         budget: tripData.budget?.maxEGP,
         language,
         maxResults: 5
@@ -165,7 +234,7 @@ export function generateWidgetData(widgetType, sessionData, language = "ar") {
         component: "BookingSummaryWidget",
         props: {
           bookingData: tripData,
-          userInfo: sessionData.userInfo,
+          userInfo: sessionData?.userInfo,
           language
         }
       };
@@ -180,6 +249,8 @@ export function generateWidgetData(widgetType, sessionData, language = "ar") {
  * Generate appropriate text response with widget
  */
 export function generateWidgetResponse(widgetInfo, language = "ar") {
+  if (!widgetInfo) return "";
+  
   const isArabic = language === "ar";
   const { type, reason } = widgetInfo;
 
@@ -219,4 +290,12 @@ export function generateWidgetResponse(widgetInfo, language = "ar") {
   };
 
   return responses[type]?.[isArabic ? "ar" : "en"] || "";
+}
+
+/**
+ * Check if we should show widget based on conversation context
+ */
+export function shouldShowWidget(sessionData, userAnalysis) {
+  const widget = determineNextWidget(sessionData, userAnalysis);
+  return widget !== null;
 }

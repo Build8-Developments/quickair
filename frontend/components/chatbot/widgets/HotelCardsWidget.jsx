@@ -10,16 +10,24 @@ export default function HotelCardsWidget({ hotels = [], language = "ar", onSelec
 
   const handleSelect = (hotel) => {
     setSelectedHotel(hotel);
-    // Send only essential data as strings
+    // Send complete hotel data for booking summary
     onSelect({
-      selectedHotel: isArabic ? hotel.hotel_name_ar : hotel.hotel_name_en,
-      hotelPrice: hotel.price_egp,
-      hotelPriceUSD: hotel.price_usd_reference,
-      hotelStars: hotel.stars,
-      hotelArea: hotel.area,
+      selectedHotel: hotel, // Send full hotel object
+      hotelName: isArabic ? hotel.hotel_name_ar : hotel.hotel_name_en,
       message: isArabic ? hotel.hotel_name_ar : hotel.hotel_name_en,
     });
   };
+
+  // Show message if no hotels found
+  if (!hotels || hotels.length === 0) {
+    return (
+      <div className={styles.widget} dir={isArabic ? "rtl" : "ltr"}>
+        <div className={styles.noHotels}>
+          {t("لا توجد فنادق متاحة لهذه الوجهة حالياً", "No hotels available for this destination")}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.widget} dir={isArabic ? "rtl" : "ltr"}>

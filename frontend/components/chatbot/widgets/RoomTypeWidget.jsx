@@ -37,9 +37,13 @@ export default function RoomTypeWidget({ language = "ar", onSelect }) {
 
   const handleSelect = (roomType) => {
     onSelect({
-      roomType: roomType.id,
+      roomType: {
+        id: roomType.id,
+        label: isArabic ? roomType.labelAr : roomType.labelEn,
+        desc: isArabic ? roomType.descAr : roomType.descEn,
+        capacity: roomType.capacity,
+      },
       message: isArabic ? roomType.labelAr : roomType.labelEn,
-      capacity: roomType.capacity,
     });
   };
 

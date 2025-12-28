@@ -25,6 +25,179 @@ import arVisasFAQ from "@/data/faq_output/ar_قسم_التأشيرات.json";
 import enVisasFAQ from "@/data/faq_output/en_Visas.json";
 
 /**
+ * ===================================
+ * معلومات الشركة الكاملة - Company Information
+ * ===================================
+ */
+const COMPANY_INFO = {
+  name: {
+    ar: "كويك إير للسياحة",
+    en: "Quick Air Travel"
+  },
+  established: 1986,
+  description: {
+    ar: "وكالة سفر مصرية رائدة تأسست عام 1986، متخصصة في تنظيم الرحلات السياحية وحجوزات الطيران والفنادق والتأشيرات",
+    en: "A leading Egyptian travel agency established in 1986, specializing in organizing tours, flight bookings, hotels, and visas"
+  },
+  contact: {
+    phone: ["+20 123 456 7890", "+20 111 222 3333"],
+    email: "info@quickair.com",
+    whatsapp: "+20 123 456 7890",
+    address: {
+      ar: "القاهرة، مصر",
+      en: "Cairo, Egypt"
+    }
+  },
+  workingHours: {
+    ar: "السبت - الخميس: 9 صباحاً - 9 مساءً | الجمعة: 2 مساءً - 9 مساءً",
+    en: "Saturday - Thursday: 9 AM - 9 PM | Friday: 2 PM - 9 PM"
+  },
+  socialMedia: {
+    facebook: "https://facebook.com/quickair",
+    instagram: "https://instagram.com/quickair",
+    twitter: "https://twitter.com/quickair"
+  }
+};
+
+/**
+ * ===================================
+ * الخدمات المتاحة - Available Services
+ * ===================================
+ */
+const SERVICES = {
+  flights: {
+    name: { ar: "حجز الطيران", en: "Flight Booking" },
+    description: {
+      ar: "حجز تذاكر طيران داخلية ودولية على جميع شركات الطيران",
+      en: "Domestic and international flight bookings on all airlines"
+    },
+    features: {
+      ar: ["أسعار تنافسية", "حجز فوري", "جميع شركات الطيران", "رحلات ذهاب وعودة أو اتجاه واحد"],
+      en: ["Competitive prices", "Instant booking", "All airlines", "Round-trip or one-way flights"]
+    }
+  },
+  hotels: {
+    name: { ar: "حجز الفنادق", en: "Hotel Booking" },
+    description: {
+      ar: "حجز فنادق في جميع أنحاء العالم من 3 إلى 5 نجوم",
+      en: "Hotel bookings worldwide from 3 to 5 stars"
+    },
+    features: {
+      ar: ["فنادق معتمدة", "أفضل الأسعار", "إلغاء مجاني (حسب السياسة)", "خيارات متنوعة"],
+      en: ["Verified hotels", "Best prices", "Free cancellation (policy dependent)", "Various options"]
+    }
+  },
+  tours: {
+    name: { ar: "الرحلات السياحية", en: "Tours" },
+    description: {
+      ar: "رحلات سياحية منظمة داخل مصر وخارجها",
+      en: "Organized tours inside and outside Egypt"
+    },
+    destinations: {
+      domestic: {
+        ar: ["شرم الشيخ", "الغردقة", "دهب", "العين السخنة", "الأقصر وأسوان", "الساحل الشمالي"],
+        en: ["Sharm El Sheikh", "Hurghada", "Dahab", "Ain Sokhna", "Luxor & Aswan", "North Coast"]
+      },
+      international: {
+        ar: ["تركيا (إسطنبول)", "بالي - إندونيسيا", "دبي", "لبنان (بيروت)", "اليونان", "المالديف"],
+        en: ["Turkey (Istanbul)", "Bali - Indonesia", "Dubai", "Lebanon (Beirut)", "Greece", "Maldives"]
+      }
+    }
+  },
+  hajjUmrah: {
+    name: { ar: "الحج والعمرة", en: "Hajj & Umrah" },
+    description: {
+      ar: "برامج حج وعمرة متكاملة مع إقامة قريبة من الحرم",
+      en: "Complete Hajj and Umrah programs with accommodation near the Haram"
+    },
+    features: {
+      ar: ["إقامة قريبة من الحرم", "مرشدين دينيين", "وجبات يومية", "نقل مريح"],
+      en: ["Accommodation near Haram", "Religious guides", "Daily meals", "Comfortable transportation"]
+    }
+  },
+  visas: {
+    name: { ar: "التأشيرات", en: "Visas" },
+    description: {
+      ar: "استخراج تأشيرات سياحية لجميع الدول",
+      en: "Tourist visa processing for all countries"
+    },
+    countries: {
+      ar: ["تركيا", "دول شنغن", "أمريكا", "بريطانيا", "الإمارات", "السعودية"],
+      en: ["Turkey", "Schengen countries", "USA", "UK", "UAE", "Saudi Arabia"]
+    }
+  },
+  transportation: {
+    name: { ar: "النقل والتوصيل", en: "Transportation" },
+    description: {
+      ar: "خدمات نقل من وإلى المطار وتأجير سيارات",
+      en: "Airport transfers and car rental services"
+    },
+    types: {
+      ar: ["نقل من/إلى المطار", "تأجير سيارات مع سائق", "حافلات سياحية", "ليموزين VIP"],
+      en: ["Airport transfers", "Car rental with driver", "Tourist buses", "VIP limousine"]
+    }
+  }
+};
+
+/**
+ * ===================================
+ * سياسات الحجز والإلغاء - Booking Policies
+ * ===================================
+ */
+const POLICIES = {
+  booking: {
+    ar: [
+      "يتم تأكيد الحجز بعد دفع 50% من إجمالي المبلغ",
+      "يجب دفع المبلغ المتبقي قبل 7 أيام من موعد السفر",
+      "الأسعار قابلة للتغيير حسب سعر الصرف وتوفر الغرف"
+    ],
+    en: [
+      "Booking is confirmed after paying 50% of the total amount",
+      "Remaining amount must be paid 7 days before travel date",
+      "Prices are subject to change based on exchange rate and room availability"
+    ]
+  },
+  cancellation: {
+    ar: [
+      "إلغاء قبل 30 يوم: استرداد 90% من المبلغ",
+      "إلغاء قبل 15 يوم: استرداد 50% من المبلغ",
+      "إلغاء قبل 7 أيام: لا يوجد استرداد",
+      "حالات القوة القاهرة: يتم التعامل معها بشكل فردي"
+    ],
+    en: [
+      "Cancellation 30+ days before: 90% refund",
+      "Cancellation 15+ days before: 50% refund",
+      "Cancellation within 7 days: No refund",
+      "Force majeure cases: Handled individually"
+    ]
+  },
+  payment: {
+    methods: {
+      ar: ["بطاقات الائتمان (Visa, MasterCard)", "التحويل البنكي", "فودافون كاش", "الدفع النقدي في المكتب"],
+      en: ["Credit cards (Visa, MasterCard)", "Bank transfer", "Vodafone Cash", "Cash payment at office"]
+    }
+  }
+};
+
+/**
+ * ===================================
+ * العروض الحالية - Current Offers
+ * ===================================
+ */
+const CURRENT_OFFERS = {
+  ar: [
+    { title: "عرض شهر العسل في بالي", discount: "15%", validUntil: "نهاية ديسمبر 2024" },
+    { title: "رحلات شرم الشيخ", discount: "خصم 500 جنيه للحجز المبكر", validUntil: "متاح الآن" },
+    { title: "عمرة رمضان", discount: "أسعار خاصة", validUntil: "احجز الآن" }
+  ],
+  en: [
+    { title: "Bali Honeymoon Offer", discount: "15%", validUntil: "End of December 2024" },
+    { title: "Sharm El Sheikh Trips", discount: "500 EGP off for early booking", validUntil: "Available now" },
+    { title: "Ramadan Umrah", discount: "Special prices", validUntil: "Book now" }
+  ]
+};
+
+/**
  * خريطة صفحات الموقع الكاملة مع الوصف
  * Complete Site Pages Map with Descriptions
  */
@@ -110,6 +283,24 @@ const SITE_PAGES = {
     keywords_ar: ["شروط", "أحكام", "سياسة", "terms"],
     keywords_en: ["terms", "conditions", "policy", "privacy"]
   },
+  hajj: {
+    url: "/haj",
+    name_ar: "الحج",
+    name_en: "Hajj",
+    desc_ar: "برامج الحج المتكاملة",
+    desc_en: "Complete Hajj programs",
+    keywords_ar: ["حج", "مكة", "الحرم", "hajj"],
+    keywords_en: ["hajj", "mecca", "pilgrimage"]
+  },
+  umrah: {
+    url: "/omra",
+    name_ar: "العمرة",
+    name_en: "Umrah",
+    desc_ar: "برامج العمرة على مدار العام",
+    desc_en: "Year-round Umrah programs",
+    keywords_ar: ["عمرة", "umrah", "مكة", "المدينة"],
+    keywords_en: ["umrah", "mecca", "medina"]
+  },
   
   // صفحات الوجهات
   destinations: {
@@ -119,6 +310,8 @@ const SITE_PAGES = {
     hurghada: "/tours/4",
     dahab: "/tours/5",
     beirut: "/tours/6",
+    ainsokhna: "/tours/7",
+    sahlhashish: "/tours/8",
   }
 };
 
@@ -277,6 +470,86 @@ export function analyzeUserMessage(message, language = "ar") {
     intent = "visa_inquiry";
     confidence = 0.9;
   }
+  // 13. السؤال عن الشركة - Company Info
+  else if (
+    msg.includes("من أنتم") || msg.includes("who are you") ||
+    msg.includes("عن الشركة") || msg.includes("about company") ||
+    msg.includes("من نحن") || msg.includes("about us") ||
+    msg.includes("تأسست") || msg.includes("established") ||
+    msg.includes("كويك إير") || msg.includes("quick air")
+  ) {
+    intent = "company_info";
+    confidence = 0.9;
+  }
+  // 14. السؤال عن الخدمات - Services Inquiry
+  else if (
+    msg.includes("خدمات") || msg.includes("services") ||
+    msg.includes("بتقدموا") || msg.includes("you offer") ||
+    msg.includes("ماذا تقدمون") || msg.includes("what do you") ||
+    msg.includes("إيه اللي") || msg.includes("what can")
+  ) {
+    intent = "services_inquiry";
+    confidence = 0.9;
+  }
+  // 15. السؤال عن التواصل - Contact Info
+  else if (
+    msg.includes("رقم") || msg.includes("number") ||
+    msg.includes("تليفون") || msg.includes("phone") ||
+    msg.includes("واتساب") || msg.includes("whatsapp") ||
+    msg.includes("إيميل") || msg.includes("email") ||
+    msg.includes("عنوان") || msg.includes("address") ||
+    msg.includes("أتواصل") || msg.includes("contact")
+  ) {
+    intent = "contact_info";
+    confidence = 0.9;
+  }
+  // 16. السؤال عن سياسة الإلغاء - Cancellation Policy
+  else if (
+    msg.includes("إلغاء") || msg.includes("cancel") ||
+    msg.includes("استرداد") || msg.includes("refund") ||
+    msg.includes("سياسة") || msg.includes("policy")
+  ) {
+    intent = "cancellation_policy";
+    confidence = 0.9;
+  }
+  // 17. السؤال عن طرق الدفع - Payment Methods
+  else if (
+    msg.includes("دفع") || msg.includes("pay") ||
+    msg.includes("فيزا كارد") || msg.includes("credit card") ||
+    msg.includes("تحويل") || msg.includes("transfer") ||
+    msg.includes("كاش") || msg.includes("cash")
+  ) {
+    intent = "payment_methods";
+    confidence = 0.85;
+  }
+  // 18. السؤال عن العروض - Offers Inquiry
+  else if (
+    msg.includes("عرض") || msg.includes("offer") ||
+    msg.includes("خصم") || msg.includes("discount") ||
+    msg.includes("تخفيض") || msg.includes("promotion")
+  ) {
+    intent = "offers_inquiry";
+    confidence = 0.9;
+  }
+  // 19. الحج والعمرة - Hajj & Umrah
+  else if (
+    msg.includes("حج") || msg.includes("hajj") ||
+    msg.includes("عمرة") || msg.includes("umrah") ||
+    msg.includes("مكة") || msg.includes("mecca") ||
+    msg.includes("المدينة") || msg.includes("medina")
+  ) {
+    intent = "hajj_umrah";
+    confidence = 0.95;
+  }
+  // 20. ساعات العمل - Working Hours
+  else if (
+    msg.includes("مواعيد") || msg.includes("hours") ||
+    msg.includes("فتح") || msg.includes("open") ||
+    msg.includes("شغالين") || msg.includes("working")
+  ) {
+    intent = "working_hours";
+    confidence = 0.85;
+  }
   // Generic booking/travel
   else if (
     msg.includes("أريد") || msg.includes("want") ||
@@ -291,24 +564,46 @@ export function analyzeUserMessage(message, language = "ar") {
   // استخراج الوجهة
   let destination = null;
   const destinationMap = {
+    // بالي
     "بالي": "bali",
     "bali": "bali",
+    "إندونيسيا": "bali",
+    "indonesia": "bali",
+    // إسطنبول
     "إسطنبول": "istanbul",
+    "اسطنبول": "istanbul",
     "istanbul": "istanbul",
     "تركيا": "istanbul",
     "turkey": "istanbul",
+    // شرم الشيخ
     "شرم": "sharm",
     "sharm": "sharm",
     "الشيخ": "sharm",
     "sheikh": "sharm",
+    "شرم الشيخ": "sharm",
+    // الغردقة
     "الغردقة": "hurghada",
+    "غردقة": "hurghada",
     "hurghada": "hurghada",
+    // دهب
     "دهب": "dahab",
     "dahab": "dahab",
+    // بيروت
     "بيروت": "beirut",
     "beirut": "beirut",
     "لبنان": "beirut",
-    "lebanon": "beirut"
+    "lebanon": "beirut",
+    // العين السخنة
+    "السخنة": "ainsokhna",
+    "العين السخنة": "ainsokhna",
+    "عين السخنة": "ainsokhna",
+    "ain sokhna": "ainsokhna",
+    "sokhna": "ainsokhna",
+    // سهل حشيش
+    "سهل حشيش": "sahlhashish",
+    "حشيش": "sahlhashish",
+    "sahl hasheesh": "sahlhashish",
+    "hasheesh": "sahlhashish"
   };
 
   for (const [key, value] of Object.entries(destinationMap)) {
@@ -385,10 +680,10 @@ export function analyzeUserMessage(message, language = "ar") {
 export function searchHotels(filters = {}) {
   const {
     destination,
-    budget,
+    budget, // This is maxEGP from BudgetWidget
     stars,
     language = "ar",
-    maxResults = 3 // Changed from 5 to 3 for shorter responses
+    maxResults = 5
   } = filters;
 
   let results = [];
@@ -400,15 +695,15 @@ export function searchHotels(filters = {}) {
     if (!dest || !dest.hotels) return;
 
     dest.hotels.forEach(hotel => {
-      // تطبيق الفلاتر
-      if (budget && hotel.price_usd_reference > budget) return;
+      // تطبيق الفلاتر - budget is in EGP
+      if (budget && hotel.price_egp > budget) return;
       if (stars && hotel.stars !== stars) return;
 
       results.push({
         ...hotel,
         destination: dest.location,
-        includes: dest.includes[language],
-        not_included: dest.not_included[language],
+        includes: dest.includes?.[language] || [],
+        not_included: dest.not_included?.[language] || [],
         optional_tours: dest.optional_tours || []
       });
     });
@@ -1092,4 +1387,153 @@ export function getSuggestedPages(userAnalysis, language = "ar") {
   return links.slice(0, 3); // أقصى 3 روابط
 }
 
-export { SITE_PAGES };
+/**
+ * ===================================
+ * دوال جديدة للمعلومات الشاملة
+ * New functions for comprehensive information
+ * ===================================
+ */
+
+/**
+ * الحصول على معلومات الشركة
+ * Get company information
+ */
+export function getCompanyInfo(language = "ar") {
+  const isArabic = language === "ar";
+  return {
+    name: COMPANY_INFO.name[language],
+    established: COMPANY_INFO.established,
+    description: COMPANY_INFO.description[language],
+    contact: COMPANY_INFO.contact,
+    workingHours: COMPANY_INFO.workingHours[language],
+    socialMedia: COMPANY_INFO.socialMedia
+  };
+}
+
+/**
+ * الحصول على جميع الخدمات
+ * Get all services
+ */
+export function getAllServices(language = "ar") {
+  const isArabic = language === "ar";
+  const services = [];
+  
+  for (const [key, service] of Object.entries(SERVICES)) {
+    services.push({
+      id: key,
+      name: service.name[language],
+      description: service.description[language],
+      features: service.features?.[language] || [],
+      destinations: service.destinations || null,
+      countries: service.countries?.[language] || null,
+      types: service.types?.[language] || null
+    });
+  }
+  
+  return services;
+}
+
+/**
+ * الحصول على خدمة معينة
+ * Get specific service
+ */
+export function getServiceInfo(serviceKey, language = "ar") {
+  const service = SERVICES[serviceKey];
+  if (!service) return null;
+  
+  return {
+    name: service.name[language],
+    description: service.description[language],
+    features: service.features?.[language] || [],
+    destinations: service.destinations || null,
+    countries: service.countries?.[language] || null,
+    types: service.types?.[language] || null
+  };
+}
+
+/**
+ * الحصول على سياسات الحجز والإلغاء
+ * Get booking and cancellation policies
+ */
+export function getPolicies(language = "ar") {
+  return {
+    booking: POLICIES.booking[language],
+    cancellation: POLICIES.cancellation[language],
+    paymentMethods: POLICIES.payment.methods[language]
+  };
+}
+
+/**
+ * الحصول على العروض الحالية
+ * Get current offers
+ */
+export function getCurrentOffers(language = "ar") {
+  return CURRENT_OFFERS[language];
+}
+
+/**
+ * البحث الشامل في كل البيانات
+ * Comprehensive search across all data
+ */
+export function comprehensiveSearch(query, language = "ar") {
+  const isArabic = language === "ar";
+  const results = {
+    hotels: [],
+    destinations: [],
+    services: [],
+    faqs: [],
+    pages: []
+  };
+  
+  const queryLower = query.toLowerCase();
+  
+  // البحث في الفنادق
+  results.hotels = searchHotels({ language, maxResults: 5 }).filter(hotel => {
+    const name = isArabic ? hotel.hotel_name_ar : hotel.hotel_name_en;
+    return name?.toLowerCase().includes(queryLower) || 
+           hotel.area?.toLowerCase().includes(queryLower);
+  });
+  
+  // البحث في الوجهات
+  results.destinations = getAllDestinations().filter(dest => 
+    dest.name?.toLowerCase().includes(queryLower)
+  );
+  
+  // البحث في الخدمات
+  results.services = getAllServices(language).filter(service =>
+    service.name?.toLowerCase().includes(queryLower) ||
+    service.description?.toLowerCase().includes(queryLower)
+  );
+  
+  // البحث في الأسئلة الشائعة
+  results.faqs = searchFAQs(query, language);
+  
+  // البحث في الصفحات
+  const matchedPage = findMatchingPage(query, language);
+  if (matchedPage) {
+    results.pages.push(matchedPage);
+  }
+  
+  return results;
+}
+
+/**
+ * الحصول على معلومات شاملة للبوت
+ * Get comprehensive info for chatbot context
+ */
+export function getChatbotKnowledgeBase(language = "ar") {
+  const isArabic = language === "ar";
+  
+  return {
+    company: getCompanyInfo(language),
+    services: getAllServices(language),
+    destinations: getAllDestinations(),
+    policies: getPolicies(language),
+    offers: getCurrentOffers(language),
+    pages: getAllPages(language),
+    totalHotels: Object.values(ALL_DESTINATIONS).reduce((sum, dest) => sum + (dest.hotels?.length || 0), 0),
+    supportedLanguages: ["ar", "en"]
+  };
+}
+
+export { SITE_PAGES, COMPANY_INFO, SERVICES, POLICIES, CURRENT_OFFERS };

@@ -62,15 +62,27 @@ export default function Gallery1({ offer, hotel }) {
   if (images.length === 1) {
     return (
       <div className="tourSingleGrid -type-1 mt-30">
-        <div style={{ width: "100%", height: "500px", position: "relative" }}>
+        <div className="single-image-container">
           <Image
             fill
             src={images[0].image}
             alt={images[0].alt || title}
             className="rounded-12"
-            style={{ objectFit: "contain", backgroundPosition: "center" }}
+            style={{ objectFit: "cover", backgroundPosition: "center" }}
           />
         </div>
+        <style jsx>{`
+          .single-image-container {
+            width: 100%;
+            height: 500px;
+            position: relative;
+          }
+          @media (max-width: 767px) {
+            .single-image-container {
+              height: 300px;
+            }
+          }
+        `}</style>
       </div>
     );
   }
@@ -82,7 +94,8 @@ export default function Gallery1({ offer, hotel }) {
   return (
     <>
       <div className="tourSingleGrid -type-1 mt-30">
-        <div className="tourSingleGrid__grid mobile-css-slider-2">
+        {/* Desktop Grid */}
+        <div className="tourSingleGrid__grid desktop-gallery">
           {gridImages.map((img, index) => (
             <div key={img.id} className="tourSingleGrid__item">
               <Image
@@ -94,6 +107,34 @@ export default function Gallery1({ offer, hotel }) {
               />
             </div>
           ))}
+        </div>
+
+        {/* Mobile Gallery */}
+        <div className="mobile-gallery">
+          <div className="mobile-gallery__main">
+            <Image
+              width={800}
+              height={500}
+              src={images[0].image}
+              alt={images[0].alt || `${title} - Main`}
+              className="w-100 h-100 object-cover rounded-12"
+            />
+          </div>
+          {images.length > 1 && (
+            <div className="mobile-gallery__thumbs">
+              {images.slice(1, 4).map((img, index) => (
+                <div key={img.id} className="mobile-gallery__thumb">
+                  <Image
+                    width={200}
+                    height={150}
+                    src={img.image}
+                    alt={img.alt || `${title} - Image ${index + 2}`}
+                    className="w-100 h-100 object-cover rounded-8"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="tourSingleGrid__button">
@@ -111,6 +152,60 @@ export default function Gallery1({ offer, hotel }) {
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        .desktop-gallery {
+          display: grid;
+          gap: 10px;
+          grid-template-columns: 770px 250px 250px;
+          grid-template-rows: 250px 250px;
+          border-radius: 12px;
+        }
+        .desktop-gallery > *:nth-child(1) {
+          grid-row: 2 span;
+        }
+        .desktop-gallery > *:nth-child(2) {
+          grid-column: 2 span;
+        }
+        .mobile-gallery {
+          display: none;
+        }
+        @media (max-width: 991px) {
+          .desktop-gallery {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 300px 150px;
+          }
+        }
+        @media (max-width: 767px) {
+          .desktop-gallery {
+            display: none;
+          }
+          .mobile-gallery {
+            display: block;
+          }
+          .mobile-gallery__main {
+            width: 100%;
+            height: 250px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+          }
+          .mobile-gallery__thumbs {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+          }
+          .mobile-gallery__thumb {
+            flex: 0 0 100px;
+            height: 75px;
+            overflow: hidden;
+            border-radius: 8px;
+          }
+        }
+      `}</style>
+
       <ImageLightBox
         images={images}
         activeLightBox={activeLightBox}
