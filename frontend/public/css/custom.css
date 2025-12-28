@@ -237,6 +237,75 @@
   background-color: #000;
   color: #fff;
 }
+
+/* Mobile Lightbox Fixes */
+@media (max-width: 767px) {
+  .modal {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+  
+  .modal .modal-content {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #000;
+  }
+  
+  .modal .mySlides {
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal .mySlides img {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 80vh;
+    object-fit: contain;
+  }
+  
+  .modal .prev,
+  .modal .next {
+    padding: 12px;
+    font-size: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-top: 0;
+    z-index: 100;
+  }
+  
+  .modal .prev {
+    left: 5px;
+  }
+  
+  .modal .next {
+    right: 5px;
+  }
+  
+  .modal .close {
+    top: 10px;
+    right: 15px;
+    font-size: 30px;
+    z-index: 1001;
+  }
+  
+  .modal .numbertext {
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 4px;
+    z-index: 100;
+  }
+}
 .calenderTourSongle .rmdp-shadow {
   margin-top: 20px;
 }
