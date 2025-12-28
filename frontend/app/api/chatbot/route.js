@@ -21,7 +21,7 @@ import {
   getChatbotKnowledgeBase
 } from "@/services/ragService";
 import sessionManager from "@/services/sessionManager";
-import { determineNextWidget, generateWidgetData, generateWidgetResponse } from "@/services/widgetGenerator";
+import { determineNextWidget, generateWidgetData, generateWidgetResponse, isValidWidget } from "@/services/widgetGenerator";
 
 // OpenRouter Configuration
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
@@ -379,18 +379,22 @@ export async function POST(request) {
     sessionManager.addMessage(session.sessionId, { role: "assistant", content: reply });
 
     // ✅ Step 9: Determine and generate next widget
-    // Only show widgets when user wants to book/plan a trip
+    // Only show our custom widgets - no AI-generated widgets
     const sessionData = sessionManager.getSession(session.sessionId);
+    sessionData.conversationHistory = conversationHistory; // Pass conversation history for smart analysis
+    
     const nextWidget = determineNextWidget(sessionData, { ...userAnalysis, originalMessage: messageText });
     let widgetData = null;
 
-    if (nextWidget) {
+    // ✅ Only generate widget if it's a valid type
+    if (nextWidget && isValidWidget(nextWidget.type)) {
       // Enable booking mode if starting booking flow
       if (nextWidget.startBookingFlow) {
         sessionManager.enableBookingMode(session.sessionId);
       }
       
-      widgetData = generateWidgetData(nextWidget.type, sessionData, language);
+      // Pass widgetInfo for direct queries (like hotel search)
+      widgetData = generateWidgetData(nextWidget.type, sessionData, language, nextWidget);
       const widgetResponse = generateWidgetResponse(nextWidget, language);
       
       // Enhance reply with widget context if needed

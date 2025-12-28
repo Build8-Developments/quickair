@@ -206,8 +206,14 @@ export default function AIChatbot() {
     setIsOpen(false);
   };
 
-  // Render widget based on type
+  // Render widget based on type - only allowed widgets
+  const ALLOWED_WIDGETS = ["destinations", "dateRange", "travelers", "budget", "hotelCards", "mealPlan", "roomType", "bookingSummary"];
+  
   const renderWidget = (widget, messageIndex) => {
+    // ✅ Only render allowed widget types
+    if (!widget || !widget.type || !ALLOWED_WIDGETS.includes(widget.type)) {
+      return null;
+    }
     if (!widget || !widget.type) return null;
 
     const handleWidgetSelection = async (data) => {
@@ -698,7 +704,7 @@ export default function AIChatbot() {
               </svg>
             </div>
             <h2 className={styles.summaryTitle}>
-              {t("رائع! تم تخطيط رحلتك 🎉", "Great! Your Trip is Planned 🎉")}
+              {t("رائع! تم تخطيط رحلتك", "Great! Your Trip is Planned")}
             </h2>
             <p className={styles.summaryText}>
               {t(
@@ -710,21 +716,21 @@ export default function AIChatbot() {
             <div className={styles.summaryDetails}>
               <div className={styles.summaryCard}>
                 <strong>{t("المعلومات الشخصية", "Personal Info")}</strong>
-                <p>👤 {userInfo.name}</p>
-                <p>📧 {userInfo.email}</p>
-                <p>📱 {userInfo.phone}</p>
+                <p>{t("الاسم:", "Name:")} {userInfo?.name || "-"}</p>
+                <p>{t("البريد الإلكتروني:", "Email:")} {userInfo?.email || "-"}</p>
+                <p>{t("رقم الهاتف:", "Phone:")} {userInfo?.phone || "-"}</p>
               </div>
               
               {tripData.destination && (
                 <div className={styles.summaryCard}>
                   <strong>{t("تفاصيل الرحلة", "Trip Details")}</strong>
-                  <p>📍 {t("الوجهة:", "Destination:")} {tripData.destination?.name || tripData.destination}</p>
-                  {tripData.dates && <p>📅 {t("التاريخ:", "Date:")} {tripData.dates?.startDate} → {tripData.dates?.endDate}</p>}
-                  {tripData.budget && <p>💰 {t("الميزانية:", "Budget:")} {tripData.budget?.label || tripData.budget}</p>}
-                  {tripData.travelers && <p>👥 {t("المسافرون:", "Travelers:")} {tripData.travelers?.total || tripData.travelers?.adults || tripData.travelers}</p>}
-                  {tripData.selectedHotel && <p>🏨 {t("الفندق:", "Hotel:")} {isChatArabic ? tripData.selectedHotel?.hotel_name_ar : tripData.selectedHotel?.hotel_name_en}</p>}
-                  {tripData.mealPlan && <p>🍽️ {t("الوجبات:", "Meals:")} {tripData.mealPlan?.label || tripData.mealPlan}</p>}
-                  {tripData.roomType && <p>🛏️ {t("الغرفة:", "Room:")} {tripData.roomType?.label || tripData.roomType}</p>}
+                  <p>{t("الوجهة:", "Destination:")} {tripData.destination?.name || tripData.destination}</p>
+                  {tripData.dates && <p>{t("التاريخ:", "Date:")} {tripData.dates?.startDate} - {tripData.dates?.endDate}</p>}
+                  {tripData.budget && <p>{t("الميزانية:", "Budget:")} {tripData.budget?.label || tripData.budget}</p>}
+                  {tripData.travelers && <p>{t("المسافرون:", "Travelers:")} {tripData.travelers?.total || tripData.travelers?.adults || tripData.travelers}</p>}
+                  {tripData.selectedHotel && <p>{t("الفندق:", "Hotel:")} {isChatArabic ? tripData.selectedHotel?.hotel_name_ar : tripData.selectedHotel?.hotel_name_en}</p>}
+                  {tripData.mealPlan && <p>{t("الوجبات:", "Meals:")} {tripData.mealPlan?.label || tripData.mealPlan}</p>}
+                  {tripData.roomType && <p>{t("الغرفة:", "Room:")} {tripData.roomType?.label || tripData.roomType}</p>}
                 </div>
               )}
             </div>

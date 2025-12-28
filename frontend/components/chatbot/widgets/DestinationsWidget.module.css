@@ -98,13 +98,14 @@
 
   .categoryTabs {
     gap: 4px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    justify-content: center;
   }
 
   .categoryTab {
     padding: 5px 10px;
     font-size: 11px;
-    border-radius: 14px;
+    border-radius: 12px;
   }
 
   .destinationsGrid {
@@ -118,7 +119,7 @@
   }
 
   .flag {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .name {
@@ -128,17 +129,29 @@
 
 /* Very small screens */
 @media (max-width: 360px) {
+  .categoryTabs {
+    gap: 3px;
+    margin-bottom: 6px;
+  }
+
   .categoryTab {
     padding: 4px 8px;
     font-size: 10px;
+    border-radius: 10px;
+  }
+
+  .destinationsGrid {
+    gap: 4px;
   }
 
   .destinationCard {
     padding: 6px 8px;
+    gap: 4px;
+    border-radius: 6px;
   }
 
   .flag {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .name {
