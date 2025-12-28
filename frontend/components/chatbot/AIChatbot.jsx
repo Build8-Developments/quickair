@@ -579,6 +579,11 @@ export default function AIChatbot() {
         );
 
       case "chat":
+        // Find the last message index that has a widget
+        const lastWidgetIndex = messages.reduce((lastIdx, msg, idx) => {
+          return msg.widget ? idx : lastIdx;
+        }, -1);
+        
         return (
           <>
             {/* Messages */}
@@ -600,8 +605,8 @@ export default function AIChatbot() {
                   <div className={styles.messageContent}>
                     <p style={{ whiteSpace: 'pre-wrap' }}>{message.content}</p>
                     
-                    {/* Interactive Widgets */}
-                    {message.widget && (
+                    {/* Interactive Widgets - Only show the last one */}
+                    {message.widget && index === lastWidgetIndex && (
                       <div className={styles.widgetContainer}>
                         {renderWidget(message.widget, index)}
                       </div>
@@ -756,9 +761,9 @@ export default function AIChatbot() {
 
   return (
     <>
-      {/* Floating Chat Button */}
+      {/* Floating Chat Button - hidden on mobile when chat is open */}
       <button
-        className={`${styles.chatButton} ${isOpen ? styles.chatButtonOpen : ""}`}
+        className={`${styles.chatButton} ${isOpen ? styles.chatButtonOpen : ""} ${isOpen ? styles.chatButtonHiddenMobile : ""}`}
         onClick={() => setIsOpen(!isOpen)}
         aria-label={t("مساعد ذكي", "AI Assistant")}
         suppressHydrationWarning
