@@ -1,0 +1,118 @@
+{
+  "offer": {
+    "title": "Istanbul Winter Offer",
+    "validity": "01 Nov – 24 Dec",
+    "duration": {
+      "days": 6,
+      "nights": 5
+    },
+    "meal_plan": "Breakfast",
+    "currency": "USD"
+  },
+  "hotels": [
+    {
+      "hotel_name": "Grand Liza Hotel",
+      "rating": "3*",
+      "area": "Fatih",
+      "prices_usd": {
+        "double_or_triple": 100,
+        "single": 289,
+        "child_6_11": 159
+      }
+    },
+    {
+      "hotel_name": "Klas Hotel Old City",
+      "rating": "4*",
+      "area": "Fatih",
+      "prices_usd": {
+        "double_or_triple": 155,
+        "single": 379,
+        "child_6_11": 205
+      }
+    },
+    {
+      "hotel_name": "Feronya Hotel Taksim",
+      "rating": "4*",
+      "area": "Taksim",
+      "prices_usd": {
+        "double_or_triple": 145,
+        "single": 445,
+        "child_6_11": 239
+      }
+    },
+    {
+      "hotel_name": "Central Palace Taksim",
+      "rating": "4*",
+      "area": "Taksim",
+      "prices_usd": {
+        "double_or_triple": 185,
+        "single": 470,
+        "child_6_11": 250
+      }
+    },
+    {
+      "hotel_name": "Ramada by Wyndham Pera",
+      "rating": "5*",
+      "area": "Pera",
+      "prices_usd": {
+        "double_or_triple": 210,
+        "single": 620,
+        "child_6_11": 325
+      }
+    },
+    {
+      "hotel_name": "Point Hotel Taksim",
+      "rating": "5*",
+      "area": "Taksim",
+      "prices_usd": {
+        "double_or_triple": 130,
+        "single": 775,
+        "child_6_11": 400
+      }
+    }
+  ],
+  "included": [
+    "Accommodation for 6 days / 5 nights with breakfast",
+    "Bosporus cruise",
+    "Airport ↔ hotel transfers"
+  ],
+  "not_included": [
+    "Any items not mentioned in the program",
+    "International flight tickets",
+    "Turkey entry visa"
+  ],
+  "visa_info": {
+    "standard_visa_cost_usd": 208,
+    "e_visa_cost_usd": 46,
+    "notes": [
+      "Ages 15–45: visa via VoyaVisa office",
+      "Ages 12–40: security approval required after visa issuance",
+      "Under 15 and over 45: eligible for electronic visa"
+    ],
+    "required_documents": [
+      "Bank statement for last 6 months",
+      "Commercial register or employment letter",
+      "Hotel and provisional flight booking",
+      "Travel health insurance"
+    ]
+  },
+  "optional_tours": [
+    { "name": "Princes’ Islands Tour (no lunch)", "price_usd": 25 },
+    { "name": "Bursa Tour with lunch & cable car", "price_usd": 45 },
+    { "name": "Sapanca & Maashouqiya Tour with lunch", "price_usd": 30 },
+    { "name": "Half-day Ottoman Mosques & Museums Tour", "price_usd": 35 },
+    {
+      "name": "Full-day City Tour (Topkapi + Hippodrome + Blue Mosque)",
+      "price_usd": 65
+    },
+    { "name": "Bosporus Cruise & Shopping (no lunch)", "price_usd": 20 },
+    { "name": "Bosporus Dinner Cruise (show only)", "price_usd": 25 },
+    { "name": "Bosporus Dinner Cruise (Turkish show)", "price_usd": 40 },
+    { "name": "Viasea Theme Park & Aquarium", "price_usd": 50 }
+  ],
+  "child_policy": "Children from 0 to 5.99 years subject to availability at booking time",
+  "notes": [
+    "Prices are in USD and payable in EGP at the exchange rate on payment date",
+    "Prices may change based on hotel availability and currency fluctuations"
+  ]
+}

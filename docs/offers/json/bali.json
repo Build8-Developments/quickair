@@ -1,0 +1,120 @@
+{
+  "offer": {
+    "title": "Luxury Honeymoon in Bali",
+    "validity": ["October", "November"],
+    "duration": {
+      "days": 6,
+      "nights": 5
+    },
+    "occupancy": "2 persons"
+  },
+  "hotels": [
+    {
+      "hotel_name": "Harris Hotel Seminyak",
+      "rating": "4*",
+      "area": "Seminyak",
+      "room_type": "Harris Room",
+      "meal_plan": "Breakfast",
+      "price_usd": 350
+    },
+    {
+      "hotel_name": "KajaNe Yangloni",
+      "rating": "4*",
+      "area": "Ubud",
+      "room_type": "Deluxe Room",
+      "meal_plan": "Breakfast",
+      "price_usd": 620
+    },
+    {
+      "hotel_name": "Mercure Kuta Bali",
+      "rating": "4*",
+      "area": "Kuta",
+      "room_type": "Superior Double Room",
+      "meal_plan": "Breakfast",
+      "price_usd": 530
+    },
+    {
+      "hotel_name": "Montigo Resorts Seminyak",
+      "rating": "5*",
+      "area": "Seminyak",
+      "room_type": "Deluxe Room",
+      "meal_plan": "Breakfast",
+      "price_usd": 600
+    },
+    {
+      "hotel_name": "Ramayana Suites and Resort",
+      "rating": "5*",
+      "area": "Kuta",
+      "room_type": "Deluxe Room",
+      "meal_plan": "Breakfast",
+      "price_usd": 655
+    }
+  ],
+  "included": [
+    "Accommodation for 6 days / 5 nights for two persons in one of the listed hotels or similar",
+    "Breakfast only",
+    "Airport ↔ hotel transfers"
+  ],
+  "not_included": [
+    "Any items not mentioned in the program",
+    "Indonesia visa on arrival",
+    "International flight tickets"
+  ],
+  "optional_tours": [
+    {
+      "name": "UNESCO Heritage & Temples Tour",
+      "price_per_person_usd": 55,
+      "highlights": [
+        "Taman Ayun Temple",
+        "Jatiluwih Rice Terraces",
+        "Bratan Crater Lake",
+        "Ulun Danu Bratan Temple",
+        "Tanah Lot sunset"
+      ]
+    },
+    {
+      "name": "Nusa Penida Snorkeling Tour (3 spots)",
+      "price_per_person_usd": 65,
+      "highlights": [
+        "Manta Rays",
+        "Crystal Bay",
+        "Gamat Bay",
+        "Paradise Beach lunch",
+        "Mangrove forest exploration"
+      ]
+    },
+    {
+      "name": "Ubud Waterfalls Tour",
+      "price_per_person_usd": 65,
+      "highlights": [
+        "Tibumana Waterfall",
+        "Tukad Cepung Waterfall",
+        "Local Balinese lunch",
+        "Tegenungan Waterfall"
+      ]
+    },
+    {
+      "name": "Mount Batur Sunrise Trek",
+      "price_per_person_usd": 60,
+      "highlights": ["Sunrise view", "Batur volcano", "Caldera landscape"]
+    },
+    {
+      "name": "Bali Highlights & Swing Tour",
+      "price_per_person_usd": 90,
+      "highlights": [
+        "Lempuyang Temple (Gates of Heaven)",
+        "Tirta Gangga",
+        "Tukad Cepung Cave Waterfall",
+        "Ubud rice fields",
+        "Famous jungle swing",
+        "Buffet lunch"
+      ]
+    }
+  ],
+  "notes": [
+    "Early check-in and late check-out are subject to availability",
+    "Hotels or similar category are subject to availability at time of booking",
+    "Prices are in USD; payment is made in EGP according to exchange rate at payment time",
+    "Prices may change based on hotel availability and currency fluctuations"
+  ]
+}

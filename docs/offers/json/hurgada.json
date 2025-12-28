@@ -1,0 +1,154 @@
+{
+  "offer": {
+    "title": "Hurghada November Offer",
+    "validity": "November",
+    "duration": {
+      "days": 4,
+      "nights": 3
+    },
+    "meal_plan": "All Inclusive (Breakfast + Lunch + Dinner + Drinks + Snacks)"
+  },
+  "hotels": [
+    {
+      "hotel_name": "Dexon Roma Hotel",
+      "rating": "3*",
+      "valid_dates": "01 Nov – 23 Dec",
+      "prices_egp": {
+        "triple": 4280,
+        "double": 4375,
+        "single": 7000
+      }
+    },
+    {
+      "hotel_name": "Minamark Beach",
+      "rating": "4*",
+      "valid_dates": "01 Nov – 23 Dec",
+      "prices_egp": {
+        "triple": 6575,
+        "double": 6615,
+        "single": 9925
+      }
+    },
+    {
+      "hotel_name": "Sphinx Aqua Park",
+      "rating": "4*",
+      "valid_dates": "01 Nov – 23 Dec",
+      "prices_egp": {
+        "triple": 8820,
+        "double": 8820,
+        "single": 16170
+      }
+    },
+    {
+      "hotel_name": "Sunny Days El Palacio",
+      "rating": "4*",
+      "valid_dates": "01 Nov – 25 Dec",
+      "prices_egp": {
+        "triple": 8765,
+        "double": 8820,
+        "single": 14115
+      }
+    },
+    {
+      "hotel_name": "Seagull Resort",
+      "rating": "4*",
+      "valid_dates": "01 Nov – 30 Nov",
+      "prices_egp": {
+        "triple": 14260,
+        "double": 14260,
+        "single": 23330
+      }
+    },
+    {
+      "hotel_name": "Sentido Mamlouk",
+      "rating": "5*",
+      "valid_dates": "01 Nov – 19 Nov",
+      "prices_egp": {
+        "triple": 14370,
+        "double": 14680,
+        "single": 22050
+      }
+    },
+    {
+      "hotel_name": "Swiss Inn Resort",
+      "rating": "5*",
+      "valid_dates": "20 Nov – 30 Nov",
+      "prices_egp": {
+        "triple": 14645,
+        "double": 14700,
+        "single": 23520
+      }
+    },
+    {
+      "hotel_name": "Titanic Palace",
+      "rating": "5*",
+      "valid_dates": "01 Nov – 30 Nov",
+      "prices_egp": {
+        "double": 16170,
+        "single": 24255
+      }
+    },
+    {
+      "hotel_name": "Sunrise Royal",
+      "rating": "5*",
+      "valid_dates": "01 Nov – 30 Nov",
+      "prices_egp": {
+        "triple": 15145,
+        "double": 15450,
+        "single": 23175
+      }
+    },
+    {
+      "hotel_name": "Meraki Resort (Adults Only)",
+      "rating": "5*",
+      "valid_dates": "01 Nov – 23 Dec",
+      "prices_egp": {
+        "double": 20550,
+        "single": 30825
+      }
+    },
+    {
+      "hotel_name": "Continental Hotel",
+      "rating": "5*",
+      "valid_dates": "01 Nov – 30 Nov",
+      "prices_egp": {
+        "triple": 16000,
+        "double": 21000,
+        "single": 33600
+      }
+    },
+    {
+      "hotel_name": "Pickalbatros White Beach Resort",
+      "rating": "5*",
+      "valid_dates": "01 Nov – 30 Nov",
+      "prices_egp": {
+        "triple": 19210,
+        "double": 20580,
+        "single": 32925
+      }
+    },
+    {
+      "hotel_name": "Rixos Premium Magawish Suites & Villas",
+      "rating": "5*",
+      "valid_dates": "01 Nov – 30 Nov",
+      "prices_egp": {
+        "triple": 29300,
+        "double": 33810,
+        "single": 50715
+      }
+    }
+  ],
+  "included": [
+    "Accommodation for 4 days / 3 nights",
+    "All Inclusive meals and drinks"
+  ],
+  "not_included": ["Any items not mentioned in the program", "Transfers"],
+  "child_policy_summary": {
+    "max_children_per_room": 2,
+    "first_child_free": "Up to 11.99 years (hotel-dependent)",
+    "second_child_discount": "50% of double room rate (age conditions apply)"
+  },
+  "notes": [
+    "Prices are subject to increase according to hotel pricing plans and availability at booking time"
+  ]
+}

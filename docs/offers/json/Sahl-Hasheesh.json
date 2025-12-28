@@ -1,0 +1,94 @@
+{
+  "offer": {
+    "title": "Sahl Hasheesh Offer",
+    "validity": "November – December",
+    "duration": {
+      "days": 4,
+      "nights": 3
+    },
+    "currency": "EGP"
+  },
+  "hotels": [
+    {
+      "hotel_name": "Zen Resort Sahl Hasheesh",
+      "rating": "4*",
+      "valid_until": "26 Dec",
+      "prices_egp": {
+        "triple": 8750,
+        "double": 9200
+      }
+    },
+    {
+      "hotel_name": "Jasmine Palace Resort And Spa",
+      "rating": "5*",
+      "valid_until": "23 Dec",
+      "prices_egp": {
+        "triple": 8700,
+        "double": 8910
+      }
+    },
+    {
+      "hotel_name": "Gravity Hotels & Aqua Park",
+      "rating": "5*",
+      "valid_until": "26 Dec",
+      "prices_egp": {
+        "triple": 14050,
+        "double": 14350
+      }
+    },
+    {
+      "hotel_name": "Tropitel Sahl Hasheesh",
+      "rating": "5*",
+      "valid_until": "20 Nov",
+      "prices_egp": {
+        "triple": 13180,
+        "double": 13230
+      }
+    },
+    {
+      "hotel_name": "Tropitel Sahl Hasheesh",
+      "rating": "5*",
+      "valid_until": "21 Nov – 29 Dec",
+      "prices_egp": {
+        "triple": 11700,
+        "double": 11760
+      }
+    },
+    {
+      "hotel_name": "KaiSol Romance Hotel (Adults Only)",
+      "rating": "5*",
+      "valid_until": "19 Nov",
+      "prices_egp": {
+        "triple": 20300,
+        "double": 20580
+      }
+    },
+    {
+      "hotel_name": "Old Palace Resort",
+      "rating": "5*",
+      "valid_until": "30 Nov",
+      "prices_egp": {
+        "triple": 13560,
+        "double": 14580
+      }
+    },
+    {
+      "hotel_name": "Premier Le Reve Hotel (Adults Only)",
+      "rating": "5*",
+      "valid_until": "30 Nov",
+      "prices_egp": {
+        "triple": 21600,
+        "double": 22050
+      }
+    }
+  ],
+  "included": [
+    "Accommodation for 4 days / 3 nights",
+    "Meals: Breakfast + Lunch + Dinner + Drinks & Snacks",
+    "Meals at Tropitel Sahl Hasheesh: Breakfast + Dinner only"
+  ],
+  "not_included": ["Any items not mentioned in the program", "Transfers"],
+  "notes": [
+    "Prices are subject to increase according to hotel pricing plans and availability at booking time"
+  ]
+}

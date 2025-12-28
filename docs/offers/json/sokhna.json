@@ -1,0 +1,145 @@
+{
+  "offer": {
+    "title": "El Sokhna Offer",
+    "validity": "November",
+    "duration": {
+      "days": 4,
+      "nights": 3
+    },
+    "stay_type": "Weekdays only"
+  },
+  "hotels": [
+    {
+      "hotel_name": "Palmera El Sokhna",
+      "rating": "4*",
+      "valid_dates": "01-11 to 30-12",
+      "prices_egp": {
+        "triple": 3750,
+        "double": 3970,
+        "single": 6350
+      }
+    },
+    {
+      "hotel_name": "Retal View El-Sokhna Hotel",
+      "rating": "4*",
+      "valid_dates": "01-11 to 30-11",
+      "prices_egp": {
+        "triple": 4165,
+        "double": 4270,
+        "single": 6395
+      }
+    },
+    {
+      "hotel_name": "Marina Wadi Degla",
+      "rating": "4*",
+      "valid_dates": "01-11 to 30-12",
+      "prices_egp": {
+        "triple": 4270,
+        "double": 4410,
+        "single": 7100
+      }
+    },
+    {
+      "hotel_name": "Swiss Inn Teda Hotel",
+      "rating": "4*",
+      "valid_dates": "01-11 to 30-12",
+      "prices_egp": {
+        "triple": 5160,
+        "double": 5750,
+        "single": 9110
+      }
+    },
+    {
+      "hotel_name": "Al Masa Hotel El Sokhna",
+      "rating": "5*",
+      "valid_dates": "01-11 to 17-12",
+      "prices_egp": {
+        "triple": 8400,
+        "double": 8850,
+        "single": 16470
+      }
+    },
+    {
+      "hotel_name": "Tolip El Galala Heights",
+      "rating": "5*",
+      "valid_dates": "01-11 to 17-12",
+      "prices_egp": {
+        "triple": 4900,
+        "double": 5595,
+        "single": 7650
+      }
+    },
+    {
+      "hotel_name": "Stella Grand",
+      "rating": "5*",
+      "valid_dates": "01-11 to 30-12",
+      "prices_egp": {
+        "triple": 6000,
+        "double": 7200,
+        "single": 12660
+      }
+    },
+    {
+      "hotel_name": "Tolip Majestic El Galala",
+      "rating": "5*",
+      "valid_dates": "01-11 to 30-12",
+      "prices_egp": {
+        "triple": 5880,
+        "double": 7350,
+        "single": 13525
+      }
+    },
+    {
+      "hotel_name": "Tolip Resort El Galala Hills",
+      "rating": "5*",
+      "valid_dates": "01-11 to 30-12",
+      "prices_egp": {
+        "triple": 5100,
+        "double": 5960,
+        "single": 10860
+      }
+    },
+    {
+      "hotel_name": "Coral Sea Beach Resort & Aqua Park",
+      "rating": "5*",
+      "valid_dates": "01-11 to 30-12",
+      "prices_egp": {
+        "triple": 6030,
+        "double": 6615,
+        "single": 10590
+      }
+    },
+    {
+      "hotel_name": "TANOAK Resort",
+      "rating": "5*",
+      "valid_dates": "01-11 to 27-12",
+      "prices_egp": {
+        "triple": 8490,
+        "double": 8150,
+        "single": 14675
+      }
+    },
+    {
+      "hotel_name": "Grand Ocean Hotel",
+      "rating": "5*",
+      "valid_dates": "01-11 to 27-12",
+      "prices_egp": {
+        "triple": 13530,
+        "double": 13820,
+        "single": 20200
+      }
+    }
+  ],
+  "included": [
+    "Accommodation for 4 days / 3 nights (weekdays)",
+    "Meals: Breakfast and Dinner"
+  ],
+  "not_included": ["Any items not mentioned in the program", "Transfers"],
+  "child_policy_summary": {
+    "note": "Birth certificate required at check-in",
+    "varies_by_hotel": true
+  },
+  "notes": [
+    "Prices are subject to increase according to hotel pricing plans and availability at booking time"
+  ]
+}

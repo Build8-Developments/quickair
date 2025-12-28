@@ -1,0 +1,52 @@
+{
+  "offer": {
+    "title": "Beirut Offer",
+    "description": "Beirut – timeless charm on the Mediterranean coast",
+    "validity": ["November"],
+    "duration": {
+      "days": 5,
+      "nights": 4
+    },
+    "occupancy": "2 persons"
+  },
+  "hotels": [
+    {
+      "hotel_name": "Caramel Boutique Hotel",
+      "rating": "3*",
+      "room_type": "Deluxe Room",
+      "price_usd": 450
+    },
+    {
+      "hotel_name": "Hotel Cavalier",
+      "rating": "4*",
+      "room_type": "Standard Room",
+      "price_usd": 485
+    },
+    {
+      "hotel_name": "Crowne Plaza Beirut",
+      "rating": "5*",
+      "room_type": "Deluxe Room",
+      "price_usd": 590
+    },
+    {
+      "hotel_name": "Movenpick Hotel Beirut",
+      "rating": "5*",
+      "room_type": "Classic Room",
+      "price_usd": 1200
+    }
+  ],
+  "included": [
+    "Accommodation for 5 days / 4 nights in one of the listed hotels",
+    "Breakfast included",
+    "Airport transfers in Beirut (airport ↔ hotel)"
+  ],
+  "not_included": [
+    "Any items not mentioned in the program",
+    "Flight tickets",
+    "Lebanon visa on arrival (25 USD per person, requires 2000 USD with traveler)"
+  ],
+  "notes": [
+    "Prices are subject to hotel availability",
+    "Prices vary according to booking date and currency exchange rate"
+  ]
+}
