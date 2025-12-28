@@ -1,0 +1,125 @@
+{
+  "offer": {
+    "title": "شهر عسل فاخر في بالي",
+    "validity": ["أكتوبر", "نوفمبر"],
+    "duration": {
+      "days": 6,
+      "nights": 5
+    },
+    "occupancy": "شخصين"
+  },
+  "hotels": [
+    {
+      "hotel_name": "Harris Hotel Seminyak",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipMB5nDjpHl-WDz5r-M5OXYho-DkepYp6BLDnk8f=s1360-w1360-h1020-rw",
+      "rating": "4*",
+      "area": "Seminyak",
+      "room_type": "Harris Room",
+      "meal_plan": "إفطار",
+      "price_usd": 350
+    },
+    {
+      "hotel_name": "KajaNe Yangloni",
+      "img": "https://bynder.onthebeach.co.uk/cdn-cgi/image/width=1180,quality=100,fit=cover,format=auto/m/1bfbe872a070a567/original/Kajane-Yangloni-Hotel-Indonesia-Bali-Room-9.jpg",
+      "rating": "4*",
+      "area": "Ubud",
+      "room_type": "Deluxe Room",
+      "meal_plan": "إفطار",
+      "price_usd": 620
+    },
+    {
+      "hotel_name": "Mercure Kuta Bali",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipN0RDKxn9j254uqlcTWCG-sDSBvvwXjghb9i3Zt=s1360-w1360-h1020-rw",
+      "rating": "4*",
+      "area": "Kuta",
+      "room_type": "Superior Double Room",
+      "meal_plan": "إفطار",
+      "price_usd": 530
+    },
+    {
+      "hotel_name": "Montigo Resorts Seminyak",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipOMWrisaLimwaGVeEk-aOEEVnqMdpP9EMQJcRYt=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "area": "Seminyak",
+      "room_type": "Deluxe Room",
+      "meal_plan": "إفطار",
+      "price_usd": 600
+    },
+    {
+      "hotel_name": "Ramayana Suites and Resort",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipNVjk8qeRROIWh4rc0vYbWdhx1YS9s6GIlVQ8QA=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "area": "Kuta",
+      "room_type": "Deluxe Room",
+      "meal_plan": "إفطار",
+      "price_usd": 655
+    }
+  ],
+  "included": [
+    "إقامة لمدة 6 أيام / 5 ليالي لشخصين في أحد الفنادق المذكورة أو ما يماثلها",
+    "إفطار فقط",
+    "التوصيل من وإلى المطار"
+  ],
+  "not_included": [
+    "أي عناصر غير مذكورة في البرنامج",
+    "تأشيرة إندونيسيا عند الوصول",
+    "تذاكر الطيران الدولية"
+  ],
+  "optional_tours": [
+    {
+      "name": "جولة التراث العالمي والمعابد",
+      "price_per_person_usd": 55,
+      "highlights": [
+        "معبد تامان أيون",
+        "مدرجات أرز جاتيلويه",
+        "بحيرة براتان",
+        "معبد أولون دانو براتان",
+        "غروب الشمس في تاناه لوط"
+      ]
+    },
+    {
+      "name": "جولة الغطس في نوسا بينيدا (3 مواقع)",
+      "price_per_person_usd": 65,
+      "highlights": [
+        "أسماك المانتا",
+        "خليج كريستال",
+        "خليج جامات",
+        "غداء على شاطئ الجنة",
+        "استكشاف غابات المانغروف"
+      ]
+    },
+    {
+      "name": "جولة شلالات أوبود",
+      "price_per_person_usd": 65,
+      "highlights": [
+        "شلال تيبومانا",
+        "شلال توكاد سيبونغ",
+        "غداء بالينيزي محلي",
+        "شلال تيغينونغان"
+      ]
+    },
+    {
+      "name": "رحلة شروق الشمس على جبل باتور",
+      "price_per_person_usd": 60,
+      "highlights": ["مشاهدة شروق الشمس", "بركان باتور", "منظر الكالديرا"]
+    },
+    {
+      "name": "جولة معالم بالي والأرجوحة",
+      "price_per_person_usd": 90,
+      "highlights": [
+        "معبد ليمبويانغ (بوابات السماء)",
+        "تيرتا غانغا",
+        "شلال كهف توكاد سيبونغ",
+        "حقول أرز أوبود",
+        "الأرجوحة الشهيرة في الغابة",
+        "غداء بوفيه"
+      ]
+    }
+  ],
+  "notes": [
+    "تسجيل الوصول المبكر والمغادرة المتأخرة حسب التوافر",
+    "الفنادق أو ما يماثلها حسب التوافر وقت الحجز",
+    "الأسعار بالدولار الأمريكي؛ الدفع بالجنيه المصري حسب سعر الصرف وقت الدفع",
+    "قد تتغير الأسعار بناءً على توافر الفندق وتقلبات العملة"
+  ]
+}

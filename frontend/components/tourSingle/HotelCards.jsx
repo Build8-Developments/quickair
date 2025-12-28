@@ -8,6 +8,7 @@ import { getStrapiURL } from "@/lib/strapi";
 import { CalendarCheck2, SquareMenu } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getHotelCurrency } from "@/utils/currency";
 
 export default function HotelCards({ hotelOptions }) {
   const { t } = useTranslation();
@@ -21,6 +22,9 @@ export default function HotelCards({ hotelOptions }) {
         const hotel = option.hotel;
         if (!hotel) return null;
 
+        // Determine currency based on hotel location (Egypt = EGP, others = USD)
+        const currency = getHotelCurrency(option, hotel, "USD");
+
         return (
           <div key={index} className="col-lg-6 col-md-6">
             <Link
@@ -32,7 +36,10 @@ export default function HotelCards({ hotelOptions }) {
                   <Image
                     width={450}
                     height={325}
-                    src={getStrapiURL(hotel.coverImage?.url)}
+                    src={
+                      hotel.externalImageUrl ||
+                      getStrapiURL(hotel.coverImage?.url)
+                    }
                     alt={hotel.coverImage?.alternativeText || hotel.name}
                     className="img-ratio rounded-12"
                   />
@@ -132,9 +139,7 @@ export default function HotelCards({ hotelOptions }) {
                             )
                             .filter((p) => p !== Infinity)
                         ).toLocaleString()}{" "}
-                        <span className="text-16 fw-500">
-                          {option.currency}
-                        </span>
+                        <span className="text-16 fw-500">{currency}</span>
                       </div>
                     </div>
                     <div className="button -sm -accent-1 text-white px-20 py-10 rounded-8">

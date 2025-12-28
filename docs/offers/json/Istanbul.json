@@ -12,6 +12,7 @@
   "hotels": [
     {
       "hotel_name": "Grand Liza Hotel",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipPPzFi8p609rbl6zMWUU8bITMDPKi5BZ47YmcHt=s1360-w1360-h1020-rw",
       "rating": "3*",
       "area": "Fatih",
       "prices_usd": {
@@ -22,6 +23,7 @@
     },
     {
       "hotel_name": "Klas Hotel Old City",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipMqGG51VMZo3S_utfcPyoWPABSciSl-5StGJYsE=s1360-w1360-h1020-rw",
       "rating": "4*",
       "area": "Fatih",
       "prices_usd": {
@@ -32,6 +34,7 @@
     },
     {
       "hotel_name": "Feronya Hotel Taksim",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipMYN_1zMmI_e7Tv-RjleKdKtb3hpJdpvkyIEGEm=s1360-w1360-h1020-rw",
       "rating": "4*",
       "area": "Taksim",
       "prices_usd": {
@@ -42,6 +45,7 @@
     },
     {
       "hotel_name": "Central Palace Taksim",
+      "img": "https://lh3.googleusercontent.com/proxy/qVCaHIGvmg49v8UAzLjv-IRRd7eEJhZKfHe8ed_Vm7fGonrUh_SfGAr7HGEgey_lE2lhK5Zba7qVFN14_sA50RosIoyWhi3sJ66AftEoksITjDRgQBZ8zJPUxfftTrlVXFzEYJUU760I8qk9pfE1Omt0ZMHjlpk=s1360-w1360-h1020-rw",
       "rating": "4*",
       "area": "Taksim",
       "prices_usd": {
@@ -52,6 +56,7 @@
     },
     {
       "hotel_name": "Ramada by Wyndham Pera",
+      "img": "https://lh3.googleusercontent.com/proxy/gOACgMmr3Y4SVi7ur-WLaN2WCHKoDDWj5HsYJ4DquRmAGAnT2WZYyaN_JlVcUE-hwHjJU_IRRtoUtFichcP7NemIgKX3piGM82sDHyQUPMe9jTuE82BmV9u0fo-kz_Nn0Uo3d8khSqTwhhhwc1DPZjebEptuLw=s1360-w1360-h1020-rw",
       "rating": "5*",
       "area": "Pera",
       "prices_usd": {
@@ -62,6 +67,7 @@
     },
     {
       "hotel_name": "Point Hotel Taksim",
+      "img": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSxLX8Q4p4mLH8eCWJ9jifaA7-v4bllg9VraPxR-mFaRr9pvcPgYDKvbrlHCFmEx8EkhvBBTK5e1ETCaAKomlZF4dH9NoD_b2_nO9bRSJItx_GjBhv0Jy1HEY-35AKQjPExzYqU=s1360-w1360-h1020-rw",
       "rating": "5*",
       "area": "Taksim",
       "prices_usd": {

@@ -1,0 +1,155 @@
+{
+  "offer": {
+    "title": "عرض العين السخنة",
+    "validity": "نوفمبر",
+    "duration": {
+      "days": 4,
+      "nights": 3
+    },
+    "stay_type": "أيام الأسبوع فقط"
+  },
+  "hotels": [
+    {
+      "hotel_name": "Palmera El Sokhna",
+      "img": "https://palmera-azur-resort-families-only.redseahotelsegypt.com/data/Pictures/OriginalPhoto/15875/1587510/1587510630/picture-ain-sukhna-kefi-palmera-beach-resort-el-sokhna-family-only-2.JPEG",
+      "rating": "4*",
+      "valid_dates": "01-11 to 30-12",
+      "prices_egp": {
+        "triple": 3750,
+        "double": 3970,
+        "single": 6350
+      }
+    },
+    {
+      "hotel_name": "Retal View El-Sokhna Hotel",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipMC2oSWLZT7eL49h-9-U-RHZfIKCqeLedyDVKAK=s1360-w1360-h1020-rw",
+      "rating": "4*",
+      "valid_dates": "01-11 to 30-11",
+      "prices_egp": {
+        "triple": 4165,
+        "double": 4270,
+        "single": 6395
+      }
+    },
+    {
+      "hotel_name": "Marina Wadi Degla",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipP1U1varYbx4pCTmL2yM6YWl2xKWQvqImljQgrc=s1360-w1360-h1020-rw",
+      "rating": "4*",
+      "valid_dates": "01-11 to 30-12",
+      "prices_egp": {
+        "triple": 4270,
+        "double": 4410,
+        "single": 7100
+      }
+    },
+    {
+      "hotel_name": "Swiss Inn Teda Hotel",
+      "img": "https://lh3.googleusercontent.com/proxy/vcyIG7ykwPtmTY6Aleo95fCkYHlN2qyqmZTXN_h7nkzqFmgT6ik5esgHCRCX5OO7fWCx5yxUAs_ujj0iPVcUKHDFV9vHPwGIyyxusXcAfIW7AkRVq0CtWSkTflvHylsoE-3XaiCMM_Y6i6YIebwjPbSyVfA8FQ=s1360-w1360-h1020-rw",
+      "rating": "4*",
+      "valid_dates": "01-11 to 30-12",
+      "prices_egp": {
+        "triple": 5160,
+        "double": 5750,
+        "single": 9110
+      }
+    },
+    {
+      "hotel_name": "Al Masa Hotel El Sokhna",
+      "img": "https://lh3.googleusercontent.com/proxy/UOACUD2TNPw8niY52_4uNMcNOrmeQT9CorJxeaMKQfO4LYcS76c7TG1ziZaYmJzrWOY5tqYcusa2XLnQkXu6hEqabql8PNnVA99ySHiH-MPJ1Z_9FjmXGTcT-rWJ-AqIq74w7BK0z7u54T5KBuV0arV2ViCEhw=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "valid_dates": "01-11 to 17-12",
+      "prices_egp": {
+        "triple": 8400,
+        "double": 8850,
+        "single": 16470
+      }
+    },
+    {
+      "hotel_name": "Tolip El Galala Heights",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipOQmWbpU2YUbZQUFoNASLvLVdjx-7UymPXsjXQP=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "valid_dates": "01-11 to 17-12",
+      "prices_egp": {
+        "triple": 4900,
+        "double": 5595,
+        "single": 7650
+      }
+    },
+    {
+      "hotel_name": "Stella Grand",
+      "img": "https://lh3.googleusercontent.com/proxy/kqw_YLVzjH4rxfAiySyPzuMzZU1LtNc7H_d1U8Kj7xqx4zd5xspr8lt_UcWV_X5JErKaPsOCw2Jp_Ud-P8hO5k3WtRRIJv4JNFZCCpre1G6sfVVxV0UkwKHBa-zhkVeM9VCvxy_7Skytoybks3cQxd_ouF7b9g=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "valid_dates": "01-11 to 30-12",
+      "prices_egp": {
+        "triple": 6000,
+        "double": 7200,
+        "single": 12660
+      }
+    },
+    {
+      "hotel_name": "Tolip Majestic El Galala",
+      "img": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSwnhwaNVmBQP-THN05HYHYdqsC4nP3PgxdNAc7E8YHl8cNIeWBuphr4QI6I1-63ugmWJJgRfuoDfzbhoN6BaoI7WSiJ1vQ9xQkEdQFldreW1FSbd9D32SsInAhO9RU89cvyAtY=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "valid_dates": "01-11 to 30-12",
+      "prices_egp": {
+        "triple": 5880,
+        "double": 7350,
+        "single": 13525
+      }
+    },
+    {
+      "hotel_name": "Tolip Resort El Galala Hills",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipO-dKkz7m9Pp1_QD81NwQnsl96lL2yIS8AfpbSx=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "valid_dates": "01-11 to 30-12",
+      "prices_egp": {
+        "triple": 5100,
+        "double": 5960,
+        "single": 10860
+      }
+    },
+    {
+      "hotel_name": "Coral Sea Beach Resort & Aqua Park",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipPETJ2Ys3ixTknkU5xctMyCZMGUQE5C3RNTqHDD=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "valid_dates": "01-11 to 30-12",
+      "prices_egp": {
+        "triple": 6030,
+        "double": 6615,
+        "single": 10590
+      }
+    },
+    {
+      "hotel_name": "TANOAK Resort",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipNF5z5JK8DyfpYKEuP9X162x_sPRRl5td9Sa3cD=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "valid_dates": "01-11 to 27-12",
+      "prices_egp": {
+        "triple": 8490,
+        "double": 8150,
+        "single": 14675
+      }
+    },
+    {
+      "hotel_name": "Grand Ocean Hotel",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipMkaKhr0OxLzsjeqeuyyxi07fPb6_NNyFO1zHXq=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "valid_dates": "01-11 to 27-12",
+      "prices_egp": {
+        "triple": 13530,
+        "double": 13820,
+        "single": 20200
+      }
+    }
+  ],
+  "included": [
+    "إقامة لمدة 4 أيام / 3 ليالي (أيام الأسبوع)",
+    "الوجبات: إفطار وعشاء"
+  ],
+  "not_included": ["أي عناصر غير مذكورة في البرنامج", "الانتقالات"],
+  "child_policy_summary": {
+    "note": "شهادة الميلاد مطلوبة عند تسجيل الوصول",
+    "varies_by_hotel": true
+  },
+  "notes": ["الأسعار قابلة للزيادة حسب خطط تسعير الفندق والتوافر وقت الحجز"]
+}

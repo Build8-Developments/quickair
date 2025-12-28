@@ -529,6 +529,12 @@ export interface ApiHotelHotel extends Struct.CollectionTypeSchema {
           localized: false;
         };
       }>;
+    externalImageUrl: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: false;
+        };
+      }>;
     featured: Schema.Attribute.Boolean &
       Schema.Attribute.SetPluginOptions<{
         i18n: {

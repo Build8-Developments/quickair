@@ -8,6 +8,7 @@ export const GET_ALL_HOTELS = `
       url
       name
     }
+    externalImageUrl
     documentId
     name
     shortDescription
@@ -21,6 +22,39 @@ export const GET_ALL_HOTELS = `
     }
   }
 }
+`;
+
+// Get all hotels with pagination metadata for server-side pagination
+// Requirements: 2.1, 2.2
+export const GET_ALL_HOTELS_PAGINATED = `
+  query HotelsPaginated($locale: I18NLocaleCode, $pagination: PaginationArg) {
+    hotels(locale: $locale, pagination: $pagination) {
+      documentId
+      name
+      shortDescription
+      stars
+      coverImage {
+        url
+        name
+      }
+      externalImageUrl
+      location {
+        documentId
+        name
+        slug
+        type
+        country
+      }
+      amenities {
+        name
+      }
+    }
+    hotels_connection(locale: $locale) {
+      pageInfo {
+        total
+      }
+    }
+  }
 `;
 
 // Get single hotel with its associated offer
@@ -39,6 +73,7 @@ export const GET_HOTEL_WITH_OFFER = `
       website
       email
       phone
+      externalImageUrl
       coverImage {
         url
         alternativeText
@@ -183,6 +218,10 @@ export const GET_FEATURED_TRIPS = `
         hotel {
           name
           stars
+          externalImageUrl
+          coverImage {
+            url
+          }
           location {
             name
           }

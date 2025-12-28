@@ -1,0 +1,108 @@
+{
+  "offer": {
+    "title": "Dahab Offer",
+    "validity": "November",
+    "duration": {
+      "days": 4,
+      "nights": 3
+    }
+  },
+  "hotels": [
+    {
+      "hotel_name": "Daniela Diving Resort",
+      "img": "https://media.packxgen.com/media/1701259350473_-Zu5RhFg_1.jpg",
+      "rating": "3*",
+      "valid_dates": "01-11 to 30-11",
+      "prices_egp": {
+        "triple": 4400,
+        "double": 5250,
+        "single": 6450
+      }
+    },
+    {
+      "hotel_name": "Happy Life Village",
+      "img": "https://www.happylifehotel.com/dahab-cover.jpg",
+      "rating": "3*",
+      "valid_dates": "01-11 to 29-12",
+      "prices_egp": {
+        "triple": 4925,
+        "double": 5000,
+        "single": 7500
+      }
+    },
+    {
+      "hotel_name": "Tropitel Dahab Oasis",
+      "img": "https://lh3.googleusercontent.com/proxy/YIntCsmRt82XcCxwrXJTOzc1jHu1MlkK80szUEUH1GX-mnW1vIMLKOwEQcyu1zsh5CTFsgDGBiREZdLJRC0tTULOwi__Uu2oB7nIvdh4Xfh15upy7jELbmhOa5WtxE3TEs7H2ZprmL12EhbpwVcUJLWmFzWgcA=s1360-w1360-h1020-rw",
+      "rating": "4*",
+      "valid_dates": "01-11 to 29-12",
+      "prices_egp": {
+        "triple": 5380,
+        "double": 5450,
+        "single": 8700
+      }
+    },
+    {
+      "hotel_name": "Dahab Lagoon Club",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipOtoAgtsV6NubGMW3UDIeoIcOR5DJA-tv00XlOp=s1360-w1360-h1020-rw",
+      "rating": "4*",
+      "valid_dates": "01-11 to 30-11",
+      "prices_egp": {
+        "triple": 8850,
+        "double": 8850,
+        "single": 14110
+      }
+    },
+    {
+      "hotel_name": "Ecotel Dahab Sea View",
+      "img": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSxSiYFH-M9T8-kaa9KX_Dgfolm_anv66i0VvwX1FqHaL0yk1UmmK9N5NQWllZb5icHFy44tKSgTae2KupQL2aj2lygghKTXy0o3TWJ7rc7kcflmOJHRElgEfoLHC1wY7n7jh2EE=s1360-w1360-h1020-rw",
+      "rating": "4*",
+      "valid_dates": "01-11 to 29-12",
+      "prices_egp": {
+        "triple": 6370,
+        "double": 7350,
+        "single": 11760
+      }
+    },
+    {
+      "hotel_name": "Swiss Inn Resort Dahab",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipMnjSZszZLHnA4gO8fRwiZlNp37sZb20tpZnJOX=s1360-w1360-h1020-rw",
+      "rating": "4*",
+      "valid_dates": "01-11 to 30-11",
+      "prices_egp": {
+        "triple": 8675,
+        "double": 8820,
+        "single": 14110
+      }
+    },
+    {
+      "hotel_name": "Retac Dahab Resort",
+      "img": "https://lh3.googleusercontent.com/proxy/yUNzDeHx0ARPexfAdCjYd46ydZlxB46Nrx33nvRmHQEAAyMsiYDlPAT0U8uSZDG8YwlOQwCS1koy93dJt4nbumuUxixLz2_j8A0wkmIPiV6sz6r_c3aCA_jegpIjyC3UfWQqDQL4Sn4fexUEj9NGhDvAxwI7wAU=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "valid_dates": "01-11 to 24-12",
+      "prices_egp": {
+        "triple": 6800,
+        "double": 6950,
+        "single": 10400
+      }
+    },
+    {
+      "hotel_name": "Safir Dahab Resort",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipONpRxHUkFpt-rrPzIM6rCDsBKXDyAVCyPN9wMv=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "valid_dates": "01-11 to 28-12",
+      "prices_egp": {
+        "triple": 8450,
+        "double": 8730,
+        "single": 13100
+      }
+    }
+  ],
+  "included": [
+    "Hotel accommodation for 4 days / 3 nights",
+    "Meals: Breakfast and Dinner"
+  ],
+  "not_included": ["Any items not mentioned in the program", "Transfers"],
+  "notes": [
+    "Prices are subject to increase based on hotel rate plans and availability at booking time"
+  ]
+}

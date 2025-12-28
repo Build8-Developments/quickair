@@ -1,0 +1,100 @@
+{
+  "offer": {
+    "title": "عرض سهل حشيش",
+    "validity": "نوفمبر – ديسمبر",
+    "duration": {
+      "days": 4,
+      "nights": 3
+    },
+    "currency": "EGP"
+  },
+  "hotels": [
+    {
+      "hotel_name": "Zen Resort Sahl Hasheesh",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipMx0ghtUY1o8jXbkS024CdEmONgCke6x2pDl_XL=s1360-w1360-h1020-rw",
+      "rating": "4*",
+      "valid_until": "26 Dec",
+      "prices_egp": {
+        "triple": 8750,
+        "double": 9200
+      }
+    },
+    {
+      "hotel_name": "Jasmine Palace Resort And Spa",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipNWSDiBOj_wnRRuFHgIn40BPBqbowKYrYPQVfzs=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "valid_until": "23 Dec",
+      "prices_egp": {
+        "triple": 8700,
+        "double": 8910
+      }
+    },
+    {
+      "hotel_name": "Gravity Hotels & Aqua Park",
+      "img": "https://hotelsgravity.com/wp-content/uploads/2019/04/17-1.jpg",
+      "rating": "5*",
+      "valid_until": "26 Dec",
+      "prices_egp": {
+        "triple": 14050,
+        "double": 14350
+      }
+    },
+    {
+      "hotel_name": "Tropitel Sahl Hasheesh",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipPG_NVPjRexAuTTEkpYe-cnCBPQZfccRVjA6XaL=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "valid_until": "20 Nov",
+      "prices_egp": {
+        "triple": 13180,
+        "double": 13230
+      }
+    },
+    {
+      "hotel_name": "Tropitel Sahl Hasheesh",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipPG_NVPjRexAuTTEkpYe-cnCBPQZfccRVjA6XaL=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "valid_until": "21 Nov – 29 Dec",
+      "prices_egp": {
+        "triple": 11700,
+        "double": 11760
+      }
+    },
+    {
+      "hotel_name": "KaiSol Romance Hotel (Adults Only)",
+      "img": "https://kaisolhotels.com/slider_image/1716560839uD0t7aOMKS.webp",
+      "rating": "5*",
+      "valid_until": "19 Nov",
+      "prices_egp": {
+        "triple": 20300,
+        "double": 20580
+      }
+    },
+    {
+      "hotel_name": "Old Palace Resort",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipMUs_Mw464nUzLBvLhy_Vlufs5LtO-Tw29HWuTN=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "valid_until": "30 Nov",
+      "prices_egp": {
+        "triple": 13560,
+        "double": 14580
+      }
+    },
+    {
+      "hotel_name": "Premier Le Reve Hotel (Adults Only)",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipM1HimqH9svh_hZA-pHmnxuFzMWrFO3i6nUpcen=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "valid_until": "30 Nov",
+      "prices_egp": {
+        "triple": 21600,
+        "double": 22050
+      }
+    }
+  ],
+  "included": [
+    "إقامة لمدة 4 أيام / 3 ليالي",
+    "الوجبات: إفطار + غداء + عشاء + مشروبات ووجبات خفيفة",
+    "الوجبات في تروبيتل سهل حشيش: إفطار + عشاء فقط"
+  ],
+  "not_included": ["أي عناصر غير مذكورة في البرنامج", "الانتقالات"],
+  "notes": ["الأسعار قابلة للزيادة حسب خطط تسعير الفندق والتوافر وقت الحجز"]
+}

@@ -11,6 +11,7 @@
   "hotels": [
     {
       "hotel_name": "Harris Hotel Seminyak",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipMB5nDjpHl-WDz5r-M5OXYho-DkepYp6BLDnk8f=s1360-w1360-h1020-rw",
       "rating": "4*",
       "area": "Seminyak",
       "room_type": "Harris Room",
@@ -19,6 +20,7 @@
     },
     {
       "hotel_name": "KajaNe Yangloni",
+      "img": "https://bynder.onthebeach.co.uk/cdn-cgi/image/width=1180,quality=100,fit=cover,format=auto/m/1bfbe872a070a567/original/Kajane-Yangloni-Hotel-Indonesia-Bali-Room-9.jpg",
       "rating": "4*",
       "area": "Ubud",
       "room_type": "Deluxe Room",
@@ -27,6 +29,7 @@
     },
     {
       "hotel_name": "Mercure Kuta Bali",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipN0RDKxn9j254uqlcTWCG-sDSBvvwXjghb9i3Zt=s1360-w1360-h1020-rw",
       "rating": "4*",
       "area": "Kuta",
       "room_type": "Superior Double Room",
@@ -35,6 +38,7 @@
     },
     {
       "hotel_name": "Montigo Resorts Seminyak",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipOMWrisaLimwaGVeEk-aOEEVnqMdpP9EMQJcRYt=s1360-w1360-h1020-rw",
       "rating": "5*",
       "area": "Seminyak",
       "room_type": "Deluxe Room",
@@ -43,6 +47,7 @@
     },
     {
       "hotel_name": "Ramayana Suites and Resort",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipNVjk8qeRROIWh4rc0vYbWdhx1YS9s6GIlVQ8QA=s1360-w1360-h1020-rw",
       "rating": "5*",
       "area": "Kuta",
       "room_type": "Deluxe Room",

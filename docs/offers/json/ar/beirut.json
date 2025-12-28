@@ -1,0 +1,56 @@
+{
+  "offer": {
+    "title": "عرض بيروت",
+    "description": "بيروت – سحر خالد على ساحل البحر المتوسط",
+    "validity": ["نوفمبر"],
+    "duration": {
+      "days": 5,
+      "nights": 4
+    },
+    "occupancy": "شخصين"
+  },
+  "hotels": [
+    {
+      "hotel_name": "Caramel Boutique Hotel",
+      "img": "https://lh3.googleusercontent.com/proxy/TyiEIvNISQe_LOyss-e_23tGXam4_oJ9hwMlodgaGrtcED8iE0sQ8uIE8Z0cnk9QMNceFAGFEdEBlnkMaT4B5rAjBKY0PQzA4I4F_1NqB04f7iCsqjOSaK3XimgVa9wDgtKrEqOrqQH9NzYjD5cAH8sSCnEAmFI=s1360-w1360-h1020-rw",
+      "rating": "3*",
+      "room_type": "Deluxe Room",
+      "price_usd": 450
+    },
+    {
+      "hotel_name": "Hotel Cavalier",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipNzccbAbnaW4Zy-oEeUM4GNwsMcH6zpJbsI3r0O=s1360-w1360-h1020-rw",
+      "rating": "4*",
+      "room_type": "Standard Room",
+      "price_usd": 485
+    },
+    {
+      "hotel_name": "Crowne Plaza Beirut",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipMGtoqS0jUYwY9RoxnMwhXy0JX-wkfPO24eEG3j=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "room_type": "Deluxe Room",
+      "price_usd": 590
+    },
+    {
+      "hotel_name": "Movenpick Hotel Beirut",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipNoLAunCiQl1DKC8eELv2DhDOJ3tgyCCPg-NX0I=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "room_type": "Classic Room",
+      "price_usd": 1200
+    }
+  ],
+  "included": [
+    "إقامة لمدة 5 أيام / 4 ليالي في أحد الفنادق المذكورة",
+    "إفطار متضمن",
+    "التوصيل من وإلى المطار في بيروت"
+  ],
+  "not_included": [
+    "أي عناصر غير مذكورة في البرنامج",
+    "تذاكر الطيران",
+    "تأشيرة لبنان عند الوصول (25 دولار للشخص، يتطلب 2000 دولار مع المسافر)"
+  ],
+  "notes": [
+    "الأسعار حسب توافر الفندق",
+    "تختلف الأسعار حسب تاريخ الحجز وسعر صرف العملة"
+  ]
+}

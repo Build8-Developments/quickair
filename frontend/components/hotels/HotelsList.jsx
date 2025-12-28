@@ -1,50 +1,105 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import HotelsSidebar from "./HotelsSidebar";
 import HotelCardSkeleton from "./HotelCardSkeleton";
 import Pagination from "../common/Pagination";
 import Image from "next/image";
-import Link from "next/link";
+import LocalizedLink from "../common/LocalizedLink";
 import { STRAPI_CONFIG } from "@/config/api";
 import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  calculatePaginationRange,
+  buildFilteredUrl,
+  parseFiltersFromUrl,
+} from "@/utils/pagination";
 
+/**
+ * HotelsList component with server-side pagination support
+ *
+ * @param {Object} props
+ * @param {Array} props.initialHotels - Hotels for the current page from server
+ * @param {number} props.totalCount - Total number of hotels in database
+ * @param {number} props.currentPage - Current page number (1-indexed)
+ * @param {number} props.totalPages - Total number of pages
+ * @param {number} props.pageSize - Items per page
+ * @param {boolean} props.isLoading - Whether data is loading
+ * @param {string} props.locale - Current locale (en/ar)
+ */
 export default function HotelsList({
   initialHotels = [],
   totalCount = 0,
+  currentPage = 1,
+  totalPages = 1,
+  pageSize = 12,
   isLoading = false,
+  locale = "en",
 }) {
   const { t } = useTranslation();
   const { language } = useLanguage();
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // State for hotels data
   const [hotels, setHotels] = useState(initialHotels);
   const [filteredHotels, setFilteredHotels] = useState(initialHotels);
+
+  // UI state
   const [sortOption, setSortOption] = useState("");
   const [ddActives, setDdActives] = useState(false);
   const [sidebarActive, setSidebarActive] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [isFiltering, setIsFiltering] = useState(false);
   const [showCards, setShowCards] = useState(true);
   const [isInitialMount, setIsInitialMount] = useState(true);
-  const [filters, setFilters] = useState({
-    locations: [],
-    amenities: [],
-  });
 
-  const itemsPerPage = 12;
+  // Client-side pagination state (only used when filters are active)
+  const [clientPage, setClientPage] = useState(1);
+
+  // Initialize filter state from URL parameters (Requirements: 6.3)
+  const initialFilters = parseFiltersFromUrl(
+    Object.fromEntries(searchParams.entries()),
+    ["locations", "amenities"]
+  );
+
+  // Filter state
+  const [filters, setFilters] = useState(initialFilters);
+
   const dropDownContainer = useRef();
 
-  const clearAllFilters = () => {
-    setFilters({
+  // Navigate to page 1 with cleared filters (Requirements: 6.4)
+  const clearAllFilters = useCallback(() => {
+    const clearedFilters = {
       locations: [],
       amenities: [],
-    });
-  };
+    };
+    setFilters(clearedFilters);
+    setClientPage(1);
+
+    // Navigate to page 1 without filter params
+    router.push(pathname);
+  }, [pathname, router]);
 
   const hasActiveFilters =
     filters.locations.length > 0 || filters.amenities.length > 0;
   const isRTL = language === "ar";
 
+  // Handle filter changes - navigate to page 1 with filter params (Requirements: 2.5, 6.1, 6.2)
+  const handleFilterChange = useCallback(
+    (newFilters) => {
+      setFilters(newFilters);
+      setClientPage(1);
+
+      // Build URL with filter params and navigate to page 1
+      const newUrl = buildFilteredUrl(pathname, newFilters, 1);
+      router.push(newUrl);
+    },
+    [pathname, router]
+  );
+
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClick = (event) => {
       if (
@@ -56,21 +111,19 @@ export default function HotelsList({
     };
 
     document.addEventListener("click", handleClick);
-
-    return () => {
-      document.removeEventListener("click", handleClick);
-    };
+    return () => document.removeEventListener("click", handleClick);
   }, []);
 
-  // Update hotels when initialHotels changes (after loading)
+  // Update hotels when initialHotels changes (server-side pagination)
   useEffect(() => {
-    if (initialHotels.length > 0) {
-      setHotels(initialHotels);
+    setHotels(initialHotels);
+    // Only reset filtered hotels if no filters are active
+    if (!hasActiveFilters) {
       setFilteredHotels(initialHotels);
     }
   }, [initialHotels]);
 
-  // Apply filters and sorting with loading state
+  // Apply filters and sorting with loading state (client-side filtering)
   useEffect(() => {
     // Skip filtering animation on initial mount
     if (isInitialMount) {
@@ -89,11 +142,9 @@ export default function HotelsList({
       if (filters.locations.length > 0) {
         result = result.filter((hotel) => {
           if (!hotel.location || !hotel.location.slug) {
-            console.warn("Hotel missing location:", hotel.name);
             return false;
           }
-          const matches = filters.locations.includes(hotel.location.slug);
-          return matches;
+          return filters.locations.includes(hotel.location.slug);
         });
       }
 
@@ -112,14 +163,9 @@ export default function HotelsList({
 
       // Apply sorting
       if (sortOption === "Price Low to High") {
-        result.sort((a, b) => {
-          // Since hotels don't have direct pricing, sort by stars
-          return (a.stars || 0) - (b.stars || 0);
-        });
+        result.sort((a, b) => (a.stars || 0) - (b.stars || 0));
       } else if (sortOption === "Price High to Low") {
-        result.sort((a, b) => {
-          return (b.stars || 0) - (a.stars || 0);
-        });
+        result.sort((a, b) => (b.stars || 0) - (a.stars || 0));
       } else if (sortOption === "Newest") {
         result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       } else if (sortOption === "Name A-Z") {
@@ -127,7 +173,7 @@ export default function HotelsList({
       }
 
       setFilteredHotels(result);
-      setCurrentPage(1); // Reset to first page when filters change
+      setClientPage(1); // Reset to first page when filters change
       setIsFiltering(false);
 
       // Trigger card animations
@@ -137,10 +183,15 @@ export default function HotelsList({
     return () => clearTimeout(filterTimeout);
   }, [filters, sortOption, hotels]);
 
-  const getImageUrl = (imageUrl) => {
-    if (!imageUrl) return "/img/tourCards/1/1.png";
-    if (imageUrl.startsWith("http")) return imageUrl;
-    return `${STRAPI_CONFIG.url}${imageUrl}`;
+  const getImageUrl = (hotel) => {
+    // Priority: externalImageUrl > coverImage > fallback
+    if (hotel?.externalImageUrl) return hotel.externalImageUrl;
+    if (hotel?.coverImage?.url) {
+      const imageUrl = hotel.coverImage.url;
+      if (imageUrl.startsWith("http")) return imageUrl;
+      return `${STRAPI_CONFIG.url}${imageUrl}`;
+    }
+    return "/img/tourCards/1/1.png";
   };
 
   // Render stars rating
@@ -155,11 +206,53 @@ export default function HotelsList({
     ));
   };
 
-  // Pagination
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentHotels = filteredHotels.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredHotels.length / itemsPerPage);
+  // Determine which pagination mode to use
+  // - Server-side: when no filters are active (use URL-based pagination)
+  // - Client-side: when filters are active (filter current page's data)
+  const useServerPagination = !hasActiveFilters;
+
+  // Calculate display data based on pagination mode
+  let displayHotels;
+  let displayTotalPages;
+  let displayCurrentPage;
+  let displayTotalCount;
+  let paginationRange;
+
+  if (useServerPagination) {
+    // Server-side pagination: display hotels from server
+    displayHotels = filteredHotels;
+    displayTotalPages = totalPages;
+    displayCurrentPage = currentPage;
+    displayTotalCount = totalCount;
+    paginationRange = calculatePaginationRange(
+      currentPage,
+      pageSize,
+      totalCount
+    );
+  } else {
+    // Client-side pagination: paginate filtered results
+    const indexOfLastItem = clientPage * pageSize;
+    const indexOfFirstItem = indexOfLastItem - pageSize;
+    displayHotels = filteredHotels.slice(indexOfFirstItem, indexOfLastItem);
+    displayTotalPages = Math.ceil(filteredHotels.length / pageSize);
+    displayCurrentPage = clientPage;
+    displayTotalCount = filteredHotels.length;
+    paginationRange = calculatePaginationRange(
+      clientPage,
+      pageSize,
+      filteredHotels.length
+    );
+  }
+
+  // Build base URL for server-side pagination with preserved filter params (Requirements: 6.3)
+  const baseUrl = pathname;
+  const preserveParams = {};
+  if (filters.locations.length > 0) {
+    preserveParams.locations = filters.locations.join(",");
+  }
+  if (filters.amenities.length > 0) {
+    preserveParams.amenities = filters.amenities.join(",");
+  }
 
   return (
     <section className="layout-pb-xl">
@@ -170,7 +263,7 @@ export default function HotelsList({
               <HotelsSidebar
                 hotels={hotels}
                 filters={filters}
-                setFilters={setFilters}
+                setFilters={handleFilterChange}
               />
             </div>
 
@@ -200,7 +293,7 @@ export default function HotelsList({
                     <HotelsSidebar
                       hotels={hotels}
                       filters={filters}
-                      setFilters={setFilters}
+                      setFilters={handleFilterChange}
                     />
                   </div>
                 </div>
@@ -230,21 +323,21 @@ export default function HotelsList({
 
             <div className="row y-gap-30">
               {isLoading || isFiltering ? (
-                // Show skeleton loaders while loading or filtering
-                Array.from({ length: itemsPerPage }).map((_, i) => (
+                // Show skeleton loaders while loading or filtering (Requirements: 4.1, 4.3)
+                Array.from({ length: pageSize }).map((_, i) => (
                   <div key={`skeleton-${i}`} className="col-lg-4 col-sm-6">
                     <HotelCardSkeleton />
                   </div>
                 ))
-              ) : currentHotels.length > 0 ? (
-                currentHotels.map((hotel, i) => (
+              ) : displayHotels.length > 0 ? (
+                displayHotels.map((hotel, i) => (
                   <div
                     key={hotel.documentId || i}
                     className={`col-lg-4 col-sm-6 ${
                       showCards ? "hotel-card-enter" : ""
                     }`}
                   >
-                    <Link
+                    <LocalizedLink
                       href={`/hotels/${hotel.documentId}`}
                       className="tourCard -type-1 py-10 px-10 border-1 rounded-12 -hover-shadow"
                     >
@@ -253,7 +346,7 @@ export default function HotelsList({
                           <Image
                             width={421}
                             height={301}
-                            src={getImageUrl(hotel.coverImage?.url)}
+                            src={getImageUrl(hotel)}
                             alt={
                               hotel.coverImage?.alternativeText || hotel.name
                             }
@@ -316,7 +409,7 @@ export default function HotelsList({
                           </div>
                         </div>
                       </div>
-                    </Link>
+                    </LocalizedLink>
                   </div>
                 ))
               ) : (
@@ -333,18 +426,34 @@ export default function HotelsList({
               )}
             </div>
 
-            {filteredHotels.length > itemsPerPage && (
+            {/* Pagination Controls (Requirements: 3.1, 3.6) */}
+            {displayTotalPages > 1 && (
               <div className="d-flex justify-center flex-column mt-60">
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={setCurrentPage}
-                />
+                {useServerPagination ? (
+                  // URL-based pagination for server-side (Requirements: 3.1, 3.2, 3.3, 3.4)
+                  <Pagination
+                    currentPage={displayCurrentPage}
+                    totalPages={displayTotalPages}
+                    baseUrl={baseUrl}
+                    preserveParams={preserveParams}
+                    isLoading={isLoading}
+                  />
+                ) : (
+                  // Controlled pagination for client-side filtered results
+                  <Pagination
+                    currentPage={displayCurrentPage}
+                    totalPages={displayTotalPages}
+                    onPageChange={setClientPage}
+                  />
+                )}
 
-                <div className="text-14 text-center mt-20">
-                  {t("hotelsList.showingResults")} {indexOfFirstItem + 1}-
-                  {Math.min(indexOfLastItem, filteredHotels.length)}{" "}
-                  {t("hotelsList.of")} {filteredHotels.length}
+                {/* Results summary (Requirements: 3.5, 5.1, 5.2) */}
+                <div
+                  className="text-14 text-center mt-20"
+                  style={{ direction: isRTL ? "rtl" : "ltr" }}
+                >
+                  {t("hotelsList.showingResults")} {paginationRange.start}-
+                  {paginationRange.end} {t("hotelsList.of")} {displayTotalCount}
                 </div>
               </div>
             )}

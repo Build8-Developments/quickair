@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/contexts/LanguageContext";
 import Calender from "@/components/common/dropdownSearch/Calender";
 import BookingModal from "./BookingModal";
+import { getHotelCurrency } from "@/utils/currency";
 import {
   Star,
   CheckCircle,
@@ -33,6 +34,9 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
   const { t } = useTranslation();
   const { language } = useLanguage();
   const isRTL = language === "ar";
+
+  // Determine currency based on hotel location (Egypt = EGP, others = USD)
+  const currency = getHotelCurrency(hotelOption, hotel, "USD");
 
   // Ticket counters
   const [adultNumber, setAdultNumber] = useState(2);
@@ -251,7 +255,7 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
       children: childrenNumber,
       optionalTrips: optionalTripsData,
       total: calculateTotal().toLocaleString(),
-      currency: hotelOption?.currency || "USD",
+      currency: currency,
     };
 
     // Open modal instead of WhatsApp
@@ -316,9 +320,7 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
                     )
                     .filter((p) => p !== Infinity)
                 ).toLocaleString()}{" "}
-                <span className="text-18 text-dark-1">
-                  {hotelOption.currency}
-                </span>
+                <span className="text-18 text-dark-1">{currency}</span>
               </div>
             )}
             <div className="text-13 text-light-2 mt-5">
@@ -431,8 +433,7 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
             {getAdultPrice() > 0 && (
               <div className="price-info-row">
                 <span className="text-13 text-light-2">
-                  {getAdultPrice().toLocaleString()}{" "}
-                  {hotelOption?.currency || "USD"}
+                  {getAdultPrice().toLocaleString()} {currency}
                 </span>
                 <span className="occupancy-type-badge">
                   {getOccupancyText()}
@@ -487,7 +488,7 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
                     </span>
                     <span className="fw-500">
                       {getSelectedRoomPricing().singleOccupancyPrice.toLocaleString()}{" "}
-                      {hotelOption?.currency}
+                      {currency}
                     </span>
                   </div>
                 )}
@@ -498,7 +499,7 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
                     </span>
                     <span className="fw-500">
                       {getSelectedRoomPricing().doubleOccupancyPrice.toLocaleString()}{" "}
-                      {hotelOption?.currency}
+                      {currency}
                     </span>
                   </div>
                 )}
@@ -509,7 +510,7 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
                     </span>
                     <span className="fw-500">
                       {getSelectedRoomPricing().tripleOccupancyPrice.toLocaleString()}{" "}
-                      {hotelOption?.currency}
+                      {currency}
                     </span>
                   </div>
                 )}
@@ -538,8 +539,7 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
                   </span>
                 ) : (
                   <>
-                    {getChildPrice().toLocaleString()}{" "}
-                    {hotelOption?.currency || "USD"}
+                    {getChildPrice().toLocaleString()} {currency}
                     {hotelOption.kidsPricing[0].discount && (
                       <span className="discount-badge">
                         -{hotelOption.kidsPricing[0].discount}%
@@ -670,7 +670,7 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
           </div>
           <div className="text-26 fw-700 text-dark-1">
             {calculateTotal().toLocaleString()}{" "}
-            <span className="text-18">{hotelOption?.currency || "USD"}</span>
+            <span className="text-18">{currency}</span>
           </div>
         </div>
       </div>
@@ -777,7 +777,7 @@ export default function HotelSidebar({ hotel, offer, hotelOption }) {
                   ] || 1,
               })) || [],
           total: calculateTotal().toLocaleString(),
-          currency: hotelOption?.currency || "USD",
+          currency: currency,
         }}
         onSubmit={handleBookingSubmit}
       />

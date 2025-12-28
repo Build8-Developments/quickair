@@ -7,6 +7,7 @@
 import { executeGraphQL } from "../client";
 import {
   GET_ALL_OFFERS,
+  GET_ALL_OFFERS_PAGINATED,
   GET_OFFER_BY_ID,
   GET_OFFERS_BY_LOCATION,
   GET_FEATURED_OFFERS,
@@ -48,6 +49,58 @@ export async function getAllOffers({
   } catch (error) {
     logError("[OfferService] Error fetching all offers:", error);
     return [];
+  }
+}
+
+/**
+ * Get all offers with server-side pagination
+ * @param {object} params - Query parameters
+ * @param {string} params.locale - Locale code ('en' or 'ar')
+ * @param {number} params.page - Page number (1-indexed)
+ * @param {number} params.pageSize - Items per page
+ * @param {string} params.sort - Sort order
+ * @param {object} params.filters - Additional filters
+ * @returns {Promise<object>} Paginated result with items, total, page, pageSize, totalPages
+ * Requirements: 2.1, 2.2, 2.4
+ */
+export async function getAllOffersPaginated({
+  locale = "en",
+  page = 1,
+  pageSize = 12,
+  sort = "createdAt:desc",
+  filters = {},
+} = {}) {
+  try {
+    // Calculate start offset from page number (0-indexed for GraphQL)
+    const start = (page - 1) * pageSize;
+
+    const data = await executeGraphQL(GET_ALL_OFFERS_PAGINATED, {
+      locale,
+      pagination: { start, limit: pageSize },
+      sort: [sort],
+      filters,
+    });
+
+    const items = data?.offers || [];
+    const total = data?.offers_connection?.pageInfo?.total || 0;
+    const totalPages = Math.ceil(total / pageSize);
+
+    return {
+      items,
+      total,
+      page,
+      pageSize,
+      totalPages,
+    };
+  } catch (error) {
+    logError("[OfferService] Error fetching paginated offers:", error);
+    return {
+      items: [],
+      total: 0,
+      page,
+      pageSize,
+      totalPages: 0,
+    };
   }
 }
 

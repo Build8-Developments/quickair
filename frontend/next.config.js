@@ -1,8 +1,8 @@
-const path = require('path');
+const path = require("path");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  outputFileTracingRoot: path.join(__dirname, '../'),
+  outputFileTracingRoot: path.join(__dirname, "../"),
   images: {
     remotePatterns: [
       {
@@ -24,6 +24,15 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "placehold.co",
+      },
+      {
+        // Allow all external image URLs
+        protocol: "https",
+        hostname: "**",
+      },
+      {
+        protocol: "http",
+        hostname: "**",
       },
     ],
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",

@@ -12,6 +12,7 @@
   "hotels": [
     {
       "hotel_name": "Sharm Club Beach Resort",
+      "img": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSzqefzPG1T_Mxr7QRBsmwxP-qWV48a65HZ-PtYFOlBW-jcM51rtIqJ1hVJyAmq_T77W14HJzLd5yhYxRhFZZGBg58pWSL-pOT7C9wRGdF3GabQNh2cQRlTvgevVg_9m-lZnplVvbA=s1360-w1360-h1020-rw",
       "rating": "4*",
       "valid_dates": "01-11 to 22-12",
       "prices_egp": {
@@ -22,6 +23,7 @@
     },
     {
       "hotel_name": "Xperience St. George",
+      "img": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSzRNija5pMWbo_MMEJ5YB0n9BRosyErgB6hVk1Tj_Ae1iq-wyerAvZ8tigoQg5IGgXKwr9DcL-CxlLcA317Uxa_D_XPMcNEDICudiJ2sjdwCkImEs3C9If7gFFfZvDVMMQm9K3A=s1360-w1360-h1020-rw",
       "rating": "4*",
       "valid_dates": "01-11 to 22-12",
       "prices_egp": {
@@ -32,6 +34,7 @@
     },
     {
       "hotel_name": "Dreams Vacation Resort",
+      "img": "https://webbox.imgix.net/images/outtmvqzlhcvkexe/712b119c-d65d-4a6c-851d-20fedbadc969.jpg",
       "rating": "4*",
       "valid_dates": "01-11 to 22-12",
       "prices_egp": {
@@ -42,6 +45,7 @@
     },
     {
       "hotel_name": "JAZ Neo Naama Bay (ex. Sol Y Mar Naama Bay)",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipNlmWpDjfgqf-ErT_BmFjY1pJxCU0bmC7zpHOa-=s1360-w1360-h1020-rw",
       "rating": "4*",
       "valid_dates": "01-11 to 30-11",
       "prices_egp": {
@@ -52,6 +56,7 @@
     },
     {
       "hotel_name": "Club Reef Resort",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipOX_c7Sh5Jrko-h9vZwJDXvUO2zV0yL0OgbE9ad=s1360-w1360-h1020-rw",
       "rating": "4*",
       "valid_dates": "01-11 to 22-12",
       "prices_egp": {
@@ -62,6 +67,7 @@
     },
     {
       "hotel_name": "Albatros Sharm Resort",
+      "img": "https://lh3.googleusercontent.com/proxy/0rNs5vmCzqUstkvlCwACZWNRukuVO2suPa2vnI4STW391TgWmAhaJ1bpfFzzo5fVUZZZT8NATe0c_3Rxw0e5a4ziIdCBdGneH3QUAax292cN3bEi0qt79hfihuiW6PCeS60BZjJkMdm2SUPBmIty80BNDBCOYqc=s1360-w1360-h1020-rw",
       "rating": "4*",
       "valid_dates": "01-11 to 30-11",
       "prices_egp": {
@@ -72,6 +78,7 @@
     },
     {
       "hotel_name": "Charmillion Sea Life",
+      "img": "https://charmillionresorts.com/wp-content/uploads/elementor/thumbs/Overview-Image-qbs66yux537umi9tpnpjd5ts3003f41dg0617cnjbc.jpg",
       "rating": "4*",
       "valid_dates": "01-11 to 30-11",
       "prices_egp": {
@@ -82,6 +89,7 @@
     },
     {
       "hotel_name": "Marina Sharm Hotel",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipM8kb3zHrHF9zdTYSpvz93R3l_mQUdDGd4OOGxR=s1360-w1360-h1020-rw",
       "rating": "4*",
       "valid_dates": "01-11 to 30-11",
       "prices_egp": {
@@ -92,6 +100,7 @@
     },
     {
       "hotel_name": "Tamra Beach Resort",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipOwWmwp_FeLMeKbRAQSQaLvUntif1s9hMxa_ddq=s1360-w1360-h1020-rw",
       "rating": "4*",
       "valid_dates": "01-11 to 22-12",
       "prices_egp": {
@@ -102,6 +111,7 @@
     },
     {
       "hotel_name": "MOVENPICK Resort",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipNvDDWbWI6NbGUeNmhmFka-vb2673OUNxFehUEa=s1360-w1360-h1020-rw",
       "rating": "5*",
       "valid_dates": "01-11 to 26-12",
       "prices_egp": {
@@ -112,6 +122,7 @@
     },
     {
       "hotel_name": "Parrotel Lagoon Waterpark Resort",
+      "img": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSyP6iJG6Nz4gKPw0HLd9VO5k3-3gxgxTmZRkHrHezXwHe8rJhvR3BDjxnqs9TKVojwAi1jzelrp2I9Su6Dc4W6q6GWna3Gb2H_xFcCQ6siRUkkI1ICcnsCImgj460si-xaZwgmo6EY_SCzC=s1360-w1360-h1020-rw",
       "rating": "5*",
       "valid_dates": "01-11 to 29-12",
       "prices_egp": {
@@ -122,6 +133,7 @@
     },
     {
       "hotel_name": "Concorde El Salam Front Hotel",
+      "img": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSz9gp0XuYbMdg3Q_lMuyL379-3cN_4kRKlCly1JMdcyNnoPfi7Vr5u9uEi98QLEfky__D-7oJSQHIm3k4BrFoZe3t8XYXalkozH18PkIvdw-XMrwOscaxK712e9pZdwvU8L4Fyx=s1360-w1360-h1020-rw",
       "rating": "5*",
       "valid_dates": "01-11 to 30-11",
       "prices_egp": {
@@ -132,6 +144,7 @@
     },
     {
       "hotel_name": "Charmillion Club Aqua Park",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipPlmecpyHsVJayWDZHt1KcwpQivNt3iLjWvTQ0=s1360-w1360-h1020-rw",
       "rating": "5*",
       "valid_dates": "01-11 to 30-11",
       "prices_egp": {
@@ -142,6 +155,7 @@
     },
     {
       "hotel_name": "Xperience Kiroseiz Parkland",
+      "img": "https://lh3.googleusercontent.com/proxy/nGsgHRzknn5L_v2us5C6lYi0kWKuZnDzoGXKGzSov4ZwgbAIyFMZyXxGmdCcrL99GIc7KnQzmBYlxQPDcuC0ylMQfTsSRwLPqw1e53qNnP824Z5vOFEy4kzw1aVNzEZPk97dHjFeCaBRJbAbzA56iGOcUDUciW4=s1360-w1360-h1020-rw",
       "rating": "5*",
       "valid_dates": "01-11 to 22-12",
       "prices_egp": {
@@ -152,6 +166,7 @@
     },
     {
       "hotel_name": "Dreams Beach Resort",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipNfW57C499yYr4xyIGaw8AZuDNuch4az4LbWYI2=s1360-w1360-h1020-rw",
       "rating": "5*",
       "valid_dates": "01-11 to 22-12",
       "prices_egp": {
@@ -162,6 +177,7 @@
     },
     {
       "hotel_name": "Cleopatra Luxury Sharm El Sheikh",
+      "img": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSxterc1sYAIiGpZTru6EfbDiFQOHnt9b_YBk5laUXvmECJqHQN82jc1jmfRU6j6Y_oXBhCZULZZDqGdQumFnRRMCCDhUkESZnA0dEG79MpmJPlxPz1o0LAT0KWDSEpdRXJlRcPAOA=s1360-w1360-h1020-rw",
       "rating": "5*",
       "valid_dates": "01-11 to 27-12",
       "prices_egp": {
@@ -172,6 +188,7 @@
     },
     {
       "hotel_name": "SUNRISE Diamond Beach Resort",
+      "img": "https://lh3.googleusercontent.com/proxy/ZhyX27ocqH8D_I4Zc_e0HAqmPNw8lqytP2jbDneoOkdO39I42rPkwEPs1gsjmGCEFq8x6yZKquv6-kMRH_45RjSBL3nyioTDNI63FFmycK8U9hyy_cPLL3LlsWooSmr87ua2-lbrXu7B1N6WTEnImWmska3Vsw=s1360-w1360-h1020-rw",
       "rating": "5*",
       "valid_dates": "01-11 to 18-11 & 24-11 to 27-12",
       "prices_egp": {
@@ -182,6 +199,7 @@
     },
     {
       "hotel_name": "Pickalbatros Aqua Park",
+      "img": "https://image-tc.galaxy.tf/wijpeg-884g0csnm82cnm6gf5m3391gh/3.jpg?width=1920",
       "rating": "5*",
       "valid_dates": "01-11 to 30-11",
       "prices_egp": {

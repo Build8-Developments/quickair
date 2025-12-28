@@ -11,6 +11,7 @@
   "hotels": [
     {
       "hotel_name": "Dexon Roma Hotel",
+      "img": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSxHoO72zcSE6MJKFwamG3mqMj_6BBG42JRV1ZKzHyC94SZdJYEF8ItPDBrMDXc0bmGiTs0RX9RH65Npe_TxfDrcnpCKNa0SjM5wLutEDkkbZkYHkeI7op1jsV28sLyb29BZb8AX=s1360-w1360-h1020-rw",
       "rating": "3*",
       "valid_dates": "01 Nov – 23 Dec",
       "prices_egp": {
@@ -21,6 +22,7 @@
     },
     {
       "hotel_name": "Minamark Beach",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipMY4Xv7iFOQ5OwnXsv5sqh2mTFP_ObVjdXETUB_=s1360-w1360-h1020-rw",
       "rating": "4*",
       "valid_dates": "01 Nov – 23 Dec",
       "prices_egp": {
@@ -31,6 +33,7 @@
     },
     {
       "hotel_name": "Sphinx Aqua Park",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipMhx6X7fhl7wPv9vY6slVWQ1PmIN0yQEK7BKqBQ=s1360-w1360-h1020-rw",
       "rating": "4*",
       "valid_dates": "01 Nov – 23 Dec",
       "prices_egp": {
@@ -41,6 +44,7 @@
     },
     {
       "hotel_name": "Sunny Days El Palacio",
+      "img": "https://lh3.googleusercontent.com/proxy/KnhOZYgFp1RnMrxD-M3qdZAHeendgfUJrUnAoEFwEqyGVfl-eTWxJu45MuaepR5K3t-HkGLI-AC-QOqkN6nGEnMQVfc3rMeSAm3UL1Uh1YiQ4xCifUheIg__JpUyv6om0cuRiyqInbmhWnrfQ4jT_2uxD7_leA=s1360-w1360-h1020-rw",
       "rating": "4*",
       "valid_dates": "01 Nov – 25 Dec",
       "prices_egp": {
@@ -51,6 +55,7 @@
     },
     {
       "hotel_name": "Seagull Resort",
+      "img": "https://lh3.googleusercontent.com/proxy/Y5_i6TMeGhZNsH2f5XVe4v6Xl-8Ploc3vV0AgTk-5x-8bGGu4AKWs5WR3hY1PK6MUKTWUrajC7TNCigqPAtNfhHNUrOa94ug-urU_zJxjSsvl4Aoa7muMdqc9uGDQEJNb9Qulc4BABs8crQk4IjDUrE66AJoUw=s1360-w1360-h1020-rw",
       "rating": "4*",
       "valid_dates": "01 Nov – 30 Nov",
       "prices_egp": {
@@ -61,6 +66,7 @@
     },
     {
       "hotel_name": "Sentido Mamlouk",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipO3NYVr-bTmkIJ29zQr74svp_5rtMp2EqR8ZRFZ=s1360-w1360-h1020-rw",
       "rating": "5*",
       "valid_dates": "01 Nov – 19 Nov",
       "prices_egp": {
@@ -71,6 +77,7 @@
     },
     {
       "hotel_name": "Swiss Inn Resort",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipNYxLvxUpovJEik_LYZ9lEgkMwR6xFn0IAUAb29=s1360-w1360-h1020-rw",
       "rating": "5*",
       "valid_dates": "20 Nov – 30 Nov",
       "prices_egp": {
@@ -81,6 +88,7 @@
     },
     {
       "hotel_name": "Titanic Palace",
+      "img": "https://lh3.googleusercontent.com/proxy/hQZhQ9Ud3Z2U_DEmHmMR_QiwzCDwj87AUAVgQN5_UvMLLCE48q4Q1A31NWdswg0ISLPrOS8-JKqd7Nv28OgilWGrY8M_QjXwfZcKnUPzaF3EHvTzzTEDlGr19Slk48_vRCH-U2wCc0XzkL_pRsxfzVlm146jZg=s1360-w1360-h1020-rw",
       "rating": "5*",
       "valid_dates": "01 Nov – 30 Nov",
       "prices_egp": {
@@ -90,6 +98,7 @@
     },
     {
       "hotel_name": "Sunrise Royal",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipOSYlr59tSux2F_MjPsZbFM11Ft55hFHdVSW0zo=s1360-w1360-h1020-rw",
       "rating": "5*",
       "valid_dates": "01 Nov – 30 Nov",
       "prices_egp": {
@@ -100,6 +109,7 @@
     },
     {
       "hotel_name": "Meraki Resort (Adults Only)",
+      "img": "https://meraki-resort.com/wp-content/uploads/2022/08/6.1-Party-Never-Ends-Suite-scaled.jpg",
       "rating": "5*",
       "valid_dates": "01 Nov – 23 Dec",
       "prices_egp": {
@@ -109,6 +119,7 @@
     },
     {
       "hotel_name": "Continental Hotel",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipMJpkwRJV5RmUdj0N9iJ4UYsrkfdpDtJhbDwblG=s1360-w1360-h1020-rw",
       "rating": "5*",
       "valid_dates": "01 Nov – 30 Nov",
       "prices_egp": {
@@ -119,6 +130,7 @@
     },
     {
       "hotel_name": "Pickalbatros White Beach Resort",
+      "img": "https://lh3.googleusercontent.com/proxy/9MXrxqKKs62PIIQ9jWgwQh5KNh6jsUPSpLZVKJzPl5J6M_cCdCnpB0iD8wYoJHzm3AJd4AvycRUYhYFn9bSi3WGG48I4hbU4rfIYTTEzKEMTOt3C3U5e-kNQ2ih96l5uEdSNKtvDij1ZO1s6ugjBbl1YK3lTKA=s1360-w1360-h1020-rw",
       "rating": "5*",
       "valid_dates": "01 Nov – 30 Nov",
       "prices_egp": {
@@ -129,6 +141,7 @@
     },
     {
       "hotel_name": "Rixos Premium Magawish Suites & Villas",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipNF0MH1PX2phEmd_gB8fszK-UxYO76QfUISwaO4=s1360-w1360-h1020-rw",
       "rating": "5*",
       "valid_dates": "01 Nov – 30 Nov",
       "prices_egp": {

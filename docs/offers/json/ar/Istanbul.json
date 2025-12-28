@@ -1,0 +1,124 @@
+{
+  "offer": {
+    "title": "عرض إسطنبول الشتوي",
+    "validity": "01 نوفمبر – 24 ديسمبر",
+    "duration": {
+      "days": 6,
+      "nights": 5
+    },
+    "meal_plan": "إفطار",
+    "currency": "USD"
+  },
+  "hotels": [
+    {
+      "hotel_name": "Grand Liza Hotel",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipPPzFi8p609rbl6zMWUU8bITMDPKi5BZ47YmcHt=s1360-w1360-h1020-rw",
+      "rating": "3*",
+      "area": "Fatih",
+      "prices_usd": {
+        "double_or_triple": 100,
+        "single": 289,
+        "child_6_11": 159
+      }
+    },
+    {
+      "hotel_name": "Klas Hotel Old City",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipMqGG51VMZo3S_utfcPyoWPABSciSl-5StGJYsE=s1360-w1360-h1020-rw",
+      "rating": "4*",
+      "area": "Fatih",
+      "prices_usd": {
+        "double_or_triple": 155,
+        "single": 379,
+        "child_6_11": 205
+      }
+    },
+    {
+      "hotel_name": "Feronya Hotel Taksim",
+      "img": "https://lh3.googleusercontent.com/p/AF1QipMYN_1zMmI_e7Tv-RjleKdKtb3hpJdpvkyIEGEm=s1360-w1360-h1020-rw",
+      "rating": "4*",
+      "area": "Taksim",
+      "prices_usd": {
+        "double_or_triple": 145,
+        "single": 445,
+        "child_6_11": 239
+      }
+    },
+    {
+      "hotel_name": "Central Palace Taksim",
+      "img": "https://lh3.googleusercontent.com/proxy/qVCaHIGvmg49v8UAzLjv-IRRd7eEJhZKfHe8ed_Vm7fGonrUh_SfGAr7HGEgey_lE2lhK5Zba7qVFN14_sA50RosIoyWhi3sJ66AftEoksITjDRgQBZ8zJPUxfftTrlVXFzEYJUU760I8qk9pfE1Omt0ZMHjlpk=s1360-w1360-h1020-rw",
+      "rating": "4*",
+      "area": "Taksim",
+      "prices_usd": {
+        "double_or_triple": 185,
+        "single": 470,
+        "child_6_11": 250
+      }
+    },
+    {
+      "hotel_name": "Ramada by Wyndham Pera",
+      "img": "https://lh3.googleusercontent.com/proxy/gOACgMmr3Y4SVi7ur-WLaN2WCHKoDDWj5HsYJ4DquRmAGAnT2WZYyaN_JlVcUE-hwHjJU_IRRtoUtFichcP7NemIgKX3piGM82sDHyQUPMe9jTuE82BmV9u0fo-kz_Nn0Uo3d8khSqTwhhhwc1DPZjebEptuLw=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "area": "Pera",
+      "prices_usd": {
+        "double_or_triple": 210,
+        "single": 620,
+        "child_6_11": 325
+      }
+    },
+    {
+      "hotel_name": "Point Hotel Taksim",
+      "img": "https://lh3.googleusercontent.com/gps-cs-s/AG0ilSxLX8Q4p4mLH8eCWJ9jifaA7-v4bllg9VraPxR-mFaRr9pvcPgYDKvbrlHCFmEx8EkhvBBTK5e1ETCaAKomlZF4dH9NoD_b2_nO9bRSJItx_GjBhv0Jy1HEY-35AKQjPExzYqU=s1360-w1360-h1020-rw",
+      "rating": "5*",
+      "area": "Taksim",
+      "prices_usd": {
+        "double_or_triple": 130,
+        "single": 775,
+        "child_6_11": 400
+      }
+    }
+  ],
+  "included": [
+    "إقامة لمدة 6 أيام / 5 ليالي مع إفطار",
+    "رحلة بحرية في البوسفور",
+    "التوصيل من وإلى المطار"
+  ],
+  "not_included": [
+    "أي عناصر غير مذكورة في البرنامج",
+    "تذاكر الطيران الدولية",
+    "تأشيرة دخول تركيا"
+  ],
+  "visa_info": {
+    "standard_visa_cost_usd": 208,
+    "e_visa_cost_usd": 46,
+    "notes": [
+      "الأعمار 15-45: التأشيرة عبر مكتب VoyaVisa",
+      "الأعمار 12-40: مطلوب موافقة أمنية بعد إصدار التأشيرة",
+      "أقل من 15 وأكثر من 45: مؤهل للتأشيرة الإلكترونية"
+    ],
+    "required_documents": [
+      "كشف حساب بنكي لآخر 6 أشهر",
+      "سجل تجاري أو خطاب عمل",
+      "حجز فندق ورحلة طيران مبدئي",
+      "تأمين صحي للسفر"
+    ]
+  },
+  "optional_tours": [
+    { "name": "جولة جزر الأمراء (بدون غداء)", "price_usd": 25 },
+    { "name": "جولة بورصة مع غداء وتلفريك", "price_usd": 45 },
+    { "name": "جولة سبانجا ومعشوقية مع غداء", "price_usd": 30 },
+    { "name": "جولة نصف يوم للمساجد والمتاحف العثمانية", "price_usd": 35 },
+    {
+      "name": "جولة المدينة ليوم كامل (توبكابي + الهيبودروم + المسجد الأزرق)",
+      "price_usd": 65
+    },
+    { "name": "رحلة البوسفور والتسوق (بدون غداء)", "price_usd": 20 },
+    { "name": "عشاء على البوسفور (عرض فقط)", "price_usd": 25 },
+    { "name": "عشاء على البوسفور (عرض تركي)", "price_usd": 40 },
+    { "name": "منتزه فياسي والأكواريوم", "price_usd": 50 }
+  ],
+  "child_policy": "الأطفال من 0 إلى 5.99 سنوات حسب التوافر وقت الحجز",
+  "notes": [
+    "الأسعار بالدولار الأمريكي وتُدفع بالجنيه المصري حسب سعر الصرف في تاريخ الدفع",
+    "قد تتغير الأسعار بناءً على توافر الفندق وتقلبات العملة"
+  ]
+}

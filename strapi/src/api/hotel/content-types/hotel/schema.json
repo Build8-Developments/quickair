@@ -110,6 +110,14 @@
         }
       }
     },
+    "externalImageUrl": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
     "featured": {
       "type": "boolean",
       "default": false,

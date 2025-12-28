@@ -720,6 +720,15 @@
     "egyptNumbers": "أرقام مصر",
     "uaeBranch": "فرع الإمارات"
   },
+  "pagination": {
+    "showing": "عرض",
+    "of": "من",
+    "results": "نتيجة",
+    "previous": "السابق",
+    "next": "التالي",
+    "page": "صفحة",
+    "goToPage": "انتقل إلى صفحة"
+  },
   "booking": {
     "confirmBooking": "تأكيد حجزك",
     "bookingSummary": "ملخص الحجز",

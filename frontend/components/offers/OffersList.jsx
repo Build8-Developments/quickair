@@ -1,45 +1,104 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import OffersSidebar from "./OffersSidebar";
 import OfferCardSkeleton from "./OfferCardSkeleton";
 import Pagination from "../common/Pagination";
 import Image from "next/image";
-import Link from "next/link";
+import LocalizedLink from "../common/LocalizedLink";
 import { STRAPI_CONFIG } from "@/config/api";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { getCurrencyByCountry } from "@/utils/currency";
+import {
+  calculatePaginationRange,
+  buildFilteredUrl,
+  parseFiltersFromUrl,
+} from "@/utils/pagination";
 
-export default function OffersList({ initialOffers = [], isLoading = false }) {
+/**
+ * OffersList component with server-side pagination support
+ *
+ * @param {Object} props
+ * @param {Array} props.initialOffers - Offers for the current page from server
+ * @param {number} props.totalCount - Total number of offers in database
+ * @param {number} props.currentPage - Current page number (1-indexed)
+ * @param {number} props.totalPages - Total number of pages
+ * @param {number} props.pageSize - Items per page
+ * @param {boolean} props.isLoading - Whether data is loading
+ * @param {string} props.locale - Current locale (en/ar)
+ */
+export default function OffersList({
+  initialOffers = [],
+  totalCount = 0,
+  currentPage = 1,
+  totalPages = 1,
+  pageSize = 12,
+  isLoading = false,
+  locale = "en",
+}) {
   const { t } = useTranslation();
   const { language } = useLanguage();
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // State for offers data
   const [offers, setOffers] = useState(initialOffers);
   const [filteredOffers, setFilteredOffers] = useState(initialOffers);
+
+  // UI state
   const [sortOption, setSortOption] = useState("");
   const [ddActives, setDdActives] = useState(false);
   const [sidebarActive, setSidebarActive] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const [isFiltering, setIsFiltering] = useState(false);
   const [showCards, setShowCards] = useState(true);
   const [isInitialMount, setIsInitialMount] = useState(true);
-  const [filters, setFilters] = useState({
-    locations: [],
-    months: [],
-  });
 
-  const itemsPerPage = 12;
+  // Client-side pagination state (only used when filters are active)
+  const [clientPage, setClientPage] = useState(1);
+
+  // Initialize filter state from URL parameters (Requirements: 6.3)
+  const initialFilters = parseFiltersFromUrl(
+    Object.fromEntries(searchParams.entries()),
+    ["locations", "months"]
+  );
+
+  // Filter state
+  const [filters, setFilters] = useState(initialFilters);
+
   const dropDownContainer = useRef();
 
-  const clearAllFilters = () => {
-    setFilters({
+  // Navigate to page 1 with cleared filters (Requirements: 6.4)
+  const clearAllFilters = useCallback(() => {
+    const clearedFilters = {
       locations: [],
       months: [],
-    });
-  };
+    };
+    setFilters(clearedFilters);
+    setClientPage(1);
+
+    // Navigate to page 1 without filter params
+    router.push(pathname);
+  }, [pathname, router]);
 
   const hasActiveFilters =
     filters.locations.length > 0 || filters.months.length > 0;
   const isRTL = language === "ar";
+
+  // Handle filter changes - navigate to page 1 with filter params (Requirements: 2.5, 6.1, 6.2)
+  const handleFilterChange = useCallback(
+    (newFilters) => {
+      setFilters(newFilters);
+      setClientPage(1);
+
+      // Build URL with filter params and navigate to page 1
+      const newUrl = buildFilteredUrl(pathname, newFilters, 1);
+      router.push(newUrl);
+    },
+    [pathname, router]
+  );
 
   // Translate English month names to Arabic
   const translateMonth = (monthName) => {
@@ -63,6 +122,7 @@ export default function OffersList({ initialOffers = [], isLoading = false }) {
     return monthMap[monthName] || monthName;
   };
 
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClick = (event) => {
       if (
@@ -74,21 +134,19 @@ export default function OffersList({ initialOffers = [], isLoading = false }) {
     };
 
     document.addEventListener("click", handleClick);
-
-    return () => {
-      document.removeEventListener("click", handleClick);
-    };
+    return () => document.removeEventListener("click", handleClick);
   }, []);
 
-  // Update offers when initialOffers changes (after loading)
+  // Update offers when initialOffers changes (server-side pagination)
   useEffect(() => {
-    if (initialOffers.length > 0) {
-      setOffers(initialOffers);
+    setOffers(initialOffers);
+    // Only reset filtered offers if no filters are active
+    if (!hasActiveFilters) {
       setFilteredOffers(initialOffers);
     }
   }, [initialOffers]);
 
-  // Apply filters and sorting with loading state
+  // Apply filters and sorting with loading state (client-side filtering)
   useEffect(() => {
     // Skip filtering animation on initial mount
     if (isInitialMount) {
@@ -110,14 +168,7 @@ export default function OffersList({ initialOffers = [], isLoading = false }) {
             console.warn("Offer missing location:", offer.title);
             return false;
           }
-          const matches = filters.locations.includes(offer.location.slug);
-          console.log("Location filter check:", {
-            offerTitle: offer.title,
-            locationSlug: offer.location.slug,
-            filterLocations: filters.locations,
-            matches,
-          });
-          return matches;
+          return filters.locations.includes(offer.location.slug);
         });
       }
 
@@ -146,7 +197,7 @@ export default function OffersList({ initialOffers = [], isLoading = false }) {
       }
 
       setFilteredOffers(result);
-      setCurrentPage(1); // Reset to first page when filters change
+      setClientPage(1); // Reset to first page when filters change
       setIsFiltering(false);
 
       // Trigger card animations
@@ -174,17 +225,84 @@ export default function OffersList({ initialOffers = [], isLoading = false }) {
     return allPrices.length > 0 ? Math.min(...allPrices) : 0;
   };
 
+  // Get currency based on offer location (Egypt = EGP, others = USD)
+  const getOfferCurrency = (offer) => {
+    // First check if any hotel option has a currency set
+    if (offer.hotelOptions && offer.hotelOptions.length > 0) {
+      const firstOptionWithCurrency = offer.hotelOptions.find(
+        (opt) => opt.currency
+      );
+      if (firstOptionWithCurrency) {
+        return firstOptionWithCurrency.currency;
+      }
+      // Check hotel location
+      const firstHotelWithLocation = offer.hotelOptions.find(
+        (opt) => opt.hotel?.location?.country
+      );
+      if (firstHotelWithLocation) {
+        return getCurrencyByCountry(
+          firstHotelWithLocation.hotel.location.country,
+          "USD"
+        );
+      }
+    }
+    // Fall back to offer location
+    return getCurrencyByCountry(offer.location?.country, "USD");
+  };
+
   const getImageUrl = (imageUrl) => {
     if (!imageUrl) return "/img/tourCards/1/1.png";
     if (imageUrl.startsWith("http")) return imageUrl;
     return `${STRAPI_CONFIG.url}${imageUrl}`;
   };
 
-  // Pagination
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentOffers = filteredOffers.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredOffers.length / itemsPerPage);
+  // Determine which pagination mode to use
+  // - Server-side: when no filters are active (use URL-based pagination)
+  // - Client-side: when filters are active (filter current page's data)
+  const useServerPagination = !hasActiveFilters;
+
+  // Calculate display data based on pagination mode
+  let displayOffers;
+  let displayTotalPages;
+  let displayCurrentPage;
+  let displayTotalCount;
+  let paginationRange;
+
+  if (useServerPagination) {
+    // Server-side pagination: display offers from server
+    displayOffers = filteredOffers;
+    displayTotalPages = totalPages;
+    displayCurrentPage = currentPage;
+    displayTotalCount = totalCount;
+    paginationRange = calculatePaginationRange(
+      currentPage,
+      pageSize,
+      totalCount
+    );
+  } else {
+    // Client-side pagination: paginate filtered results
+    const indexOfLastItem = clientPage * pageSize;
+    const indexOfFirstItem = indexOfLastItem - pageSize;
+    displayOffers = filteredOffers.slice(indexOfFirstItem, indexOfLastItem);
+    displayTotalPages = Math.ceil(filteredOffers.length / pageSize);
+    displayCurrentPage = clientPage;
+    displayTotalCount = filteredOffers.length;
+    paginationRange = calculatePaginationRange(
+      clientPage,
+      pageSize,
+      filteredOffers.length
+    );
+  }
+
+  // Build base URL for server-side pagination with preserved filter params (Requirements: 6.3)
+  const baseUrl = pathname;
+  const preserveParams = {};
+  if (filters.locations.length > 0) {
+    preserveParams.locations = filters.locations.join(",");
+  }
+  if (filters.months.length > 0) {
+    preserveParams.months = filters.months.join(",");
+  }
 
   return (
     <section className="layout-pb-xl">
@@ -195,7 +313,7 @@ export default function OffersList({ initialOffers = [], isLoading = false }) {
               <OffersSidebar
                 offers={offers}
                 filters={filters}
-                setFilters={setFilters}
+                setFilters={handleFilterChange}
               />
             </div>
 
@@ -225,7 +343,7 @@ export default function OffersList({ initialOffers = [], isLoading = false }) {
                     <OffersSidebar
                       offers={offers}
                       filters={filters}
-                      setFilters={setFilters}
+                      setFilters={handleFilterChange}
                     />
                   </div>
                 </div>
@@ -255,21 +373,21 @@ export default function OffersList({ initialOffers = [], isLoading = false }) {
 
             <div className="row y-gap-30">
               {isLoading || isFiltering ? (
-                // Show skeleton loaders while loading or filtering
-                Array.from({ length: itemsPerPage }).map((_, i) => (
+                // Show skeleton loaders while loading or filtering (Requirements: 4.2, 4.3)
+                Array.from({ length: pageSize }).map((_, i) => (
                   <div key={`skeleton-${i}`} className="col-lg-4 col-sm-6">
                     <OfferCardSkeleton />
                   </div>
                 ))
-              ) : currentOffers.length > 0 ? (
-                currentOffers.map((offer, i) => (
+              ) : displayOffers.length > 0 ? (
+                displayOffers.map((offer, i) => (
                   <div
                     key={offer.documentId || i}
                     className={`col-lg-4 col-sm-6 ${
                       showCards ? "offer-card-enter" : ""
                     }`}
                   >
-                    <Link
+                    <LocalizedLink
                       href={`/offers/${offer.documentId}`}
                       className="tourCard -type-1 py-10 px-10 border-1 rounded-12 -hover-shadow"
                     >
@@ -348,7 +466,8 @@ export default function OffersList({ initialOffers = [], isLoading = false }) {
                               <>
                                 {t("offersList.from")}{" "}
                                 <span className="text-16 fw-500">
-                                  ${getMinPrice(offer).toLocaleString()}
+                                  {getMinPrice(offer).toLocaleString()}{" "}
+                                  {getOfferCurrency(offer)}
                                 </span>
                               </>
                             ) : (
@@ -359,7 +478,7 @@ export default function OffersList({ initialOffers = [], isLoading = false }) {
                           </div>
                         </div>
                       </div>
-                    </Link>
+                    </LocalizedLink>
                   </div>
                 ))
               ) : (
@@ -376,18 +495,34 @@ export default function OffersList({ initialOffers = [], isLoading = false }) {
               )}
             </div>
 
-            {filteredOffers.length > itemsPerPage && (
+            {/* Pagination Controls (Requirements: 3.1, 3.6) */}
+            {displayTotalPages > 1 && (
               <div className="d-flex justify-center flex-column mt-60">
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPageChange={setCurrentPage}
-                />
+                {useServerPagination ? (
+                  // URL-based pagination for server-side (Requirements: 3.1, 3.2, 3.3, 3.4)
+                  <Pagination
+                    currentPage={displayCurrentPage}
+                    totalPages={displayTotalPages}
+                    baseUrl={baseUrl}
+                    preserveParams={preserveParams}
+                    isLoading={isLoading}
+                  />
+                ) : (
+                  // Controlled pagination for client-side filtered results
+                  <Pagination
+                    currentPage={displayCurrentPage}
+                    totalPages={displayTotalPages}
+                    onPageChange={setClientPage}
+                  />
+                )}
 
-                <div className="text-14 text-center mt-20">
-                  {t("offersList.showingResults")} {indexOfFirstItem + 1}-
-                  {Math.min(indexOfLastItem, filteredOffers.length)}{" "}
-                  {t("offersList.of")} {filteredOffers.length}
+                {/* Results summary (Requirements: 3.5, 5.1, 5.2) */}
+                <div
+                  className="text-14 text-center mt-20"
+                  style={{ direction: isRTL ? "rtl" : "ltr" }}
+                >
+                  {t("offersList.showingResults")} {paginationRange.start}-
+                  {paginationRange.end} {t("offersList.of")} {displayTotalCount}
                 </div>
               </div>
             )}

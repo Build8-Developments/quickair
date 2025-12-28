@@ -28,6 +28,13 @@ export const GET_ALL_OFFERS = `
       hotelOptions {
         hotel {
           documentId
+          externalImageUrl
+          coverImage {
+            url
+          }
+          location {
+            country
+          }
         }
         nights
         currency
@@ -36,6 +43,57 @@ export const GET_ALL_OFFERS = `
           doubleOccupancyPrice
           tripleOccupancyPrice
         }
+      }
+    }
+  }
+`;
+
+// Get all offers with pagination metadata for server-side pagination
+// Supports filters parameter for filtered pagination
+// Requirements: 2.1, 2.2
+export const GET_ALL_OFFERS_PAGINATED = `
+  query GetAllOffersPaginated($locale: I18NLocaleCode, $pagination: PaginationArg, $sort: [String], $filters: OfferFiltersInput) {
+    offers(locale: $locale, pagination: $pagination, sort: $sort, filters: $filters) {
+      documentId
+      title
+      slug
+      description
+      month
+      year
+      coverImage {
+        url
+        alternativeText
+      }
+      location {
+        documentId
+        name
+        slug
+        type
+        country
+      }
+      hotelOptions {
+        hotel {
+          documentId
+          externalImageUrl
+          coverImage {
+            url
+          }
+          location {
+            country
+          }
+        }
+        nights
+        currency
+        roomPricing {
+          singleOccupancyPrice
+          doubleOccupancyPrice
+          tripleOccupancyPrice
+        }
+      }
+    }
+    offers_connection(locale: $locale, filters: $filters) {
+      pageInfo {
+        total
       }
     }
   }
@@ -86,6 +144,7 @@ export const GET_OFFER_BY_ID = `
           chain
           address
           shortDescription
+          externalImageUrl
           coverImage {
             url
             alternativeText
@@ -249,6 +308,13 @@ export const GET_FILTERED_OFFERS = `
       hotelOptions {
         hotel {
           documentId
+          externalImageUrl
+          coverImage {
+            url
+          }
+          location {
+            country
+          }
         }
         nights
         currency

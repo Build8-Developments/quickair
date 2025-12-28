@@ -717,6 +717,15 @@
     "egyptNumbers": "Egypt Numbers",
     "uaeBranch": "UAE Branch"
   },
+  "pagination": {
+    "showing": "Showing",
+    "of": "of",
+    "results": "results",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "goToPage": "Go to page"
+  },
   "booking": {
     "confirmBooking": "Confirm Your Booking",
     "bookingSummary": "Booking Summary",
