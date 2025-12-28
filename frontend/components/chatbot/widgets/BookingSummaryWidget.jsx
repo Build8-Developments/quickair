@@ -39,6 +39,26 @@ export default function BookingSummaryWidget({
       </div>
 
       <div className={styles.sections}>
+        {/* User Info */}
+        {userInfo && (userInfo.name || userInfo.email || userInfo.phone) && (
+          <div className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <div className={styles.sectionTitle}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#019fb1" strokeWidth="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                {t("بيانات العميل", "Customer Info")}
+              </div>
+            </div>
+            <div className={styles.details}>
+              {userInfo.name && <div className={styles.detailValue}>{t("الاسم:", "Name:")} {userInfo.name}</div>}
+              {userInfo.email && <div className={styles.detailValue}>{t("الإيميل:", "Email:")} {userInfo.email}</div>}
+              {userInfo.phone && <div className={styles.detailValue}>{t("الهاتف:", "Phone:")} {userInfo.phone}</div>}
+            </div>
+          </div>
+        )}
+
         {/* Trip Details - Destination */}
         <div className={styles.section}>
           <div className={styles.sectionHeader}>
