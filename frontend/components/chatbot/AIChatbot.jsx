@@ -619,17 +619,25 @@ export default function AIChatbot() {
                     
                     {message.suggestedPages && message.suggestedPages.length > 0 && (
                       <div className={styles.suggestedLinks}>
-                        {message.suggestedPages.map((link, linkIndex) => (
-                          <a
-                            key={linkIndex}
-                            href={link.url}
-                            className={styles.suggestedLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <span className={styles.linkText}>{link.text}</span>
-                          </a>
-                        ))}
+                        {message.suggestedPages.map((link, linkIndex) => {
+                          // Add locale to URL if not already present
+                          const locale = userInfo.preferredLanguage || language || 'en';
+                          const urlWithLocale = link.url.startsWith(`/${locale}`) 
+                            ? link.url 
+                            : `/${locale}${link.url}`;
+                          
+                          return (
+                            <a
+                              key={linkIndex}
+                              href={urlWithLocale}
+                              className={styles.suggestedLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <span className={styles.linkText}>{link.text}</span>
+                            </a>
+                          );
+                        })}
                       </div>
                     )}
                   </div>

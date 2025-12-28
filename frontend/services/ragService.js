@@ -302,16 +302,16 @@ const SITE_PAGES = {
     keywords_en: ["umrah", "mecca", "medina"]
   },
   
-  // صفحات الوجهات
+  // صفحات الوجهات - توجيه لصفحة العروض
   destinations: {
-    bali: "/tours/1",
-    istanbul: "/tours/2",
-    sharm: "/tours/3",
-    hurghada: "/tours/4",
-    dahab: "/tours/5",
-    beirut: "/tours/6",
-    ainsokhna: "/tours/7",
-    sahlhashish: "/tours/8",
+    bali: "/offers",
+    istanbul: "/offers",
+    sharm: "/offers",
+    hurghada: "/offers",
+    dahab: "/offers",
+    beirut: "/offers",
+    ainsokhna: "/offers",
+    sahlhashish: "/offers",
   }
 };
 
