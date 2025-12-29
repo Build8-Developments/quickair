@@ -1,28 +1,23 @@
-import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 export async function POST(request) {
   try {
     const tripData = await request.json();
-    
-    console.log('Trip request received:', tripData);
-    
+
+    console.log("Trip request received:", tripData);
+
     // Generate unique request ID
     const requestId = `TRIP-${Date.now()}`;
-    
+
     // Create transporter
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false,
+      host: process.env.SMTP_HOST,
+      port: parseInt(process.env.SMTP_PORT) || 465,
+      secure: true,
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
-      tls: {
-        rejectUnauthorized: false,
-        minVersion: 'TLSv1.2',
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
       },
     });
 
@@ -41,11 +36,11 @@ export async function POST(request) {
       } = data;
 
       const formatDate = (date) => {
-        if (!date) return 'Not specified';
-        return new Date(date).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
+        if (!date) return "Not specified";
+        return new Date(date).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
         });
       };
 
@@ -55,11 +50,11 @@ export async function POST(request) {
       };
 
       const CURRENCY_SYMBOLS = {
-        USD: '$',
-        EUR: '€',
-        GBP: '£',
-        AED: 'AED',
-        EGP: 'ج.م',
+        USD: "$",
+        EUR: "€",
+        GBP: "£",
+        AED: "AED",
+        EGP: "ج.م",
       };
 
       return `
@@ -71,22 +66,38 @@ export async function POST(request) {
           </tr>
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Trip Type:</td>
-            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${tripType?.title || 'Not specified'}</td>
+            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${
+              tripType?.title || "Not specified"
+            }</td>
           </tr>
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Destination:</td>
-            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${destination?.name || 'Not specified'}</td>
+            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${
+              destination?.name || "Not specified"
+            }</td>
           </tr>
-          ${locationType ? `
+          ${
+            locationType
+              ? `
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Location Type:</td>
-            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${locationType.title || locationType}</td>
-          </tr>` : ''}
-          ${hotel ? `
+            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${
+              locationType.title || locationType
+            }</td>
+          </tr>`
+              : ""
+          }
+          ${
+            hotel
+              ? `
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Hotel:</td>
-            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${hotel.name || 'Not specified'}</td>
-          </tr>` : ''}
+            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${
+              hotel.name || "Not specified"
+            }</td>
+          </tr>`
+              : ""
+          }
         </table>
 
         <h2 style="color: #019fb1; border-bottom: 2px solid #019fb1; padding-bottom: 10px;">Travelers & Dates</h2>
@@ -97,23 +108,38 @@ export async function POST(request) {
           </tr>
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Adults:</td>
-            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${travelers?.adults || 0}</td>
+            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${
+              travelers?.adults || 0
+            }</td>
           </tr>
-          ${(travelers?.children || 0) > 0 ? `
+          ${
+            (travelers?.children || 0) > 0
+              ? `
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Children:</td>
             <td style="padding: 10px; border-bottom: 1px solid #ddd;">${travelers.children}</td>
-          </tr>` : ''}
-          ${(travelers?.infants || 0) > 0 ? `
+          </tr>`
+              : ""
+          }
+          ${
+            (travelers?.infants || 0) > 0
+              ? `
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Infants:</td>
             <td style="padding: 10px; border-bottom: 1px solid #ddd;">${travelers.infants}</td>
-          </tr>` : ''}
+          </tr>`
+              : ""
+          }
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Dates:</td>
             <td style="padding: 10px; border-bottom: 1px solid #ddd;">
-              ${dates?.flexible ? 'Flexible dates' : 
-                `${formatDate(dates?.startDate)} - ${formatDate(dates?.endDate)}`}
+              ${
+                dates?.flexible
+                  ? "Flexible dates"
+                  : `${formatDate(dates?.startDate)} - ${formatDate(
+                      dates?.endDate
+                    )}`
+              }
             </td>
           </tr>
         </table>
@@ -123,13 +149,17 @@ export async function POST(request) {
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold; width: 180px;">Budget Amount:</td>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold; color: #019fb1; font-size: 18px;">
-              ${CURRENCY_SYMBOLS[budget?.currency] || '$'}${budget?.amount ? Number(budget.amount).toLocaleString() : 'Not specified'}
+              ${CURRENCY_SYMBOLS[budget?.currency] || "$"}${
+        budget?.amount
+          ? Number(budget.amount).toLocaleString()
+          : "Not specified"
+      }
             </td>
           </tr>
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Budget Type:</td>
             <td style="padding: 10px; border-bottom: 1px solid #ddd;">
-              ${budget?.perPerson ? 'Per person' : 'Total trip budget'}
+              ${budget?.perPerson ? "Per person" : "Total trip budget"}
             </td>
           </tr>
         </table>
@@ -139,53 +169,100 @@ export async function POST(request) {
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold; width: 180px;">Visa Needed:</td>
             <td style="padding: 10px; border-bottom: 1px solid #ddd;">
-              ${visa?.needed === true ? 'Yes' : visa?.needed === false ? 'No' : 'Not specified'}
+              ${
+                visa?.needed === true
+                  ? "Yes"
+                  : visa?.needed === false
+                  ? "No"
+                  : "Not specified"
+              }
             </td>
           </tr>
-          ${visa?.needed === true ? `
+          ${
+            visa?.needed === true
+              ? `
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Has Visa:</td>
-            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${visa.hasVisa ? 'Yes' : 'No'}</td>
+            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${
+              visa.hasVisa ? "Yes" : "No"
+            }</td>
           </tr>
-          ${visa.hasVisa === false ? `
+          ${
+            visa.hasVisa === false
+              ? `
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Assistance Required:</td>
-            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${visa.assistanceRequired ? 'Yes' : 'No'}</td>
-          </tr>` : ''}` : ''}
+            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${
+              visa.assistanceRequired ? "Yes" : "No"
+            }</td>
+          </tr>`
+              : ""
+          }`
+              : ""
+          }
         </table>
 
-        ${preferences?.accommodation?.length > 0 || preferences?.activities?.length > 0 || preferences?.mealPlan || preferences?.specialRequests ? `
+        ${
+          preferences?.accommodation?.length > 0 ||
+          preferences?.activities?.length > 0 ||
+          preferences?.mealPlan ||
+          preferences?.specialRequests
+            ? `
         <h2 style="color: #019fb1; border-bottom: 2px solid #019fb1; padding-bottom: 10px;">Preferences</h2>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
-          ${preferences?.accommodation?.length > 0 ? `
+          ${
+            preferences?.accommodation?.length > 0
+              ? `
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold; width: 180px;">Accommodation:</td>
-            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${preferences.accommodation.join(', ')}</td>
-          </tr>` : ''}
-          ${preferences?.activities?.length > 0 ? `
+            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${preferences.accommodation.join(
+              ", "
+            )}</td>
+          </tr>`
+              : ""
+          }
+          ${
+            preferences?.activities?.length > 0
+              ? `
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Activities:</td>
-            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${preferences.activities.join(', ')}</td>
-          </tr>` : ''}
-          ${preferences?.mealPlan ? `
+            <td style="padding: 10px; border-bottom: 1px solid #ddd;">${preferences.activities.join(
+              ", "
+            )}</td>
+          </tr>`
+              : ""
+          }
+          ${
+            preferences?.mealPlan
+              ? `
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Meal Plan:</td>
             <td style="padding: 10px; border-bottom: 1px solid #ddd;">${preferences.mealPlan}</td>
-          </tr>` : ''}
-          ${preferences?.specialRequests ? `
+          </tr>`
+              : ""
+          }
+          ${
+            preferences?.specialRequests
+              ? `
           <tr>
             <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Special Requests:</td>
             <td style="padding: 10px; border-bottom: 1px solid #ddd;">${preferences.specialRequests}</td>
-          </tr>` : ''}
-        </table>` : ''}
+          </tr>`
+              : ""
+          }
+        </table>`
+            : ""
+        }
       `;
     };
 
     // Email to company
     const mailOptionsToCompany = {
-      from: `"QuickAir Trip Request" <${process.env.GMAIL_USER}>`,
-      to: process.env.CONTACT_EMAIL || process.env.GMAIL_USER,
-      subject: `New Trip Request: ${tripData.destination?.name || 'Custom Trip'} - ${requestId}`,
+      from: `"QuickAir Trip Request" <${process.env.SMTP_USER}>`,
+      to: process.env.CONTACT_EMAIL || process.env.SMTP_USER,
+      subject: `New Trip Request: ${
+        tripData.destination?.name || "Custom Trip"
+      } - ${requestId}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto;">
           <div style="background: linear-gradient(135deg, #019fb1 0%, #016d7a 100%); padding: 30px; text-align: center;">
@@ -196,15 +273,21 @@ export async function POST(request) {
             <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
               <tr>
                 <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold; width: 180px;">Name:</td>
-                <td style="padding: 10px; border-bottom: 1px solid #ddd;">${tripData.contact?.name || 'Not provided'}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">${
+                  tripData.contact?.name || "Not provided"
+                }</td>
               </tr>
               <tr>
                 <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Email:</td>
-                <td style="padding: 10px; border-bottom: 1px solid #ddd;">${tripData.contact?.email || 'Not provided'}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">${
+                  tripData.contact?.email || "Not provided"
+                }</td>
               </tr>
               <tr>
                 <td style="padding: 10px; border-bottom: 1px solid #ddd; font-weight: bold;">Phone:</td>
-                <td style="padding: 10px; border-bottom: 1px solid #ddd;">${tripData.contact?.phone || 'Not provided'}</td>
+                <td style="padding: 10px; border-bottom: 1px solid #ddd;">${
+                  tripData.contact?.phone || "Not provided"
+                }</td>
               </tr>
             </table>
             ${formatTripData(tripData)}
@@ -218,7 +301,7 @@ export async function POST(request) {
 
     // Email to customer
     const mailOptionsToCustomer = {
-      from: `"QuickAir" <${process.env.GMAIL_USER}>`,
+      from: `"QuickAir" <${process.env.SMTP_USER}>`,
       to: tripData.contact?.email,
       subject: `Trip Request Confirmation - ${requestId}`,
       html: `
@@ -227,7 +310,9 @@ export async function POST(request) {
             <h1 style="color: white; margin: 0;">Thank You for Your Trip Request!</h1>
           </div>
           <div style="padding: 30px; background-color: #f9f9f9;">
-            <p style="color: #333; font-size: 16px;">Dear ${tripData.contact?.name || 'Valued Customer'},</p>
+            <p style="color: #333; font-size: 16px;">Dear ${
+              tripData.contact?.name || "Valued Customer"
+            },</p>
             <p style="color: #333; line-height: 1.6;">
               Thank you for choosing QuickAir! We have received your trip request and our travel experts are already working on creating the perfect itinerary for you.
             </p>
@@ -253,7 +338,9 @@ export async function POST(request) {
             </p>
 
             <div style="text-align: center; margin-top: 30px;">
-              <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://quickair.com'}" 
+              <a href="${
+                process.env.NEXT_PUBLIC_SITE_URL || "https://quickair.com"
+              }" 
                  style="background-color: #019fb1; color: white; padding: 12px 30px; text-decoration: none; border-radius: 8px; display: inline-block;">
                 Visit Our Website
               </a>
@@ -276,35 +363,42 @@ export async function POST(request) {
 
     // Send emails to both company and customer
     try {
-      console.log('Sending email to company:', process.env.CONTACT_EMAIL || process.env.GMAIL_USER);
+      console.log(
+        "Sending email to company:",
+        process.env.CONTACT_EMAIL || process.env.GMAIL_USER
+      );
       await transporter.sendMail(mailOptionsToCompany);
-      console.log('✓ Email sent to company successfully');
-      
+      console.log("✓ Email sent to company successfully");
+
       if (tripData.contact?.email) {
-        console.log('Sending confirmation email to customer:', tripData.contact.email);
+        console.log(
+          "Sending confirmation email to customer:",
+          tripData.contact.email
+        );
         await transporter.sendMail(mailOptionsToCustomer);
-        console.log('✓ Confirmation email sent to customer successfully');
+        console.log("✓ Confirmation email sent to customer successfully");
       }
     } catch (emailError) {
-      console.error('Error sending emails:', emailError);
+      console.error("Error sending emails:", emailError);
       // Continue anyway - don't fail the request if email fails
     }
 
     return NextResponse.json(
-      { 
-        success: true, 
-        message: 'Trip request received successfully',
-        requestId: requestId
+      {
+        success: true,
+        message: "Trip request received successfully",
+        requestId: requestId,
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error('Error processing trip request:', error);
+    console.error("Error processing trip request:", error);
     return NextResponse.json(
-      { 
-        success: false, 
-        message: 'Failed to process trip request',
-        error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+      {
+        success: false,
+        message: "Failed to process trip request",
+        error:
+          process.env.NODE_ENV === "development" ? error.message : undefined,
       },
       { status: 500 }
     );

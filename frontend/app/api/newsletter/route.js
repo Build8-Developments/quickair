@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
+import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 export async function POST(request) {
   try {
@@ -8,7 +8,7 @@ export async function POST(request) {
     // Validate email
     if (!email) {
       return NextResponse.json(
-        { success: false, message: 'Email is required' },
+        { success: false, message: "Email is required" },
         { status: 400 }
       );
     }
@@ -17,31 +17,26 @@ export async function POST(request) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { success: false, message: 'Invalid email address' },
+        { success: false, message: "Invalid email address" },
         { status: 400 }
       );
     }
 
-    // Create transporter with App Password
+    // Create transporter
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false,
+      host: process.env.SMTP_HOST,
+      port: parseInt(process.env.SMTP_PORT) || 465,
+      secure: true,
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
-      tls: {
-        rejectUnauthorized: false,
-        minVersion: 'TLSv1.2',
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
       },
     });
 
     // Email to company (notification of new subscriber)
     const mailOptionsToCompany = {
-      from: `"QuickAir Newsletter" <${process.env.GMAIL_USER}>`,
-      to: process.env.CONTACT_EMAIL || process.env.GMAIL_USER,
+      from: `"QuickAir Newsletter" <${process.env.SMTP_USER}>`,
+      to: process.env.CONTACT_EMAIL || process.env.SMTP_USER,
       subject: `New Newsletter Subscription`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -64,9 +59,9 @@ export async function POST(request) {
 
     // Welcome email to subscriber
     const mailOptionsToSubscriber = {
-      from: `"QuickAir" <${process.env.GMAIL_USER}>`,
+      from: `"QuickAir" <${process.env.SMTP_USER}>`,
       to: email,
-      subject: 'Welcome to QuickAir Newsletter!',
+      subject: "Welcome to QuickAir Newsletter!",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px; text-align: center;">
@@ -90,7 +85,9 @@ export async function POST(request) {
               Stay tuned for amazing travel opportunities and insider tips to make your journeys unforgettable!
             </p>
             <div style="text-align: center; margin-top: 30px;">
-              <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://quickair.com'}" 
+              <a href="${
+                process.env.NEXT_PUBLIC_SITE_URL || "https://quickair.com"
+              }" 
                  style="background-color: #667eea; color: white; padding: 14px 40px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: 600;">
                 Explore Destinations
               </a>
@@ -116,17 +113,18 @@ export async function POST(request) {
     return NextResponse.json(
       {
         success: true,
-        message: 'Successfully subscribed to newsletter',
+        message: "Successfully subscribed to newsletter",
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error('Error subscribing to newsletter:', error);
+    console.error("Error subscribing to newsletter:", error);
     return NextResponse.json(
       {
         success: false,
-        message: 'Failed to subscribe. Please try again later.',
-        error: process.env.NODE_ENV === 'development' ? error.message : undefined,
+        message: "Failed to subscribe. Please try again later.",
+        error:
+          process.env.NODE_ENV === "development" ? error.message : undefined,
       },
       { status: 500 }
     );
