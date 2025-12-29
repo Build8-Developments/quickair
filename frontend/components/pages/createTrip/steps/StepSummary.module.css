@@ -1,268 +1,299 @@
-.summaryIconWrapper {
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, rgba(1, 159, 177, 0.1) 0%, rgba(1, 192, 212, 0.1) 100%);
+/* ===== Header ===== */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.headerIcon {
+  width: 64px;
+  height: 64px;
+  background: #f0fafb;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: #019fb1;
+  margin-bottom: 16px;
 }
 
-.summaryCard {
-  background: #fff;
-  border: 2.5px solid #e8e8e8;
-  border-radius: 20px;
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: #64748b;
+}
+
+/* ===== Container ===== */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===== Card ===== */
+.card {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  margin-bottom: 16px;
   overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.summaryCard:hover {
-  border-color: #019fb1;
-  box-shadow: 0 8px 25px rgba(1, 159, 177, 0.12);
 }
 
 .cardHeader {
-  padding: 24px 28px;
-  background: linear-gradient(135deg, rgba(1, 159, 177, 0.08) 0%, rgba(1, 192, 212, 0.08) 100%);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 2.5px solid #e8e8e8;
-}
-
-.headerContent {
   display: flex;
   align-items: center;
   gap: 12px;
+  padding: 16px 20px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
 }
 
-.cardIconWrapper {
-  width: 45px;
-  height: 45px;
-  background: #fff;
-  border: 2.5px solid #019fb1;
-  border-radius: 12px;
+.cardIcon {
+  width: 36px;
+  height: 36px;
+  background: #f0fafb;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #019fb1;
 }
 
-.editButton {
-  background: #fff;
-  border: 2.5px solid #019fb1;
-  color: #019fb1;
-  padding: 10px 18px;
-  border-radius: 12px;
+.cardTitle {
+  flex: 1;
   font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.editBtn {
+  padding: 6px 14px;
+  background: #ffffff;
+  border: 1.5px solid #019fb1;
+  border-radius: 8px;
+  color: #019fb1;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  transition: all 0.2s ease;
 }
 
-.editButton:hover {
+.editBtn:hover {
   background: #019fb1;
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.3);
+  color: #ffffff;
 }
 
-.cardContent {
-  padding: 28px;
+.cardBody {
+  padding: 16px 20px;
 }
 
-.summaryItem {
+/* ===== Summary Row ===== */
+.row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 0;
-  border-bottom: 1.5px solid #f3f4f6;
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f5f9;
 }
 
-.summaryItem:last-child {
+.row:last-child {
   border-bottom: none;
 }
 
-.summaryLabel {
-  font-size: 15px;
-  color: #6b7280;
-  font-weight: 600;
+.rowLabel {
+  font-size: 14px;
+  color: #64748b;
 }
 
-.summaryValue {
-  font-size: 15px;
-  color: #1f2937;
-  font-weight: 700;
+.rowValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
   text-align: right;
-  display: flex;
-  align-items: center;
-  gap: 3px;
 }
 
-.summaryValueHighlight {
-  color: #019fb1;
-  font-size: 19px;
+/* ===== Contact Form ===== */
+.inputGroup {
+  margin-bottom: 16px;
 }
 
-.contactNotice {
-  background: linear-gradient(135deg, rgba(1, 159, 177, 0.05) 0%, rgba(1, 192, 212, 0.05) 100%);
-  border: 2.5px solid #019fb1;
-  animation: summaryFadeIn 0.5s ease;
+.inputGroup:last-child {
+  margin-bottom: 0;
 }
 
-.contactNoticeIcon {
-  width: 70px;
-  height: 70px;
-  background: #fff;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: #019fb1;
-  box-shadow: 0 4px 15px rgba(1, 159, 177, 0.15);
+.inputRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
-.actionButton {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.label {
+  display: block;
+  font-size: 13px;
   font-weight: 600;
-  transition: all 0.3s ease;
-  border: 2.5px solid;
+  color: #475569;
+  margin-bottom: 6px;
 }
 
-.actionButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #1e293b;
+  transition: all 0.2s ease;
 }
 
-.outlineButton:hover {
-  background: #1a1a1a;
-  color: #fff !important;
+.input:focus {
+  outline: none;
+  border-color: #019fb1;
+  box-shadow: 0 0 0 4px rgba(1, 159, 177, 0.08);
 }
 
-.accentButton {
-  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
-  border-color: transparent;
+.input::placeholder {
+  color: #94a3b8;
 }
 
-.accentButton:hover {
-  box-shadow: 0 8px 25px rgba(1, 159, 177, 0.4);
+.error {
+  padding: 10px 14px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+/* ===== Notice ===== */
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 20px;
+  background: #f0fafb;
+  border: 1.5px solid #019fb1;
+  border-radius: 14px;
+  margin-top: 8px;
+}
+
+.notice svg {
+  color: #019fb1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.notice strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 2px;
+}
+
+.notice p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ===== Navigation ===== */
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  gap: 16px;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.backButton:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.submitButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  background: #019fb1;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: #018a9a;
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .spinner {
-  width: 18px;
-  height: 18px;
-  border: 2.5px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #fff;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
   border-radius: 50%;
-  animation: summarySpin 0.8s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 
-.actionButton:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
-@keyframes summaryFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes summarySpin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (max-width: 991px) {
-  .summaryIconWrapper {
-    width: 70px;
-    height: 70px;
-  }
-
-  .cardHeader {
-    padding: 20px 24px;
-  }
-
-  .cardIconWrapper {
-    width: 40px;
-    height: 40px;
-  }
-
-  .cardContent {
-    padding: 24px;
-  }
-
-  .summaryItem {
-    padding: 14px 0;
-  }
-
-  .contactNoticeIcon {
-    width: 60px;
-    height: 60px;
-  }
-}
-
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
-  .summaryItem {
+  .title {
+    font-size: 22px;
+  }
+
+  .inputRow {
+    grid-template-columns: 1fr;
+  }
+
+  .row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 4px;
   }
 
-  .summaryValue {
+  .rowValue {
     text-align: left;
   }
 
-  .actionButton {
-    padding: 12px 24px !important;
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 575px) {
-  .summaryIconWrapper {
-    width: 60px;
-    height: 60px;
+  .navigation {
+    flex-direction: column-reverse;
+    gap: 12px;
   }
 
-  .summaryCard {
-    border-radius: 16px;
-  }
-
-  .cardHeader {
-    flex-direction: column;
-    gap: 15px;
-    align-items: flex-start;
-  }
-
-  .editButton {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .contactNoticeIcon {
-    width: 50px;
-    height: 50px;
-  }
-
-  .buttonStack {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .fullWidthButton {
+  .backButton,
+  .submitButton {
     width: 100%;
     justify-content: center;
   }

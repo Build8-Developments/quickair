@@ -1,247 +1,444 @@
-.toggleCard {
-  background: white;
-  border: 2.5px solid #e5e7eb;
-  border-radius: 20px;
-  padding: 28px 32px;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+/* ===== Header ===== */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
 }
 
-.toggleCard:hover {
-  border-color: #019fb1;
-  box-shadow: 0 8px 24px rgba(1, 159, 177, 0.12);
-  transform: translateY(-2px);
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
 }
 
-.toggleCardActive {
-  border-color: #019fb1;
-  background: linear-gradient(135deg, #e6f7f9 0%, #f0fbfc 100%);
-  box-shadow: 0 8px 24px rgba(1, 159, 177, 0.2);
+.subtitle {
+  font-size: 15px;
+  color: #64748b;
 }
 
-.toggleContent {
+/* ===== Container ===== */
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* ===== Flexible Card ===== */
+.flexibleCard {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 20px 24px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin-bottom: 24px;
 }
 
-.toggleInfo {
+.flexibleCard:hover {
+  border-color: #019fb1;
+}
+
+.flexibleActive {
+  border-color: #019fb1;
+  background: #f0fafb;
+}
+
+.flexibleContent {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 }
 
-.iconWrapper {
-  width: 64px;
-  height: 64px;
-  min-width: 64px;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #e6f7f9 0%, #d0f0f4 100%);
+.flexibleIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #f0fafb;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #019fb1;
-  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.15);
 }
 
-.toggleText {
+.flexibleActive .flexibleIcon {
+  background: #019fb1;
+  color: #ffffff;
+}
+
+.flexibleText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.flexibleTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.flexibleDesc {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* ===== Toggle ===== */
+.toggle {
+  width: 52px;
+  height: 28px;
+  background: #e2e8f0;
+  border-radius: 14px;
+  position: relative;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.toggleActive {
+  background: #019fb1;
+}
+
+.toggleKnob {
+  width: 22px;
+  height: 22px;
+  background: #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggleActive .toggleKnob {
+  left: 27px;
+}
+
+/* ===== Date Section ===== */
+.dateSection {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.dateInputs {
+  display: flex;
+  gap: 12px;
+}
+
+/* ===== Date Selector ===== */
+.dateSelector {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.toggleTitle {
-  font-size: 20px;
+.dateSelector:hover {
+  border-color: #019fb1;
+  background: #f0fafb;
+}
+
+.hasValue {
+  border-color: #019fb1;
+  background: #f0fafb;
+}
+
+.dateInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dateLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.dateValue {
+  font-size: 14px;
   font-weight: 700;
-  color: #1f2937;
-  margin: 0 0 6px 0;
-  letter-spacing: -0.3px;
+  color: #1e293b;
 }
 
-.toggleDesc {
+.calendarIcon {
+  color: #019fb1;
+  flex-shrink: 0;
+}
+
+/* ===== Nights Info ===== */
+.nightsInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 12px;
+  background: #f0fafb;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #019fb1;
+  border: 1px solid rgba(1, 159, 177, 0.2);
+}
+
+/* ===== Navigation ===== */
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  gap: 16px;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #475569;
   font-size: 15px;
   font-weight: 600;
-  color: #6b7280;
-  margin: 0;
-}
-
-.toggleSwitch {
-  position: relative;
-  width: 64px;
-  height: 36px;
-  min-width: 64px;
-}
-
-.toggleInput {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.backButton:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.continueButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  background: #019fb1;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.continueButton:hover:not(:disabled) {
+  background: #018a9a;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== Calendar Modal ===== */
+.overlay {
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #e5e7eb;
-  transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 34px;
-}
-
-.slider::before {
-  position: absolute;
-  content: "";
-  height: 28px;
-  width: 28px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-.toggleInput:checked + .slider {
-  background: linear-gradient(135deg, #019fb1 0%, #00b4c8 100%);
-}
-
-.toggleInput:checked + .slider::before {
-  transform: translateX(28px);
-}
-
-.datesBox {
-  background: linear-gradient(135deg, #f8fcfd 0%, #f2f7fa 100%);
-  border: 2.5px solid #e5e7eb;
-  border-radius: 24px;
-  padding: 40px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-}
-
-.dateField {
-  padding: 24px;
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(1, 159, 177, 0.04);
-  margin-bottom: 18px;
-  border: 1.5px solid #e5e7eb;
-}
-
-.dateLabel {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 17px;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 16px;
-}
-
-.dateLabel svg {
-  color: #019fb1;
-}
-
-.divider {
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    #e5e7eb 20%,
-    #e5e7eb 80%,
-    transparent 100%
-  );
-  margin: 0;
-}
-
-.dateInput {
-  width: 100%;
-  padding: 22px 26px;
-  border: 2.5px solid #e5e7eb;
-  border-radius: 14px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1f2937;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: #f9fafb;
-  box-sizing: border-box;
-}
-
-.dateInput:focus {
-  outline: none;
-  border-color: #019fb1;
-  background: white;
-  box-shadow: 0 0 0 4px rgba(1, 159, 177, 0.1);
-}
-
-.durationSummary {
-  margin-top: 32px;
-  padding-top: 32px;
-  border-top: 2px solid #e5e7eb;
-}
-
-.durationContent {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 20px 28px;
-  background: linear-gradient(135deg, #e6f7f9 0%, #f0fbfc 100%);
-  border-radius: 16px;
-  border: 2px solid #019fb1;
-}
-
-.durationIcon {
-  width: 48px;
-  height: 48px;
-  min-width: 48px;
-  border-radius: 12px;
-  background: white;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #019fb1;
+  z-index: 10001;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
 }
 
-.durationLabel {
-  flex: 1;
-  font-size: 17px;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 360px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #019fb1;
+  color: #ffffff;
+  font-size: 16px;
   font-weight: 700;
-  color: #1f2937;
 }
 
-.durationValue {
-  font-size: 22px;
-  font-weight: 800;
-  color: #019fb1;
-  letter-spacing: -0.3px;
+.closeButton {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #ffffff;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
 }
 
-.continueButton:disabled {
-  cursor: not-allowed;
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
+.calendarWrapper {
+  padding: 16px;
+}
+
+/* ===== Calendar Styles ===== */
+.calendarWrapper :global(.rmdp-wrapper) {
+  width: 100% !important;
+}
+
+.calendarWrapper :global(.rmdp-calendar) {
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+.calendarWrapper :global(.rmdp-header) {
+  padding: 8px 0 !important;
+  margin-bottom: 8px !important;
+}
+
+.calendarWrapper :global(.rmdp-header-values) {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+}
+
+.calendarWrapper :global(.rmdp-arrow) {
+  border-color: #019fb1 !important;
+}
+
+.calendarWrapper :global(.rmdp-arrow-container) {
+  width: 32px !important;
+  height: 32px !important;
+}
+
+.calendarWrapper :global(.rmdp-arrow-container:hover) {
+  background: #f0fafb !important;
+  border-radius: 8px !important;
+}
+
+.calendarWrapper :global(.rmdp-week-day) {
+  color: #64748b !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  width: 40px !important;
+  height: 32px !important;
+}
+
+.calendarWrapper :global(.rmdp-day) {
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.calendarWrapper :global(.rmdp-day span) {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  border-radius: 8px !important;
+  width: 36px !important;
+  height: 36px !important;
+}
+
+.calendarWrapper :global(.rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:hover) {
+  background: #f0fafb !important;
+  color: #019fb1 !important;
+}
+
+.calendarWrapper :global(.rmdp-day.rmdp-selected span:not(.highlight)) {
+  background: #019fb1 !important;
+  color: #ffffff !important;
+}
+
+.calendarWrapper :global(.rmdp-day.rmdp-today span) {
+  background: #e0f7fa !important;
+  color: #019fb1 !important;
+}
+
+.calendarWrapper :global(.rmdp-day.rmdp-disabled span) {
+  color: #cbd5e1 !important;
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
-  .toggleContent {
-    flex-direction: column;
-    gap: 20px;
+  .title {
+    font-size: 22px;
   }
 
-  .toggleInfo {
+  .dateInputs {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .dateSelector {
+    padding: 14px;
+  }
+
+  .navigation {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .backButton,
+  .continueButton {
     width: 100%;
+    justify-content: center;
   }
 
-  .datesBox {
-    padding: 28px 24px;
+  .modal {
+    max-width: 320px;
   }
 
-  .iconWrapper {
-    width: 56px;
-    height: 56px;
-    min-width: 56px;
+  .calendarWrapper :global(.rmdp-day) {
+    width: 36px !important;
+    height: 36px !important;
   }
 
-  .durationContent {
-    flex-direction: column;
-    text-align: center;
+  .calendarWrapper :global(.rmdp-day span) {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 13px !important;
+  }
+
+  .calendarWrapper :global(.rmdp-week-day) {
+    width: 36px !important;
+    font-size: 11px !important;
   }
 }

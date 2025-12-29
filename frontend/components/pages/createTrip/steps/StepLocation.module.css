@@ -1,237 +1,240 @@
-.locationCard {
-  padding: 40px 30px;
-  border: 3px solid #e5e7eb;
-  border-radius: 24px;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  background: #fff;
-  position: relative;
-  overflow: hidden;
-  min-height: 420px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.locationCard::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: linear-gradient(90deg, #019fb1 0%, #00b4c8 100%);
-  transform: scaleX(0);
-  transition: transform 0.4s ease;
-}
-
-.selected::before {
-  transform: scaleX(1);
-}
-
-.locationCard:hover {
-  border-color: #019fb1;
-  transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(1, 159, 177, 0.15);
-}
-
-.selected {
-  border-color: #019fb1;
-  background: linear-gradient(135deg, #e6f7f9 0%, #d0f0f4 50%, #e6f7f9 100%);
-  box-shadow: 0 12px 32px rgba(1, 159, 177, 0.2);
-  transform: translateY(-4px);
-}
-
-.content {
+/* ===== Header ===== */
+.header {
   text-align: center;
-  position: relative;
-  z-index: 2;
+  margin-bottom: 40px;
 }
 
-.iconWrapper {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto;
-  border-radius: 30px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(230, 247, 249, 0.8) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.4s ease;
-  box-shadow: 0 8px 24px rgba(1, 159, 177, 0.15);
-}
-
-.locationCard:hover .iconWrapper {
-  background: linear-gradient(135deg, #019fb1 0%, #00b4c8 100%);
-  transform: scale(1.05);
-  box-shadow: 0 12px 32px rgba(1, 159, 177, 0.3);
-}
-
-.selected .iconWrapper {
-  background: linear-gradient(135deg, #019fb1 0%, #00b4c8 100%);
-  transform: scale(1.1);
-  box-shadow: 0 12px 32px rgba(1, 159, 177, 0.4);
-}
-
-.locationTitle {
-  transition: font-size 0.3s ease;
-}
-
-.cardDescription {
-  color: #0f172a;
-  font-weight: 500;
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
   margin-bottom: 8px;
 }
 
-.destinationsPreview {
-  background: #fff;
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
+.subtitle {
+  font-size: 15px;
+  color: #64748b;
 }
 
-.selected .destinationsPreview {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: #019fb1;
+/* ===== Cards Grid ===== */
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
-.previewLabel {
+/* ===== Card ===== */
+.card {
+  position: relative;
+  padding: 28px 24px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.25s ease;
   text-align: center;
-  color: #0f172a;
 }
 
-.previewLabelEn {
-  display: block;
-  font-size: 11px;
-  color: #94a3b8;
-  margin-top: 4px;
+.card:hover {
+  border-color: #019fb1;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(1, 159, 177, 0.12);
 }
 
-.destinationsTags {
+.cardActive {
+  border-color: #019fb1;
+  background: #f0fafb;
+  box-shadow: 0 8px 24px rgba(1, 159, 177, 0.15);
+}
+
+/* ===== Card Icon ===== */
+.cardIcon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  background: #f0fafb;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #019fb1;
+  transition: all 0.25s ease;
+}
+
+.cardActive .cardIcon {
+  background: #019fb1;
+  color: #ffffff;
+}
+
+/* ===== Card Content ===== */
+.cardTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 6px;
+}
+
+.cardDesc {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.4;
+  margin-bottom: 16px;
+}
+
+/* ===== Tags ===== */
+.tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   justify-content: center;
+  margin-bottom: 16px;
 }
 
-.destinationTag {
-  padding: 6px 14px;
+.tag {
+  padding: 5px 12px;
   background: #e6f7f9;
   color: #019fb1;
   border-radius: 20px;
   font-size: 12px;
   font-weight: 600;
-  transition: all 0.3s ease;
 }
 
-.destinationTagMore {
+.cardActive .tag {
   background: #019fb1;
-  color: #fff;
+  color: #ffffff;
 }
 
-.locationCard:hover .destinationTag {
-  background: #d0f0f4;
-}
-
-.selected .destinationTag {
-  background: #019fb1;
-  color: #fff;
-}
-
-.selected .destinationTagMore {
-  background: #b71c38;
-}
-
-.locationStats {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.statItem {
+/* ===== Stats ===== */
+.stats {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  background: #fff;
+  justify-content: center;
+  gap: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
 }
 
-.statIcon {
-  color: #019fb1;
-  font-size: 18px;
+.stat {
+  text-align: center;
 }
 
 .statLabel {
   display: block;
-  font-size: 12px;
-  color: #64748b;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 2px;
 }
 
 .statValue {
   font-size: 14px;
-  font-weight: 600;
-  color: #0f172a;
-  display: block;
+  font-weight: 700;
+  color: #1e293b;
 }
 
-.statValueNote {
-  display: block;
-  font-size: 11px;
-  color: #475569;
-  margin-top: 4px;
-}
-
-.selectedCheck {
+/* ===== Check Mark ===== */
+.checkMark {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #019fb1 0%, #00b4c8 100%);
+  top: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  background: #10b981;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.4);
-  animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  color: #ffffff;
+  animation: popIn 0.2s ease;
+}
+
+[dir="rtl"] .checkMark {
+  right: auto;
+  left: 12px;
 }
 
 @keyframes popIn {
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+  0% { transform: scale(0); }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
-.disabledButton {
+/* ===== Navigation ===== */
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  gap: 16px;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.backButton:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.continueButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  background: #019fb1;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.continueButton:hover:not(:disabled) {
+  background: #018a9a;
+}
+
+.disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
-  .locationCard {
-    min-height: 350px;
-    padding: 30px 20px;
+  .title {
+    font-size: 22px;
   }
 
-  .iconWrapper {
-    width: 100px;
-    height: 100px;
+  .cardsGrid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
   }
 
-  .locationTitle {
-    font-size: 20px !important;
+  .card {
+    padding: 24px 20px;
+  }
+
+  .navigation {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .backButton,
+  .continueButton {
+    width: 100%;
+    justify-content: center;
   }
 }

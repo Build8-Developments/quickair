@@ -8,10 +8,10 @@ import styles from "./StepDestination.module.css";
 export default function StepDestination({ data, locationType, onUpdate, onNext, onPrev }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDestination, setSelectedDestination] = useState(data);
-  const { language, t } = useLanguage();
+  const { language } = useLanguage();
   const isRTL = language === "ar";
+  const t = (ar, en) => (isRTL ? ar : en);
 
-  // Choose destinations list based on location type
   const destinationsList = locationType === 'domestic' ? DOMESTIC_DESTINATIONS : INTERNATIONAL_DESTINATIONS;
 
   const filteredDestinations = destinationsList.filter((dest) =>
@@ -25,135 +25,117 @@ export default function StepDestination({ data, locationType, onUpdate, onNext, 
   };
 
   const handleContinue = () => {
-    if (selectedDestination) {
-      onNext();
-    }
+    if (selectedDestination) onNext();
   };
 
   return (
     <div className="step-content" dir={isRTL ? "rtl" : "ltr"}>
-      <div className="text-center mb-40">
-        <h2 className="text-30 fw-600 text-dark-1 mb-10">
+      {/* Header */}
+      <div className={styles.header}>
+        <h2 className={styles.title}>
           {locationType === 'domestic' 
             ? t('اختر وجهتك داخل مصر', 'Choose Your Destination in Egypt')
             : t('إلى أين تريد الذهاب؟', 'Where would you like to go?')}
         </h2>
-        <p className="text-16 text-dark-2">
+        <p className={styles.subtitle}>
           {locationType === 'domestic' 
-            ? t('استكشف أجمل الوجهات السياحية في مصر', 'Explore the most beautiful tourist destinations in Egypt')
-            : t('اختر وجهتك المفضلة من اختياراتنا الشائعة', 'Select your dream destination from our popular picks')}
+            ? t('استكشف أجمل الوجهات السياحية', 'Explore the most beautiful destinations')
+            : t('اختر وجهتك المفضلة', 'Select your dream destination')}
         </p>
       </div>
 
-      {/* Search Bar */}
-      <div className="mb-40">
-        <div className="searchMenu-loc px-30 py-20 bg-white rounded-12 border-1">
-          <div className="d-flex items-center" style={{ gap: "15px" }}>
-            <i className="icon-location-2 text-20 text-dark-1"></i>
-            <input
-              type="text"
-              className="border-0 text-16 fw-500"
-              placeholder={t('ابحث عن الوجهات...', 'Search destinations...')}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{ outline: "none", width: "100%", direction: isRTL ? "rtl" : "ltr" }}
-            />
-          </div>
-        </div>
+      {/* Search */}
+      <div className={styles.searchWrapper}>
+        <svg className={styles.searchIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+        <input
+          type="text"
+          className={styles.searchInput}
+          placeholder={t('ابحث عن الوجهات...', 'Search destinations...')}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
       </div>
 
       {/* Destinations Grid */}
-      <div className="row x-gap-20 y-gap-20">
-        {filteredDestinations.map((destination) => (
-          <div key={destination.id} className="col-lg-3 col-md-4 col-sm-6">
+      <div className={styles.grid}>
+        {filteredDestinations.map((destination) => {
+          const isSelected = selectedDestination?.id === destination.id;
+          return (
             <div
-              className={`${styles.destinationCard} ${
-                selectedDestination?.id === destination.id ? styles.selected : ""
-              }`.trim()}
+              key={destination.id}
+              className={`${styles.card} ${isSelected ? styles.cardActive : ""}`}
               onClick={() => handleSelect(destination)}
             >
-              <div className={styles.image}>
-                <img
-                  src={destination.image}
-                  alt={destination.name}
-                  loading="lazy"
-                />
+              <div className={styles.cardImage}>
+                <img src={destination.image} alt={destination.name} loading="lazy" />
                 {destination.popular && (
-                  <div className={styles.popularBadge}>
-                    <i className="icon-fire text-12 mr-5"></i>
-                    Popular
+                  <span className={styles.badge}>
+                    {t('شائع', 'Popular')}
+                  </span>
+                )}
+                {isSelected && (
+                  <div className={styles.checkMark}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
                   </div>
                 )}
-                {selectedDestination?.id === destination.id && (
-                  <div className={styles.selectedBadge}>
-                    <i className="icon-check text-16"></i>
-                  </div>
-                )}
-                <div className={styles.imageOverlay}></div>
               </div>
-              <div className={styles.content}>
-                <h4 className="text-16 fw-600 text-dark-1">
+              <div className={styles.cardContent}>
+                <h4 className={styles.cardTitle}>
                   {isRTL ? destination.name : (destination.nameEn || destination.name)}
                 </h4>
-                <p className="text-13 text-dark-3 mt-5 d-flex items-center" style={{ gap: "5px" }}>
-                  <i className="icon-location text-14 text-accent-1"></i>
-                  {destination.country}
-                  {destination.nameEn && isRTL && (
-                    <span>• {destination.nameEn}</span>
-                  )}
-                </p>
-                {/* Price Range */}
+                <p className={styles.cardCountry}>{destination.country}</p>
                 {destination.priceRange && (
-                  <div className="mt-10">
-                    <span className="text-12 fw-600 text-accent-1">
-                      {t(`من ${destination.priceRange.min.toLocaleString()} جنيه`, `From ${destination.priceRange.min.toLocaleString()} EGP`)}
+                  <div className={styles.cardPrice}>
+                    <span className={styles.priceValue}>
+                      {t(`من ${destination.priceRange.min.toLocaleString()} ج.م`, `From ${destination.priceRange.min.toLocaleString()} EGP`)}
                     </span>
                     {destination.hotelCount > 0 && (
-                      <span className="text-11 text-light-1" style={{ marginInline: "5px" }}>
-                        • {destination.hotelCount} {t('فندق', 'hotels')}
+                      <span className={styles.hotelCount}>
+                        {destination.hotelCount} {t('فندق', 'hotels')}
                       </span>
                     )}
                   </div>
                 )}
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
+      {/* Empty State */}
       {filteredDestinations.length === 0 && (
-        <div className="text-center py-60">
-          <i className="icon-search text-60 text-dark-3"></i>
-          <h3 className="text-20 fw-500 text-dark-2 mt-20">
-            {t('لا توجد وجهات', 'No destinations found')}
-          </h3>
-          <p className="text-15 text-dark-3 mt-10">
-            {t('جرب كلمة بحث أخرى', 'Try a different search term')}
-          </p>
+        <div className={styles.emptyState}>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          <h3>{t('لا توجد وجهات', 'No destinations found')}</h3>
+          <p>{t('جرب كلمة بحث أخرى', 'Try a different search term')}</p>
         </div>
       )}
 
-      {/* Action Buttons */}
-      <div className="d-flex justify-between items-center mt-40">
-        <button
-          type="button"
-          className="button -md -outline-accent-1 text-accent-1 px-35"
-          onClick={onPrev}
-          style={{ display: "flex", alignItems: "center", gap: "10px" }}
-        >
-          <i className={`icon-arrow-${isRTL ? 'left' : 'right'} text-16`}></i>
+      {/* Navigation */}
+      <div className={styles.navigation}>
+        <button className={styles.backButton} onClick={onPrev}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d={isRTL ? "m9 18 6-6-6-6" : "m15 18-6-6 6-6"} />
+          </svg>
           {t('رجوع', 'Back')}
         </button>
         <button
-          className={`button -md -dark-1 bg-accent-1 text-white px-50 py-15 rounded-12 ${
-            !selectedDestination ? styles.disabledButton : ""
-          }`}
+          className={`${styles.continueButton} ${!selectedDestination ? styles.disabled : ""}`}
           onClick={handleContinue}
           disabled={!selectedDestination}
-          style={{ display: "flex", alignItems: "center", gap: "10px" }}
         >
           {t('متابعة', 'Continue')}
-          <i className={`icon-arrow-${isRTL ? 'right' : 'left'}`}></i>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d={isRTL ? "m15 18-6-6 6-6" : "m9 18 6-6-6-6"} />
+          </svg>
         </button>
       </div>
     </div>

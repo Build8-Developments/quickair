@@ -1,209 +1,296 @@
-.sectionTitle {
-  font-size: 22px;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 12px;
-}
-
-.sectionDesc {
-  font-size: 15px;
-  color: #666;
-  margin-bottom: 25px;
-}
-
-.preferenceSection {
+/* ===== Header ===== */
+.header {
+  text-align: center;
   margin-bottom: 40px;
 }
 
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: #64748b;
+}
+
+/* ===== Container ===== */
+.container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ===== Section ===== */
+.section {
+  margin-bottom: 32px;
+}
+
+.sectionLabel {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+}
+
+/* ===== Activities Grid ===== */
+.activitiesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
 .activityCard {
-  background: #fff;
-  border: 2.5px solid #e8e8e8;
-  border-radius: 20px;
-  padding: 30px 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-  position: relative;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 10px;
+  padding: 20px 16px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  text-align: center;
 }
 
 .activityCard:hover {
   border-color: #019fb1;
-  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
-  transform: translateY(-3px);
+  background: #f8fcfd;
 }
 
-.activityCardSelected {
-  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
+.activityActive {
   border-color: #019fb1;
-  box-shadow: 0 8px 25px rgba(1, 159, 177, 0.3);
-  transform: translateY(-3px);
+  background: #f0fafb;
 }
 
 .activityIcon {
-  width: 70px;
-  height: 70px;
-  background: rgba(1, 159, 177, 0.1);
-  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #f0fafb;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #019fb1;
-  margin-bottom: 20px;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
-.activityCardSelected .activityIcon {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
+.activityActive .activityIcon {
+  background: #019fb1;
+  color: #ffffff;
 }
 
-.activityTitle {
-  font-size: 17px;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin: 0 0 8px 0;
+.activityLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.3;
 }
 
-.activityCardSelected .activityTitle {
-  color: #fff;
-}
-
-.activitySubtitle {
-  font-size: 14px;
-  color: #666;
-  margin: 0;
-}
-
-.activityCardSelected .activitySubtitle {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.checkBadge {
+.checkMark {
   position: absolute;
-  top: 15px;
-  right: 15px;
-  width: 32px;
-  height: 32px;
-  background: #fff;
+  top: 8px;
+  right: 8px;
+  width: 22px;
+  height: 22px;
+  background: #10b981;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #019fb1;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: #ffffff;
+  animation: popIn 0.2s ease;
+}
+
+[dir="rtl"] .checkMark {
+  right: auto;
+  left: 8px;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* ===== Meals Grid ===== */
+.mealsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
 }
 
 .mealCard {
-  background: #fff;
-  border: 2.5px solid #e8e8e8;
-  border-radius: 20px;
-  padding: 25px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 16px 18px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .mealCard:hover {
   border-color: #019fb1;
-  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
-  transform: translateY(-2px);
 }
 
-.mealCardSelected {
-  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
+.mealActive {
   border-color: #019fb1;
-  box-shadow: 0 8px 25px rgba(1, 159, 177, 0.3);
-  transform: translateY(-2px);
+  background: #f0fafb;
 }
 
 .mealContent {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
-.mealTitle {
-  font-size: 18px;
+.mealLabel {
+  font-size: 14px;
   font-weight: 700;
-  color: #1a1a1a;
-  margin: 0 0 8px 0;
-}
-
-.mealCardSelected .mealTitle {
-  color: #fff;
+  color: #1e293b;
 }
 
 .mealDesc {
-  font-size: 14px;
-  color: #666;
-  margin: 0;
+  font-size: 12px;
+  color: #64748b;
 }
 
-.mealCardSelected .mealDesc {
-  color: rgba(255, 255, 255, 0.9);
+.mealCheck {
+  width: 28px;
+  height: 28px;
+  background: #019fb1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
 }
 
-.checkIcon {
-  color: #019fb1;
-  margin-left: 15px;
-}
-
-.mealCardSelected .checkIcon {
-  color: #fff;
-}
-
-.specialRequestsInput {
+/* ===== Textarea ===== */
+.textarea {
   width: 100%;
-  padding: 20px 25px;
-  border: 2.5px solid #e8e8e8;
-  border-radius: 20px;
-  font-size: 16px;
+  padding: 16px 18px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 14px;
   font-family: inherit;
   resize: vertical;
-  transition: all 0.3s ease;
-  line-height: 1.6;
+  transition: all 0.2s ease;
+  line-height: 1.5;
+  min-height: 100px;
 }
 
-.specialRequestsInput:focus {
+.textarea:focus {
   outline: none;
   border-color: #019fb1;
-  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
+  box-shadow: 0 0 0 4px rgba(1, 159, 177, 0.08);
 }
 
-.specialRequestsInput::placeholder {
-  color: #999;
+.textarea::placeholder {
+  color: #94a3b8;
 }
 
+/* ===== Navigation ===== */
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  gap: 16px;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.backButton:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.continueButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  background: #019fb1;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.continueButton:hover {
+  background: #018a9a;
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
+  .title {
+    font-size: 22px;
+  }
+
+  .activitiesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
   .activityCard {
-    padding: 25px 15px;
+    padding: 16px 12px;
   }
 
   .activityIcon {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
   }
 
-  .activityIcon svg {
-    width: 28px;
-    height: 28px;
+  .activityLabel {
+    font-size: 12px;
   }
 
-  .mealCard {
-    padding: 20px;
+  .mealsGrid {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 
-  .checkBadge {
-    top: 10px;
-    right: 10px;
-    width: 28px;
-    height: 28px;
+  .navigation {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .backButton,
+  .continueButton {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .activitiesGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

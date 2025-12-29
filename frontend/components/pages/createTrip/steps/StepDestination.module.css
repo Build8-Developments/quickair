@@ -1,106 +1,305 @@
-.destinationCard {
+/* ===== Header ===== */
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: #64748b;
+}
+
+/* ===== Search ===== */
+.searchWrapper {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto 32px;
+}
+
+.searchIcon {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
+[dir="rtl"] .searchIcon {
+  left: auto;
+  right: 16px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 14px 16px 14px 48px;
+  border: 1.5px solid #e2e8f0;
   border-radius: 12px;
+  font-size: 15px;
+  color: #1e293b;
+  background: #ffffff;
+  transition: all 0.2s ease;
+}
+
+[dir="rtl"] .searchInput {
+  padding: 14px 48px 14px 16px;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #019fb1;
+  box-shadow: 0 0 0 3px rgba(1, 159, 177, 0.1);
+}
+
+.searchInput::placeholder {
+  color: #94a3b8;
+}
+
+/* ===== Grid ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+/* ===== Card ===== */
+.card {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-  background: #fff;
+  transition: all 0.25s ease;
 }
 
-.destinationCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+.card:hover {
   border-color: #019fb1;
-}
-
-.selected {
-  border-color: #019fb1;
-  background: linear-gradient(135deg, #e6f7f9 0%, #d0f0f4 100%);
-  box-shadow: 0 8px 24px rgba(1, 159, 177, 0.2);
   transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(1, 159, 177, 0.12);
 }
 
-.image {
+.cardActive {
+  border-color: #019fb1;
+  background: #f0fafb;
+  box-shadow: 0 8px 24px rgba(1, 159, 177, 0.15);
+}
+
+/* ===== Card Image ===== */
+.cardImage {
   position: relative;
-  height: 200px;
+  height: 140px;
   overflow: hidden;
 }
 
-.image img {
+.cardImage img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s ease;
 }
 
-.imageOverlay {
+.card:hover .cardImage img {
+  transform: scale(1.05);
+}
+
+.badge {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.destinationCard:hover .image img {
-  transform: scale(1.15);
-}
-
-.destinationCard:hover .imageOverlay {
-  opacity: 1;
-}
-
-.popularBadge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 20px;
+  top: 10px;
+  left: 10px;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  color: #ffffff;
   font-size: 11px;
   font-weight: 700;
-  display: flex;
-  align-items: center;
-  z-index: 2;
+  border-radius: 20px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
 }
 
-.selectedBadge {
+[dir="rtl"] .badge {
+  left: auto;
+  right: 10px;
+}
+
+.checkMark {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 36px;
-  height: 36px;
-  background: linear-gradient(135deg, #019fb1 0%, #00b4c8 100%);
+  top: 10px;
+  right: 10px;
+  width: 28px;
+  height: 28px;
+  background: #10b981;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  z-index: 3;
-  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.4);
-  animation: popIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  color: #ffffff;
+  animation: popIn 0.2s ease;
+}
+
+[dir="rtl"] .checkMark {
+  right: auto;
+  left: 10px;
 }
 
 @keyframes popIn {
-  0% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
+  0% { transform: scale(0); }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
-.content {
-  padding: 16px;
+/* ===== Card Content ===== */
+.cardContent {
+  padding: 14px;
 }
 
-.disabledButton {
+.cardTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.cardCountry {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+.cardPrice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.priceValue {
+  font-size: 13px;
+  font-weight: 700;
+  color: #019fb1;
+}
+
+.hotelCount {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* ===== Empty State ===== */
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  color: #94a3b8;
+}
+
+.emptyState svg {
+  margin-bottom: 16px;
+}
+
+.emptyState h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.emptyState p {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* ===== Navigation ===== */
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  gap: 16px;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.backButton:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.continueButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  background: #019fb1;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.continueButton:hover:not(:disabled) {
+  background: #018a9a;
+}
+
+.disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 22px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .cardImage {
+    height: 120px;
+  }
+
+  .navigation {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .backButton,
+  .continueButton {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }

@@ -329,7 +329,7 @@ export default function ContactForm() {
                         </div>
                         <div className={styles.messageContent}>
                           <h4 className={styles.messageTitle}>
-                            {t("تم الإرسال بنجاح! ✨", "Successfully Sent! ✨")}
+                            {t("تم الإرسال بنجاح!", "Successfully Sent!")}
                           </h4>
                           <p className={styles.messageText}>
                             {t(
