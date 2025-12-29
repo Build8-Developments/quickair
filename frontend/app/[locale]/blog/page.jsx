@@ -3,6 +3,7 @@ import FooterTwo from "@/components/layout/footers/FooterTwo";
 import BlogPageContent from "@/components/pages/blog/BlogPageContent";
 import { generateLocalizedMetadata } from "@/utils/seo";
 import { siteInfo } from "@/data/seo";
+import { blogsAPI } from "@/services/api";
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
@@ -22,15 +23,26 @@ export async function generateMetadata({ params }) {
   };
 }
 
+async function getBlogPosts(locale) {
+  try {
+    const posts = await blogsAPI.getAll({ locale, limit: 50 });
+    return posts || [];
+  } catch (error) {
+    console.error("Error fetching blog posts:", error);
+    return [];
+  }
+}
+
 export default async function BlogPage({ params }) {
   const { locale } = await params;
+  const posts = await getBlogPosts(locale);
 
   return (
     <>
       <main style={{ overflowX: "hidden" }}>
         <Header3 locale={locale} />
         <div className="header-margin"></div>
-        <BlogPageContent locale={locale} />
+        <BlogPageContent locale={locale} initialPosts={posts} />
         <FooterTwo locale={locale} />
       </main>
     </>

@@ -72,51 +72,25 @@ export default function AIChatbot() {
     // Don't reload page, just change internal language
     setCurrentStep("chat");
     
-    // Initialize chat with welcome message and destinations widget
+    // ✅ Initialize chat with welcome message - NO widget initially
+    // Let user chat naturally, widgets will appear when they want to book
     const welcomeMessage = lang === "ar"
-      ? `مرحباً ${userInfo.name}\n\nسأساعدك في تخطيط رحلتك.`
-      : `Welcome ${userInfo.name}\n\nI'll help you plan your trip.`;
+      ? `أهلاً ${userInfo.name}! 👋\n\nأنا كويك، مساعدك الذكي من Quick Air.\n\nكيف أقدر أساعدك اليوم؟`
+      : `Hi ${userInfo.name}! 👋\n\nI'm Quick, your smart assistant from Quick Air.\n\nHow can I help you today?`;
     
     console.log("Setting messages with:", welcomeMessage);
     
-    // Send initial message to API to get destinations widget
+    // ✅ Just show welcome message - no widget
     setMessages([
       {
         role: "assistant",
         content: welcomeMessage,
+        // No widget here - let user chat first
       },
     ]);
     
-    setIsLoading(true);
-    try {
-      const response = await fetch("/api/chatbot", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: "start",
-          language: lang,
-          conversationHistory: [],
-          userInfo: { ...userInfo, preferredLanguage: lang },
-          tripData: {},
-          sessionId: newSessionId,
-        }),
-      });
-
-      const data = await response.json();
-      if (data.success && data.widget) {
-        setMessages([
-          {
-            role: "assistant",
-            content: welcomeMessage,
-            widget: data.widget,
-          },
-        ]);
-      }
-    } catch (error) {
-      console.error("Initial widget load error:", error);
-    } finally {
-      setIsLoading(false);
-    }
+    // ✅ No API call needed for initial message
+    // User will start chatting and widgets will appear when they want to book
   };
 
   const handleSend = async () => {
@@ -232,8 +206,14 @@ export default function AIChatbot() {
     setIsOpen(false);
   };
 
-  // Render widget based on type
+  // Render widget based on type - only allowed widgets
+  const ALLOWED_WIDGETS = ["destinations", "dateRange", "travelers", "budget", "hotelCards", "mealPlan", "roomType", "bookingSummary"];
+  
   const renderWidget = (widget, messageIndex) => {
+    // ✅ Only render allowed widget types
+    if (!widget || !widget.type || !ALLOWED_WIDGETS.includes(widget.type)) {
+      return null;
+    }
     if (!widget || !widget.type) return null;
 
     const handleWidgetSelection = async (data) => {
@@ -381,12 +361,72 @@ export default function AIChatbot() {
         );
       
       case "bookingSummary":
+        // Map field names to widget types
+        const fieldToWidget = {
+          destination: "destinations",
+          dates: "dateRange",
+          travelers: "travelers",
+          budget: "budget",
+          hotel: "hotelCards",
+          mealPlan: "mealPlan",
+          roomType: "roomType"
+        };
+
+        // Handle edit - show the appropriate widget
+        const handleEdit = (field) => {
+          const widgetType = fieldToWidget[field];
+          if (!widgetType) return;
+
+          // Clear the field from tripData so user can re-select
+          const updatedTripData = { ...tripData };
+          if (field === "hotel") {
+            delete updatedTripData.selectedHotel;
+            delete updatedTripData.hotel;
+          } else {
+            delete updatedTripData[field];
+          }
+          setTripData(updatedTripData);
+
+          // Create edit message
+          const fieldNames = {
+            destination: isChatArabic ? "الوجهة" : "destination",
+            dates: isChatArabic ? "التاريخ" : "dates",
+            travelers: isChatArabic ? "المسافرين" : "travelers",
+            budget: isChatArabic ? "الميزانية" : "budget",
+            hotel: isChatArabic ? "الفندق" : "hotel",
+            mealPlan: isChatArabic ? "الوجبات" : "meal plan",
+            roomType: isChatArabic ? "الغرفة" : "room type"
+          };
+
+          const editMessage = isChatArabic 
+            ? `تعديل ${fieldNames[field]}`
+            : `Edit ${fieldNames[field]}`;
+
+          // Generate the widget data
+          let widgetData = { type: widgetType, props: { language: userInfo.preferredLanguage || "ar" } };
+          
+          // For hotel cards, we need to pass hotels
+          if (widgetType === "hotelCards") {
+            widgetData.props.hotels = widget.props?.hotels || [];
+          }
+
+          // Add message with the edit widget
+          setMessages((prev) => [
+            ...prev,
+            { role: "user", content: editMessage },
+            { 
+              role: "assistant", 
+              content: isChatArabic ? `اختر ${fieldNames[field]} الجديد:` : `Choose new ${fieldNames[field]}:`,
+              widget: widgetData
+            }
+          ]);
+        };
+
         return (
           <BookingSummaryWidget
             {...commonProps}
-            {...widget.props}
+            bookingData={{ ...widget.props?.bookingData, ...tripData }}
             userInfo={userInfo}
-            tripData={tripData}
             onConfirm={async () => {
               setIsLoading(true);
               try {
@@ -418,16 +458,7 @@ export default function AIChatbot() {
                 setIsLoading(false);
               }
             }}
-            onEdit={(field) => {
-              const fieldName = typeof field === 'string' ? field : 'booking';
-              const editMessage = isChatArabic 
-                ? `أريد تعديل ${fieldName === 'trip' ? 'تفاصيل الرحلة' : 'الحجز'}`
-                : `I want to edit ${fieldName === 'trip' ? 'trip details' : 'booking'}`;
-              setMessages((prev) => [
-                ...prev,
-                { role: "user", content: editMessage }
-              ]);
-            }}
+            onEdit={handleEdit}
           />
         );
       
@@ -548,6 +579,11 @@ export default function AIChatbot() {
         );
 
       case "chat":
+        // Find the last message index that has a widget
+        const lastWidgetIndex = messages.reduce((lastIdx, msg, idx) => {
+          return msg.widget ? idx : lastIdx;
+        }, -1);
+        
         return (
           <>
             {/* Messages */}
@@ -569,8 +605,8 @@ export default function AIChatbot() {
                   <div className={styles.messageContent}>
                     <p style={{ whiteSpace: 'pre-wrap' }}>{message.content}</p>
                     
-                    {/* Interactive Widgets */}
-                    {message.widget && (
+                    {/* Interactive Widgets - Only show the last one */}
+                    {message.widget && index === lastWidgetIndex && (
                       <div className={styles.widgetContainer}>
                         {renderWidget(message.widget, index)}
                       </div>
@@ -594,17 +630,25 @@ export default function AIChatbot() {
                     
                     {message.suggestedPages && message.suggestedPages.length > 0 && (
                       <div className={styles.suggestedLinks}>
-                        {message.suggestedPages.map((link, linkIndex) => (
-                          <a
-                            key={linkIndex}
-                            href={link.url}
-                            className={styles.suggestedLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <span className={styles.linkText}>{link.text}</span>
-                          </a>
-                        ))}
+                        {message.suggestedPages.map((link, linkIndex) => {
+                          // Add locale to URL if not already present
+                          const locale = userInfo.preferredLanguage || language || 'en';
+                          const urlWithLocale = link.url.startsWith(`/${locale}`) 
+                            ? link.url 
+                            : `/${locale}${link.url}`;
+                          
+                          return (
+                            <a
+                              key={linkIndex}
+                              href={urlWithLocale}
+                              className={styles.suggestedLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <span className={styles.linkText}>{link.text}</span>
+                            </a>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -665,7 +709,7 @@ export default function AIChatbot() {
               </svg>
             </div>
             <h2 className={styles.summaryTitle}>
-              {t("رائع! تم تخطيط رحلتك 🎉", "Great! Your Trip is Planned 🎉")}
+              {t("رائع! تم تخطيط رحلتك", "Great! Your Trip is Planned")}
             </h2>
             <p className={styles.summaryText}>
               {t(
@@ -677,18 +721,21 @@ export default function AIChatbot() {
             <div className={styles.summaryDetails}>
               <div className={styles.summaryCard}>
                 <strong>{t("المعلومات الشخصية", "Personal Info")}</strong>
-                <p>👤 {userInfo.name}</p>
-                <p>📧 {userInfo.email}</p>
-                <p>📱 {userInfo.phone}</p>
+                <p>{t("الاسم:", "Name:")} {userInfo?.name || "-"}</p>
+                <p>{t("البريد الإلكتروني:", "Email:")} {userInfo?.email || "-"}</p>
+                <p>{t("رقم الهاتف:", "Phone:")} {userInfo?.phone || "-"}</p>
               </div>
               
               {tripData.destination && (
                 <div className={styles.summaryCard}>
                   <strong>{t("تفاصيل الرحلة", "Trip Details")}</strong>
-                  <p>📍 {t("الوجهة:", "Destination:")} {tripData.destination}</p>
-                  {tripData.duration && <p>📅 {t("المدة:", "Duration:")} {tripData.duration}</p>}
-                  {tripData.budget && <p>💰 {t("الميزانية:", "Budget:")} {tripData.budget}</p>}
-                  {tripData.travelers && <p>👥 {t("المسافرون:", "Travelers:")} {tripData.travelers}</p>}
+                  <p>{t("الوجهة:", "Destination:")} {tripData.destination?.name || tripData.destination}</p>
+                  {tripData.dates && <p>{t("التاريخ:", "Date:")} {tripData.dates?.startDate} - {tripData.dates?.endDate}</p>}
+                  {tripData.budget && <p>{t("الميزانية:", "Budget:")} {tripData.budget?.label || tripData.budget}</p>}
+                  {tripData.travelers && <p>{t("المسافرون:", "Travelers:")} {tripData.travelers?.total || tripData.travelers?.adults || tripData.travelers}</p>}
+                  {tripData.selectedHotel && <p>{t("الفندق:", "Hotel:")} {isChatArabic ? tripData.selectedHotel?.hotel_name_ar : tripData.selectedHotel?.hotel_name_en}</p>}
+                  {tripData.mealPlan && <p>{t("الوجبات:", "Meals:")} {tripData.mealPlan?.label || tripData.mealPlan}</p>}
+                  {tripData.roomType && <p>{t("الغرفة:", "Room:")} {tripData.roomType?.label || tripData.roomType}</p>}
                 </div>
               )}
             </div>
@@ -714,9 +761,9 @@ export default function AIChatbot() {
 
   return (
     <>
-      {/* Floating Chat Button */}
+      {/* Floating Chat Button - hidden on mobile when chat is open */}
       <button
-        className={`${styles.chatButton} ${isOpen ? styles.chatButtonOpen : ""}`}
+        className={`${styles.chatButton} ${isOpen ? styles.chatButtonOpen : ""} ${isOpen ? styles.chatButtonHiddenMobile : ""}`}
         onClick={() => setIsOpen(!isOpen)}
         aria-label={t("مساعد ذكي", "AI Assistant")}
         suppressHydrationWarning

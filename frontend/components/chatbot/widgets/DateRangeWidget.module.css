@@ -1,14 +1,15 @@
 .widget {
   width: 100%;
-  padding: 12px;
+  margin-top: 8px;
+  padding: 10px;
   background: white;
-  border-radius: 12px;
+  border-radius: 10px;
 }
 
 .dateInputs {
   display: flex;
-  gap: 10px;
-  margin-bottom: 12px;
+  gap: 8px;
+  margin-bottom: 10px;
 }
 
 .dateSelector {
@@ -16,9 +17,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px;
-  border: 2px solid #e5e7eb;
-  border-radius: 10px;
+  padding: 10px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
   background: #f9fafb;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -41,20 +42,20 @@
 }
 
 .dateLabel {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
   color: #6b7280;
 }
 
 .dateValue {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: #1f2937;
 }
 
 .labelIcon {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   color: #019fb1;
   flex-shrink: 0;
 }
@@ -63,24 +64,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 12px;
+  padding: 6px 10px;
   background: #f0fdff;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  font-size: 13px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-size: 11px;
   font-weight: 700;
   color: #019fb1;
-  border: 1px solid #019fb1;
+  border: 1px solid rgba(1, 159, 177, 0.2);
 }
 
 .confirmButton {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   background: #019fb1;
   color: white;
   border: none;
-  border-radius: 10px;
-  font-size: 14px;
+  border-radius: 8px;
+  font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -106,7 +107,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
+  z-index: 10001;
   padding: 16px;
   animation: fadeIn 0.2s ease;
 }
@@ -118,9 +119,9 @@
 
 .calendarModal {
   background: white;
-  border-radius: 16px;
+  border-radius: 12px;
   width: 100%;
-  max-width: 320px;
+  max-width: 300px;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: slideUp 0.3s ease;
@@ -141,10 +142,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 16px;
+  padding: 12px 14px;
   background: #019fb1;
   color: white;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -152,9 +153,9 @@
   background: rgba(255, 255, 255, 0.2);
   border: none;
   color: white;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -167,7 +168,7 @@
 }
 
 .calendarWrapper {
-  padding: 12px;
+  padding: 10px;
 }
 
 /* Calendar Styles */
@@ -181,12 +182,12 @@
 }
 
 .calendarWrapper :global(.rmdp-header) {
-  padding: 8px 0 !important;
-  margin-bottom: 8px !important;
+  padding: 6px 0 !important;
+  margin-bottom: 6px !important;
 }
 
 .calendarWrapper :global(.rmdp-header-values) {
-  font-size: 14px !important;
+  font-size: 13px !important;
   font-weight: 700 !important;
   color: #1f2937 !important;
 }
@@ -196,8 +197,8 @@
 }
 
 .calendarWrapper :global(.rmdp-arrow-container) {
-  width: 28px !important;
-  height: 28px !important;
+  width: 26px !important;
+  height: 26px !important;
 }
 
 .calendarWrapper :global(.rmdp-arrow-container:hover) {
@@ -206,23 +207,23 @@
 
 .calendarWrapper :global(.rmdp-week-day) {
   color: #6b7280 !important;
-  font-size: 11px !important;
+  font-size: 10px !important;
   font-weight: 600 !important;
-  width: 36px !important;
-  height: 28px !important;
+  width: 32px !important;
+  height: 24px !important;
 }
 
 .calendarWrapper :global(.rmdp-day) {
-  width: 36px !important;
-  height: 36px !important;
+  width: 32px !important;
+  height: 32px !important;
 }
 
 .calendarWrapper :global(.rmdp-day span) {
-  font-size: 13px !important;
+  font-size: 12px !important;
   font-weight: 500 !important;
-  border-radius: 8px !important;
-  width: 32px !important;
-  height: 32px !important;
+  border-radius: 6px !important;
+  width: 28px !important;
+  height: 28px !important;
 }
 
 .calendarWrapper :global(.rmdp-day:not(.rmdp-disabled):not(.rmdp-day-hidden) span:hover) {
@@ -247,47 +248,87 @@
 /* Mobile Responsive */
 @media (max-width: 480px) {
   .widget {
-    padding: 10px;
+    padding: 8px;
   }
 
   .dateInputs {
-    gap: 8px;
+    gap: 6px;
   }
 
   .dateSelector {
-    padding: 10px;
+    padding: 8px;
   }
 
   .dateLabel {
-    font-size: 10px;
+    font-size: 9px;
   }
 
   .dateValue {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .labelIcon {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .nightsInfo {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+
+  .confirmButton {
+    padding: 8px;
+    font-size: 12px;
   }
 
   .calendarModal {
-    max-width: 290px;
+    max-width: 280px;
   }
 
   .calendarWrapper :global(.rmdp-day) {
-    width: 32px !important;
-    height: 32px !important;
+    width: 28px !important;
+    height: 28px !important;
   }
 
   .calendarWrapper :global(.rmdp-day span) {
-    width: 28px !important;
-    height: 28px !important;
-    font-size: 12px !important;
+    width: 24px !important;
+    height: 24px !important;
+    font-size: 11px !important;
   }
 
   .calendarWrapper :global(.rmdp-week-day) {
-    width: 32px !important;
+    width: 28px !important;
+    font-size: 9px !important;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  .dateSelector {
+    padding: 6px;
+  }
+
+  .dateLabel {
+    font-size: 8px;
+  }
+
+  .dateValue {
+    font-size: 10px;
+  }
+
+  .calendarModal {
+    max-width: 260px;
+  }
+
+  .calendarWrapper :global(.rmdp-day) {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .calendarWrapper :global(.rmdp-day span) {
+    width: 22px !important;
+    height: 22px !important;
     font-size: 10px !important;
   }
 }

@@ -1,71 +1,119 @@
 .widget {
   width: 100%;
-  margin-top: 12px;
+  margin-top: 8px;
 }
 
 .mealGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-
-@media (max-width: 480px) {
-  .mealGrid {
-    grid-template-columns: 1fr;
-  }
+  gap: 8px;
 }
 
 .mealCard {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 16px 12px;
+  gap: 10px;
+  padding: 10px 12px;
   background: white;
   border: 1.5px solid #e5e7eb;
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
-  text-align: center;
 }
 
 .mealCard:hover {
   border-color: #019fb1;
   background: #f0fdff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(1, 159, 177, 0.15);
+}
+
+.mealCard:active {
+  transform: scale(0.98);
 }
 
 .icon {
-  font-size: 32px;
+  font-size: 24px;
+  flex-shrink: 0;
 }
 
 .content {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
+  text-align: start;
 }
 
 .label {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
   color: #1f2937;
-  margin-bottom: 5px;
-}
-
-@media (max-width: 480px) {
-  .label {
-    font-size: 13px;
-  }
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .desc {
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 500;
   color: #6b7280;
-  line-height: 1.4;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
+/* Mobile Responsive */
 @media (max-width: 480px) {
-  .desc {
+  .mealGrid {
+    gap: 6px;
+  }
+
+  .mealCard {
+    padding: 8px 10px;
+    gap: 8px;
+    border-radius: 8px;
+  }
+
+  .icon {
+    font-size: 20px;
+  }
+
+  .label {
     font-size: 11px;
   }
+
+  .desc {
+    font-size: 9px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  .mealCard {
+    padding: 6px 8px;
+  }
+
+  .icon {
+    font-size: 18px;
+  }
+
+  .label {
+    font-size: 10px;
+  }
+
+  .desc {
+    font-size: 8px;
+    -webkit-line-clamp: 1;
+  }
+}
+
+/* RTL Support */
+[dir="rtl"] .content {
+  text-align: right;
+}
+
+[dir="ltr"] .content {
+  text-align: left;
 }

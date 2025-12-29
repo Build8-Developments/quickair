@@ -1,17 +1,37 @@
 "use client";
 
 import { useState } from "react";
+import { Calendar } from "react-multi-date-picker";
 import { useLanguage } from "@/contexts/LanguageContext";
 import styles from "./StepDates.module.css";
 
 export default function StepDates({ data, onUpdate, onNext, onPrev }) {
-  const [dates, setDates] = useState(data);
-  const { language, t } = useLanguage();
+  const [dates, setDates] = useState(data || {});
+  const [activeCalendar, setActiveCalendar] = useState(null);
+  const { language } = useLanguage();
+  const isRTL = language === "ar";
+  const t = (ar, en) => (isRTL ? ar : en);
 
-  const handleDateChange = (field, value) => {
-    const newDates = { ...dates, [field]: value };
-    setDates(newDates);
-    onUpdate(newDates);
+  const today = new Date();
+  const maxDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
+
+  const handleDateSelect = (date) => {
+    const selectedDate = date?.toDate?.() || date;
+    const dateStr = selectedDate ? selectedDate.toISOString().split("T")[0] : null;
+
+    if (activeCalendar === "start") {
+      const newDates = { ...dates, startDate: dateStr };
+      if (dates.endDate && new Date(dateStr) >= new Date(dates.endDate)) {
+        newDates.endDate = null;
+      }
+      setDates(newDates);
+      onUpdate(newDates);
+    } else {
+      const newDates = { ...dates, endDate: dateStr };
+      setDates(newDates);
+      onUpdate(newDates);
+    }
+    setActiveCalendar(null);
   };
 
   const handleFlexibleToggle = () => {
@@ -20,253 +40,181 @@ export default function StepDates({ data, onUpdate, onNext, onPrev }) {
     onUpdate(newDates);
   };
 
-  const handleFlexDaysChange = (e) => {
-    const flexDays = parseInt(e.target.value, 10) || 0;
-    const newDates = { ...dates, flexDays };
-    setDates(newDates);
-    onUpdate(newDates);
+  const formatDate = (dateStr) => {
+    if (!dateStr) return t("اختر", "Select");
+    const d = new Date(dateStr);
+    return d.toLocaleDateString(isRTL ? "ar-EG" : "en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
   };
 
-  const handleContinue = () => {
-    if (dates.flexible || (dates.startDate && dates.endDate)) {
-      onNext();
-    }
+  const calculateNights = () => {
+    if (!dates.startDate || !dates.endDate) return 0;
+    const start = new Date(dates.startDate);
+    const end = new Date(dates.endDate);
+    return Math.ceil((end - start) / (1000 * 60 * 60 * 24));
   };
 
   const isValidDates = () => {
     if (dates.flexible) return true;
-    if (!dates.startDate || !dates.endDate) return false;
-    return new Date(dates.startDate) < new Date(dates.endDate);
+    return dates.startDate && dates.endDate && calculateNights() > 0;
   };
 
+  const nights = calculateNights();
+
   return (
-    <div className="step-content">
-      <div className="text-center mb-50">
-        <h2 className="text-32 fw-700 text-dark-1 mb-12">
-          {t("إمتى عايز تسافر؟", "When are you thinking?")}
+    <div className="step-content" dir={isRTL ? "rtl" : "ltr"}>
+      {/* Header */}
+      <div className={styles.header}>
+        <h2 className={styles.title}>
+          {t("متى تريد السفر؟", "When do you want to travel?")}
         </h2>
-        <p className="text-17 text-dark-2">
-          {t(
-            "اختر تاريخ السفر أو خليه مرن لعروض أفضل",
-            "Pick your dates or stay flexible for better deals"
-          )}
+        <p className={styles.subtitle}>
+          {t("اختر تواريخ رحلتك أو اجعلها مرنة", "Pick your dates or stay flexible")}
         </p>
       </div>
 
-      <div className="row justify-center">
-        <div className="col-xl-7 col-lg-9">
-          {/* Flexible Dates Toggle */}
-          <div className="flexible-toggle mb-40">
-            <div
-              className={`${styles.toggleCard} ${
-                dates.flexible ? styles.toggleCardActive : ""
-              }`}
-              onClick={handleFlexibleToggle}
-            >
-              <div className={styles.toggleContent}>
-                <div className={styles.toggleInfo}>
-                  <div className={styles.iconWrapper}>
-                    <svg
-                      width="28"
-                      height="28"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                      <line x1="16" y1="2" x2="16" y2="6" />
-                      <line x1="8" y1="2" x2="8" y2="6" />
-                      <line x1="3" y1="10" x2="21" y2="10" />
-                    </svg>
-                  </div>
-                  <div className={styles.toggleText}>
-                    <h4 className={styles.toggleTitle}>
-                      {t("التواريخ مرنة", "My dates are flexible")}
-                    </h4>
-                    <p className={styles.toggleDesc}>
-                      {t(
-                        "احصل على عروض أفضل مع تواريخ سفر مرنة",
-                        "Get better deals with flexible travel dates"
-                      )}
-                    </p>
-                  </div>
-                </div>
-                <div className={styles.toggleSwitch}>
-                  <input
-                    type="checkbox"
-                    className={styles.toggleInput}
-                    checked={dates.flexible}
-                    onChange={handleFlexibleToggle}
-                  />
-                  <span className={styles.slider}></span>
-                </div>
-              </div>
+      <div className={styles.container}>
+        {/* Flexible Toggle */}
+        <div
+          className={`${styles.flexibleCard} ${dates.flexible ? styles.flexibleActive : ""}`}
+          onClick={handleFlexibleToggle}
+        >
+          <div className={styles.flexibleContent}>
+            <div className={styles.flexibleIcon}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+            </div>
+            <div className={styles.flexibleText}>
+              <span className={styles.flexibleTitle}>
+                {t("تواريخي مرنة", "My dates are flexible")}
+              </span>
+              <span className={styles.flexibleDesc}>
+                {t("احصل على عروض أفضل", "Get better deals")}
+              </span>
             </div>
           </div>
+          <div className={`${styles.toggle} ${dates.flexible ? styles.toggleActive : ""}`}>
+            <div className={styles.toggleKnob} />
+          </div>
+        </div>
 
-          {/* Date Pickers + Flex Days */}
-          {!dates.flexible && (
-            <div className={styles.datesBox}>
+        {/* Date Selectors */}
+        {!dates.flexible && (
+          <div className={styles.dateSection}>
+            <div className={styles.dateInputs}>
               {/* Start Date */}
-              <div className={styles.dateField}>
-                <label className={styles.dateLabel}>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                  >
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                    <line x1="16" y1="2" x2="16" y2="6" />
-                    <line x1="8" y1="2" x2="8" y2="6" />
-                    <line x1="3" y1="10" x2="21" y2="10" />
-                    <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01" />
-                  </svg>
-                  {t("تاريخ المغادرة", "Departure Date")}
-                </label>
-                <input
-                  type="date"
-                  className={styles.dateInput}
-                  value={dates.startDate || ""}
-                  onChange={(e) =>
-                    handleDateChange("startDate", e.target.value)
-                  }
-                  min={new Date().toISOString().split("T")[0]}
-                />
+              <div
+                className={`${styles.dateSelector} ${dates.startDate ? styles.hasValue : ""}`}
+                onClick={() => setActiveCalendar("start")}
+              >
+                <div className={styles.dateInfo}>
+                  <span className={styles.dateLabel}>{t("تاريخ المغادرة", "Departure")}</span>
+                  <span className={styles.dateValue}>{formatDate(dates.startDate)}</span>
+                </div>
+                <svg className={styles.calendarIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
               </div>
-
-              <div className={styles.divider}></div>
 
               {/* End Date */}
-              <div className={styles.dateField}>
-                <label className={styles.dateLabel}>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                  >
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                    <line x1="16" y1="2" x2="16" y2="6" />
-                    <line x1="8" y1="2" x2="8" y2="6" />
-                    <line x1="3" y1="10" x2="21" y2="10" />
-                    <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01" />
-                  </svg>
-                  {t("تاريخ العودة", "Return Date")}
-                </label>
-                <input
-                  type="date"
-                  className={styles.dateInput}
-                  value={dates.endDate || ""}
-                  onChange={(e) => handleDateChange("endDate", e.target.value)}
-                  min={
-                    dates.startDate || new Date().toISOString().split("T")[0]
-                  }
-                />
+              <div
+                className={`${styles.dateSelector} ${dates.endDate ? styles.hasValue : ""}`}
+                onClick={() => setActiveCalendar("end")}
+              >
+                <div className={styles.dateInfo}>
+                  <span className={styles.dateLabel}>{t("تاريخ العودة", "Return")}</span>
+                  <span className={styles.dateValue}>{formatDate(dates.endDate)}</span>
+                </div>
+                <svg className={styles.calendarIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
               </div>
+            </div>
 
-              {/* Dynamic Flex Days Field */}
-              <div className={styles.dateField} style={{ marginTop: 24 }}>
-                <label className={styles.dateLabel}>
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M8 12h8M12 8v8" />
-                  </svg>
-                  {t("مرونة التواريخ (± أيام)", "Date Flexibility (± days)")}
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  max="7"
-                  className={styles.dateInput}
-                  value={dates.flexDays || 0}
-                  onChange={handleFlexDaysChange}
-                  placeholder={t(
-                    "عدد الأيام المرنة",
-                    "Number of flexible days"
-                  )}
-                  style={{ width: 120 }}
-                />
-                <span
-                  className={styles.flexDaysHint}
-                  style={{ marginLeft: 8, fontSize: 13, color: "#888" }}
-                >
-                  {t(
-                    "يمكنك اختيار عدد الأيام قبل أو بعد التواريخ المختارة",
-                    "You can allow a few days before or after your selected dates"
-                  )}
+            {/* Nights Info */}
+            {nights > 0 && (
+              <div className={styles.nightsInfo}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+                <span>
+                  {nights} {t(nights === 1 ? "ليلة" : "ليالي", nights === 1 ? "night" : "nights")}
                 </span>
               </div>
-
-              {/* Duration Info */}
-              {dates.startDate && dates.endDate && isValidDates() && (
-                <div className={styles.durationSummary}>
-                  <div className={styles.durationContent}>
-                    <div className={styles.durationIcon}>
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2.5"
-                      >
-                        <circle cx="12" cy="12" r="10" />
-                        <polyline points="12 6 12 12 16 14" />
-                      </svg>
-                    </div>
-                    <span className={styles.durationLabel}>
-                      {t("مدة الرحلة", "Trip Duration")}
-                    </span>
-                    <span className={styles.durationValue}>
-                      {Math.ceil(
-                        (new Date(dates.endDate) - new Date(dates.startDate)) /
-                          (1000 * 60 * 60 * 24)
-                      )}{" "}
-                      {t("يوم", "Days")}
-                    </span>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Action Buttons */}
-      <div className="d-flex justify-between mt-50">
-        <button
-          className="button -md -outline-accent-1 text-accent-1 px-40 py-15 rounded-12"
-          onClick={onPrev}
-        >
-          <i className="icon-arrow-right mr-10"></i>
+      {/* Navigation */}
+      <div className={styles.navigation}>
+        <button className={styles.backButton} onClick={onPrev}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d={isRTL ? "m9 18 6-6-6-6" : "m15 18-6-6 6-6"} />
+          </svg>
           {t("رجوع", "Back")}
         </button>
         <button
-          className={`button -md -dark-1 bg-accent-1 text-white px-50 py-15 rounded-12 ${
-            !isValidDates() ? "opacity-50" : ""
-          } ${styles.continueButton}`}
-          onClick={handleContinue}
+          className={`${styles.continueButton} ${!isValidDates() ? styles.disabled : ""}`}
+          onClick={onNext}
           disabled={!isValidDates()}
         >
-          {t("التالي", "Continue")}
-          <i className="icon-arrow-left ml-10"></i>
+          {t("متابعة", "Continue")}
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d={isRTL ? "m15 18-6-6 6-6" : "m9 18 6-6-6-6"} />
+          </svg>
         </button>
       </div>
+
+      {/* Calendar Modal */}
+      {activeCalendar && (
+        <div className={styles.overlay} onClick={() => setActiveCalendar(null)}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <span>
+                {activeCalendar === "start"
+                  ? t("تاريخ المغادرة", "Departure Date")
+                  : t("تاريخ العودة", "Return Date")}
+              </span>
+              <button className={styles.closeButton} onClick={() => setActiveCalendar(null)}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+            <div className={styles.calendarWrapper}>
+              <Calendar
+                value={activeCalendar === "start" ? (dates.startDate ? new Date(dates.startDate) : null) : (dates.endDate ? new Date(dates.endDate) : null)}
+                onChange={handleDateSelect}
+                minDate={activeCalendar === "end" && dates.startDate ? new Date(dates.startDate) : today}
+                maxDate={maxDate}
+                weekDays={isRTL
+                  ? ["ح", "ن", "ث", "ر", "خ", "ج", "س"]
+                  : ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+                }
+                months={isRTL
+                  ? ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"]
+                  : ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+                }
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

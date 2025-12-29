@@ -3,73 +3,147 @@
   margin-top: 12px;
 }
 
+.title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
 .budgetGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-
-@media (max-width: 480px) {
-  .budgetGrid {
-    grid-template-columns: 1fr;
-  }
+  gap: 8px;
 }
 
 .budgetCard {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
+  gap: 10px;
+  padding: 12px;
   background: white;
   border: 1.5px solid #e5e7eb;
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
-}
-
-@media (max-width: 480px) {
-  .budgetCard {
-    padding: 14px;
-  }
+  min-height: auto;
 }
 
 .budgetCard:hover {
   border-color: #019fb1;
   background: #f0fdff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(1, 159, 177, 0.15);
+}
+
+.budgetCard:active {
+  transform: scale(0.98);
 }
 
 .icon {
-  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #f0fdff 0%, #e0f7fa 100%);
+  border-radius: 8px;
+  color: #019fb1;
+  flex-shrink: 0;
+}
+
+.icon svg {
+  width: 20px;
+  height: 20px;
 }
 
 .content {
   flex: 1;
   text-align: start;
+  min-width: 0;
 }
 
 .label {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
   color: #1f2937;
-  margin-bottom: 5px;
-}
-
-@media (max-width: 480px) {
-  .label {
-    font-size: 14px;
-  }
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .price {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: #019fb1;
 }
 
+/* Mobile Responsive - Keep 2 columns but smaller */
 @media (max-width: 480px) {
-  .price {
+  .budgetGrid {
+    gap: 6px;
+  }
+
+  .budgetCard {
+    padding: 10px 8px;
+    gap: 8px;
+    border-radius: 8px;
+  }
+
+  .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+  }
+
+  .icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .label {
     font-size: 12px;
   }
+
+  .price {
+    font-size: 11px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  .budgetCard {
+    padding: 8px 6px;
+    gap: 6px;
+  }
+
+  .icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .label {
+    font-size: 11px;
+  }
+
+  .price {
+    font-size: 10px;
+  }
+}
+
+/* RTL Support */
+[dir="rtl"] .content {
+  text-align: right;
+}
+
+[dir="ltr"] .content {
+  text-align: left;
 }

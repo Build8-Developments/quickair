@@ -46,11 +46,15 @@ export default function BudgetWidget({ language = "ar", onSelect }) {
   const t = (ar, en) => (isArabic ? ar : en);
 
   const handleSelect = (range) => {
+    // Send complete budget data for booking summary
     onSelect({
-      budget: range.id,
+      budget: {
+        id: range.id,
+        label: isArabic ? range.labelAr : range.labelEn,
+        minEGP: range.minEGP,
+        maxEGP: range.maxEGP,
+      },
       message: isArabic ? range.labelAr : range.labelEn,
-      minEGP: range.minEGP,
-      maxEGP: range.maxEGP,
     });
   };
 

@@ -122,8 +122,6 @@ export const INTERNATIONAL_DESTINATIONS = [
     description: 'المدينة العابرة للقارات بين أوروبا وآسيا',
     descriptionEn: 'The transcontinental city between Europe and Asia',
     requiresVisa: true,
-    visaCost: 208,
-    visaCurrency: 'USD',
   },
   {
     id: 'bali',
@@ -143,9 +141,6 @@ export const INTERNATIONAL_DESTINATIONS = [
     description: 'جزيرة الجنة مع معابد ساحرة وشواطئ استوائية',
     descriptionEn: 'Paradise island with enchanting temples and tropical beaches',
     requiresVisa: true,
-    visaCost: 35,
-    visaCurrency: 'USD',
-    visaType: 'on_arrival',
   },
   {
     id: 'beirut',
@@ -165,10 +160,6 @@ export const INTERNATIONAL_DESTINATIONS = [
     description: 'باريس الشرق بتاريخها العريق وثقافتها المتنوعة',
     descriptionEn: 'Paris of the East with rich history and diverse culture',
     requiresVisa: true,
-    visaCost: 25,
-    visaCurrency: 'USD',
-    visaType: 'on_arrival',
-    visaRequirements: 'يجب توفر 2000 دولار نقداً مع المسافر',
   },
 ];
 

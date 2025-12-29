@@ -17,7 +17,7 @@ export default function ImageLightBox({
     >
       <div
         className="close cursor"
-        style={{ zIndex: 1000 }}
+        style={{ zIndex: 1001 }}
         onClick={() => {
           setActiveLightBox(false);
         }}
@@ -31,7 +31,7 @@ export default function ImageLightBox({
             className={`mySlides ${currentSlideIndex == i ? "fadein" : ""} `}
             style={
               currentSlideIndex == i
-                ? { display: "block", height: "100%" }
+                ? { display: "flex", height: "100%", justifyContent: "center", alignItems: "center" }
                 : { display: "none", height: "100%" }
             }
           >
@@ -39,16 +39,17 @@ export default function ImageLightBox({
               {i + 1} / {images.length}
             </div>
             <Image
-              width={850}
-              height={510}
+              width={1200}
+              height={800}
               src={elm.image}
               style={{
-                height: "100%",
+                height: "auto",
                 width: "100%",
+                maxHeight: "85vh",
                 objectFit: "contain",
-                margin: "auto auto",
               }}
               alt="image"
+              priority={currentSlideIndex === i}
             />
           </div>
         ))}

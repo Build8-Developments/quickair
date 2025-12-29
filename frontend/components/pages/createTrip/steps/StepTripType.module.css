@@ -1,111 +1,209 @@
-.cardsRow {
+/* ===== Header ===== */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: #64748b;
+}
+
+/* ===== Cards Grid ===== */
+.cardsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
-.cardsRowRtl {
-  direction: rtl;
-}
-
+/* ===== Card ===== */
 .card {
   position: relative;
-  padding: 30px 24px;
-  border-radius: 16px;
-  border: 2px solid #edf1f7;
+  padding: 28px 20px;
   background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 16px;
   cursor: pointer;
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease,
-    background 0.3s ease;
+  transition: all 0.25s ease;
   text-align: center;
-  min-height: 220px;
-  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.05);
 }
 
 .card:hover {
-  border-color: var(--accent-primary);
+  border-color: #019fb1;
   transform: translateY(-4px);
-  box-shadow: 0 18px 35px rgba(10, 99, 122, 0.18);
+  box-shadow: 0 8px 24px rgba(1, 159, 177, 0.12);
 }
 
-.cardSelected {
-  border-color: var(--accent-primary);
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.9), var(--accent-ghost));
-  box-shadow: 0 22px 45px rgba(7, 104, 123, 0.25);
+.cardActive {
+  border-color: #019fb1;
+  background: #f0fafb;
+  box-shadow: 0 8px 24px rgba(1, 159, 177, 0.15);
 }
 
-.iconBox {
-  width: 110px;
-  height: 110px;
-  margin: 0 auto;
-  border-radius: 32px;
-  background: linear-gradient(135deg, #ffffff 0%, var(--accent-ghost) 100%);
+/* ===== Card Icon ===== */
+.cardIcon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  background: #f0fafb;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent-primary);
-  position: relative;
-  overflow: visible;
-  box-shadow: 0 4px 20px rgba(1, 159, 177, 0.12);
-  transition: all 0.3s ease;
+  color: #019fb1;
+  transition: all 0.25s ease;
 }
 
-.iconBox svg {
-  width: 64px;
-  height: 64px;
-  position: relative;
-  z-index: 2;
+.cardActive .cardIcon {
+  background: #019fb1;
+  color: #ffffff;
 }
 
-.card:hover .iconBox {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 8px 28px rgba(1, 159, 177, 0.2);
+/* ===== Card Content ===== */
+.cardTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 6px;
 }
 
-.cardSelected .iconBox {
-  background: linear-gradient(135deg, var(--accent-ghost) 0%, #ffffff 100%);
-  transform: scale(1.08) translateY(-2px);
-  box-shadow: 0 12px 32px rgba(1, 159, 177, 0.25);
+.cardDesc {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.4;
 }
 
-.selectedCheck {
+/* ===== Check Mark ===== */
+.checkMark {
   position: absolute;
-  top: 16px;
-  inset-inline-start: 16px;
-  width: 30px;
-  height: 30px;
-  background: #3b82f6;
+  top: 12px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  background: #10b981;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
+  animation: popIn 0.2s ease;
 }
 
-.controls {
+[dir="rtl"] .checkMark {
+  right: auto;
+  left: 12px;
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* ===== Navigation ===== */
+.navigation {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 40px;
+  gap: 16px;
 }
 
-.controlsRtl {
-  direction: rtl;
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.disabledButton {
-  cursor: not-allowed;
+.backButton:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.continueButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  background: #019fb1;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.continueButton:hover:not(:disabled) {
+  background: #018a9a;
+}
+
+.disabled {
   opacity: 0.5;
+  cursor: not-allowed;
 }
 
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
-  .card {
-    padding: 24px 20px;
+  .title {
+    font-size: 22px;
   }
 
-  .iconBox {
-    width: 96px;
-    height: 96px;
+  .cardsGrid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+  }
+
+  .card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    text-align: left;
+  }
+
+  [dir="rtl"] .card {
+    text-align: right;
+  }
+
+  .cardIcon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    margin: 0;
+  }
+
+  .cardTitle {
+    margin-bottom: 2px;
+  }
+
+  .navigation {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .backButton,
+  .continueButton {
+    width: 100%;
+    justify-content: center;
   }
 }

@@ -1,154 +1,136 @@
 .widget {
   width: 100%;
-  margin-top: 12px;
-  padding: 16px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-top: 8px;
+  max-height: 350px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #019fb1 #f1f1f1;
+}
+
+.widget::-webkit-scrollbar {
+  width: 4px;
+}
+
+.widget::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.widget::-webkit-scrollbar-thumb {
+  background: #019fb1;
+  border-radius: 4px;
 }
 
 .summaryHeader {
-  margin-bottom: 16px;
-  padding-bottom: 12px;
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 8px 0;
+  margin-bottom: 8px;
   border-bottom: 2px solid #019fb1;
+  z-index: 1;
 }
 
 .title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color: #1f2937;
   margin: 0;
+  text-align: center;
 }
 
 .sections {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 6px;
 }
 
 .section {
-  padding: 16px;
-  background: white;
-  border-radius: 12px;
-  border: 2px solid #f0f9ff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  padding: 8px 10px;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
 }
 
-@media (max-width: 480px) {
-  .section {
-    padding: 14px;
-  }
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
 }
 
 .sectionTitle {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 14px;
+  gap: 6px;
+  font-size: 11px;
   font-weight: 700;
   color: #019fb1;
-  margin-bottom: 12px;
 }
 
-@media (max-width: 480px) {
-  .sectionTitle {
-    font-size: 13px;
-  }
+.sectionTitle svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.editBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editBtn:hover {
+  background: #f0fdff;
+  border-color: #019fb1;
+  color: #019fb1;
+}
+
+.editBtn:active {
+  transform: scale(0.95);
 }
 
 .details {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 2px;
 }
 
-.detailRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 14px;
-  font-size: 14px;
-  padding: 8px 0;
-  border-bottom: 1px solid #f0f9ff;
-}
-
-.detailRow:last-child {
-  border-bottom: none;
-}
-
-@media (max-width: 480px) {
-  .detailRow {
-    font-size: 13px;
-  }
-}
-
-.label {
-  font-weight: 600;
-  color: #6b7280;
-  min-width: 90px;
-}
-
-@media (max-width: 480px) {
-  .label {
-    min-width: 80px;
-  }
-}
-
-.value {
+.detailValue {
+  font-size: 12px;
   font-weight: 600;
   color: #1f2937;
-  text-align: end;
-  flex: 1;
 }
 
-.valuePrice {
+.priceTag {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 8px;
+  background: linear-gradient(135deg, #019fb1 0%, #017a8a 100%);
+  color: white;
+  font-size: 11px;
   font-weight: 700;
-  font-size: 15px;
-  color: #019fb1;
-  text-align: end;
-  flex: 1;
-}
-
-@media (max-width: 480px) {
-  .valuePrice {
-    font-size: 14px;
-  }
+  border-radius: 4px;
 }
 
 .actions {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 10px;
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid #e5e7eb;
-}
-
-@media (max-width: 480px) {
-  .actions {
-    grid-template-columns: 1fr;
-  }
-}
-
-.editButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 12px;
+  position: sticky;
+  bottom: 0;
   background: white;
-  border: 1.5px solid #019fb1;
-  color: #019fb1;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.editButton:hover {
-  background: #f0fdff;
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e5e7eb;
 }
 
 .confirmButton {
@@ -156,19 +138,129 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 12px;
-  background: #019fb1;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #019fb1 0%, #017a8a 100%);
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
+  flex: 1;
+  box-shadow: 0 2px 8px rgba(1, 159, 177, 0.25);
+}
+
+.confirmButton svg {
+  width: 16px;
+  height: 16px;
 }
 
 .confirmButton:hover {
-  background: #018090;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.3);
+  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.35);
+}
+
+.confirmButton:active {
+  transform: scale(0.98);
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .widget {
+    max-height: 300px;
+  }
+
+  .summaryHeader {
+    padding: 6px 0;
+    margin-bottom: 6px;
+  }
+
+  .title {
+    font-size: 13px;
+  }
+
+  .sections {
+    gap: 5px;
+  }
+
+  .section {
+    padding: 6px 8px;
+    border-radius: 6px;
+  }
+
+  .sectionTitle {
+    font-size: 10px;
+    gap: 4px;
+  }
+
+  .sectionTitle svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .editBtn {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+  }
+
+  .detailValue {
+    font-size: 11px;
+  }
+
+  .priceTag {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .actions {
+    gap: 6px;
+    margin-top: 8px;
+    padding-top: 8px;
+  }
+
+  .confirmButton {
+    padding: 10px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+
+  .confirmButton svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  .widget {
+    max-height: 280px;
+  }
+
+  .title {
+    font-size: 12px;
+  }
+
+  .section {
+    padding: 5px 6px;
+  }
+
+  .sectionTitle {
+    font-size: 9px;
+  }
+
+  .editBtn {
+    width: 20px;
+    height: 20px;
+  }
+
+  .detailValue {
+    font-size: 10px;
+  }
+
+  .confirmButton {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
 }

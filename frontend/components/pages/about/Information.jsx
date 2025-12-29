@@ -229,23 +229,23 @@ export default function Information() {
               }}>
                 {isArabic ? "منذ عام 1986" : "Since 1986"}
               </span>
-              <h2 style={{ fontSize: '32px', fontWeight: '700', marginTop: '20px', lineHeight: '1.3' }}>
+              <h2 style={{ fontSize: '32px', fontWeight: '700', marginTop: '20px', lineHeight: '1.3', color: '#fff' }}>
                 {isArabic 
                   ? "كويك إير للسفريات - شريكك الموثوق منذ أكثر من 38 عاماً"
                   : "Quick Air Travel - Your Trusted Partner for Over 38 Years"}
               </h2>
               <div style={{ marginTop: '24px', display: 'flex', gap: '30px', flexWrap: 'wrap' }}>
                 <div>
-                  <div style={{ fontSize: '36px', fontWeight: '700' }}>2M+</div>
-                  <div style={{ opacity: 0.9, fontSize: '14px' }}>{isArabic ? "عملاء سعداء" : "Happy Customers"}</div>
+                  <div style={{ fontSize: '36px', fontWeight: '700', color: '#fff' }}>2M+</div>
+                  <div style={{ opacity: 0.9, fontSize: '14px', color: '#fff' }}>{isArabic ? "عملاء سعداء" : "Happy Customers"}</div>
                 </div>
                 <div>
-                  <div style={{ fontSize: '36px', fontWeight: '700' }}>38+</div>
-                  <div style={{ opacity: 0.9, fontSize: '14px' }}>{isArabic ? "سنوات خبرة" : "Years Experience"}</div>
+                  <div style={{ fontSize: '36px', fontWeight: '700', color: '#fff' }}>38+</div>
+                  <div style={{ opacity: 0.9, fontSize: '14px', color: '#fff' }}>{isArabic ? "سنوات خبرة" : "Years Experience"}</div>
                 </div>
                 <div>
-                  <div style={{ fontSize: '36px', fontWeight: '700' }}>10x</div>
-                  <div style={{ opacity: 0.9, fontSize: '14px' }}>{isArabic ? "نمو سنوي" : "Growth Rate"}</div>
+                  <div style={{ fontSize: '36px', fontWeight: '700', color: '#fff' }}>10x</div>
+                  <div style={{ opacity: 0.9, fontSize: '14px', color: '#fff' }}>{isArabic ? "نمو سنوي" : "Growth Rate"}</div>
                 </div>
               </div>
             </div>
@@ -468,10 +468,10 @@ export default function Information() {
                 }}>
                   {isArabic ? "السوق الإلكتروني" : "E-Market"}
                 </span>
-                <h3 style={{ fontSize: '28px', fontWeight: '700', marginTop: '20px', marginBottom: '16px' }}>
+                <h3 style={{ fontSize: '28px', fontWeight: '700', marginTop: '20px', marginBottom: '16px', color: '#fff' }}>
                   {isArabic ? "نحرص على وقتك وجهدك" : "We Value Your Time & Effort"}
                 </h3>
-                <p style={{ opacity: 0.9, lineHeight: '1.7' }}>
+                <p style={{ opacity: 0.9, lineHeight: '1.7', color: '#fff' }}>
                   {isArabic 
                     ? "نسعى لجعل عملائنا أكثر ارتياحاً مع السوق الإلكتروني وبدء استخدام الخدمات عبر الإنترنت من خلال موقعنا."
                     : "We try to make our clients more friendly with E-Market to start using online services through our website."}
@@ -489,8 +489,8 @@ export default function Information() {
                       alignItems: 'center',
                       gap: '12px',
                     }}>
-                      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{item.icon}</span>
-                      <span style={{ fontWeight: '500' }}>{item.label}</span>
+                      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>{item.icon}</span>
+                      <span style={{ fontWeight: '500', color: '#fff' }}>{item.label}</span>
                     </div>
                   ))}
                 </div>

@@ -1,0 +1,183 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #019fb1 0%, #017a8a 100%);
+  padding: 20px;
+}
+
+.card {
+  max-width: 440px;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 48px 36px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== Icon ===== */
+.iconWrapper {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  color: #ffffff;
+  animation: scaleIn 0.4s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===== Title ===== */
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: #64748b;
+  margin-bottom: 28px;
+}
+
+/* ===== Email Box ===== */
+.emailBox {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  background: #f0fafb;
+  border: 1.5px solid #019fb1;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+[dir="rtl"] .emailBox {
+  text-align: right;
+}
+
+.emailBox svg {
+  color: #019fb1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.emailBox strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #019fb1;
+  margin-bottom: 2px;
+}
+
+.emailBox span {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* ===== Steps Box ===== */
+.stepsBox {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+[dir="rtl"] .stepsBox {
+  text-align: right;
+}
+
+.stepsTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 14px;
+}
+
+.stepsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #475569;
+  margin-bottom: 10px;
+}
+
+.stepItem:last-child {
+  margin-bottom: 0;
+}
+
+.stepItem svg {
+  color: #10b981;
+  flex-shrink: 0;
+}
+
+/* ===== Countdown ===== */
+.countdown {
+  padding: 12px 16px;
+  background: #fef3c7;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #92400e;
+  margin-bottom: 20px;
+}
+
+/* ===== Button ===== */
+.button {
+  width: 100%;
+  padding: 14px 24px;
+  background: #019fb1;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  background: #018a9a;
+  transform: translateY(-2px);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .card {
+    padding: 36px 24px;
+    border-radius: 16px;
+  }
+
+  .iconWrapper {
+    width: 70px;
+    height: 70px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+}

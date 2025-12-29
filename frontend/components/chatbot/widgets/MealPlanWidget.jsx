@@ -42,7 +42,11 @@ export default function MealPlanWidget({ language = "ar", onSelect }) {
 
   const handleSelect = (plan) => {
     onSelect({
-      mealPlan: plan.id,
+      mealPlan: {
+        id: plan.id,
+        label: isArabic ? plan.labelAr : plan.labelEn,
+        desc: isArabic ? plan.descAr : plan.descEn,
+      },
       message: isArabic ? plan.labelAr : plan.labelEn,
     });
   };

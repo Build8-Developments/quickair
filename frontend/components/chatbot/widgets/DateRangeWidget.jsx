@@ -40,10 +40,12 @@ export default function DateRangeWidget({ language = "ar", onSelect }) {
       const startStr = new Date(startDate).toISOString().split('T')[0];
       const endStr = new Date(endDate).toISOString().split('T')[0];
       onSelect({
-        startDate: startStr,
-        endDate: endStr,
-        nights,
-        message: `${startStr} to ${endStr} (${nights} ${nights === 1 ? 'night' : 'nights'})`,
+        dates: {
+          startDate: startStr,
+          endDate: endStr,
+          nights,
+        },
+        message: `${startStr} → ${endStr} (${nights} ${nights === 1 ? 'night' : 'nights'})`,
       });
     }
   };

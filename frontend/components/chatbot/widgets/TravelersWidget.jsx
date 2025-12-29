@@ -28,10 +28,14 @@ export default function TravelersWidget({ language = "ar", onSelect }) {
   const handleConfirm = () => {
     const total = adults + children;
     onSelect({
-      adults,
-      children,
-      travelers: total,
-      message: `${total} ${total === 1 ? 'traveler' : 'travelers'} (${adults} adults${children > 0 ? `, ${children} children` : ''})`,
+      travelers: {
+        adults,
+        children,
+        total,
+      },
+      message: isArabic 
+        ? `${adults} بالغ${children > 0 ? ` + ${children} طفل` : ''}`
+        : `${adults} adult${adults > 1 ? 's' : ''}${children > 0 ? ` + ${children} child${children > 1 ? 'ren' : ''}` : ''}`,
     });
   };
 

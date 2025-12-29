@@ -1,229 +1,239 @@
+/* ===== Header ===== */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: #64748b;
+}
+
+/* ===== Container ===== */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===== Section ===== */
+.section {
+  margin-bottom: 28px;
+}
+
 .sectionLabel {
   display: block;
-  font-size: 17px;
+  font-size: 13px;
   font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 20px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+/* ===== Currency Grid ===== */
+.currencyGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 }
 
 .currencyCard {
-  background: #fff;
-  border: 2.5px solid #e8e8e8;
-  border-radius: 20px;
-  padding: 25px;
-  cursor: pointer;
-  transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 20px;
-  height: 100%;
+  gap: 12px;
+  padding: 16px 20px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .currencyCard:hover {
   border-color: #019fb1;
-  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
-  transform: translateY(-2px);
 }
 
-.currencyCardSelected {
-  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
+.currencyActive {
+  background: #019fb1;
   border-color: #019fb1;
-  box-shadow: 0 8px 25px rgba(1, 159, 177, 0.3);
-  transform: translateY(-2px);
 }
 
 .currencySymbol {
-  font-size: 32px;
+  font-size: 20px;
   font-weight: 700;
   color: #019fb1;
-  min-width: 50px;
-  text-align: center;
 }
 
-.currencyCardSelected .currencySymbol {
-  color: #fff;
+.currencyActive .currencySymbol {
+  color: #ffffff;
 }
 
-.currencyInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.currencyLabel {
-  font-size: 18px;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-.currencyCardSelected .currencyLabel {
-  color: #fff;
-}
-
-.currencyCode {
+.currencyName {
   font-size: 14px;
-  font-weight: 500;
-  color: #666;
+  font-weight: 600;
+  color: #1e293b;
 }
 
-.currencyCardSelected .currencyCode {
-  color: rgba(255, 255, 255, 0.9);
+.currencyActive .currencyName {
+  color: #ffffff;
 }
 
-.budgetRangeCard {
-  background: #fff;
-  border: 2.5px solid #e8e8e8;
-  border-radius: 20px;
-  padding: 25px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+/* ===== Range Grid ===== */
+.rangeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.rangeCard {
   display: flex;
   align-items: flex-start;
-  gap: 20px;
-  height: 100%;
+  gap: 14px;
+  padding: 18px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.budgetRangeCard:hover {
+.rangeCard:hover {
   border-color: #019fb1;
-  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
-  transform: translateY(-2px);
+  background: #f8fcfd;
 }
 
-.budgetRangeCardSelected {
-  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
+.rangeActive {
   border-color: #019fb1;
-  box-shadow: 0 8px 25px rgba(1, 159, 177, 0.3);
-  transform: translateY(-2px);
+  background: #f0fafb;
 }
 
-.budgetIconWrapper {
-  min-width: 56px;
-  height: 56px;
-  background: rgba(1, 159, 177, 0.1);
-  border-radius: 16px;
+.rangeIcon {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 10px;
+  background: #f0fafb;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #019fb1;
 }
 
-.budgetRangeCardSelected .budgetIconWrapper {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
+.rangeActive .rangeIcon {
+  background: #019fb1;
+  color: #ffffff;
 }
 
-.budgetContent {
-  flex: 1;
+.rangeContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
 }
 
-.budgetTitle {
-  font-size: 18px;
+.rangeLabel {
+  font-size: 15px;
   font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 8px;
+  color: #1e293b;
 }
 
-.budgetRangeCardSelected .budgetTitle {
-  color: #fff;
-}
-
-.budgetPrice {
-  font-size: 16px;
+.rangePrice {
+  font-size: 13px;
   font-weight: 600;
   color: #019fb1;
-  margin-bottom: 10px;
 }
 
-.budgetRangeCardSelected .budgetPrice {
-  color: #fff;
+.rangeDesc {
+  font-size: 12px;
+  color: #94a3b8;
 }
 
-.budgetDesc {
-  font-size: 14px;
-  color: #666;
-  margin: 0;
-  line-height: 1.5;
-}
-
-.budgetRangeCardSelected .budgetDesc {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.amountInputWrapper {
-  position: relative;
+/* ===== Custom Input ===== */
+.customInput {
   display: flex;
   align-items: center;
-  background: #fff;
-  border: 2.5px solid #e8e8e8;
-  border-radius: 20px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
-.amountInputWrapper:focus-within {
+.customInput:focus-within {
   border-color: #019fb1;
-  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
+  box-shadow: 0 0 0 4px rgba(1, 159, 177, 0.08);
 }
 
-.currencyPrefix {
-  padding: 0 25px;
-  background: rgba(1, 159, 177, 0.1);
-  height: 65px;
+.inputPrefix {
+  padding: 0 18px;
+  height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 90px;
+  background: #f8fafc;
   color: #019fb1;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
+  border-right: 1px solid #e2e8f0;
+}
+
+[dir="rtl"] .inputPrefix {
+  border-right: none;
+  border-left: 1px solid #e2e8f0;
 }
 
 .amountInput {
   flex: 1;
   border: none;
   outline: none;
-  padding: 0 25px;
-  height: 65px;
-  font-size: 18px;
+  padding: 0 18px;
+  height: 52px;
+  font-size: 16px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: #1e293b;
+  background: transparent;
 }
 
 .amountInput::placeholder {
-  color: #999;
+  color: #94a3b8;
 }
 
+/* ===== Toggle Card ===== */
 .toggleCard {
-  background: #fff;
-  border: 2.5px solid #e8e8e8;
-  border-radius: 20px;
-  padding: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  margin-top: 20px;
 }
 
 .toggleCard:hover {
   border-color: #019fb1;
-  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
 }
 
 .toggleContent {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 14px;
 }
 
-.toggleInfo {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.iconWrapper {
-  min-width: 56px;
-  height: 56px;
-  background: rgba(1, 159, 177, 0.1);
-  border-radius: 16px;
+.toggleIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #f0fafb;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -233,145 +243,126 @@
 .toggleText {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 2px;
 }
 
-.toggleTitle {
-  font-size: 18px;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin: 0;
+.toggleLabel {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
 }
 
 .toggleDesc {
-  font-size: 14px;
-  color: #666;
-  margin: 0;
+  font-size: 12px;
+  color: #64748b;
 }
 
-.toggleSwitch {
-  position: relative;
-  width: 64px;
-  height: 34px;
-}
-
-.toggleInput {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #e8e8e8;
-  transition: 0.3s;
-  border-radius: 34px;
-}
-
-.slider::before {
-  position: absolute;
-  content: "";
+/* ===== Toggle Switch ===== */
+.toggle {
+  width: 48px;
   height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: 0.3s;
+  background: #e2e8f0;
+  border-radius: 13px;
+  position: relative;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.toggleOn {
+  background: #019fb1;
+}
+
+.toggleKnob {
+  width: 20px;
+  height: 20px;
+  background: #ffffff;
   border-radius: 50%;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.toggleInput:checked + .slider {
-  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
+.toggleOn .toggleKnob {
+  left: 25px;
 }
 
-.toggleInput:checked + .slider::before {
-  transform: translateX(30px);
+/* ===== Navigation ===== */
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  gap: 16px;
 }
 
-.budgetSummary {
-  background: linear-gradient(135deg, rgba(1, 159, 177, 0.1) 0%, rgba(1, 192, 212, 0.1) 100%);
-  border: 2.5px solid #019fb1;
-  border-radius: 20px;
-  padding: 30px;
-  margin-bottom: 30px;
-  animation: fadeInBudget 0.3s ease;
-}
-
-.summaryContent {
+.backButton {
   display: flex;
   align-items: center;
-  gap: 25px;
-}
-
-.summaryIcon {
-  min-width: 70px;
-  height: 70px;
-  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-}
-
-.summaryInfo {
-  flex: 1;
-}
-
-.summaryLabel {
-  font-size: 16px;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 15px;
   font-weight: 600;
-  color: #666;
-  margin: 0 0 8px 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.summaryAmount {
-  font-size: 32px;
-  font-weight: 700;
-  color: #019fb1;
-  margin: 0 0 5px 0;
+.backButton:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
 }
 
-.summaryType {
-  font-size: 14px;
-  color: #666;
-  margin: 0;
+.continueButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  background: #019fb1;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-@keyframes fadeInBudget {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.continueButton:hover:not(:disabled) {
+  background: #018a9a;
 }
 
-.continueButton:disabled {
+.disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
-  .currencyCard,
-  .budgetRangeCard,
-  .toggleCard {
-    padding: 20px;
+  .title {
+    font-size: 22px;
   }
 
-  .summaryContent {
-    flex-direction: column;
-    text-align: center;
+  .rangeGrid {
+    grid-template-columns: 1fr;
   }
 
-  .summaryIcon {
-    margin: 0 auto;
+  .currencyGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .navigation {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .backButton,
+  .continueButton {
+    width: 100%;
+    justify-content: center;
   }
 }

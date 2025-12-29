@@ -10,6 +10,8 @@ const DESTINATIONS = [
   { id: "hurghada", nameAr: "الغردقة", nameEn: "Hurghada", flag: "🇪🇬", category: "domestic" },
   { id: "dahab", nameAr: "دهب", nameEn: "Dahab", flag: "🇪🇬", category: "domestic" },
   { id: "beirut", nameAr: "بيروت", nameEn: "Beirut", flag: "🇱🇧", category: "international" },
+  { id: "ainsokhna", nameAr: "العين السخنة", nameEn: "Ain Sokhna", flag: "🇪🇬", category: "domestic" },
+  { id: "sahlhashish", nameAr: "سهل حشيش", nameEn: "Sahl Hasheesh", flag: "🇪🇬", category: "domestic" },
 ];
 
 export default function DestinationsWidget({ language = "ar", onSelect }) {
@@ -23,8 +25,12 @@ export default function DestinationsWidget({ language = "ar", onSelect }) {
 
   const handleSelect = (destination) => {
     onSelect({
-      destination: destination.id,
-      name: isArabic ? destination.nameAr : destination.nameEn,
+      destination: {
+        id: destination.id,
+        name: isArabic ? destination.nameAr : destination.nameEn,
+        flag: destination.flag,
+      },
+      message: isArabic ? destination.nameAr : destination.nameEn,
     });
   };
 

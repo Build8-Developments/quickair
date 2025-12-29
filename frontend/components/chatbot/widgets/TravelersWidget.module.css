@@ -1,25 +1,18 @@
 .widget {
   width: 100%;
-  margin-top: 12px;
-  padding: 16px;
+  margin-top: 8px;
+  padding: 12px;
   background: white;
   border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-@media (max-width: 480px) {
-  .widget {
-    padding: 14px;
-  }
+  border-radius: 10px;
 }
 
 .counterRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 0;
-  border-bottom: 2px solid #f0f9ff;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .counterRow:last-of-type {
@@ -27,68 +20,37 @@
   padding-bottom: 0;
 }
 
-@media (max-width: 480px) {
-  .counterRow {
-    padding: 14px 0;
-  }
-}
-
 .counterInfo {
   display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-@media (max-width: 480px) {
-  .counterInfo {
-    gap: 10px;
-  }
+  flex-direction: column;
+  gap: 2px;
 }
 
 .counterLabel {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 700;
   color: #1f2937;
 }
 
-@media (max-width: 480px) {
-  .counterLabel {
-    font-size: 14px;
-  }
-}
-
 .counterSubtext {
-  font-size: 13px;
+  font-size: 11px;
   color: #6b7280;
-  margin-top: 3px;
   font-weight: 500;
-}
-
-@media (max-width: 480px) {
-  .counterSubtext {
-    font-size: 12px;
-  }
 }
 
 .counterControls {
   display: flex;
   align-items: center;
-  gap: 14px;
-}
-
-@media (max-width: 480px) {
-  .counterControls {
-    gap: 10px;
-  }
+  gap: 12px;
 }
 
 .counterButton {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border: 1.5px solid #e5e7eb;
   background: white;
   border-radius: 8px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   color: #019fb1;
   cursor: pointer;
@@ -98,17 +60,13 @@
   justify-content: center;
 }
 
-@media (max-width: 480px) {
-  .counterButton {
-    width: 34px;
-    height: 34px;
-    font-size: 16px;
-  }
-}
-
 .counterButton:hover:not(:disabled) {
   background: #f0fdff;
   border-color: #019fb1;
+}
+
+.counterButton:active:not(:disabled) {
+  transform: scale(0.95);
 }
 
 .counterButton:disabled {
@@ -117,86 +75,120 @@
 }
 
 .counterValue {
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 700;
   color: #1f2937;
-  min-width: 28px;
+  min-width: 24px;
   text-align: center;
-}
-
-@media (max-width: 480px) {
-  .counterValue {
-    font-size: 16px;
-    min-width: 24px;
-  }
 }
 
 .totalSummary {
-  margin-top: 16px;
-  padding: 14px 16px;
-  background: linear-gradient(135deg, #f0fdff 0%, #e0f7fa 100%);
-  border-radius: 12px;
-  font-size: 14px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: #f0fdff;
+  border-radius: 8px;
+  font-size: 12px;
   font-weight: 600;
   color: #019fb1;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(1, 159, 177, 0.1);
-}
-
-@media (max-width: 480px) {
-  .totalSummary {
-    padding: 12px 14px;
-    font-size: 13px;
-  }
 }
 
 .confirmButton {
   width: 100%;
-  padding: 14px;
-  margin-top: 16px;
+  padding: 12px;
+  margin-top: 12px;
   background: linear-gradient(135deg, #019fb1 0%, #017a8a 100%);
   color: white;
   border: none;
-  border-radius: 12px;
-  font-size: 15px;
+  border-radius: 10px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.25);
-  position: relative;
-  overflow: hidden;
-}
-
-.confirmButton::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-}
-
-.confirmButton:hover::before {
-  width: 300px;
-  height: 300px;
-}
-
-@media (max-width: 480px) {
-  .confirmButton {
-    padding: 12px;
-    font-size: 14px;
-  }
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(1, 159, 177, 0.25);
 }
 
 .confirmButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.35);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(1, 159, 177, 0.35);
 }
 
 .confirmButton:active {
   transform: translateY(0);
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .widget {
+    padding: 10px;
+  }
+
+  .counterRow {
+    padding: 10px 0;
+  }
+
+  .counterLabel {
+    font-size: 12px;
+  }
+
+  .counterSubtext {
+    font-size: 10px;
+  }
+
+  .counterControls {
+    gap: 10px;
+  }
+
+  .counterButton {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+    border-radius: 6px;
+  }
+
+  .counterValue {
+    font-size: 14px;
+    min-width: 20px;
+  }
+
+  .totalSummary {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .confirmButton {
+    padding: 10px;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  .widget {
+    padding: 8px;
+  }
+
+  .counterLabel {
+    font-size: 11px;
+  }
+
+  .counterSubtext {
+    font-size: 9px;
+  }
+
+  .counterButton {
+    width: 26px;
+    height: 26px;
+    font-size: 13px;
+  }
+
+  .counterValue {
+    font-size: 13px;
+  }
+
+  .confirmButton {
+    padding: 8px;
+    font-size: 12px;
+  }
 }

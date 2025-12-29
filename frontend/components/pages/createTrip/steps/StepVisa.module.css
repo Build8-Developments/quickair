@@ -1,227 +1,319 @@
-.visaNotice {
-  background: linear-gradient(135deg, rgba(1, 159, 177, 0.1) 0%, rgba(1, 192, 212, 0.1) 100%);
-  border: 2.5px solid #019fb1;
-  border-radius: 20px;
-  padding: 30px;
+/* ===== Header ===== */
+.header {
+  text-align: center;
+  margin-bottom: 32px;
 }
 
-.noticeContent {
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 15px;
+  color: #64748b;
+}
+
+/* ===== Notice Box ===== */
+.noticeBox {
   display: flex;
   align-items: center;
-  gap: 25px;
+  gap: 16px;
+  max-width: 500px;
+  margin: 0 auto 32px;
+  padding: 20px;
+  background: #f0fafb;
+  border: 1.5px solid #019fb1;
+  border-radius: 14px;
 }
 
 .noticeIcon {
-  min-width: 70px;
-  height: 70px;
-  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
-  border-radius: 18px;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  background: #019fb1;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #ffffff;
 }
 
-.noticeInfo {
+.noticeContent {
   flex: 1;
 }
 
 .noticeTitle {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
   color: #019fb1;
-  margin: 0 0 8px 0;
+  margin: 0 0 4px;
 }
 
 .noticeDesc {
-  font-size: 15px;
-  color: #666;
-  margin: 0 0 12px 0;
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 8px;
 }
 
 .visaCost {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #019fb1;
-  margin: 0;
-}
-
-.visaCost svg {
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 700;
   color: #019fb1;
 }
 
-.visaQuestion {
-  margin-bottom: 40px;
+/* ===== Question Section ===== */
+.questionSection {
+  max-width: 500px;
+  margin: 0 auto 32px;
 }
 
 .questionLabel {
-  font-size: 19px;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin-bottom: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 16px;
   text-align: center;
 }
 
-.visaOption {
-  background: #fff;
-  border: 2.5px solid #e8e8e8;
-  border-radius: 20px;
-  padding: 35px 25px;
+/* ===== Options Grid ===== */
+.optionsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* ===== Option Card ===== */
+.optionCard {
+  position: relative;
+  padding: 24px 20px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
   text-align: center;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
-.visaOption:hover {
+.optionCard:hover {
   border-color: #019fb1;
-  box-shadow: 0 6px 20px rgba(1, 159, 177, 0.15);
-  transform: translateY(-3px);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(1, 159, 177, 0.12);
 }
 
-.visaOptionSelected {
-  background: linear-gradient(135deg, #019fb1 0%, #01c0d4 100%);
+.optionActive {
   border-color: #019fb1;
-  box-shadow: 0 8px 25px rgba(1, 159, 177, 0.3);
-  transform: translateY(-3px);
+  background: #f0fafb;
+  box-shadow: 0 4px 16px rgba(1, 159, 177, 0.15);
 }
 
 .optionIcon {
-  width: 70px;
-  height: 70px;
-  background: rgba(1, 159, 177, 0.1);
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 12px;
+  background: #f0fafb;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #019fb1;
-  margin-bottom: 20px;
 }
 
-.visaOptionSelected .optionIcon {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
+.optionActive .optionIcon {
+  background: #019fb1;
+  color: #ffffff;
 }
 
 .optionTitle {
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 700;
-  color: #1a1a1a;
-  margin: 0 0 10px 0;
-}
-
-.visaOptionSelected .optionTitle {
-  color: #fff;
+  color: #1e293b;
+  margin: 0 0 4px;
 }
 
 .optionDesc {
-  font-size: 15px;
-  color: #666;
+  font-size: 12px;
+  color: #64748b;
   margin: 0;
 }
 
-.visaOptionSelected .optionDesc {
-  color: rgba(255, 255, 255, 0.9);
+/* ===== Help Option ===== */
+.optionHelp .optionIcon {
+  background: #fff7ed;
+  color: #f97316;
 }
 
-.visaOptionNeedHelp .optionIcon {
-  background: rgba(255, 152, 0, 0.1);
-  color: #ff9800;
+.optionHelp:hover {
+  border-color: #f97316;
 }
 
-.visaOptionNeedHelp:hover {
-  border-color: #ff9800;
+.optionHelpActive {
+  border-color: #f97316;
+  background: #fff7ed;
 }
 
-.visaOptionNeedHelpSelected {
-  background: linear-gradient(135deg, #ff9800 0%, #ffa726 100%);
-  border-color: #ff9800;
-  box-shadow: 0 8px 25px rgba(255, 152, 0, 0.3);
+.optionHelpActive .optionIcon {
+  background: #f97316;
+  color: #ffffff;
 }
 
-.visaOptionNeedHelpSelected .optionIcon {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-}
-
-.contactInfo {
-  background: linear-gradient(135deg, rgba(255, 152, 0, 0.1) 0%, rgba(255, 167, 38, 0.1) 100%);
-  border: 2.5px solid #ff9800;
-  border-radius: 20px;
-  padding: 30px;
-  animation: slideInVisa 0.4s ease;
-}
-
-.contactContent {
-  display: flex;
-  align-items: center;
-  gap: 25px;
-}
-
-.contactIcon {
-  min-width: 70px;
-  height: 70px;
-  background: linear-gradient(135deg, #ff9800 0%, #ffa726 100%);
-  border-radius: 18px;
+/* ===== Check Mark ===== */
+.checkMark {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 24px;
+  height: 24px;
+  background: #10b981;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #ffffff;
+  animation: popIn 0.2s ease;
 }
 
-.contactText {
-  flex: 1;
+[dir="rtl"] .checkMark {
+  right: auto;
+  left: 10px;
 }
 
-.contactTitle {
-  font-size: 20px;
+@keyframes popIn {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* ===== Help Box ===== */
+.helpBox {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  background: #fff7ed;
+  border: 1.5px solid #f97316;
+  border-radius: 12px;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.helpIcon {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  background: #f97316;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.helpTitle {
+  font-size: 14px;
   font-weight: 700;
-  color: #ff9800;
-  margin: 0 0 8px 0;
+  color: #f97316;
+  margin: 0 0 2px;
 }
 
-.contactDesc {
-  font-size: 15px;
-  color: #666;
+.helpDesc {
+  font-size: 12px;
+  color: #64748b;
   margin: 0;
-  line-height: 1.6;
 }
 
-.continueButton:disabled {
+/* ===== Navigation ===== */
+.navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  gap: 16px;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #475569;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.backButton:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.continueButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 12px;
+  background: #019fb1;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.continueButton:hover:not(:disabled) {
+  background: #018a9a;
+}
+
+.disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-@keyframes slideInVisa {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
-  .noticeContent,
-  .contactContent {
+  .title {
+    font-size: 22px;
+  }
+
+  .noticeBox {
     flex-direction: column;
     text-align: center;
   }
 
-  .noticeIcon,
-  .contactIcon {
-    margin: 0 auto;
+  .optionsGrid {
+    grid-template-columns: 1fr;
   }
 
-  .visaOption {
-    padding: 30px 20px;
+  .helpBox {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .navigation {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .backButton,
+  .continueButton {
+    width: 100%;
+    justify-content: center;
   }
 }

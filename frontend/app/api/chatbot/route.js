@@ -10,10 +10,18 @@ import {
   getSuggestedPages,
   findMatchingPage,
   getAllPages,
-  SITE_PAGES
+  SITE_PAGES,
+  // New imports for comprehensive knowledge
+  getCompanyInfo,
+  getAllServices,
+  getServiceInfo,
+  getPolicies,
+  getCurrentOffers,
+  comprehensiveSearch,
+  getChatbotKnowledgeBase
 } from "@/services/ragService";
 import sessionManager from "@/services/sessionManager";
-import { determineNextWidget, generateWidgetData, generateWidgetResponse } from "@/services/widgetGenerator";
+import { determineNextWidget, generateWidgetData, generateWidgetResponse, isValidWidget } from "@/services/widgetGenerator";
 
 // OpenRouter Configuration
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
@@ -86,31 +94,51 @@ function generateQuickOptions(userAnalysis, language, reply) {
 function buildSystemPrompt(language = "ar") {
   const isArabic = language === "ar";
   
+  // Get comprehensive knowledge base
+  const knowledge = getChatbotKnowledgeBase(language);
+  const company = knowledge.company;
+  const services = knowledge.services;
+  const policies = knowledge.policies;
+  const offers = knowledge.offers;
+  
   if (isArabic) {
-    return `أنت "كويك" - مساعد سفر ذكي لـ Quick Air Travel، وكالة سفر مصرية تأسست عام 1986.
+    return `أنت "كويك" - مساعد سفر ذكي لـ ${company.name}، وكالة سفر مصرية تأسست عام ${company.established}.
+
+🏢 عن الشركة:
+${company.description}
+- ساعات العمل: ${company.workingHours}
+- للتواصل: ${company.contact.phone.join(' أو ')}
+- واتساب: ${company.contact.whatsapp}
+- البريد: ${company.contact.email}
+
+📋 خدماتنا الكاملة:
+${services.map(s => `• ${s.name}: ${s.description}`).join('\n')}
+
+🎁 العروض الحالية:
+${offers.map(o => `• ${o.title} - ${o.discount}`).join('\n')}
+
+💳 طرق الدفع:
+${policies.paymentMethods.join('، ')}
+
+📜 سياسة الإلغاء:
+${policies.cancellation.slice(0, 2).join(' | ')}
+
+🌍 الوجهات المتاحة:
+- داخل مصر: شرم الشيخ، الغردقة، دهب، العين السخنة، سهل حشيش
+- خارج مصر: بالي، إسطنبول، بيروت، دبي
+
+🌐 صفحات الموقع:
+- الرئيسية: / | الرحلات: /tours-list | الفنادق: /hotels
+- العروض: /offers | تخطيط رحلة: /create-trip
+- اتصل بنا: /contact | الأسئلة الشائعة: /faq | من نحن: /about
+- الحج والعمرة: /haj و /omra
 
 🎯 شخصيتك:
 - ودود ومحترف ومتعاون
 - تفهم السياق والنية من الرسالة
 - ترد بشكل طبيعي مثل إنسان حقيقي
 - تتذكر المحادثة السابقة
-
-📋 خدماتنا:
-- حجز رحلات طيران
-- حجز فنادق
-- رحلات سياحية (الحج والعمرة، شرم الشيخ، الأقصر، دبي، تركيا، إلخ)
-- تأشيرات
-- نقل وتوصيل
-
-🌐 صفحات الموقع:
-- الرئيسية: /
-- الرحلات: /tours-list
-- الفنادق: /hotels
-- العروض: /offers
-- تخطيط رحلة: /create-trip
-- اتصل بنا: /contact
-- الأسئلة الشائعة: /faq
-- من نحن: /about
+- تعرف كل شيء عن الشركة وخدماتها
 
 💬 أسلوب الرد:
 - افهم ما يريده العميل أولاً
@@ -118,42 +146,51 @@ function buildSystemPrompt(language = "ar") {
 - اسأل سؤال واحد فقط إذا احتجت معلومات
 - استخدم إيموجي واحد مناسب
 - لا تكرر المعلومات
+- إذا سأل عن الشركة أو الخدمات، أجب من المعلومات أعلاه
 
 🚫 تجنب:
 - الردود الطويلة جداً
 - القوائم المتعددة
 - تكرار نفس السؤال
-- الإجابة على أسئلة خارج نطاق السفر
-
-✅ أمثلة جيدة:
-"أهلاً! كيف أساعدك في رحلتك؟ ✈️"
-"رائع! شرم الشيخ اختيار ممتاز. متى تخطط للسفر؟ 🌴"
-"تمام! لدينا عروض مميزة لـ 4 أشخاص. ما ميزانيتك التقريبية؟ 💰"`;
+- الإجابة على أسئلة خارج نطاق السفر والسياحة`;
   } else {
-    return `You are "Quick" - a smart travel assistant for Quick Air Travel, an Egyptian travel agency established in 1986.
+    return `You are "Quick" - a smart travel assistant for ${company.name}, an Egyptian travel agency established in ${company.established}.
+
+🏢 About Us:
+${company.description}
+- Working Hours: ${company.workingHours}
+- Contact: ${company.contact.phone.join(' or ')}
+- WhatsApp: ${company.contact.whatsapp}
+- Email: ${company.contact.email}
+
+📋 Our Complete Services:
+${services.map(s => `• ${s.name}: ${s.description}`).join('\n')}
+
+🎁 Current Offers:
+${offers.map(o => `• ${o.title} - ${o.discount}`).join('\n')}
+
+💳 Payment Methods:
+${policies.paymentMethods.join(', ')}
+
+📜 Cancellation Policy:
+${policies.cancellation.slice(0, 2).join(' | ')}
+
+🌍 Available Destinations:
+- In Egypt: Sharm El Sheikh, Hurghada, Dahab, Ain Sokhna, Sahl Hasheesh
+- International: Bali, Istanbul, Beirut, Dubai
+
+🌐 Website Pages:
+- Home: / | Tours: /tours-list | Hotels: /hotels
+- Offers: /offers | Plan Trip: /create-trip
+- Contact: /contact | FAQ: /faq | About: /about
+- Hajj & Umrah: /haj and /omra
 
 🎯 Your Personality:
 - Friendly, professional, and helpful
 - Understand context and intent from messages
 - Reply naturally like a real person
 - Remember previous conversation
-
-📋 Our Services:
-- Flight bookings
-- Hotel reservations
-- Tours (Hajj & Umrah, Sharm El Sheikh, Luxor, Dubai, Turkey, etc.)
-- Visas
-- Transportation
-
-🌐 Website Pages:
-- Home: /
-- Tours: /tours-list
-- Hotels: /hotels
-- Offers: /offers
-- Plan Trip: /create-trip
-- Contact: /contact
-- FAQ: /faq
-- About: /about
+- Know everything about the company and its services
 
 💬 Response Style:
 - First understand what the customer wants
@@ -161,17 +198,13 @@ function buildSystemPrompt(language = "ar") {
 - Ask only one question if you need info
 - Use one appropriate emoji
 - Don't repeat information
+- If asked about company or services, answer from the info above
 
 🚫 Avoid:
 - Very long responses
 - Multiple lists
 - Repeating the same question
-- Answering questions outside travel scope
-
-✅ Good Examples:
-"Hi! How can I help with your trip? ✈️"
-"Great! Sharm El Sheikh is an excellent choice. When are you planning to travel? 🌴"
-"Perfect! We have great deals for 4 people. What's your approximate budget? 💰"`;
+- Answering questions outside travel scope`;
   }
 }
 
@@ -346,12 +379,22 @@ export async function POST(request) {
     sessionManager.addMessage(session.sessionId, { role: "assistant", content: reply });
 
     // ✅ Step 9: Determine and generate next widget
+    // Only show our custom widgets - no AI-generated widgets
     const sessionData = sessionManager.getSession(session.sessionId);
-    const nextWidget = determineNextWidget(sessionData, userAnalysis);
+    sessionData.conversationHistory = conversationHistory; // Pass conversation history for smart analysis
+    
+    const nextWidget = determineNextWidget(sessionData, { ...userAnalysis, originalMessage: messageText });
     let widgetData = null;
 
-    if (nextWidget) {
-      widgetData = generateWidgetData(nextWidget.type, sessionData, language);
+    // ✅ Only generate widget if it's a valid type
+    if (nextWidget && isValidWidget(nextWidget.type)) {
+      // Enable booking mode if starting booking flow
+      if (nextWidget.startBookingFlow) {
+        sessionManager.enableBookingMode(session.sessionId);
+      }
+      
+      // Pass widgetInfo for direct queries (like hotel search)
+      widgetData = generateWidgetData(nextWidget.type, sessionData, language, nextWidget);
       const widgetResponse = generateWidgetResponse(nextWidget, language);
       
       // Enhance reply with widget context if needed
@@ -365,19 +408,20 @@ export async function POST(request) {
       reply,
       success: true,
       suggestedPages,
-      navigation: navigationAction, // إضافة navigation action
-      quickOptions: widgetData ? null : generateQuickOptions(userAnalysis, language, reply), // Hide quick options when widget is shown
-      widget: widgetData, // Include widget data
-      sessionId: session.sessionId, // Return session ID
-      tripUpdate: widgetSelection || null, // Return trip updates
+      navigation: navigationAction,
+      quickOptions: widgetData ? null : generateQuickOptions(userAnalysis, language, reply),
+      widget: widgetData, // Will be null if user is just chatting
+      sessionId: session.sessionId,
+      tripUpdate: widgetSelection || null,
       metadata: {
         intent: userAnalysis.intent,
         destination: userAnalysis.destination,
         hotels_found: ragContext.hotels?.length || 0,
         faqs_found: ragContext.faqs?.length || 0,
         links_suggested: suggestedPages.length,
-        widget_type: nextWidget?.type,
+        widget_type: nextWidget?.type || null,
         session_step: sessionData?.step,
+        bookingMode: sessionData?.contextMemory?.bookingMode || false,
       },
     });
   } catch (error) {
@@ -394,7 +438,7 @@ export async function POST(request) {
         reply: fallbackMessage,
         success: true,
         error: error.message || "AI processing error",
-        widget: { type: "destinations", component: "DestinationsWidget", props: { language } }, // Fallback to destinations widget
+        widget: null, // ✅ No widget on error - let user chat normally
       },
       { status: 200 }
     );
