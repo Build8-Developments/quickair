@@ -315,7 +315,7 @@ export default function FooterTwo({ locale: serverLocale }) {
                   >
                     {t(
                       "footer.address",
-                      "328 Queensberry Street, North Melbourne VIC3051, Australia."
+                      "El Shorouk City, 162 Neighborhood 2"
                     )}
                   </span>
                 </a>
