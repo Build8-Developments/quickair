@@ -43,17 +43,6 @@ export default function StepVisa({ data, destination, onUpdate, onNext, onPrev }
           <div className={styles.noticeContent}>
             <h3 className={styles.noticeTitle}>{t('تأشيرة مطلوبة', 'Visa Required')}</h3>
             <p className={styles.noticeDesc}>{t('يجب الحصول على التأشيرة قبل السفر', 'You must obtain a visa before traveling')}</p>
-            {destination?.visaCost && (
-              <span className={styles.visaCost}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"/>
-                  <path d="M12 6v12"/>
-                  <path d="M15 9.5a3 3 0 0 0-3-2.5H9"/>
-                  <path d="M9 14.5a3 3 0 0 0 3 2.5h3"/>
-                </svg>
-                ${destination.visaCost} {t('(رسوم التأشيرة)', '(Visa Fee)')}
-              </span>
-            )}
           </div>
         </div>
       )}
