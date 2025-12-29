@@ -40,9 +40,9 @@ const COMPANY_INFO = {
     en: "A leading Egyptian travel agency established in 1986, specializing in organizing tours, flight bookings, hotels, and visas"
   },
   contact: {
-    phone: ["+20 123 456 7890", "+20 111 222 3333"],
-    email: "info@quickair.com",
-    whatsapp: "+20 123 456 7890",
+    phone: ["19102"],
+    email: "19102@quickair.travel",
+    whatsapp: "19102",
     address: {
       ar: "القاهرة، مصر",
       en: "Cairo, Egypt"

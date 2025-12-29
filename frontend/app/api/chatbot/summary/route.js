@@ -233,7 +233,7 @@ function generateEmailHTML(userInfo, displayData, isArabic) {
                 ${t("سنتواصل معك قريباً لإتمام حجزك", "We'll contact you soon to complete your booking")}
               </p>
               <p style="margin: 0; font-size: 13px; color: #94a3b8;">
-                ${process.env.CONTACT_PHONE || "+966 XX XXX XXXX"} | ${process.env.CONTACT_EMAIL || "info@quickair.com"}
+                ${process.env.CONTACT_PHONE || "19102"} | ${process.env.CONTACT_EMAIL || "19102@quickair.travel"}
               </p>
             </td>
           </tr>

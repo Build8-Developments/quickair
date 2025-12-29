@@ -127,7 +127,7 @@ export default function ContactForm() {
                             {t("الهاتف", "Phone")}
                           </h4>
                           <p className={styles.detailValue} dir="ltr">
-                            +20 123 456 7890
+                            19102
                           </p>
                         </div>
                       </div>
@@ -151,7 +151,7 @@ export default function ContactForm() {
                             {t("البريد الإلكتروني", "Email")}
                           </h4>
                           <p className={styles.detailValue}>
-                            info@quickair.com
+                            19102@quickair.travel
                           </p>
                         </div>
                       </div>

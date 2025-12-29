@@ -261,8 +261,8 @@ export async function POST(request) {
 
             <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
               <p style="color: #666; margin: 5px 0;"><strong>Contact Information:</strong></p>
-              <p style="color: #666; margin: 5px 0;">📧 Email: info@quickair.com</p>
-              <p style="color: #666; margin: 5px 0;">📞 Phone: +20 123 456 7890</p>
+              <p style="color: #666; margin: 5px 0;">📧 Email: 19102@quickair.travel</p>
+              <p style="color: #666; margin: 5px 0;">📞 Phone: 19102</p>
               <p style="color: #666; margin: 5px 0;">🕒 Working Hours: Sat - Thu: 9 AM - 6 PM</p>
             </div>
 

@@ -243,7 +243,7 @@ export default function FooterTwo({ locale: serverLocale }) {
                     style={{ color: "#ffffff" }}
                     dir="ltr"
                   >
-                    1-800-453-6744
+                    19102
                   </div>
                 </div>
               </div>
@@ -320,7 +320,7 @@ export default function FooterTwo({ locale: serverLocale }) {
                   </span>
                 </a>
                 <a
-                  href="mailto:hi@quickair.com"
+                  href="mailto:19102@quickair.travel"
                   style={footerStyles.contactItem}
                 >
                   <div style={footerStyles.contactIcon}>
@@ -337,7 +337,7 @@ export default function FooterTwo({ locale: serverLocale }) {
                     </svg>
                   </div>
                   <span style={{ color: "rgba(255, 255, 255, 0.85)" }}>
-                    {t("footer.email", "hi@quickair.com")}
+                    {t("footer.email", "19102@quickair.travel")}
                   </span>
                 </a>
               </div>
