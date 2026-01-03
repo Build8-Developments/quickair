@@ -1,4 +1,5 @@
 import BrandsOne from "@/components/homes/brands/BrandsOne";
+import ChatbotWidget from "@/components/homes/chatbot/ChatbotWidget";
 import OfferDestinations from "@/components/homes/destinations/OfferDestinations";
 import TrendingDestinations from "@/components/homes/destinations/TrendingDestinations";
 import FeaturesFour from "@/components/homes/features/FeaturesFour";
@@ -43,6 +44,7 @@ export default async function HomePage({ params }) {
         <Header3 locale={locale} />
         <Hero3 locale={locale} />
         <TripTypeSelector locale={locale} />
+        <ChatbotWidget />
         <OfferDestinations locale={locale} />
         <BrandsOne locale={locale} />
         <HajOmra locale={locale} />

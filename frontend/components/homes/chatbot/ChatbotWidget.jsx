@@ -179,25 +179,20 @@ export default function ChatbotWidget() {
                   <span></span>
                 </div>
               </div>
-
-              <div className={styles.quickActions}>
-                <button className={styles.quickActionBtn}>
-                  ✈️ {t("رحلات طيران", "Flights")}
-                </button>
-                <button className={styles.quickActionBtn}>
-                  🏨 {t("فنادق", "Hotels")}
-                </button>
-                <button className={styles.quickActionBtn}>
-                  🎫 {t("عروض", "Offers")}
-                </button>
-              </div>
             </div>
           </div>
 
           <div className="col-lg-6">
             <div className={styles.ctaContent}>
               <div className={styles.badge}>
-                <span className={styles.badgeIcon}>🤖</span>
+                <span className={styles.badgeIcon}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="11" width="18" height="10" rx="2" />
+                    <circle cx="8.5" cy="16" r="1.5" fill="currentColor" />
+                    <circle cx="15.5" cy="16" r="1.5" fill="currentColor" />
+                    <path d="M12 2v4M8 4l4 2 4-2" />
+                  </svg>
+                </span>
                 <span className={styles.badgeText}>
                   {t("مدعوم بالذكاء الاصطناعي", "AI-Powered")}
                 </span>
@@ -216,21 +211,39 @@ export default function ChatbotWidget() {
 
               <div className={styles.features}>
                 <div className={styles.featureItem}>
-                  <div className={styles.featureIcon}>⚡</div>
+                  <div className={styles.featureIcon}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#019fb1" strokeWidth="2">
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                    </svg>
+                  </div>
                   <div>
                     <strong>{t("استجابة فورية", "Instant Replies")}</strong>
                     <p>{t("إجابات فورية على جميع استفساراتك", "Instant answers to all queries")}</p>
                   </div>
                 </div>
                 <div className={styles.featureItem}>
-                  <div className={styles.featureIcon}>🎯</div>
+                  <div className={styles.featureIcon}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#019fb1" strokeWidth="2">
+                      <circle cx="12" cy="12" r="10" />
+                      <circle cx="12" cy="12" r="3" fill="#019fb1" />
+                      <line x1="12" y1="2" x2="12" y2="6" />
+                      <line x1="12" y1="18" x2="12" y2="22" />
+                      <line x1="2" y1="12" x2="6" y2="12" />
+                      <line x1="18" y1="12" x2="22" y2="12" />
+                    </svg>
+                  </div>
                   <div>
                     <strong>{t("توصيات ذكية", "Smart Suggestions")}</strong>
                     <p>{t("مبنية على تفضيلاتك وميزانيتك", "Based on preferences & budget")}</p>
                   </div>
                 </div>
                 <div className={styles.featureItem}>
-                  <div className={styles.featureIcon}>🔒</div>
+                  <div className={styles.featureIcon}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#019fb1" strokeWidth="2">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                  </div>
                   <div>
                     <strong>{t("حجز آمن", "Secure Booking")}</strong>
                     <p>{t("معاملات آمنة ومشفرة", "Safe & encrypted transactions")}</p>
