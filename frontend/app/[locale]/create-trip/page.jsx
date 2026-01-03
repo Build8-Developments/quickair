@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import CreateTripFlow from "@/components/pages/createTrip/CreateTripFlow";
 import Header3 from "@/components/layout/header/Header3";
 import FooterTwo from "@/components/layout/footers/FooterTwo";
@@ -38,7 +39,9 @@ export default async function CreateTripPage({ params }) {
     <>
       <Header3 locale={locale} />
       <div className="header-margin"></div>
-      <CreateTripFlow locale={locale} />
+      <Suspense fallback={<div className="text-center py-5">Loading...</div>}>
+        <CreateTripFlow locale={locale} />
+      </Suspense>
       <FooterTwo locale={locale} />
     </>
   );
