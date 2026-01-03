@@ -10,14 +10,12 @@ export async function POST(request) {
     // Generate unique request ID
     const requestId = `TRIP-${Date.now()}`;
 
-    // Create transporter
+    // Create transporter using Gmail
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT) || 465,
-      secure: true,
+      service: 'gmail',
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD,
       },
     });
 
@@ -258,8 +256,8 @@ export async function POST(request) {
 
     // Email to company
     const mailOptionsToCompany = {
-      from: `"QuickAir Trip Request" <${process.env.SMTP_USER}>`,
-      to: process.env.CONTACT_EMAIL || process.env.SMTP_USER,
+      from: `"QuickAir Trip Request" <${process.env.GMAIL_USER}>`,
+      to: process.env.CONTACT_EMAIL || process.env.GMAIL_USER,
       subject: `New Trip Request: ${
         tripData.destination?.name || "Custom Trip"
       } - ${requestId}`,
@@ -301,7 +299,7 @@ export async function POST(request) {
 
     // Email to customer
     const mailOptionsToCustomer = {
-      from: `"QuickAir" <${process.env.SMTP_USER}>`,
+      from: `"QuickAir" <${process.env.GMAIL_USER}>`,
       to: tripData.contact?.email,
       subject: `Trip Request Confirmation - ${requestId}`,
       html: `

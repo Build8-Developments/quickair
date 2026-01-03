@@ -21,19 +21,17 @@ export async function POST(request) {
     console.log("Language:", language);
     console.log("=".repeat(60));
 
-    // For now, skip email sending if SMTP not configured
-    const smtpConfigured =
-      process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS;
+    // For now, skip email sending if Gmail not configured
+    const gmailConfigured =
+      process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD;
 
-    if (smtpConfigured) {
+    if (gmailConfigured) {
       // إعداد transporter للإيميل
       const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: parseInt(process.env.SMTP_PORT) || 465,
-        secure: true,
+        service: 'gmail',
         auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_APP_PASSWORD,
         },
       });
 
@@ -49,8 +47,8 @@ export async function POST(request) {
 
       // إرسال إيميل للفريق
       await transporter.sendMail({
-        from: `"QuickAir Chatbot" <${process.env.SMTP_USER}>`,
-        to: process.env.CONTACT_EMAIL || process.env.SMTP_USER,
+        from: `"QuickAir Chatbot" <${process.env.GMAIL_USER}>`,
+        to: process.env.CONTACT_EMAIL || process.env.GMAIL_USER,
         subject: isArabic
           ? `🎯 حجز جديد من ${userInfo.name}`
           : `🎯 New Booking from ${userInfo.name}`,
@@ -59,7 +57,7 @@ export async function POST(request) {
 
       // إرسال إيميل للعميل
       await transporter.sendMail({
-        from: `"QuickAir" <${process.env.SMTP_USER}>`,
+        from: `"QuickAir" <${process.env.GMAIL_USER}>`,
         to: userInfo.email,
         subject: isArabic
           ? "تأكيد طلب حجزك - QuickAir"
@@ -69,8 +67,8 @@ export async function POST(request) {
 
       console.log("✅ Emails sent successfully");
     } else {
-      console.log("⚠️  SMTP not configured - Booking saved to console only");
-      console.log("💡 To enable emails, add SMTP settings to .env file");
+      console.log("⚠️  Gmail not configured - Booking saved to console only");
+      console.log("💡 To enable emails, add GMAIL_USER and GMAIL_APP_PASSWORD to .env file");
     }
 
     // إرسال إشعار واتساب (اختياري - يحتاج WhatsApp Business API)

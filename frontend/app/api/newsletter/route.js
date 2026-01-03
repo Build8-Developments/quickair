@@ -22,21 +22,19 @@ export async function POST(request) {
       );
     }
 
-    // Create transporter
+    // Create transporter using Gmail
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: parseInt(process.env.SMTP_PORT) || 465,
-      secure: true,
+      service: 'gmail',
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_APP_PASSWORD,
       },
     });
 
     // Email to company (notification of new subscriber)
     const mailOptionsToCompany = {
-      from: `"QuickAir Newsletter" <${process.env.SMTP_USER}>`,
-      to: process.env.CONTACT_EMAIL || process.env.SMTP_USER,
+      from: `"QuickAir Newsletter" <${process.env.GMAIL_USER}>`,
+      to: process.env.CONTACT_EMAIL || process.env.GMAIL_USER,
       subject: `New Newsletter Subscription`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -59,7 +57,7 @@ export async function POST(request) {
 
     // Welcome email to subscriber
     const mailOptionsToSubscriber = {
-      from: `"QuickAir" <${process.env.SMTP_USER}>`,
+      from: `"QuickAir" <${process.env.GMAIL_USER}>`,
       to: email,
       subject: "Welcome to QuickAir Newsletter!",
       html: `

@@ -67,19 +67,17 @@ export async function POST(request) {
     console.log("Language:", language);
     console.log("=".repeat(60));
 
-    // Check if SMTP is configured
-    const smtpConfigured =
-      process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS;
+    // Check if Gmail is configured
+    const gmailConfigured =
+      process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD;
 
-    if (smtpConfigured) {
-      // Create email transporter
+    if (gmailConfigured) {
+      // Create email transporter using Gmail
       const transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST,
-        port: parseInt(process.env.SMTP_PORT) || 465,
-        secure: true,
+        service: 'gmail',
         auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS,
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_APP_PASSWORD,
         },
       });
 
@@ -303,15 +301,15 @@ export async function POST(request) {
 
       // Send email to user
       await transporter.sendMail({
-        from: `"QuickAir" <${process.env.SMTP_USER}>`,
+        from: `"QuickAir" <${process.env.GMAIL_USER}>`,
         to: userInfo.email,
         subject: emailSubject,
         html: emailHTML,
       });
 
       await transporter.sendMail({
-        from: `"QuickAir Chatbot" <${process.env.SMTP_USER}>`,
-        to: process.env.CONTACT_EMAIL || process.env.SMTP_USER,
+        from: `"QuickAir Chatbot" <${process.env.GMAIL_USER}>`,
+        to: process.env.CONTACT_EMAIL || process.env.GMAIL_USER,
         subject: `New Trip Request - ${userInfo.name}`,
         html: emailHTML,
       });
