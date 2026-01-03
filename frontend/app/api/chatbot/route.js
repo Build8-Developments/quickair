@@ -276,33 +276,50 @@ export async function POST(request) {
     
     // ✅ Step 3.6: فحص إذا كان يطلب التوجيه لصفحة معينة
     let navigationAction = null;
-    if (userAnalysis.intent === "navigate_page") {
-      const matchedPage = findMatchingPage(messageText, language);
-      if (matchedPage) {
-        navigationAction = {
-          action: "navigate",
+    
+    // البحث عن صفحة مطابقة - حتى لو الـ intent مختلف
+    const matchedPage = findMatchingPage(messageText, language);
+    
+    // تحقق من وجود كلمات التنقل في الرسالة
+    const hasNavigationIntent = /وديني|ودني|خدني|روح|افتح|ورني|اذهب|توجه|صفحة|صفحه|take me|go to|open|show me|navigate|page/i.test(messageText);
+    
+    console.log("🔍 Navigation check:", { messageText, matchedPage, hasNavigationIntent, intent: userAnalysis.intent });
+    
+    if (matchedPage && hasNavigationIntent) {
+      navigationAction = {
+        action: "navigate",
+        url: matchedPage.url,
+        pageName: matchedPage.name,
+        shouldNavigate: true
+      };
+      
+      // رد مختصر مع التوجيه - بدون widget
+      const navReply = isArabic 
+        ? `حاضر، جاري فتح صفحة ${matchedPage.name} 🚀`
+        : `Sure, opening ${matchedPage.name} page 🚀`;
+      
+      // Add to session
+      sessionManager.addMessage(session.sessionId, { role: "assistant", content: navReply });
+      
+      return Response.json({
+        reply: navReply,
+        success: true,
+        navigation: navigationAction,
+        suggestedPages: [{
           url: matchedPage.url,
-          pageName: matchedPage.name,
-          shouldNavigate: true
-        };
-        
-        // رد مختصر مع التوجيه
-        const navReply = isArabic 
-          ? `جاري فتح ${matchedPage.name}... 🔗`
-          : `Opening ${matchedPage.name}... 🔗`;
-        
-        return Response.json({
-          reply: navReply,
-          success: true,
-          navigation: navigationAction,
-          suggestedPages: [matchedPage],
-          sessionId: session.sessionId,
-          metadata: {
-            intent: "navigate_page",
-            page: matchedPage.page
-          }
-        });
-      }
+          text: matchedPage.name,
+          description: matchedPage.description,
+          icon: "🔗",
+          isPrimary: true
+        }],
+        widget: null, // ❌ لا widget - فقط navigation
+        quickOptions: null,
+        sessionId: session.sessionId,
+        metadata: {
+          intent: "navigate_page",
+          page: matchedPage.page
+        }
+      });
     }
 
     // ✅ Step 4: بناء Prompt للـ AI

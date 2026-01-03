@@ -21,6 +21,15 @@
     "hajDescription": "Embark on the sacred pilgrimage to Mecca. Experience the spiritual journey of a lifetime with our comprehensive Hajj packages.",
     "omraDescription": "Perform the lesser pilgrimage at any time of the year. Discover our carefully curated Umrah packages for a blessed journey.",
     "explorePackages": "Explore Packages",
+    "honeymoon": {
+      "subtitle": "Romantic Getaways",
+      "title": "Honeymoon Packages",
+      "description": "Celebrate your love with our exclusive honeymoon packages. Discover romantic destinations and create unforgettable memories together.",
+      "beach": "Beach Escapes",
+      "beachDescription": "Relax on pristine beaches with your loved one. Crystal clear waters and romantic sunsets await.",
+      "europe": "European Romance",
+      "europeDescription": "Discover the charm of European cities. Historic streets, fine dining, and unforgettable moments."
+    },
     "trendingDestinations": "Trending Destinations",
     "stats": {
       "totalDonations": "Happy Travelers",

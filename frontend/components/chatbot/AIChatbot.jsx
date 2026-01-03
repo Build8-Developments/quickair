@@ -127,12 +127,26 @@ export default function AIChatbot() {
           tripUpdate: data.tripUpdate || null,
           quickOptions: data.quickOptions || null,
           widget: data.widget || null, // Add widget data from API
+          navigation: data.navigation || null, // Add navigation data
         };
         setMessages((prev) => [...prev, assistantMessage]);
 
         // Update trip data if provided
         if (data.tripUpdate) {
           setTripData((prev) => ({ ...prev, ...data.tripUpdate }));
+        }
+
+        // ✅ Handle automatic navigation if requested
+        if (data.navigation && data.navigation.shouldNavigate && data.navigation.url) {
+          const locale = userInfo.preferredLanguage || language || 'en';
+          const urlWithLocale = data.navigation.url.startsWith(`/${locale}`) 
+            ? data.navigation.url 
+            : `/${locale}${data.navigation.url}`;
+          
+          // Navigate after a short delay to show the message first
+          setTimeout(() => {
+            window.open(urlWithLocale, '_blank');
+          }, 800);
         }
 
         // Check if conversation is complete

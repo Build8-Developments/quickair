@@ -208,8 +208,8 @@ const SITE_PAGES = {
     name_en: "Home",
     desc_ar: "الصفحة الرئيسية - عروض، وجهات، وكل خدماتنا",
     desc_en: "Home page - offers, destinations, and all our services",
-    keywords_ar: ["رئيسية", "البداية", "الصفحة الأولى", "home"],
-    keywords_en: ["home", "main", "homepage", "start"]
+    keywords_ar: ["رئيسية", "البداية", "الصفحة الأولى", "home", "الرئيسيه", "الصفحه الرئيسيه", "البيت"],
+    keywords_en: ["home", "main", "homepage", "start", "front page"]
   },
   tours: {
     url: "/tours-list",
@@ -217,8 +217,8 @@ const SITE_PAGES = {
     name_en: "Tours",
     desc_ar: "جميع الرحلات والوجهات السياحية المتاحة",
     desc_en: "All available tours and destinations",
-    keywords_ar: ["رحلات", "جولات", "وجهات", "سياحة", "tours"],
-    keywords_en: ["tours", "trips", "destinations", "travel"]
+    keywords_ar: ["رحلات", "جولات", "وجهات", "سياحة", "tours", "الرحلات", "رحله", "رحلة", "سفر", "سفريات"],
+    keywords_en: ["tours", "trips", "destinations", "travel", "journeys", "vacations"]
   },
   hotels: {
     url: "/hotels",
@@ -226,8 +226,8 @@ const SITE_PAGES = {
     name_en: "Hotels",
     desc_ar: "حجز الفنادق في جميع الوجهات",
     desc_en: "Book hotels in all destinations",
-    keywords_ar: ["فنادق", "فندق", "إقامة", "حجز فندق", "hotels"],
-    keywords_en: ["hotels", "hotel", "accommodation", "booking"]
+    keywords_ar: ["فنادق", "فندق", "إقامة", "حجز فندق", "hotels", "الفنادق", "اقامه", "اقامة", "سكن"],
+    keywords_en: ["hotels", "hotel", "accommodation", "booking", "stay", "lodging"]
   },
   offers: {
     url: "/offers",
@@ -235,8 +235,8 @@ const SITE_PAGES = {
     name_en: "Offers",
     desc_ar: "أحدث العروض والخصومات الخاصة",
     desc_en: "Latest offers and special discounts",
-    keywords_ar: ["عروض", "خصومات", "تخفيضات", "offers"],
-    keywords_en: ["offers", "deals", "discounts", "promotions"]
+    keywords_ar: ["عروض", "خصومات", "تخفيضات", "offers", "العروض", "عرض", "خصم", "تخفيض", "اوفر"],
+    keywords_en: ["offers", "deals", "discounts", "promotions", "sales", "specials"]
   },
   createTrip: {
     url: "/create-trip",
@@ -244,8 +244,8 @@ const SITE_PAGES = {
     name_en: "Plan Your Trip",
     desc_ar: "صمم رحلتك الخاصة حسب احتياجاتك",
     desc_en: "Design your custom trip",
-    keywords_ar: ["تخطيط", "رحلة مخصصة", "خطط", "plan"],
-    keywords_en: ["plan", "create", "custom trip", "design"]
+    keywords_ar: ["تخطيط", "رحلة مخصصة", "خطط", "plan", "صمم رحلتك", "خطط رحلتك", "رحلة خاصة", "تصميم رحلة"],
+    keywords_en: ["plan", "create", "custom trip", "design", "build trip", "customize"]
   },
   contact: {
     url: "/contact",
@@ -253,8 +253,8 @@ const SITE_PAGES = {
     name_en: "Contact Us",
     desc_ar: "تواصل معنا - خدمة عملاء 24/7",
     desc_en: "Contact us - 24/7 customer service",
-    keywords_ar: ["اتصال", "تواصل", "خدمة عملاء", "مساعدة", "contact"],
-    keywords_en: ["contact", "support", "help", "customer service"]
+    keywords_ar: ["اتصال", "تواصل", "خدمة عملاء", "مساعدة", "contact", "اتصل بنا", "تواصل معنا", "كلمنا", "راسلنا"],
+    keywords_en: ["contact", "support", "help", "customer service", "reach us", "call us"]
   },
   about: {
     url: "/about",
@@ -262,8 +262,8 @@ const SITE_PAGES = {
     name_en: "About Us",
     desc_ar: "تعرف على شركة Quick Air وخدماتنا",
     desc_en: "Learn about Quick Air and our services",
-    keywords_ar: ["من نحن", "عن الشركة", "about"],
-    keywords_en: ["about", "company", "who we are"]
+    keywords_ar: ["من نحن", "عن الشركة", "about", "عننا", "معلومات عنا", "تعرف علينا"],
+    keywords_en: ["about", "company", "who we are", "about us", "our story"]
   },
   faq: {
     url: "/faq",
@@ -271,8 +271,8 @@ const SITE_PAGES = {
     name_en: "FAQs",
     desc_ar: "أسئلة وأجوبة حول خدماتنا",
     desc_en: "Questions and answers about our services",
-    keywords_ar: ["أسئلة", "استفسارات", "faq", "مساعدة"],
-    keywords_en: ["faq", "questions", "help", "answers"]
+    keywords_ar: ["أسئلة", "استفسارات", "faq", "مساعدة", "الأسئلة الشائعة", "اسئله", "استفسار"],
+    keywords_en: ["faq", "questions", "help", "answers", "frequently asked"]
   },
   terms: {
     url: "/terms",
@@ -280,8 +280,8 @@ const SITE_PAGES = {
     name_en: "Terms & Conditions",
     desc_ar: "شروط الاستخدام وسياسة الخصوصية",
     desc_en: "Terms of use and privacy policy",
-    keywords_ar: ["شروط", "أحكام", "سياسة", "terms"],
-    keywords_en: ["terms", "conditions", "policy", "privacy"]
+    keywords_ar: ["شروط", "أحكام", "سياسة", "terms", "الشروط والأحكام", "سياسة الخصوصية"],
+    keywords_en: ["terms", "conditions", "policy", "privacy", "legal"]
   },
   hajj: {
     url: "/haj",
@@ -289,8 +289,8 @@ const SITE_PAGES = {
     name_en: "Hajj",
     desc_ar: "برامج الحج المتكاملة",
     desc_en: "Complete Hajj programs",
-    keywords_ar: ["حج", "مكة", "الحرم", "hajj"],
-    keywords_en: ["hajj", "mecca", "pilgrimage"]
+    keywords_ar: ["حج", "مكة", "الحرم", "hajj", "الحج", "برامج الحج", "رحلات الحج"],
+    keywords_en: ["hajj", "mecca", "pilgrimage", "hajj programs"]
   },
   umrah: {
     url: "/omra",
@@ -298,8 +298,8 @@ const SITE_PAGES = {
     name_en: "Umrah",
     desc_ar: "برامج العمرة على مدار العام",
     desc_en: "Year-round Umrah programs",
-    keywords_ar: ["عمرة", "umrah", "مكة", "المدينة"],
-    keywords_en: ["umrah", "mecca", "medina"]
+    keywords_ar: ["عمرة", "umrah", "مكة", "المدينة", "العمرة", "برامج العمرة", "رحلات العمرة", "عمره"],
+    keywords_en: ["umrah", "mecca", "medina", "umrah programs"]
   },
   
   // صفحات الوجهات - توجيه لصفحة العروض
@@ -427,10 +427,16 @@ export function analyzeUserMessage(message, language = "ar") {
   }
   // 9. السؤال عن صفحة معينة - Page Navigation
   else if (
-    msg.includes("صفحة") || msg.includes("page") ||
-    msg.includes("أين") || msg.includes("where") ||
+    msg.includes("صفحة") || msg.includes("صفحه") || msg.includes("page") ||
     msg.includes("كيف أذهب") || msg.includes("how to go") ||
-    msg.includes("وديني") || msg.includes("take me")
+    msg.includes("وديني") || msg.includes("take me") ||
+    msg.includes("ودني") || msg.includes("خدني") ||
+    msg.includes("روح") || msg.includes("go to") ||
+    msg.includes("افتح") || msg.includes("open") ||
+    msg.includes("فتح") || msg.includes("show me") ||
+    msg.includes("ورني") || msg.includes("عايز أشوف") ||
+    msg.includes("أبي أشوف") || msg.includes("navigate") ||
+    msg.includes("اذهب") || msg.includes("توجه")
   ) {
     intent = "navigate_page";
     confidence = 0.85;
@@ -1251,7 +1257,9 @@ export function findMatchingPage(message, language = "ar") {
   const msg = message.toLowerCase();
   const isArabic = language === "ar";
   
-  // البحث في كل صفحة
+  console.log("🔎 findMatchingPage called with:", { message, msg, language });
+  
+  // أولاً: البحث المباشر في الكلمات المفتاحية
   for (const [key, pageInfo] of Object.entries(SITE_PAGES)) {
     if (key === "destinations") continue; // تخطي الوجهات
     
@@ -1261,12 +1269,58 @@ export function findMatchingPage(message, language = "ar") {
     // تحقق من الكلمات المفتاحية
     for (const keyword of keywords) {
       if (msg.includes(keyword.toLowerCase())) {
+        console.log("✅ Found match by keyword:", { key, keyword });
         return {
           page: key,
           url: pageInfo.url,
           name: name,
           description: isArabic ? pageInfo.desc_ar : pageInfo.desc_en,
           confidence: 0.9
+        };
+      }
+    }
+  }
+  
+  // ثانياً: البحث الذكي بالسياق
+  // إذا ذكر "وديني" أو "خدني" أو "روح" مع كلمة معينة
+  const navigationPatterns = {
+    ar: [
+      { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:رحل|سفر|جول|الرحلات)/i, page: "tours" },
+      { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:فند|إقام|سكن|الفنادق)/i, page: "hotels" },
+      { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:عرو|عروض|العروض|خصم|تخفيض)/i, page: "offers" },
+      { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:حج|الحج)/i, page: "hajj" },
+      { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:عمر|العمرة)/i, page: "umrah" },
+      { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:تواصل|اتصل|كلم|اتصال)/i, page: "contact" },
+      { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:سؤال|أسئل|استفسار|الأسئلة)/i, page: "faq" },
+      { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:خطط|صمم|تخطيط)/i, page: "createTrip" },
+      { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:رئيس|بداي|بيت|الرئيسية)/i, page: "home" },
+      { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:عنن|من نحن|شرك|عننا)/i, page: "about" },
+    ],
+    en: [
+      { pattern: /(?:take me|go to|open|show me|navigate).*(?:tour|trip|travel)/i, page: "tours" },
+      { pattern: /(?:take me|go to|open|show me|navigate).*(?:hotel|stay|accommodation)/i, page: "hotels" },
+      { pattern: /(?:take me|go to|open|show me|navigate).*(?:offer|deal|discount)/i, page: "offers" },
+      { pattern: /(?:take me|go to|open|show me|navigate).*(?:hajj|pilgrimage)/i, page: "hajj" },
+      { pattern: /(?:take me|go to|open|show me|navigate).*(?:umrah)/i, page: "umrah" },
+      { pattern: /(?:take me|go to|open|show me|navigate).*(?:contact|support)/i, page: "contact" },
+      { pattern: /(?:take me|go to|open|show me|navigate).*(?:faq|question)/i, page: "faq" },
+      { pattern: /(?:take me|go to|open|show me|navigate).*(?:plan|create|custom)/i, page: "createTrip" },
+      { pattern: /(?:take me|go to|open|show me|navigate).*(?:home|main|front)/i, page: "home" },
+      { pattern: /(?:take me|go to|open|show me|navigate).*(?:about|company)/i, page: "about" },
+    ]
+  };
+  
+  const patterns = isArabic ? navigationPatterns.ar : navigationPatterns.en;
+  for (const { pattern, page } of patterns) {
+    if (pattern.test(msg)) {
+      const pageInfo = SITE_PAGES[page];
+      if (pageInfo) {
+        return {
+          page: page,
+          url: pageInfo.url,
+          name: isArabic ? pageInfo.name_ar : pageInfo.name_en,
+          description: isArabic ? pageInfo.desc_ar : pageInfo.desc_en,
+          confidence: 0.85
         };
       }
     }

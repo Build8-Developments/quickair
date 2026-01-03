@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import StepIndicator from "./StepIndicator";
 import StepDestination from "./steps/StepDestination";
 import StepTripType from "./steps/StepTripType";
@@ -14,6 +15,33 @@ import StepPreferences from "./steps/StepPreferences";
 import StepSummary from "./steps/StepSummary";
 import { useLanguage } from "@/contexts/LanguageContext";
 import styles from "./CreateTripFlow.module.css";
+
+const TRIP_TYPES_MAP = {
+  package: {
+    id: "package",
+    titleAr: "باقة متكاملة",
+    titleEn: "Complete Package",
+    descAr: "رحلة كاملة مع كل شيء",
+    descEn: "Full vacation with everything included",
+    icon: "package",
+  },
+  "flight-hotel": {
+    id: "flight-hotel",
+    titleAr: "طيران + فندق",
+    titleEn: "Flight + Hotel",
+    descAr: "تأشيرة سفر",
+    descEn: "Visa assistance",
+    icon: "flight",
+  },
+  "hotel-only": {
+    id: "hotel-only",
+    titleAr: "فندق فقط",
+    titleEn: "Hotel Only",
+    descAr: "تصفح الفنادق",
+    descEn: "Browse our hotels",
+    icon: "hotel",
+  },
+};
 
 const STEPS = [
   { id: 1, title: "Purpose", icon: "icon-flag" },
@@ -29,9 +57,16 @@ const STEPS = [
 ];
 
 export default function CreateTripFlow() {
-  const [currentStep, setCurrentStep] = useState(1);
+  const searchParams = useSearchParams();
+  const typeFromUrl = searchParams.get("type");
+  
+  // تحديد الخطوة الأولى والنوع بناءً على الـ URL
+  const initialTripType = typeFromUrl && TRIP_TYPES_MAP[typeFromUrl] ? TRIP_TYPES_MAP[typeFromUrl] : null;
+  const initialStep = initialTripType ? 2 : 1;
+  
+  const [currentStep, setCurrentStep] = useState(initialStep);
   const [tripData, setTripData] = useState({
-    tripType: null,
+    tripType: initialTripType,
     locationType: null,
     destination: null,
     hotel: null,

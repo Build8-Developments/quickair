@@ -5,6 +5,8 @@ import FeaturesFour from "@/components/homes/features/FeaturesFour";
 import FeaturesThree from "@/components/homes/features/FeaturesThree";
 import Hero3 from "@/components/homes/heros/Hero3";
 import HajOmra from "@/components/homes/others/Haj-Omra";
+import Honeymoon from "@/components/homes/others/Honeymoon";
+import TripTypeSelector from "@/components/homes/others/TripTypeSelector";
 import TestimonialsThree from "@/components/homes/testimonials/TestimonialsThree";
 import TourSlider5 from "@/components/homes/tours/TourSlider5";
 import FooterTwo from "@/components/layout/footers/FooterTwo";
@@ -40,9 +42,11 @@ export default async function HomePage({ params }) {
       <main>
         <Header3 locale={locale} />
         <Hero3 locale={locale} />
+        <TripTypeSelector locale={locale} />
         <OfferDestinations locale={locale} />
         <BrandsOne locale={locale} />
         <HajOmra locale={locale} />
+        <Honeymoon locale={locale} />
         <TrendingDestinations locale={locale} />
         <FeaturesFour locale={locale} />
         <TourSlider5 locale={locale} />
