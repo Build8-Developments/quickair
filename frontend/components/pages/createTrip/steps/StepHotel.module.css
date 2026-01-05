@@ -331,6 +331,11 @@
   align-items: center;
   gap: 16px;
   margin-top: 32px;
+  position: sticky;
+  bottom: 0;
+  background: linear-gradient(to top, #ffffff 80%, transparent);
+  padding: 20px 0;
+  z-index: 10;
 }
 
 .backButton {

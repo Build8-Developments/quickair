@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import styles from "./StepHotel.module.css";
 
@@ -18,6 +18,7 @@ export default function StepHotel({
   const [filterStars, setFilterStars] = useState(0);
   const { language, t } = useLanguage();
   const isRTL = language === "ar";
+  const topRef = useRef(null);
 
   // Get hotels for selected destination
   const hotels = destination?.data?.hotels || [];
@@ -32,6 +33,8 @@ export default function StepHotel({
 
   const handleSelect = (hotel) => {
     setSelectedHotel(hotel);
+    // Scroll to top when hotel is selected
+    topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const handleContinue = () => {
@@ -66,6 +69,9 @@ export default function StepHotel({
 
   return (
     <div className="step-content" dir={isRTL ? "rtl" : "ltr"}>
+      {/* Reference for scroll */}
+      <div ref={topRef} />
+      
       {/* Header */}
       <div className={styles.header}>
         <h2 className={styles.title}>

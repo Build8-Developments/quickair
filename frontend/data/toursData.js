@@ -52,7 +52,7 @@ export const DOMESTIC_DESTINATIONS = [
     nameEn: 'Hurghada',
     country: 'مصر',
     countryEn: 'Egypt',
-    image: 'https://images.unsplash.com/photo-1568321599756-b939462c8581?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?w=800&q=80',
     popular: true,
     data: hurghada,
     priceRange: {
@@ -148,7 +148,7 @@ export const INTERNATIONAL_DESTINATIONS = [
     nameEn: 'Beirut',
     country: 'لبنان',
     countryEn: 'Lebanon',
-    image: 'https://images.unsplash.com/photo-1580970986-3b95a0be5a32?w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1579033461380-adb47c3eb938?w=800&q=80',
     popular: true,
     data: beirut,
     priceRange: {
