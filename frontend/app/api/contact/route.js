@@ -13,19 +13,32 @@ export async function POST(request) {
       );
     }
 
-    // Create transporter using Gmail
+    // Create transporter using SMTP
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: process.env.SMTP_HOST,
+      port: parseInt(process.env.SMTP_PORT),
+      secure: true, // true for port 465 (SSL)
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
       },
+      debug: true,
+      logger: true,
     });
+
+    // Verify connection
+    try {
+      await transporter.verify();
+      console.log("SMTP connection verified successfully");
+    } catch (verifyError) {
+      console.error("SMTP verification failed:", verifyError);
+      throw new Error(`SMTP connection failed: ${verifyError.message}`);
+    }
 
     // Email to company
     const mailOptionsToCompany = {
-      from: `"QuickAir" <${process.env.GMAIL_USER}>`,
-      to: process.env.CONTACT_EMAIL || process.env.GMAIL_USER,
+      from: `"QuickAir" <${process.env.SMTP_USER}>`,
+      to: process.env.CONTACT_EMAIL || process.env.SMTP_USER,
       replyTo: email,
       subject: `رسالة جديدة من ${name}`,
       html: buildCompanyEmail(name, email, phone, message),
@@ -33,9 +46,9 @@ export async function POST(request) {
 
     // Auto-reply email to customer
     const mailOptionsToCustomer = {
-      from: `"QuickAir" <${process.env.GMAIL_USER}>`,
+      from: `"QuickAir" <${process.env.SMTP_USER}>`,
       to: email,
-      replyTo: process.env.GMAIL_USER,
+      replyTo: process.env.SMTP_USER,
       subject: "شكراً لتواصلك معنا - QuickAir",
       html: buildCustomerEmail(name, message),
     };
