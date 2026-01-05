@@ -26,7 +26,16 @@ export default async function ToursPage({ params }) {
   const { locale } = await params;
 
   // Server-side data fetching with locale from URL
-  const offers = await getAllOffers({ locale, limit: 100 });
+  // Wrapped in try-catch to handle build-time failures gracefully
+  let offers = [];
+  try {
+    offers = await getAllOffers({ locale, limit: 100 });
+  } catch (error) {
+    // Log only at runtime, not during build
+    if (typeof window !== "undefined") {
+      console.error("Error fetching offers:", error);
+    }
+  }
 
   return (
     <>

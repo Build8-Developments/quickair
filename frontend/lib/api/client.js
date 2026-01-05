@@ -17,7 +17,11 @@ const GRAPHQL_ENDPOINT = `${STRAPI_URL}/graphql`;
 export async function executeGraphQL(query, variables = {}, options = {}) {
   // Use force-cache during build, no-store at runtime for fresh data
   const defaultCache = process.env.NODE_ENV === "production" ? "force-cache" : "no-store";
-  const { cache = defaultCache, next = { revalidate: 60 }, headers = {} } = options;
+  const { cache = defaultCache, next = { revalidate: 60 }, headers = {}, timeout = 25000 } = options;
+
+  // Create abort controller for timeout
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
 
   try {
     const response = await fetch(GRAPHQL_ENDPOINT, {
@@ -32,7 +36,10 @@ export async function executeGraphQL(query, variables = {}, options = {}) {
       }),
       cache,
       next,
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -48,6 +55,8 @@ export async function executeGraphQL(query, variables = {}, options = {}) {
 
     return result.data;
   } catch (error) {
+    clearTimeout(timeoutId);
+    
     // Only log errors at runtime, not during build
     if (process.env.NODE_ENV !== "production" || typeof window !== "undefined") {
       console.error("GraphQL Request Failed:", error);
