@@ -11,7 +11,10 @@ export default function ChatbotWidget() {
   const t = (ar, en) => (isArabic ? ar : en);
 
   const scrollToChatbot = () => {
-    const chatButton = document.querySelector('[aria-label*="AI"]');
+    // Try multiple selectors to find the chatbot button (works for both Arabic and English)
+    const chatButton = document.querySelector('[aria-label*="AI"]') || 
+                       document.querySelector('[aria-label*="مساعد"]') ||
+                       document.querySelector('[aria-label*="ذكي"]');
     if (chatButton) {
       chatButton.click();
     }
