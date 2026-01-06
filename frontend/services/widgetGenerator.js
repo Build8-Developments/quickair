@@ -23,7 +23,7 @@ const ALLOWED_WIDGET_TYPES = [
 
 /**
  * تحليل ذكي لنية اليوزر - Smart Intent Analysis
- * يفهم السياق والنية بدون الاعتماد على كلمات محددة
+ * يفهم السياق والنية - يبدأ الـ flow لأي سؤال عن رحلات أو فنادق
  */
 function analyzeBookingIntent(message = "", conversationContext = {}) {
   const msgLower = message.toLowerCase().trim();
@@ -50,38 +50,62 @@ function analyzeBookingIntent(message = "", conversationContext = {}) {
     return { wantsToBook: true, confidence: 0.8, reason: "in_booking_flow" };
   }
   
-  // 2. تحليل النية من الرسالة - Intent patterns
-  const bookingPatterns = [
-    // نية الحجز المباشرة
-    { pattern: /حج[زو]|احج[زو]|بوك|book|reserv/i, weight: 1.0 },
-    { pattern: /رحل[ةه]|trip|travel|سفر|vacation/i, weight: 0.9 },
-    { pattern: /فندق|hotel|إقام[ةه]|accommodat/i, weight: 0.9 },
-    { pattern: /عرض|عروض|offer|deal|باق[ةه]|package/i, weight: 0.8 },
+  // 2. ✅ أي سؤال عن رحلات أو فنادق يبدأ الـ flow مباشرة
+  const travelRelatedPatterns = [
+    // رحلات وسفر - بأي صيغة
+    /رحل/i, /سفر/i, /trip/i, /travel/i, /vacation/i, /holiday/i,
+    /جول[ةه]/i, /tour/i, /journey/i,
     
-    // نية التخطيط
-    { pattern: /خطط|plan|نظم|organiz/i, weight: 0.8 },
-    { pattern: /عايز|أريد|أبغى|want|need|looking for/i, weight: 0.7 },
+    // فنادق وإقامة - بأي صيغة  
+    /فندق/i, /فنادق/i, /hotel/i, /hotels/i,
+    /إقام/i, /اقام/i, /accommodat/i, /stay/i, /room/i,
+    /منتجع/i, /resort/i,
     
-    // أسئلة عن الأسعار والتكلفة
-    { pattern: /سعر|تكلف[ةه]|كام|price|cost|how much/i, weight: 0.7 },
-    { pattern: /ميزاني[ةه]|budget/i, weight: 0.8 },
+    // حجز - بأي صيغة
+    /حج[زو]/i, /احج[زو]/i, /book/i, /reserv/i,
     
-    // وجهات محددة
-    { pattern: /بالي|شرم|الغردق|دهب|إسطنبول|بيروت|السخن[ةه]/i, weight: 0.85 },
-    { pattern: /bali|sharm|hurghada|dahab|istanbul|beirut/i, weight: 0.85 },
+    // عروض وباقات
+    /عرض/i, /عروض/i, /offer/i, /deal/i, /باق[ةه]/i, /package/i,
+    /برنامج/i, /program/i,
     
-    // ردود إيجابية عامة
-    { pattern: /^(اه|أه|آه|ايوه|نعم|اوك|تمام|ماشي|يلا|طيب|حاضر|موافق|اكيد)$/i, weight: 0.95 },
-    { pattern: /^(yes|yeah|yep|ok|okay|sure|alright|go|let'?s)$/i, weight: 0.95 },
+    // أسعار وتكلفة
+    /سعر/i, /اسعار/i, /price/i, /cost/i, /كام/i, /how much/i,
+    /تكلف/i, /ميزاني/i, /budget/i, /cheap/i, /رخيص/i,
+    
+    // وجهات ومدن
+    /وجه[ةه]/i, /destination/i, /مكان/i, /place/i,
+    /بالي/i, /bali/i, /شرم/i, /sharm/i, /الغردق/i, /hurghada/i,
+    /دهب/i, /dahab/i, /إسطنبول/i, /اسطنبول/i, /istanbul/i,
+    /بيروت/i, /beirut/i, /لبنان/i, /lebanon/i,
+    /تركيا/i, /turkey/i, /السخن/i, /sokhna/i,
+    /دبي/i, /dubai/i, /المالديف/i, /maldives/i,
+    /مصر/i, /egypt/i, /البحر/i, /sea/i, /beach/i, /شاطئ/i,
+    
+    // نية السفر العامة
+    /عايز اروح/i, /عايز أروح/i, /أريد أذهب/i, /want to go/i,
+    /نفسي اسافر/i, /أبي أسافر/i, /ابغى اسافر/i,
+    /فين اروح/i, /وين أروح/i, /where.*go/i,
+    /اقترح/i, /suggest/i, /recommend/i, /توصي/i,
+    
+    // أسئلة عامة عن السياحة
+    /سياح/i, /tourism/i, /tourist/i,
+    /اجاز[ةه]/i, /إجاز/i, /شهر عسل/i, /honeymoon/i,
+    /عائل/i, /family/i, /أصحاب/i, /friends/i,
+    
+    // ردود إيجابية
+    /^(اه|أه|آه|ايوه|نعم|اوك|تمام|ماشي|يلا|طيب|حاضر|موافق|اكيد)$/i,
+    /^(yes|yeah|yep|ok|okay|sure|alright|go|let'?s)$/i,
   ];
   
-  let totalWeight = 0;
-  let matchedPatterns = [];
-  
-  for (const { pattern, weight } of bookingPatterns) {
+  // ✅ لو أي pattern اتطابق، ابدأ الـ flow
+  for (const pattern of travelRelatedPatterns) {
     if (pattern.test(msgLower)) {
-      totalWeight += weight;
-      matchedPatterns.push(pattern.source);
+      return {
+        wantsToBook: true,
+        confidence: 1.0,
+        reason: "travel_related_query",
+        matchedPattern: pattern.source
+      };
     }
   }
   
@@ -95,18 +119,17 @@ function analyzeBookingIntent(message = "", conversationContext = {}) {
   );
   
   if (botAskedAboutBooking && msgLower.length < 30) {
-    totalWeight += 0.3;
+    return {
+      wantsToBook: true,
+      confidence: 0.8,
+      reason: "responding_to_bot"
+    };
   }
   
-  // 4. حساب الثقة النهائية
-  const confidence = Math.min(totalWeight, 1.0);
-  const wantsToBook = confidence >= 0.5;
-  
   return {
-    wantsToBook,
-    confidence,
-    reason: wantsToBook ? "intent_detected" : "no_booking_intent",
-    matchedPatterns
+    wantsToBook: false,
+    confidence: 0,
+    reason: "no_travel_intent"
   };
 }
 

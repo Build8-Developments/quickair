@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import styles from "./AIChatbot.module.css";
 
@@ -14,10 +14,40 @@ import MealPlanWidget from "./widgets/MealPlanWidget";
 import RoomTypeWidget from "./widgets/RoomTypeWidget";
 import BookingSummaryWidget from "./widgets/BookingSummaryWidget";
 
+// LocalStorage keys
+const STORAGE_KEYS = {
+  SESSION_ID: "quickair_chat_session_id",
+  USER_INFO: "quickair_chat_user_info",
+  TRIP_DATA: "quickair_chat_trip_data",
+  MESSAGES: "quickair_chat_messages",
+  CURRENT_STEP: "quickair_chat_current_step",
+  POPUP_DISMISSED: "quickair_chat_popup_dismissed",
+};
+
+// Popup messages - رسائل جذب الانتباه
+const POPUP_MESSAGES = {
+  ar: [
+    "👋 أهلاً! محتاج مساعدة في تخطيط رحلتك؟",
+    "🌴 عروض حصرية على شرم الشيخ ودبي!",
+    "✈️ خطط رحلة أحلامك معانا",
+    "🎁 خصومات تصل لـ 30% على الرحلات",
+    "💬 عندك سؤال؟ أنا هنا للمساعدة!",
+    "🏨 أفضل الفنادق بأقل الأسعار",
+  ],
+  en: [
+    "👋 Hi! Need help planning your trip?",
+    "🌴 Exclusive deals on Sharm & Dubai!",
+    "✈️ Plan your dream trip with us",
+    "🎁 Up to 30% off on tours",
+    "💬 Got questions? I'm here to help!",
+    "🏨 Best hotels at lowest prices",
+  ],
+};
+
 export default function AIChatbot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentStep, setCurrentStep] = useState("welcome"); // welcome, userInfo, language, chat, summary
-  const [sessionId, setSessionId] = useState(null); // Track session ID
+  const [currentStep, setCurrentStep] = useState("welcome");
+  const [sessionId, setSessionId] = useState(null);
   const [userInfo, setUserInfo] = useState({
     name: "",
     email: "",
@@ -34,6 +64,15 @@ export default function AIChatbot() {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+  
+  // Popup state
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupDismissed, setPopupDismissed] = useState(false);
+  const popupTimerRef = useRef(null);
+  const messageIndexRef = useRef(0);
+  
   const messagesEndRef = useRef(null);
   const { language } = useLanguage();
   const isArabic = language === "ar";
@@ -42,6 +81,121 @@ export default function AIChatbot() {
   const chatLanguage = userInfo.preferredLanguage || language;
   const isChatArabic = chatLanguage === "ar";
   const t = (ar, en) => (isChatArabic ? ar : en);
+
+  // ✅ Show popup message
+  const showNextPopup = useCallback(() => {
+    if (isOpen || popupDismissed) return;
+    
+    const msgs = isArabic ? POPUP_MESSAGES.ar : POPUP_MESSAGES.en;
+    const msg = msgs[messageIndexRef.current % msgs.length];
+    setPopupMessage(msg);
+    setShowPopup(true);
+    messageIndexRef.current++;
+    
+    // Auto hide after 5 seconds
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 5000);
+  }, [isOpen, popupDismissed, isArabic]);
+
+  // ✅ Popup timer - show first popup after 5 seconds, then every 30 seconds
+  useEffect(() => {
+    // Check if popup was dismissed in this session
+    if (typeof window !== "undefined") {
+      const dismissed = sessionStorage.getItem(STORAGE_KEYS.POPUP_DISMISSED);
+      if (dismissed) {
+        setPopupDismissed(true);
+        return;
+      }
+    }
+    
+    // First popup after 5 seconds
+    const initialTimer = setTimeout(() => {
+      showNextPopup();
+    }, 5000);
+    
+    // Recurring popups every 30 seconds
+    popupTimerRef.current = setInterval(() => {
+      showNextPopup();
+    }, 30000);
+    
+    return () => {
+      clearTimeout(initialTimer);
+      if (popupTimerRef.current) {
+        clearInterval(popupTimerRef.current);
+      }
+    };
+  }, [showNextPopup]);
+
+  // ✅ Hide popup when chat opens
+  useEffect(() => {
+    if (isOpen) {
+      setShowPopup(false);
+    }
+  }, [isOpen]);
+
+  // ✅ Dismiss popup permanently for this session
+  const dismissPopup = () => {
+    setShowPopup(false);
+    setPopupDismissed(true);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(STORAGE_KEYS.POPUP_DISMISSED, "true");
+    }
+    if (popupTimerRef.current) {
+      clearInterval(popupTimerRef.current);
+    }
+  };
+
+  // ✅ Load saved data from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const savedSessionId = localStorage.getItem(STORAGE_KEYS.SESSION_ID);
+        const savedUserInfo = localStorage.getItem(STORAGE_KEYS.USER_INFO);
+        const savedTripData = localStorage.getItem(STORAGE_KEYS.TRIP_DATA);
+        const savedMessages = localStorage.getItem(STORAGE_KEYS.MESSAGES);
+        const savedStep = localStorage.getItem(STORAGE_KEYS.CURRENT_STEP);
+
+        if (savedSessionId) setSessionId(savedSessionId);
+        if (savedUserInfo) setUserInfo(JSON.parse(savedUserInfo));
+        if (savedTripData) setTripData(JSON.parse(savedTripData));
+        if (savedMessages) setMessages(JSON.parse(savedMessages));
+        if (savedStep && savedStep !== "welcome") setCurrentStep(savedStep);
+        
+        console.log("✅ Chat data restored from localStorage");
+      } catch (error) {
+        console.error("Error loading chat data:", error);
+      }
+      setIsInitialized(true);
+    }
+  }, []);
+
+  // ✅ Save data to localStorage whenever it changes
+  useEffect(() => {
+    if (isInitialized && typeof window !== "undefined") {
+      try {
+        if (sessionId) localStorage.setItem(STORAGE_KEYS.SESSION_ID, sessionId);
+        if (userInfo.name) localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(userInfo));
+        if (Object.keys(tripData).some(k => tripData[k])) {
+          localStorage.setItem(STORAGE_KEYS.TRIP_DATA, JSON.stringify(tripData));
+        }
+        if (messages.length > 0) localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messages));
+        if (currentStep !== "welcome") localStorage.setItem(STORAGE_KEYS.CURRENT_STEP, currentStep);
+      } catch (error) {
+        console.error("Error saving chat data:", error);
+      }
+    }
+  }, [sessionId, userInfo, tripData, messages, currentStep, isInitialized]);
+
+  // ✅ Clear all saved data (for restart)
+  const clearSavedData = () => {
+    if (typeof window !== "undefined") {
+      Object.values(STORAGE_KEYS).forEach(key => {
+        localStorage.removeItem(key);
+      });
+      console.log("✅ Chat data cleared from localStorage");
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -72,11 +226,27 @@ export default function AIChatbot() {
     // Don't reload page, just change internal language
     setCurrentStep("chat");
     
-    // ✅ Initialize chat with welcome message - NO widget initially
-    // Let user chat naturally, widgets will appear when they want to book
-    const welcomeMessage = lang === "ar"
-      ? `أهلاً ${userInfo.name}! 👋\n\nأنا كويك، مساعدك الذكي من Quick Air.\n\nكيف أقدر أساعدك اليوم؟`
-      : `Hi ${userInfo.name}! 👋\n\nI'm Quick, your smart assistant from Quick Air.\n\nHow can I help you today?`;
+    // ✅ Welcome messages in all supported languages
+    const welcomeMessages = {
+      ar: `أهلاً ${userInfo.name}! 👋\n\nأنا كويك، مساعدك الذكي من Quick Air.\n\nكيف أقدر أساعدك اليوم؟`,
+      en: `Hi ${userInfo.name}! �\n\nI'm Quوick, your smart assistant from Quick Air.\n\nHow can I help you today?`,
+      fr: `Bonjour ${userInfo.name}! 👋\n\nJe suis Quick, votre assistant intelligent de Quick Air.\n\nComment puis-je vous aider aujourd'hui?`,
+      de: `Hallo ${userInfo.name}! 👋\n\nIch bin Quick, Ihr intelligenter Assistent von Quick Air.\n\nWie kann ich Ihnen heute helfen?`,
+      es: `¡Hola ${userInfo.name}! 👋\n\nSoy Quick, tu asistente inteligente de Quick Air.\n\n¿Cómo puedo ayudarte hoy?`,
+      it: `Ciao ${userInfo.name}! 👋\n\nSono Quick, il tuo assistente intelligente di Quick Air.\n\nCome posso aiutarti oggi?`,
+      ru: `Привет ${userInfo.name}! 👋\n\nЯ Quick, ваш умный помощник от Quick Air.\n\nКак я могу помочь вам сегодня?`,
+      zh: `你好 ${userInfo.name}！👋\n\n我是Quick，来自Quick Air的智能助手。\n\n今天我能帮您什么？`,
+      ja: `こんにちは ${userInfo.name}さん！👋\n\n私はQuick、Quick Airのスマートアシスタントです。\n\n今日はどのようにお手伝いできますか？`,
+      ko: `안녕하세요 ${userInfo.name}님! 👋\n\n저는 Quick Air의 스마트 어시스턴트 Quick입니다.\n\n오늘 어떻게 도와드릴까요?`,
+      pt: `Olá ${userInfo.name}! 👋\n\nSou o Quick, seu assistente inteligente da Quick Air.\n\nComo posso ajudá-lo hoje?`,
+      tr: `Merhaba ${userInfo.name}! 👋\n\nBen Quick, Quick Air'den akıllı asistanınız.\n\nBugün size nasıl yardımcı olabilirim?`,
+      hi: `नमस्ते ${userInfo.name}! 👋\n\nमैं Quick हूं, Quick Air से आपका स्मार्ट असिस्टेंट।\n\nआज मैं आपकी कैसे मदद कर सकता हूं?`,
+      nl: `Hallo ${userInfo.name}! 👋\n\nIk ben Quick, uw slimme assistent van Quick Air.\n\nHoe kan ik u vandaag helpen?`,
+      pl: `Cześć ${userInfo.name}! 👋\n\nJestem Quick, Twój inteligentny asystent z Quick Air.\n\nJak mogę Ci dzisiaj pomóc?`,
+      th: `สวัสดี ${userInfo.name}! 👋\n\nฉันคือ Quick ผู้ช่วยอัจฉริยะจาก Quick Air\n\nวันนี้ฉันช่วยอะไรคุณได้บ้าง?`,
+    };
+    
+    const welcomeMessage = welcomeMessages[lang] || welcomeMessages.en;
     
     console.log("Setting messages with:", welcomeMessage);
     
@@ -212,12 +382,46 @@ export default function AIChatbot() {
   };
 
   const handleReset = () => {
+    clearSavedData(); // ✅ Clear localStorage
     setCurrentStep("welcome");
     setSessionId(null);
     setUserInfo({ name: "", email: "", phone: "", preferredLanguage: null });
     setTripData({ destination: null, budget: null, duration: null, travelers: null, preferences: [] });
     setMessages([]);
     setIsOpen(false);
+  };
+
+  // ✅ Restart chat but keep user info
+  const handleRestart = () => {
+    // Clear trip data and messages but keep user info
+    setTripData({ destination: null, budget: null, duration: null, travelers: null, preferences: [] });
+    setMessages([]);
+    
+    // Generate new session
+    const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    setSessionId(newSessionId);
+    
+    // Update localStorage
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(STORAGE_KEYS.TRIP_DATA);
+      localStorage.removeItem(STORAGE_KEYS.MESSAGES);
+      localStorage.setItem(STORAGE_KEYS.SESSION_ID, newSessionId);
+    }
+    
+    // Show welcome message again
+    const lang = userInfo.preferredLanguage || "ar";
+    const welcomeMessages = {
+      ar: `أهلاً ${userInfo.name}! 👋\n\nتم إعادة تشغيل المحادثة.\n\nكيف أقدر أساعدك؟`,
+      en: `Hi ${userInfo.name}! 👋\n\nChat restarted.\n\nHow can I help you?`,
+      fr: `Bonjour ${userInfo.name}! 👋\n\nConversation redémarrée.\n\nComment puis-je vous aider?`,
+      de: `Hallo ${userInfo.name}! 👋\n\nChat neu gestartet.\n\nWie kann ich helfen?`,
+      es: `¡Hola ${userInfo.name}! 👋\n\nChat reiniciado.\n\n¿Cómo puedo ayudarte?`,
+    };
+    
+    setMessages([{
+      role: "assistant",
+      content: welcomeMessages[lang] || welcomeMessages.en,
+    }]);
   };
 
   // Render widget based on type - only allowed widgets
@@ -551,6 +755,25 @@ export default function AIChatbot() {
         );
 
       case "language":
+        const popularLanguages = [
+          { code: "ar", flag: "🇸🇦", name: "العربية", subtext: "Arabic" },
+          { code: "en", flag: "🇬🇧", name: "English", subtext: "الإنجليزية" },
+          { code: "fr", flag: "🇫🇷", name: "Français", subtext: "French" },
+          { code: "de", flag: "🇩🇪", name: "Deutsch", subtext: "German" },
+          { code: "es", flag: "🇪🇸", name: "Español", subtext: "Spanish" },
+          { code: "it", flag: "🇮🇹", name: "Italiano", subtext: "Italian" },
+          { code: "ru", flag: "🇷🇺", name: "Русский", subtext: "Russian" },
+          { code: "zh", flag: "🇨🇳", name: "中文", subtext: "Chinese" },
+          { code: "ja", flag: "🇯🇵", name: "日本語", subtext: "Japanese" },
+          { code: "ko", flag: "🇰🇷", name: "한국어", subtext: "Korean" },
+          { code: "pt", flag: "🇧🇷", name: "Português", subtext: "Portuguese" },
+          { code: "tr", flag: "🇹🇷", name: "Türkçe", subtext: "Turkish" },
+          { code: "hi", flag: "🇮🇳", name: "हिन्दी", subtext: "Hindi" },
+          { code: "nl", flag: "🇳🇱", name: "Nederlands", subtext: "Dutch" },
+          { code: "pl", flag: "🇵🇱", name: "Polski", subtext: "Polish" },
+          { code: "th", flag: "🇹🇭", name: "ไทย", subtext: "Thai" },
+        ];
+        
         return (
           <div className={styles.languageStep}>
             <div className={styles.stepIcon}>
@@ -565,29 +788,23 @@ export default function AIChatbot() {
             </h2>
             <p className={styles.stepText}>
               {t(
-                "سيتم التواصل معك بهذه اللغة طوال المحادثة",
-                "We'll communicate with you in this language throughout"
+                "نتحدث جميع لغات العالم! اختر لغتك",
+                "We speak all languages! Choose yours"
               )}
             </p>
-            <div className={styles.languageButtons}>
-              <button
-                type="button"
-                className={styles.languageButton}
-                onClick={() => handleLanguageSelect("ar")}
-              >
-                <span className={styles.languageFlag}>🇸🇦</span>
-                <span className={styles.languageName}>العربية</span>
-                <span className={styles.languageSubtext}>Arabic</span>
-              </button>
-              <button
-                type="button"
-                className={styles.languageButton}
-                onClick={() => handleLanguageSelect("en")}
-              >
-                <span className={styles.languageFlag}>🇬🇧</span>
-                <span className={styles.languageName}>English</span>
-                <span className={styles.languageSubtext}>الإنجليزية</span>
-              </button>
+            <div className={styles.languageGrid}>
+              {popularLanguages.map((lang) => (
+                <button
+                  key={lang.code}
+                  type="button"
+                  className={styles.languageButton}
+                  onClick={() => handleLanguageSelect(lang.code)}
+                >
+                  <span className={styles.languageFlag}>{lang.flag}</span>
+                  <span className={styles.languageName}>{lang.name}</span>
+                  <span className={styles.languageSubtext}>{lang.subtext}</span>
+                </button>
+              ))}
             </div>
           </div>
         );
@@ -775,9 +992,35 @@ export default function AIChatbot() {
 
   return (
     <>
+      {/* Popup Message Bubble */}
+      {showPopup && !isOpen && (
+        <div className={styles.popupBubble} dir={isArabic ? "rtl" : "ltr"}>
+          <button 
+            className={styles.popupClose} 
+            onClick={(e) => {
+              e.stopPropagation();
+              dismissPopup();
+            }}
+            aria-label="Close"
+          >
+            ×
+          </button>
+          <div 
+            className={styles.popupContent}
+            onClick={() => {
+              setShowPopup(false);
+              setIsOpen(true);
+            }}
+          >
+            <p>{popupMessage}</p>
+          </div>
+          <div className={styles.popupArrow}></div>
+        </div>
+      )}
+
       {/* Floating Chat Button - hidden on mobile when chat is open */}
       <button
-        className={`${styles.chatButton} ${isOpen ? styles.chatButtonOpen : ""} ${isOpen ? styles.chatButtonHiddenMobile : ""}`}
+        className={`${styles.chatButton} ${isOpen ? styles.chatButtonOpen : ""} ${isOpen ? styles.chatButtonHiddenMobile : ""} ${showPopup ? styles.chatButtonPulse : ""}`}
         onClick={() => setIsOpen(!isOpen)}
         aria-label={t("مساعد ذكي", "AI Assistant")}
         suppressHydrationWarning
@@ -823,16 +1066,32 @@ export default function AIChatbot() {
                 </p>
               </div>
             </div>
-            <button
-              className={styles.closeButton}
-              onClick={() => setIsOpen(false)}
-              aria-label={t("إغلاق", "Close")}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
+            <div className={styles.headerButtons}>
+              {/* Restart Button - only show in chat step */}
+              {currentStep === "chat" && (
+                <button
+                  className={styles.restartButton}
+                  onClick={handleRestart}
+                  aria-label={t("إعادة تشغيل", "Restart")}
+                  title={t("إعادة تشغيل المحادثة", "Restart conversation")}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                    <path d="M3 3v5h5"></path>
+                  </svg>
+                </button>
+              )}
+              <button
+                className={styles.closeButton}
+                onClick={() => setIsOpen(false)}
+                aria-label={t("إغلاق", "Close")}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
           </div>
 
           {/* Content */}

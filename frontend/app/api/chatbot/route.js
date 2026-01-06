@@ -94,76 +94,54 @@ function generateQuickOptions(userAnalysis, language, reply) {
 function buildSystemPrompt(language = "ar") {
   const isArabic = language === "ar";
   
-  // Get comprehensive knowledge base
-  const knowledge = getChatbotKnowledgeBase(language);
+  // Get comprehensive knowledge base (always in Arabic/English for data)
+  const knowledge = getChatbotKnowledgeBase(isArabic ? "ar" : "en");
   const company = knowledge.company;
   const services = knowledge.services;
   const policies = knowledge.policies;
   const offers = knowledge.offers;
   
-  if (isArabic) {
-    return `أنت "كويك" - مساعد سفر ذكي لـ ${company.name}، وكالة سفر مصرية تأسست عام ${company.established}.
+  // Language names for the prompt
+  const languageNames = {
+    ar: "Arabic (العربية)",
+    en: "English",
+    fr: "French (Français)",
+    de: "German (Deutsch)",
+    es: "Spanish (Español)",
+    it: "Italian (Italiano)",
+    ru: "Russian (Русский)",
+    zh: "Chinese (中文)",
+    ja: "Japanese (日本語)",
+    ko: "Korean (한국어)",
+    pt: "Portuguese (Português)",
+    tr: "Turkish (Türkçe)",
+    hi: "Hindi (हिन्दी)",
+    nl: "Dutch (Nederlands)",
+    pl: "Polish (Polski)",
+    th: "Thai (ไทย)",
+  };
+  
+  const selectedLanguage = languageNames[language] || language;
+  
+  // Universal multilingual prompt
+  return `You are "Quick" - a smart multilingual travel assistant for Quick Air Travel (كويك إير للسياحة), an Egyptian travel agency established in 1986.
 
-🏢 عن الشركة:
-${company.description}
-- ساعات العمل: ${company.workingHours}
-- للتواصل: ${company.contact.phone.join(' أو ')}
-- واتساب: ${company.contact.whatsapp}
-- البريد: ${company.contact.email}
+🌍 CRITICAL LANGUAGE INSTRUCTION:
+You MUST respond ONLY in ${selectedLanguage}. The user has selected this language.
+- ALL your responses must be in ${selectedLanguage}
+- Translate all information to ${selectedLanguage}
+- Use natural, fluent ${selectedLanguage}
+- Keep cultural context appropriate for ${selectedLanguage} speakers
 
-📋 خدماتنا الكاملة:
-${services.map(s => `• ${s.name}: ${s.description}`).join('\n')}
+🏢 Company Information:
+- Name: Quick Air Travel / كويك إير للسياحة
+- Established: 1986
+- Working Hours: Saturday-Thursday 9AM-9PM, Friday 2PM-9PM
+- Contact: 19102 (Phone & WhatsApp)
+- Email: 19102@quickair.travel
+- Location: Cairo, Egypt
 
-🎁 العروض الحالية:
-${offers.map(o => `• ${o.title} - ${o.discount}`).join('\n')}
-
-💳 طرق الدفع:
-${policies.paymentMethods.join('، ')}
-
-📜 سياسة الإلغاء:
-${policies.cancellation.slice(0, 2).join(' | ')}
-
-🌍 الوجهات المتاحة:
-- داخل مصر: شرم الشيخ، الغردقة، دهب، العين السخنة، سهل حشيش
-- خارج مصر: بالي، إسطنبول، بيروت، دبي
-
-🌐 صفحات الموقع:
-- الرئيسية: / | الرحلات: /tours-list | الفنادق: /hotels
-- العروض: /offers | تخطيط رحلة: /create-trip
-- اتصل بنا: /contact | الأسئلة الشائعة: /faq | من نحن: /about
-- الحج والعمرة: /haj و /omra
-
-🎯 شخصيتك:
-- ودود ومحترف ومتعاون
-- تفهم السياق والنية من الرسالة
-- ترد بشكل طبيعي مثل إنسان حقيقي
-- تتذكر المحادثة السابقة
-- تعرف كل شيء عن الشركة وخدماتها
-
-💬 أسلوب الرد:
-- افهم ما يريده العميل أولاً
-- رد بشكل طبيعي ومختصر (جملة أو جملتين)
-- اسأل سؤال واحد فقط إذا احتجت معلومات
-- استخدم إيموجي واحد مناسب
-- لا تكرر المعلومات
-- إذا سأل عن الشركة أو الخدمات، أجب من المعلومات أعلاه
-
-🚫 تجنب:
-- الردود الطويلة جداً
-- القوائم المتعددة
-- تكرار نفس السؤال
-- الإجابة على أسئلة خارج نطاق السفر والسياحة`;
-  } else {
-    return `You are "Quick" - a smart travel assistant for ${company.name}, an Egyptian travel agency established in ${company.established}.
-
-🏢 About Us:
-${company.description}
-- Working Hours: ${company.workingHours}
-- Contact: ${company.contact.phone.join(' or ')}
-- WhatsApp: ${company.contact.whatsapp}
-- Email: ${company.contact.email}
-
-📋 Our Complete Services:
+📋 Our Services:
 ${services.map(s => `• ${s.name}: ${s.description}`).join('\n')}
 
 🎁 Current Offers:
@@ -176,7 +154,7 @@ ${policies.paymentMethods.join(', ')}
 ${policies.cancellation.slice(0, 2).join(' | ')}
 
 🌍 Available Destinations:
-- In Egypt: Sharm El Sheikh, Hurghada, Dahab, Ain Sokhna, Sahl Hasheesh
+- Egypt: Sharm El Sheikh, Hurghada, Dahab, Ain Sokhna, Sahl Hasheesh
 - International: Bali, Istanbul, Beirut, Dubai
 
 🌐 Website Pages:
@@ -193,19 +171,19 @@ ${policies.cancellation.slice(0, 2).join(' | ')}
 - Know everything about the company and its services
 
 💬 Response Style:
+- ALWAYS respond in ${selectedLanguage}
 - First understand what the customer wants
 - Reply naturally and briefly (one or two sentences)
 - Ask only one question if you need info
 - Use one appropriate emoji
 - Don't repeat information
-- If asked about company or services, answer from the info above
 
 🚫 Avoid:
+- Responding in any language other than ${selectedLanguage}
 - Very long responses
 - Multiple lists
 - Repeating the same question
 - Answering questions outside travel scope`;
-  }
 }
 
 export async function POST(request) {
@@ -281,22 +259,16 @@ export async function POST(request) {
     const matchedPage = findMatchingPage(messageText, language);
     
     // تحقق من وجود كلمات التنقل في الرسالة
-    const hasNavigationIntent = /وديني|ودني|خدني|روح|افتح|ورني|اذهب|توجه|صفحة|صفحه|take me|go to|open|show me|navigate|page/i.test(messageText);
+    const hasNavigationIntent = /وديني|ودني|خدني|روح|افتح|ورني|اذهب|توجه|صفحة|صفحه|اشوف|شوفني|عرض|لا صفح|لا الصفح|طب |هات|ابي|أبي|أبغى|ابغى|عايز|اريد|أريد|take me|go to|open|show me|navigate|page|view|see|want|need/i.test(messageText);
     
     console.log("🔍 Navigation check:", { messageText, matchedPage, hasNavigationIntent, intent: userAnalysis.intent });
     
-    if (matchedPage && hasNavigationIntent) {
-      navigationAction = {
-        action: "navigate",
-        url: matchedPage.url,
-        pageName: matchedPage.name,
-        shouldNavigate: true
-      };
-      
-      // رد مختصر مع التوجيه - بدون widget
+    // ✅ إذا طلب صفحة معينة - أعطيه زرار بدل ما يفتح أوتوماتيك
+    if (matchedPage) {
+      // رد مع زرار للصفحة
       const navReply = isArabic 
-        ? `حاضر، جاري فتح صفحة ${matchedPage.name} 🚀`
-        : `Sure, opening ${matchedPage.name} page 🚀`;
+        ? `تفضل 👇`
+        : `Here you go 👇`;
       
       // Add to session
       sessionManager.addMessage(session.sessionId, { role: "assistant", content: navReply });
@@ -304,15 +276,15 @@ export async function POST(request) {
       return Response.json({
         reply: navReply,
         success: true,
-        navigation: navigationAction,
+        navigation: null,
         suggestedPages: [{
           url: matchedPage.url,
-          text: matchedPage.name,
+          text: isArabic ? `اذهب لـ ${matchedPage.name}` : `Go to ${matchedPage.name}`,
           description: matchedPage.description,
           icon: "🔗",
           isPrimary: true
         }],
-        widget: null, // ❌ لا widget - فقط navigation
+        widget: null,
         quickOptions: null,
         sessionId: session.sessionId,
         metadata: {

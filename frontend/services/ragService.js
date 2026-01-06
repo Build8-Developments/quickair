@@ -208,7 +208,7 @@ const SITE_PAGES = {
     name_en: "Home",
     desc_ar: "الصفحة الرئيسية - عروض، وجهات، وكل خدماتنا",
     desc_en: "Home page - offers, destinations, and all our services",
-    keywords_ar: ["رئيسية", "البداية", "الصفحة الأولى", "home", "الرئيسيه", "الصفحه الرئيسيه", "البيت"],
+    keywords_ar: ["رئيسية", "البداية", "الصفحة الأولى", "home", "الرئيسيه", "الصفحه الرئيسيه", "البيت", "هوم"],
     keywords_en: ["home", "main", "homepage", "start", "front page"]
   },
   tours: {
@@ -217,7 +217,7 @@ const SITE_PAGES = {
     name_en: "Tours",
     desc_ar: "جميع الرحلات والوجهات السياحية المتاحة",
     desc_en: "All available tours and destinations",
-    keywords_ar: ["رحلات", "جولات", "وجهات", "سياحة", "tours", "الرحلات", "رحله", "رحلة", "سفر", "سفريات"],
+    keywords_ar: ["جولات", "وجهات", "سياحة", "tours", "الرحلات", "سفريات", "تورز", "برامج سياحية"],
     keywords_en: ["tours", "trips", "destinations", "travel", "journeys", "vacations"]
   },
   hotels: {
@@ -226,7 +226,7 @@ const SITE_PAGES = {
     name_en: "Hotels",
     desc_ar: "حجز الفنادق في جميع الوجهات",
     desc_en: "Book hotels in all destinations",
-    keywords_ar: ["فنادق", "فندق", "إقامة", "حجز فندق", "hotels", "الفنادق", "اقامه", "اقامة", "سكن"],
+    keywords_ar: ["فنادق", "فندق", "إقامة", "حجز فندق", "hotels", "الفنادق", "اقامه", "اقامة", "سكن", "هوتيل", "هوتيلز"],
     keywords_en: ["hotels", "hotel", "accommodation", "booking", "stay", "lodging"]
   },
   offers: {
@@ -235,7 +235,7 @@ const SITE_PAGES = {
     name_en: "Offers",
     desc_ar: "أحدث العروض والخصومات الخاصة",
     desc_en: "Latest offers and special discounts",
-    keywords_ar: ["عروض", "خصومات", "تخفيضات", "offers", "العروض", "عرض", "خصم", "تخفيض", "اوفر"],
+    keywords_ar: ["عروض", "خصومات", "تخفيضات", "offers", "العروض", "عرض", "خصم", "تخفيض", "اوفر", "اوفرز"],
     keywords_en: ["offers", "deals", "discounts", "promotions", "sales", "specials"]
   },
   createTrip: {
@@ -244,8 +244,8 @@ const SITE_PAGES = {
     name_en: "Plan Your Trip",
     desc_ar: "صمم رحلتك الخاصة حسب احتياجاتك",
     desc_en: "Design your custom trip",
-    keywords_ar: ["تخطيط", "رحلة مخصصة", "خطط", "plan", "صمم رحلتك", "خطط رحلتك", "رحلة خاصة", "تصميم رحلة"],
-    keywords_en: ["plan", "create", "custom trip", "design", "build trip", "customize"]
+    keywords_ar: ["تخطيط", "رحلة مخصصة", "خطط", "plan", "صمم رحلتك", "خطط رحلتك", "رحلة خاصة", "تصميم رحلة", "اخصص", "خصص", "رحله", "رحلة", "اخصص رحله", "خصص رحلة", "صمم", "انشئ رحلة", "رحلتي"],
+    keywords_en: ["plan", "create", "custom trip", "design", "build trip", "customize", "my trip", "plan trip"]
   },
   contact: {
     url: "/contact",
@@ -253,7 +253,7 @@ const SITE_PAGES = {
     name_en: "Contact Us",
     desc_ar: "تواصل معنا - خدمة عملاء 24/7",
     desc_en: "Contact us - 24/7 customer service",
-    keywords_ar: ["اتصال", "تواصل", "خدمة عملاء", "مساعدة", "contact", "اتصل بنا", "تواصل معنا", "كلمنا", "راسلنا"],
+    keywords_ar: ["اتصال", "تواصل", "خدمة عملاء", "مساعدة", "contact", "اتصل بنا", "تواصل معنا", "كلمنا", "راسلنا", "كونتاكت", "الكونتاكت"],
     keywords_en: ["contact", "support", "help", "customer service", "reach us", "call us"]
   },
   about: {
@@ -262,7 +262,7 @@ const SITE_PAGES = {
     name_en: "About Us",
     desc_ar: "تعرف على شركة Quick Air وخدماتنا",
     desc_en: "Learn about Quick Air and our services",
-    keywords_ar: ["من نحن", "عن الشركة", "about", "عننا", "معلومات عنا", "تعرف علينا"],
+    keywords_ar: ["من نحن", "عن الشركة", "about", "عننا", "معلومات عنا", "تعرف علينا", "اباوت"],
     keywords_en: ["about", "company", "who we are", "about us", "our story"]
   },
   faq: {
@@ -273,6 +273,15 @@ const SITE_PAGES = {
     desc_en: "Questions and answers about our services",
     keywords_ar: ["أسئلة", "استفسارات", "faq", "مساعدة", "الأسئلة الشائعة", "اسئله", "استفسار"],
     keywords_en: ["faq", "questions", "help", "answers", "frequently asked"]
+  },
+  blog: {
+    url: "/blog",
+    name_ar: "المدونة",
+    name_en: "Blog",
+    desc_ar: "مقالات ونصائح السفر",
+    desc_en: "Travel articles and tips",
+    keywords_ar: ["مدونة", "المدونة", "مقالات", "blog", "بلوج", "البلوج", "بلوق", "مقالات السفر"],
+    keywords_en: ["blog", "articles", "posts", "news", "travel tips"]
   },
   terms: {
     url: "/terms",
@@ -1259,7 +1268,21 @@ export function findMatchingPage(message, language = "ar") {
   
   console.log("🔎 findMatchingPage called with:", { message, msg, language });
   
-  // أولاً: البحث المباشر في الكلمات المفتاحية
+  // ✅ أولاً: فحص كلمات التخصيص - أولوية عالية لـ create-trip
+  const customTripPatterns = /اخصص|خصص|صمم رحل|خطط رحل|انشئ رحل|رحلتي|custom|plan.*trip|create.*trip|design.*trip|my trip/i;
+  if (customTripPatterns.test(msg)) {
+    const pageInfo = SITE_PAGES.createTrip;
+    console.log("✅ Found createTrip by custom pattern");
+    return {
+      page: "createTrip",
+      url: pageInfo.url,
+      name: isArabic ? pageInfo.name_ar : pageInfo.name_en,
+      description: isArabic ? pageInfo.desc_ar : pageInfo.desc_en,
+      confidence: 0.95
+    };
+  }
+  
+  // ثانياً: البحث المباشر في الكلمات المفتاحية
   for (const [key, pageInfo] of Object.entries(SITE_PAGES)) {
     if (key === "destinations") continue; // تخطي الوجهات
     
