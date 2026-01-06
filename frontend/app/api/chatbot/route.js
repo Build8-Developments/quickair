@@ -158,7 +158,7 @@ ${policies.cancellation.slice(0, 2).join(' | ')}
 - International: Bali, Istanbul, Beirut, Dubai
 
 🌐 Website Pages:
-- Home: / | Tours: /tours-list | Hotels: /hotels
+- Home: / | Tours: /offers | Hotels: /hotels
 - Offers: /offers | Plan Trip: /create-trip
 - Contact: /contact | FAQ: /faq | About: /about
 - Hajj & Umrah: /haj and /omra

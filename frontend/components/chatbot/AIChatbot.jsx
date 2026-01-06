@@ -66,6 +66,10 @@ export default function AIChatbot() {
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   
+  // Language dropdown state
+  const [selectedLang, setSelectedLang] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  
   // Popup state
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
@@ -157,14 +161,47 @@ export default function AIChatbot() {
         const savedStep = localStorage.getItem(STORAGE_KEYS.CURRENT_STEP);
 
         if (savedSessionId) setSessionId(savedSessionId);
-        if (savedUserInfo) setUserInfo(JSON.parse(savedUserInfo));
-        if (savedTripData) setTripData(JSON.parse(savedTripData));
-        if (savedMessages) setMessages(JSON.parse(savedMessages));
+        
+        // Safely parse JSON with validation
+        if (savedUserInfo) {
+          try {
+            const parsed = JSON.parse(savedUserInfo);
+            if (parsed && typeof parsed === 'object') setUserInfo(parsed);
+          } catch (e) {
+            console.warn("Invalid userInfo in localStorage, clearing...");
+            localStorage.removeItem(STORAGE_KEYS.USER_INFO);
+          }
+        }
+        
+        if (savedTripData) {
+          try {
+            const parsed = JSON.parse(savedTripData);
+            if (parsed && typeof parsed === 'object') setTripData(parsed);
+          } catch (e) {
+            console.warn("Invalid tripData in localStorage, clearing...");
+            localStorage.removeItem(STORAGE_KEYS.TRIP_DATA);
+          }
+        }
+        
+        if (savedMessages) {
+          try {
+            const parsed = JSON.parse(savedMessages);
+            if (Array.isArray(parsed)) setMessages(parsed);
+          } catch (e) {
+            console.warn("Invalid messages in localStorage, clearing...");
+            localStorage.removeItem(STORAGE_KEYS.MESSAGES);
+          }
+        }
+        
         if (savedStep && savedStep !== "welcome") setCurrentStep(savedStep);
         
         console.log("✅ Chat data restored from localStorage");
       } catch (error) {
         console.error("Error loading chat data:", error);
+        // Clear all potentially corrupted data
+        Object.values(STORAGE_KEYS).forEach(key => {
+          try { localStorage.removeItem(key); } catch (e) {}
+        });
       }
       setIsInitialized(true);
     }
@@ -756,22 +793,22 @@ export default function AIChatbot() {
 
       case "language":
         const popularLanguages = [
-          { code: "ar", flag: "🇸🇦", name: "العربية", subtext: "Arabic" },
-          { code: "en", flag: "🇬🇧", name: "English", subtext: "الإنجليزية" },
-          { code: "fr", flag: "🇫🇷", name: "Français", subtext: "French" },
-          { code: "de", flag: "🇩🇪", name: "Deutsch", subtext: "German" },
-          { code: "es", flag: "🇪🇸", name: "Español", subtext: "Spanish" },
-          { code: "it", flag: "🇮🇹", name: "Italiano", subtext: "Italian" },
-          { code: "ru", flag: "🇷🇺", name: "Русский", subtext: "Russian" },
-          { code: "zh", flag: "🇨🇳", name: "中文", subtext: "Chinese" },
-          { code: "ja", flag: "🇯🇵", name: "日本語", subtext: "Japanese" },
-          { code: "ko", flag: "🇰🇷", name: "한국어", subtext: "Korean" },
-          { code: "pt", flag: "🇧🇷", name: "Português", subtext: "Portuguese" },
-          { code: "tr", flag: "🇹🇷", name: "Türkçe", subtext: "Turkish" },
-          { code: "hi", flag: "🇮🇳", name: "हिन्दी", subtext: "Hindi" },
-          { code: "nl", flag: "🇳🇱", name: "Nederlands", subtext: "Dutch" },
-          { code: "pl", flag: "🇵🇱", name: "Polski", subtext: "Polish" },
-          { code: "th", flag: "🇹🇭", name: "ไทย", subtext: "Thai" },
+          { code: "ar", countryCode: "sa", name: "العربية", subtext: "Arabic" },
+          { code: "en", countryCode: "gb", name: "English", subtext: "الإنجليزية" },
+          { code: "fr", countryCode: "fr", name: "Français", subtext: "French" },
+          { code: "de", countryCode: "de", name: "Deutsch", subtext: "German" },
+          { code: "es", countryCode: "es", name: "Español", subtext: "Spanish" },
+          { code: "it", countryCode: "it", name: "Italiano", subtext: "Italian" },
+          { code: "ru", countryCode: "ru", name: "Русский", subtext: "Russian" },
+          { code: "zh", countryCode: "cn", name: "中文", subtext: "Chinese" },
+          { code: "ja", countryCode: "jp", name: "日本語", subtext: "Japanese" },
+          { code: "ko", countryCode: "kr", name: "한국어", subtext: "Korean" },
+          { code: "pt", countryCode: "br", name: "Português", subtext: "Portuguese" },
+          { code: "tr", countryCode: "tr", name: "Türkçe", subtext: "Turkish" },
+          { code: "hi", countryCode: "in", name: "हिन्दी", subtext: "Hindi" },
+          { code: "nl", countryCode: "nl", name: "Nederlands", subtext: "Dutch" },
+          { code: "pl", countryCode: "pl", name: "Polski", subtext: "Polish" },
+          { code: "th", countryCode: "th", name: "ไทย", subtext: "Thai" },
         ];
         
         return (
@@ -792,19 +829,54 @@ export default function AIChatbot() {
                 "We speak all languages! Choose yours"
               )}
             </p>
-            <div className={styles.languageGrid}>
-              {popularLanguages.map((lang) => (
-                <button
-                  key={lang.code}
-                  type="button"
-                  className={styles.languageButton}
-                  onClick={() => handleLanguageSelect(lang.code)}
-                >
-                  <span className={styles.languageFlag}>{lang.flag}</span>
-                  <span className={styles.languageName}>{lang.name}</span>
-                  <span className={styles.languageSubtext}>{lang.subtext}</span>
-                </button>
-              ))}
+            <div className={styles.languageDropdownWrapper}>
+              <button
+                type="button"
+                className={styles.languageDropdownTrigger}
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                {selectedLang ? (
+                  <>
+                    <img 
+                      src={`https://flagcdn.com/24x18/${selectedLang.countryCode}.png`}
+                      alt={selectedLang.name}
+                      className={styles.flagIcon}
+                    />
+                    <span>{selectedLang.name} - {selectedLang.subtext}</span>
+                  </>
+                ) : (
+                  <span>{t("-- اختر اللغة --", "-- Select Language --")}</span>
+                )}
+                <div className={`${styles.dropdownArrow} ${dropdownOpen ? styles.dropdownArrowOpen : ''}`}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </div>
+              </button>
+              {dropdownOpen && (
+                <div className={styles.languageDropdownMenu}>
+                  {popularLanguages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      type="button"
+                      className={styles.languageDropdownItem}
+                      onClick={() => {
+                        setSelectedLang(lang);
+                        setDropdownOpen(false);
+                        handleLanguageSelect(lang.code);
+                      }}
+                    >
+                      <img 
+                        src={`https://flagcdn.com/24x18/${lang.countryCode}.png`}
+                        alt={lang.name}
+                        className={styles.flagIcon}
+                      />
+                      <span className={styles.langName}>{lang.name}</span>
+                      <span className={styles.langSubtext}>{lang.subtext}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         );

@@ -45,7 +45,25 @@ export async function executeGraphQL(query, variables = {}, options = {}) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const result = await response.json();
+    // Check content type to avoid parsing HTML error pages as JSON
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await response.text();
+      console.error("Non-JSON response received:", text.substring(0, 200));
+      throw new Error(`Expected JSON response but got: ${contentType || "unknown"}`);
+    }
+
+    // Get response text first to handle potential parsing errors
+    const responseText = await response.text();
+    
+    let result;
+    try {
+      result = JSON.parse(responseText);
+    } catch (parseError) {
+      console.error("JSON parse error:", parseError.message);
+      console.error("Response preview:", responseText.substring(0, 600));
+      throw new Error(`Invalid JSON response: ${parseError.message}`);
+    }
 
     // Check for GraphQL errors
     if (result.errors) {
