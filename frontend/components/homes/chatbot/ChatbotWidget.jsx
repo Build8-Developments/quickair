@@ -11,7 +11,10 @@ export default function ChatbotWidget() {
   const t = (ar, en) => (isArabic ? ar : en);
 
   const scrollToChatbot = () => {
-    const chatButton = document.querySelector('[aria-label*="AI"]');
+    // Try multiple selectors to find the chatbot button (works for both Arabic and English)
+    const chatButton = document.querySelector('[aria-label*="AI"]') || 
+                       document.querySelector('[aria-label*="مساعد"]') ||
+                       document.querySelector('[aria-label*="ذكي"]');
     if (chatButton) {
       chatButton.click();
     }
@@ -106,13 +109,21 @@ export default function ChatbotWidget() {
               </div>
               {index < steps.length - 1 && (
                 <div className={styles.stepConnector}>
-                  <svg width="40" height="20" viewBox="0 0 40 20" fill="none">
+                  <svg width="50" height="24" viewBox="0 0 50 24" fill="none">
                     <path
-                      d="M0 10 L35 10 M30 5 L35 10 L30 15"
+                      d="M2 12 L40 12"
                       stroke="#019fb1"
-                      strokeWidth="2"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      className={activeStep > step.id ? styles.activeConnector : ""}
+                    />
+                    <path
+                      d="M35 6 L44 12 L35 18"
+                      stroke="#019fb1"
+                      strokeWidth="2.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      fill="none"
                       className={activeStep > step.id ? styles.activeConnector : ""}
                     />
                   </svg>

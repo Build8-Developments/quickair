@@ -162,24 +162,24 @@ export default function Honeymoon({ locale = "en" }) {
   const cards = [
     {
       href: `/${locale}/offers`,
-      imageSrc: "/img/destinationCards/1/1.png",
-      imageAlt: t("home.honeymoon.beach", "Beach Honeymoon"),
-      title: t("home.honeymoon.beach", "Beach Escapes"),
+      imageSrc: "/Honeymoon_Abroad_01.png",
+      imageAlt: t("home.honeymoon.abroad", "Abroad Honeymoon"),
+      title: t("home.honeymoon.abroad", "European Romance"),
       description: t(
-        "home.honeymoon.beachDescription",
-        "Relax on pristine beaches with your loved one. Crystal clear waters and romantic sunsets await."
+        "home.honeymoon.abroadDescription",
+        "Sail through Venice's enchanting canals. Romantic gondola rides and timeless Italian charm await."
       ),
       ctaText: t("home.explorePackages", "Explore Packages"),
       delay: "",
     },
     {
       href: `/${locale}/offers`,
-      imageSrc: "/img/destinationCards/1/2.png",
-      imageAlt: t("home.honeymoon.europe", "Europe Honeymoon"),
-      title: t("home.honeymoon.europe", "European Romance"),
+      imageSrc: "/Honeymoon_Egypt_01.png",
+      imageAlt: t("home.honeymoon.egypt", "Egypt Honeymoon"),
+      title: t("home.honeymoon.egypt", "Egyptian Wonders"),
       description: t(
-        "home.honeymoon.europeDescription",
-        "Discover the charm of European cities. Historic streets, fine dining, and unforgettable moments."
+        "home.honeymoon.egyptDescription",
+        "Walk hand in hand through ancient temples. Discover the magic of the Pharaohs together."
       ),
       ctaText: t("home.explorePackages", "Explore Packages"),
       delay: "100",

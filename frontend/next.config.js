@@ -3,6 +3,10 @@ const path = require("path");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, "../"),
+  
+  // Increase timeout for static page generation (default is 60s)
+  staticPageGenerationTimeout: 120,
+  
   images: {
     remotePatterns: [
       {

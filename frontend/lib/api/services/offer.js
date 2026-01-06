@@ -48,6 +48,7 @@ export async function getAllOffers({
     return data?.offers || [];
   } catch (error) {
     logError("[OfferService] Error fetching all offers:", error);
+    // Return empty array instead of throwing - allows build to continue
     return [];
   }
 }
