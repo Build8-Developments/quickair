@@ -43,17 +43,17 @@ export default async function HomePage({ params }) {
       <main>
         <Header3 locale={locale} />
         <Hero3 locale={locale} />
-        <TripTypeSelector locale={locale} />
-        <ChatbotWidget />
-        <OfferDestinations locale={locale} />
         <BrandsOne locale={locale} />
+        <TripTypeSelector locale={locale} />
+        <OfferDestinations locale={locale} />
         <HajOmra locale={locale} />
+        <FeaturesFour locale={locale} />
         <Honeymoon locale={locale} />
         <TrendingDestinations locale={locale} />
-        <FeaturesFour locale={locale} />
         <TourSlider5 locale={locale} />
         <FeaturesThree locale={locale} />
         <TestimonialsThree locale={locale} />
+        <ChatbotWidget />
         <HomeFaq locale={locale} />
         <ContactForm locale={locale} />
         <FooterTwo locale={locale} />
