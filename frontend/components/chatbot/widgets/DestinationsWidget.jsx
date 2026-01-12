@@ -4,14 +4,14 @@ import { useState } from "react";
 import styles from "./DestinationsWidget.module.css";
 
 const DESTINATIONS = [
-  { id: "bali", nameAr: "بالي", nameEn: "Bali", flag: "🇮🇩", category: "international" },
-  { id: "istanbul", nameAr: "إسطنبول", nameEn: "Istanbul", flag: "🇹🇷", category: "international" },
-  { id: "sharm", nameAr: "شرم الشيخ", nameEn: "Sharm El Sheikh", flag: "🇪🇬", category: "domestic" },
-  { id: "hurghada", nameAr: "الغردقة", nameEn: "Hurghada", flag: "🇪🇬", category: "domestic" },
-  { id: "dahab", nameAr: "دهب", nameEn: "Dahab", flag: "🇪🇬", category: "domestic" },
-  { id: "beirut", nameAr: "بيروت", nameEn: "Beirut", flag: "🇱🇧", category: "international" },
-  { id: "ainsokhna", nameAr: "العين السخنة", nameEn: "Ain Sokhna", flag: "🇪🇬", category: "domestic" },
-  { id: "sahlhashish", nameAr: "سهل حشيش", nameEn: "Sahl Hasheesh", flag: "🇪🇬", category: "domestic" },
+  { id: "bali", nameAr: "بالي", nameEn: "Bali", flagCode: "id", category: "international" },
+  { id: "istanbul", nameAr: "إسطنبول", nameEn: "Istanbul", flagCode: "tr", category: "international" },
+  { id: "sharm", nameAr: "شرم الشيخ", nameEn: "Sharm El Sheikh", flagCode: "eg", category: "domestic" },
+  { id: "hurghada", nameAr: "الغردقة", nameEn: "Hurghada", flagCode: "eg", category: "domestic" },
+  { id: "dahab", nameAr: "دهب", nameEn: "Dahab", flagCode: "eg", category: "domestic" },
+  { id: "beirut", nameAr: "بيروت", nameEn: "Beirut", flagCode: "lb", category: "international" },
+  { id: "ainsokhna", nameAr: "العين السخنة", nameEn: "Ain Sokhna", flagCode: "eg", category: "domestic" },
+  { id: "sahlhashish", nameAr: "سهل حشيش", nameEn: "Sahl Hasheesh", flagCode: "eg", category: "domestic" },
 ];
 
 export default function DestinationsWidget({ language = "ar", onSelect }) {
@@ -19,8 +19,8 @@ export default function DestinationsWidget({ language = "ar", onSelect }) {
   const isArabic = language === "ar";
   const t = (ar, en) => (isArabic ? ar : en);
 
-  const filteredDestinations = selectedCategory === "all" 
-    ? DESTINATIONS 
+  const filteredDestinations = selectedCategory === "all"
+    ? DESTINATIONS
     : DESTINATIONS.filter(d => d.category === selectedCategory);
 
   const handleSelect = (destination) => {
@@ -28,7 +28,7 @@ export default function DestinationsWidget({ language = "ar", onSelect }) {
       destination: {
         id: destination.id,
         name: isArabic ? destination.nameAr : destination.nameEn,
-        flag: destination.flag,
+        flag: `https://flagcdn.com/w40/${destination.flagCode}.png`,
       },
       message: isArabic ? destination.nameAr : destination.nameEn,
     });
@@ -66,7 +66,12 @@ export default function DestinationsWidget({ language = "ar", onSelect }) {
             className={styles.destinationCard}
             onClick={() => handleSelect(destination)}
           >
-            <span className={styles.flag}>{destination.flag}</span>
+            <img
+              src={`https://flagcdn.com/w40/${destination.flagCode}.png`}
+              alt={destination.flagCode}
+              className={styles.flagImage || "flag-icon"}
+              style={{ width: "24px", height: "auto", borderRadius: "4px", objectFit: "cover" }}
+            />
             <span className={styles.name}>
               {isArabic ? destination.nameAr : destination.nameEn}
             </span>
