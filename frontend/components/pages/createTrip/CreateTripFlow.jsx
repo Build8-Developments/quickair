@@ -15,6 +15,7 @@ import StepPreferences from "./steps/StepPreferences";
 import StepSummary from "./steps/StepSummary";
 import { useLanguage } from "@/contexts/LanguageContext";
 import styles from "./CreateTripFlow.module.css";
+import FlightSearch from "@/components/homes/heros/FlightSearch";
 
 const TRIP_TYPES_MAP = {
   package: {
@@ -27,10 +28,10 @@ const TRIP_TYPES_MAP = {
   },
   "flight-hotel": {
     id: "flight-hotel",
-    titleAr: "طيران + فندق",
-    titleEn: "Flight + Hotel",
-    descAr: "تأشيرة سفر",
-    descEn: "Visa assistance",
+    titleAr: "طيران فقط",
+    titleEn: "Flight Only",
+    descAr: "حجز رحلات طيران",
+    descEn: "Book flights",
     icon: "flight",
   },
   "hotel-only": {
@@ -59,12 +60,13 @@ const STEPS = [
 export default function CreateTripFlow() {
   const searchParams = useSearchParams();
   const typeFromUrl = searchParams.get("type");
-  
+
   // تحديد الخطوة الأولى والنوع بناءً على الـ URL
   const initialTripType = typeFromUrl && TRIP_TYPES_MAP[typeFromUrl] ? TRIP_TYPES_MAP[typeFromUrl] : null;
   const initialStep = initialTripType ? 2 : 1;
-  
+
   const [currentStep, setCurrentStep] = useState(initialStep);
+  const [showFlightSearch, setShowFlightSearch] = useState(false);
   const [tripData, setTripData] = useState({
     tripType: initialTripType,
     locationType: null,
@@ -126,8 +128,8 @@ export default function CreateTripFlow() {
         return;
       }
       if (effectiveTripType.id === "flight-hotel") {
-        // Flight + Hotel (Visa) - redirect to contact
-        window.location.href = "/contact";
+        // Flight Only - render search component
+        setShowFlightSearch(true);
         return;
       }
     }
@@ -262,7 +264,7 @@ export default function CreateTripFlow() {
             <div className="text-center mb-60">
               <div className="header-icon-wrapper mb-20">
                 <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#019fb1" strokeWidth="2">
-                  <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+                  <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
                 </svg>
               </div>
               <h1 className={styles.pageTitle}>
@@ -274,15 +276,21 @@ export default function CreateTripFlow() {
             </div>
 
             {/* Step Indicator */}
-            <StepIndicator
-              steps={STEPS}
-              currentStep={currentStep}
-              onStepClick={goToStep}
-            />
+            {!showFlightSearch && (
+              <StepIndicator
+                steps={STEPS}
+                currentStep={currentStep}
+                onStepClick={goToStep}
+              />
+            )}
 
             {/* Step Content */}
             <div className="mt-60">
-              {renderStep()}
+              {showFlightSearch ? (
+                <FlightSearch onBack={() => setShowFlightSearch(false)} />
+              ) : (
+                renderStep()
+              )}
             </div>
           </div>
         </div>

@@ -1,37 +1,35 @@
 "use client";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, useRef } from "react";
 import { AlertCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/contexts/LanguageContext";
-import FlightSegment from "./FlightSegment";
-import PassengerSelector from "./PassengerSelector";
-import { buildFlightSearchUrl } from "@/utils/flightUrl";
+import FlightCalendar from "./FlightCalendar";
+import AirportSearch from "./AirportSearch";
+import PassengersClass from "./PassengersClass";
 
-export default function FlightSearch() {
+export default function FlightSearch({ onBack }) {
+  const router = useRouter();
+  const { t } = useTranslation();
   const { language } = useLanguage();
-  const [tripType, setTripType] = useState("roundtrip"); // roundtrip, oneway, multicity
+  const isRTL = language === "ar";
 
-  const [flightClass, setFlightClass] = useState("Y"); // Y, W, C, F
+  const [currentActiveDD, setCurrentActiveDD] = useState("");
+  const [tripType, setTripType] = useState("roundtrip");
+  const [fromAirport, setFromAirport] = useState(null);
+  const [toAirport, setToAirport] = useState(null);
+  const [departureDate, setDepartureDate] = useState(null);
+  const [returnDate, setReturnDate] = useState(null);
+  const [multiCitySegments, setMultiCitySegments] = useState([
+    { from: null, to: null, date: null },
+    { from: null, to: null, date: null },
+  ]);
   const [passengers, setPassengers] = useState({
     adults: 1,
     children: 0,
     infants: 0,
   });
-
-  // For roundtrip and oneway - single segment
-  const [singleSegment, setSingleSegment] = useState({
-    from: null,
-    to: null,
-    departureDate: null,
-    returnDate: null,
-  });
-
-  // For multicity - array of segments
-  const [multiCitySegments, setMultiCitySegments] = useState([
-    { from: null, to: null, departureDate: null },
-    { from: null, to: null, departureDate: null },
-  ]);
-
-  // Error states
+  const [flightClass, setFlightClass] = useState("Y");
   const [errors, setErrors] = useState({
     from: "",
     to: "",
@@ -41,9 +39,9 @@ export default function FlightSearch() {
     multiCity: {},
   });
 
-  const handleTripTypeChange = (type) => {
-    setTripType(type);
-    // Clear errors when changing trip type
+  useEffect(() => {
+    setCurrentActiveDD("");
+    // Clear errors when fields change
     setErrors({
       from: "",
       to: "",
@@ -52,51 +50,30 @@ export default function FlightSearch() {
       sameCity: "",
       multiCity: {},
     });
-  };
+  }, [fromAirport, toAirport, departureDate, returnDate, tripType]);
 
-  const addCity = () => {
-    if (multiCitySegments.length < 6) {
-      // Get the 'to' airport from the last segment to auto-fill the new segment's 'from'
-      const lastSegment = multiCitySegments[multiCitySegments.length - 1];
-      const newSegmentFrom = lastSegment.to || null;
+  const dropDownContainer = useRef();
+  useEffect(() => {
+    const handleClick = (event) => {
+      if (
+        dropDownContainer.current &&
+        !dropDownContainer.current.contains(event.target)
+      ) {
+        setCurrentActiveDD("");
+      }
+    };
 
-      setMultiCitySegments([
-        ...multiCitySegments,
-        { from: newSegmentFrom, to: null, departureDate: null },
-      ]);
-    }
-  };
+    document.addEventListener("click", handleClick);
 
-  const removeCity = (index) => {
-    if (multiCitySegments.length > 2) {
-      setMultiCitySegments(multiCitySegments.filter((_, i) => i !== index));
-    }
-  };
-
-  const updateSingleSegment = (field, value) => {
-    setSingleSegment((prev) => ({ ...prev, [field]: value }));
-    // Clear error for this field when user updates it
-    setErrors((prev) => ({ ...prev, [field]: "", sameCity: "" }));
-  };
-
-  const updateMultiCitySegment = (index, field, value) => {
-    const newSegments = [...multiCitySegments];
-    newSegments[index] = { ...newSegments[index], [field]: value };
-
-    // Auto-calculate next segment's 'from' field when 'to' changes
-    if (field === "to" && value && index < newSegments.length - 1) {
-      newSegments[index + 1] = { ...newSegments[index + 1], from: value };
-    }
-
-    setMultiCitySegments(newSegments);
-    // Clear error for this segment when user updates it
-    setErrors((prev) => ({
-      ...prev,
-      multiCity: { ...prev.multiCity, [index]: "" },
-    }));
-  };
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, []);
 
   const handleSearch = () => {
+    const baseUrl = "https://www.skysync.travel/flight/search";
+    const params = new URLSearchParams();
+
     // Reset errors
     const newErrors = {
       from: "",
@@ -107,49 +84,32 @@ export default function FlightSearch() {
       multiCity: {},
     };
 
-    // Validation
-    if (tripType !== "multicity") {
-      // Single segment validation
-      if (!singleSegment.from) {
-        newErrors.from =
-          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
-      }
-      if (!singleSegment.to) {
-        newErrors.to =
-          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
-      }
-      if (!singleSegment.departureDate) {
-        newErrors.departureDate =
-          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
-      }
-      if (tripType === "roundtrip" && !singleSegment.returnDate) {
-        newErrors.returnDate =
-          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
-      }
+    const formatDate = (date) => {
+      if (!date) return "";
+      const d = new Date(date);
+      const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      return `${d.getDate()}-${months[d.getMonth()]}-${d.getFullYear()}`;
+    };
 
-      // Check if From and To are the same
-      if (
-        singleSegment.from &&
-        singleSegment.to &&
-        singleSegment.from.iata === singleSegment.to.iata
-      ) {
-        newErrors.sameCity =
-          language === "ar"
-            ? "يرجى اختيار مدينة مختلفة للوصول"
-            : "Departure and arrival cities must be different";
-      }
+    if (tripType === "multicity") {
+      const validSegments = multiCitySegments.filter(
+        (seg) => seg.from && seg.to && seg.date
+      );
 
-      // If there are errors, set them and return
-      if (
-        Object.values(newErrors).some(
-          (error) => typeof error === "string" && error !== ""
-        )
-      ) {
-        setErrors(newErrors);
-        return;
-      }
-    } else {
-      // Multi-city validation
+      // Validate each segment
       let hasErrors = false;
       multiCitySegments.forEach((seg, index) => {
         const segmentErrors = [];
@@ -161,12 +121,11 @@ export default function FlightSearch() {
           segmentErrors.push(
             language === "ar" ? "المدينة مطلوبة" : "City required"
           );
-        if (!seg.departureDate)
+        if (!seg.date)
           segmentErrors.push(
             language === "ar" ? "التاريخ مطلوب" : "Date required"
           );
 
-        // Check if From and To are the same
         if (seg.from && seg.to && seg.from.iata === seg.to.iata) {
           segmentErrors.push(
             language === "ar"
@@ -181,10 +140,6 @@ export default function FlightSearch() {
         }
       });
 
-      // Check if at least 2 segments are filled
-      const validSegments = multiCitySegments.filter(
-        (seg) => seg.from && seg.to && seg.departureDate
-      );
       if (validSegments.length < 2) {
         newErrors.multiCity.general =
           language === "ar"
@@ -197,230 +152,658 @@ export default function FlightSearch() {
         setErrors(newErrors);
         return;
       }
+
+      validSegments.forEach((seg, i) => {
+        const segNum = i + 1;
+        params.append(`dep${segNum}`, seg.from.iata);
+        params.append(`ret${segNum}`, seg.to.iata);
+        params.append(`dtt${segNum}`, formatDate(seg.date));
+        params.append(`cl${segNum}`, flightClass);
+      });
+      params.append("triptype", "3");
+      params.append("key", "NMC");
+    } else {
+      // Validate single segment
+      if (!fromAirport) {
+        newErrors.from =
+          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
+      }
+      if (!toAirport) {
+        newErrors.to =
+          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
+      }
+      if (!departureDate) {
+        newErrors.departureDate =
+          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
+      }
+      if (tripType === "roundtrip" && !returnDate) {
+        newErrors.returnDate =
+          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
+      }
+
+      if (fromAirport && toAirport && fromAirport.iata === toAirport.iata) {
+        newErrors.sameCity =
+          language === "ar"
+            ? "يرجى اختيار مدينة مختلفة للوصول"
+            : "Departure and arrival cities must be different";
+      }
+
+      if (
+        Object.values(newErrors).some(
+          (error) => error !== "" && typeof error === "string"
+        )
+      ) {
+        setErrors(newErrors);
+        return;
+      }
+
+      params.append("dep1", fromAirport.iata);
+      params.append("ret1", toAirport.iata);
+      params.append("dtt1", formatDate(departureDate));
+      params.append("cl1", flightClass);
+
+      if (tripType === "roundtrip" && returnDate) {
+        params.append("dep2", toAirport.iata);
+        params.append("ret2", fromAirport.iata);
+        params.append("dtt2", formatDate(returnDate));
+        params.append("cl2", flightClass);
+        params.append("triptype", "2");
+        params.append("key", "IRT");
+      } else {
+        params.append("triptype", "1");
+        params.append("key", "OW");
+      }
     }
 
-    const url = buildFlightSearchUrl({
-      tripType,
-      flightClass,
-      passengers,
-      singleSegment,
-      multiCitySegments,
-    });
+    params.append("adult", passengers.adults.toString());
+    params.append("child", passengers.children.toString());
+    params.append("infant", passengers.infants.toString());
+    params.append("direct", "false");
+    params.append("baggage", "false");
+    params.append("pft", "");
+    params.append("airlines", "");
+    params.append("ref", "false");
+    params.append("lc", language.toUpperCase());
+    params.append("curr", "EGP");
+    params.append("currtime", Date.now().toString());
 
-    if (url) {
-      window.location.href = url;
-    }
+    window.open(`${baseUrl}?${params.toString()}`, "_blank");
   };
 
   const totalPassengers =
     passengers.adults + passengers.children + passengers.infants;
+  const classLabels = {
+    Y: "Economy",
+    W: "Premium Economy",
+    C: "Business Class",
+    F: "First Class",
+  };
 
   return (
-    <div className="flight-search">
+    <div className="hero__filter" ref={dropDownContainer} dir={isRTL ? "rtl" : "ltr"} style={{ position: "relative", zIndex: 100 }}>
+      {/* Back Button */}
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="button -sm text-14 bg-blue-1-05 text-blue-1 mb-20"
+          style={{
+            marginBottom: "20px",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "8px 16px",
+            borderRadius: "4px",
+            fontWeight: "500",
+            cursor: "pointer"
+          }}
+        >
+          <i className={`icon-arrow-${isRTL ? "right" : "left"} text-12`}></i>
+          {isRTL ? "عودة" : "Back"}
+        </button>
+      )}
+
       {/* Trip Type Tabs */}
-      <div className="flight-search__tabs">
+      <div className="searchForm__tabs">
         <button
-          onClick={() => handleTripTypeChange("roundtrip")}
-          className={`flight-search__tab ${
-            tripType === "roundtrip" ? "is-active" : ""
-          }`}
+          className={`searchForm__tab ${tripType === "roundtrip" ? "is-active" : ""
+            }`}
+          onClick={() => setTripType("roundtrip")}
         >
-          {language === "ar" ? "ذهاب وعودة" : "Round Trip"}
+          {t("flightSearch.tripTypes.roundTrip")}
         </button>
         <button
-          onClick={() => handleTripTypeChange("oneway")}
-          className={`flight-search__tab ${
-            tripType === "oneway" ? "is-active" : ""
-          }`}
+          className={`searchForm__tab ${tripType === "oneway" ? "is-active" : ""
+            }`}
+          onClick={() => setTripType("oneway")}
         >
-          {language === "ar" ? "ذهاب فقط" : "One Way"}
+          {t("flightSearch.tripTypes.oneWay")}
         </button>
         <button
-          onClick={() => handleTripTypeChange("multicity")}
-          className={`flight-search__tab ${
-            tripType === "multicity" ? "is-active" : ""
-          }`}
+          className={`searchForm__tab ${tripType === "multicity" ? "is-active" : ""
+            }`}
+          onClick={() => setTripType("multicity")}
         >
-          {language === "ar" ? "متعدد المدن" : "Multi City"}
+          {t("flightSearch.tripTypes.multiCity")}
         </button>
       </div>
 
       {/* Flight Search Form */}
-      <div className="flight-search__form">
-        {tripType === "multicity" ? (
-          // Multi-city segments
-          <div className="flight-search__multicity">
-            {multiCitySegments.map((segment, index) => (
-              <div key={index} className="flight-search__segment-wrapper">
-                <div className="flight-search__segment-header">
-                  <span className="flight-search__segment-label">
-                    {language === "ar"
-                      ? `رحلة ${index + 1}`
-                      : `Flight ${index + 1}`}
-                  </span>
-                  {multiCitySegments.length > 2 && (
-                    <button
-                      onClick={() => removeCity(index)}
-                      className="flight-search__remove-city"
-                      type="button"
-                    >
-                      <i className="icon-delete"></i>
-                      {language === "ar" ? "إزالة" : "Remove"}
-                    </button>
-                  )}
-                </div>
-                <FlightSegment
-                  from={segment.from}
-                  to={segment.to}
-                  departureDate={segment.departureDate}
-                  onFromChange={(value) =>
-                    updateMultiCitySegment(index, "from", value)
-                  }
-                  onToChange={(value) =>
-                    updateMultiCitySegment(index, "to", value)
-                  }
-                  onDepartureDateChange={(value) =>
-                    updateMultiCitySegment(index, "departureDate", value)
-                  }
-                  showReturn={false}
-                />
-                {errors.multiCity[index] && (
-                  <div
-                    className="flight-search__error"
-                    dir={language === "ar" ? "rtl" : "ltr"}
-                  >
-                    <AlertCircle size={16} />
-                    <span>{errors.multiCity[index]}</span>
-                  </div>
-                )}
-              </div>
-            ))}
-
-            {errors.multiCity.general && (
-              <div
-                className="flight-search__error"
-                dir={language === "ar" ? "rtl" : "ltr"}
-              >
-                <AlertCircle size={16} />
-                <span>{errors.multiCity.general}</span>
-              </div>
-            )}
-
-            {multiCitySegments.length < 6 && (
-              <button
-                onClick={addCity}
-                className="flight-search__add-city"
-                type="button"
-              >
-                <i className="icon-plus"></i>
-                {language === "ar" ? "إضافة مدينة أخرى" : "Add Another City"}
-              </button>
-            )}
-          </div>
-        ) : (
-          // Single segment (roundtrip or oneway)
+      <div className="flight-search-form">
+        {tripType !== "multicity" ? (
           <>
-            <FlightSegment
-              from={singleSegment.from}
-              to={singleSegment.to}
-              departureDate={singleSegment.departureDate}
-              returnDate={singleSegment.returnDate}
-              onFromChange={(value) => updateSingleSegment("from", value)}
-              onToChange={(value) => updateSingleSegment("to", value)}
-              onDepartureDateChange={(value) =>
-                updateSingleSegment("departureDate", value)
-              }
-              onReturnDateChange={(value) =>
-                updateSingleSegment("returnDate", value)
-              }
-              showReturn={tripType === "roundtrip"}
-            />
+            <div className="flight-search-row">
+              {/* FROM */}
+              <div
+                className="flight-field"
+                onClick={() =>
+                  setCurrentActiveDD((pre) =>
+                    pre === "from" ? "" : "from"
+                  )
+                }
+              >
+                <div className="flight-field-label">
+                  {t("flightSearch.fields.from")}
+                </div>
+                <div
+                  className={
+                    fromAirport
+                      ? "flight-field-value"
+                      : "flight-field-placeholder"
+                  }
+                >
+                  {fromAirport
+                    ? `${fromAirport.city}`
+                    : t("flightSearch.placeholders.departureAirport")}
+                </div>
+                <AirportSearch
+                  setAirport={setFromAirport}
+                  active={currentActiveDD === "from"}
+                />
+              </div>
+
+              <div className="flight-search-divider"></div>
+
+              {/* TO */}
+              <div
+                className="flight-field"
+                onClick={() =>
+                  setCurrentActiveDD((pre) =>
+                    pre === "to" ? "" : "to"
+                  )
+                }
+              >
+                <div className="flight-field-label">
+                  {t("flightSearch.fields.to")}
+                </div>
+                <div
+                  className={
+                    toAirport
+                      ? "flight-field-value"
+                      : "flight-field-placeholder"
+                  }
+                >
+                  {toAirport
+                    ? `${toAirport.city}`
+                    : t("flightSearch.placeholders.arrivalAirport")}
+                </div>
+                <AirportSearch
+                  setAirport={setToAirport}
+                  active={currentActiveDD === "to"}
+                />
+              </div>
+
+              <div className="flight-search-divider"></div>
+
+              {/* DEPARTURE DATE */}
+              <div
+                className="flight-field"
+                onClick={() =>
+                  setCurrentActiveDD((pre) =>
+                    pre === "departure" ? "" : "departure"
+                  )
+                }
+              >
+                <div className="flight-field-label">
+                  {t("flightSearch.fields.departure")}
+                </div>
+                <div
+                  className={
+                    departureDate
+                      ? "flight-field-value"
+                      : "flight-field-placeholder"
+                  }
+                >
+                  <FlightCalendar
+                    active={currentActiveDD === "departure"}
+                    date={departureDate}
+                    setDate={setDepartureDate}
+                  />
+                </div>
+              </div>
+
+              {tripType === "roundtrip" && (
+                <>
+                  <div className="flight-search-divider"></div>
+
+                  {/* RETURN DATE */}
+                  <div
+                    className="flight-field"
+                    onClick={() =>
+                      setCurrentActiveDD((pre) =>
+                        pre === "return" ? "" : "return"
+                      )
+                    }
+                  >
+                    <div className="flight-field-label">
+                      {t("flightSearch.fields.return")}
+                    </div>
+                    <div
+                      className={
+                        returnDate
+                          ? "flight-field-value"
+                          : "flight-field-placeholder"
+                      }
+                    >
+                      <FlightCalendar
+                        active={currentActiveDD === "return"}
+                        date={returnDate}
+                        setDate={setReturnDate}
+                        minDate={departureDate}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+
+              <div className="flight-search-divider"></div>
+
+              <div
+                className="flight-field"
+                onClick={() =>
+                  setCurrentActiveDD((pre) =>
+                    pre === "passengers" ? "" : "passengers"
+                  )
+                }
+              >
+                <div className="flight-field-label">
+                  {t("flightSearch.fields.passengersClass")}
+                </div>
+                <div className="flight-field-value">
+                  {totalPassengers}{" "}
+                  {totalPassengers === 1
+                    ? t("flightSearch.passengers.traveller")
+                    : t("flightSearch.passengers.travellers")}
+                  , {classLabels[flightClass]}
+                </div>
+                <PassengersClass
+                  active={currentActiveDD === "passengers"}
+                  passengers={passengers}
+                  setPassengers={setPassengers}
+                  flightClass={flightClass}
+                  setFlightClass={setFlightClass}
+                  onClose={() => setCurrentActiveDD("")}
+                />
+              </div>
+            </div>
+
+            {/* Error Messages for Single Segment */}
             {(errors.from ||
               errors.to ||
               errors.departureDate ||
               errors.returnDate ||
               errors.sameCity) && (
+                <div className="flight-search__error-container">
+                  {errors.from && (
+                    <div
+                      className="flight-search__error"
+                      dir={language === "ar" ? "rtl" : "ltr"}
+                    >
+                      <AlertCircle size={16} />
+                      <span>
+                        {language === "ar" ? "من: " : "From: "}
+                        {errors.from}
+                      </span>
+                    </div>
+                  )}
+                  {errors.to && (
+                    <div
+                      className="flight-search__error"
+                      dir={language === "ar" ? "rtl" : "ltr"}
+                    >
+                      <AlertCircle size={16} />
+                      <span>
+                        {language === "ar" ? "إلى: " : "To: "}
+                        {errors.to}
+                      </span>
+                    </div>
+                  )}
+                  {errors.departureDate && (
+                    <div
+                      className="flight-search__error"
+                      dir={language === "ar" ? "rtl" : "ltr"}
+                    >
+                      <AlertCircle size={16} />
+                      <span>
+                        {language === "ar"
+                          ? "المغادرة: "
+                          : "Departure: "}
+                        {errors.departureDate}
+                      </span>
+                    </div>
+                  )}
+                  {errors.returnDate && (
+                    <div
+                      className="flight-search__error"
+                      dir={language === "ar" ? "rtl" : "ltr"}
+                    >
+                      <AlertCircle size={16} />
+                      <span>
+                        {language === "ar" ? "العودة: " : "Return: "}
+                        {errors.returnDate}
+                      </span>
+                    </div>
+                  )}
+                  {errors.sameCity && (
+                    <div
+                      className="flight-search__error"
+                      dir={language === "ar" ? "rtl" : "ltr"}
+                    >
+                      <AlertCircle size={16} />
+                      <span>{errors.sameCity}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+          </>
+        ) : (
+          <>
+            {/* MULTI CITY */}
+            {multiCitySegments.map((segment, index) => (
+              <div
+                key={index}
+                style={{
+                  marginBottom:
+                    index < multiCitySegments.length - 1
+                      ? "12px"
+                      : "0",
+                  position: "relative",
+                }}
+              >
+                <div className="flight-search-row">
+                  {/* FROM */}
+                  <div
+                    className="flight-field"
+                    onClick={() =>
+                      setCurrentActiveDD((pre) =>
+                        pre === `mc-from-${index}`
+                          ? ""
+                          : `mc-from-${index}`
+                      )
+                    }
+                  >
+                    <div className="flight-field-label">
+                      {t("flightSearch.fields.from")}
+                    </div>
+                    <div
+                      className={
+                        segment.from
+                          ? "flight-field-value"
+                          : "flight-field-placeholder"
+                      }
+                    >
+                      {segment.from
+                        ? segment.from.city
+                        : t(
+                          "flightSearch.placeholders.departureAirport"
+                        )}
+                    </div>
+                    <AirportSearch
+                      setAirport={(airport) => {
+                        const newSegments = [...multiCitySegments];
+                        newSegments[index].from = airport;
+                        setMultiCitySegments(newSegments);
+                      }}
+                      active={currentActiveDD === `mc-from-${index}`}
+                    />
+                  </div>
+
+                  <div className="flight-search-divider"></div>
+
+                  {/* TO */}
+                  <div
+                    className="flight-field"
+                    onClick={() =>
+                      setCurrentActiveDD((pre) =>
+                        pre === `mc-to-${index}`
+                          ? ""
+                          : `mc-to-${index}`
+                      )
+                    }
+                  >
+                    <div className="flight-field-label">
+                      {t("flightSearch.fields.to")}
+                    </div>
+                    <div
+                      className={
+                        segment.to
+                          ? "flight-field-value"
+                          : "flight-field-placeholder"
+                      }
+                    >
+                      {segment.to
+                        ? segment.to.city
+                        : t(
+                          "flightSearch.placeholders.arrivalAirport"
+                        )}
+                    </div>
+                    <AirportSearch
+                      setAirport={(airport) => {
+                        const newSegments = [...multiCitySegments];
+                        newSegments[index].to = airport;
+                        // Auto-calculate next segment's 'from' field
+                        if (index < multiCitySegments.length - 1) {
+                          newSegments[index + 1].from = airport;
+                        }
+                        setMultiCitySegments(newSegments);
+                      }}
+                      active={currentActiveDD === `mc-to-${index}`}
+                    />
+                  </div>
+
+                  <div className="flight-search-divider"></div>
+
+                  {/* DEPARTURE DATE */}
+                  <div
+                    className="flight-field"
+                    onClick={() =>
+                      setCurrentActiveDD((pre) =>
+                        pre === `mc-date-${index}`
+                          ? ""
+                          : `mc-date-${index}`
+                      )
+                    }
+                  >
+                    <div className="flight-field-label">
+                      {t("flightSearch.fields.departure")}
+                    </div>
+                    <div
+                      className={
+                        segment.date
+                          ? "flight-field-value"
+                          : "flight-field-placeholder"
+                      }
+                    >
+                      <FlightCalendar
+                        active={
+                          currentActiveDD === `mc-date-${index}`
+                        }
+                        date={segment.date}
+                        setDate={(date) => {
+                          const newSegments = [...multiCitySegments];
+                          newSegments[index].date = date;
+                          setMultiCitySegments(newSegments);
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Delete Button */}
+                {multiCitySegments.length > 2 && (
+                  <button
+                    onClick={() => {
+                      const newSegments = multiCitySegments.filter(
+                        (_, i) => i !== index
+                      );
+                      setMultiCitySegments(newSegments);
+                    }}
+                    style={{
+                      position: "absolute",
+                      top: "8px",
+                      ...(isRTL ? { left: "8px" } : { right: "8px" }),
+                      width: "28px",
+                      height: "28px",
+                      background: "white",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: "50%",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#ef4444",
+                      fontSize: "16px",
+                      transition:
+                        "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                      zIndex: 10,
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.background = "#fee2e2";
+                      e.currentTarget.style.borderColor = "#ef4444";
+                      e.currentTarget.style.transform =
+                        "scale(1.1) rotate(90deg)";
+                      e.currentTarget.style.boxShadow =
+                        "0 4px 12px rgba(239, 68, 68, 0.25)";
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.background = "white";
+                      e.currentTarget.style.borderColor = "#e5e7eb";
+                      e.currentTarget.style.transform =
+                        "scale(1) rotate(0deg)";
+                      e.currentTarget.style.boxShadow = "none";
+                    }}
+                    title="Remove this flight"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+            ))}
+
+            {/* Multi-city error messages */}
+            {Object.keys(errors.multiCity).length > 0 && (
               <div className="flight-search__error-container">
-                {errors.from && (
-                  <div
-                    className="flight-search__error"
-                    dir={language === "ar" ? "rtl" : "ltr"}
-                  >
-                    <AlertCircle size={16} />
-                    <span>
-                      {language === "ar" ? "من: " : "From: "}
-                      {errors.from}
-                    </span>
-                  </div>
-                )}
-                {errors.to && (
-                  <div
-                    className="flight-search__error"
-                    dir={language === "ar" ? "rtl" : "ltr"}
-                  >
-                    <AlertCircle size={16} />
-                    <span>
-                      {language === "ar" ? "إلى: " : "To: "}
-                      {errors.to}
-                    </span>
-                  </div>
-                )}
-                {errors.departureDate && (
-                  <div
-                    className="flight-search__error"
-                    dir={language === "ar" ? "rtl" : "ltr"}
-                  >
-                    <AlertCircle size={16} />
-                    <span>
-                      {language === "ar" ? "المغادرة: " : "Departure: "}
-                      {errors.departureDate}
-                    </span>
-                  </div>
-                )}
-                {errors.returnDate && (
-                  <div
-                    className="flight-search__error"
-                    dir={language === "ar" ? "rtl" : "ltr"}
-                  >
-                    <AlertCircle size={16} />
-                    <span>
-                      {language === "ar" ? "العودة: " : "Return: "}
-                      {errors.returnDate}
-                    </span>
-                  </div>
-                )}
-                {errors.sameCity && (
-                  <div
-                    className="flight-search__error"
-                    dir={language === "ar" ? "rtl" : "ltr"}
-                  >
-                    <AlertCircle size={16} />
-                    <span>{errors.sameCity}</span>
-                  </div>
+                {Object.entries(errors.multiCity).map(
+                  ([key, value]) => (
+                    <div
+                      key={key}
+                      className="flight-search__error"
+                      dir={language === "ar" ? "rtl" : "ltr"}
+                    >
+                      <AlertCircle size={16} />
+                      <span>
+                        {key === "general"
+                          ? value
+                          : `${language === "ar"
+                            ? `رحلة ${parseInt(key) + 1}`
+                            : `Flight ${parseInt(key) + 1}`
+                          }: ${value}`}
+                      </span>
+                    </div>
+                  )
                 )}
               </div>
             )}
+
+            {multiCitySegments.length < 6 && (
+              <button
+                onClick={() => {
+                  const lastSegment =
+                    multiCitySegments[multiCitySegments.length - 1];
+                  const newSegmentFrom = lastSegment.to || null;
+                  setMultiCitySegments([
+                    ...multiCitySegments,
+                    { from: newSegmentFrom, to: null, date: null },
+                  ]);
+                }}
+                style={{
+                  marginTop: "12px",
+                  marginBottom: "12px",
+                  padding: "8px 16px",
+                  fontSize: "13px",
+                  color: "var(--color-accent-1)",
+                  background: "transparent",
+                  border: "1px solid var(--color-accent-1)",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.background =
+                    "var(--color-accent-1)";
+                  e.currentTarget.style.color = "white";
+                  e.currentTarget.style.transform =
+                    "translateY(-2px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 4px 12px rgba(1, 159, 177, 0.3)";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.background = "transparent";
+                  e.currentTarget.style.color =
+                    "var(--color-accent-1)";
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                {t("flightSearch.buttons.addFlight")}
+              </button>
+            )}
+
+            <div className="flight-search-row">
+              <div
+                className="flight-field"
+                onClick={() =>
+                  setCurrentActiveDD((pre) =>
+                    pre === "passengers" ? "" : "passengers"
+                  )
+                }
+              >
+                <div className="flight-field-label">
+                  {t("flightSearch.fields.passengersClass")}
+                </div>
+                <div className="flight-field-value">
+                  {totalPassengers}{" "}
+                  {totalPassengers === 1
+                    ? t("flightSearch.passengers.traveller")
+                    : t("flightSearch.passengers.travellers")}
+                  , {classLabels[flightClass]}
+                </div>
+                <PassengersClass
+                  active={currentActiveDD === "passengers"}
+                  passengers={passengers}
+                  setPassengers={setPassengers}
+                  flightClass={flightClass}
+                  setFlightClass={setFlightClass}
+                  onClose={() => setCurrentActiveDD("")}
+                />
+              </div>
+            </div>
           </>
         )}
 
-        {/* Passengers and Class Row */}
-        <div className="flight-search__bottom-row">
-          <PassengerSelector
-            passengers={passengers}
-            onPassengersChange={setPassengers}
-            flightClass={flightClass}
-            onClassChange={setFlightClass}
-          />
-        </div>
-
         {/* Search Button */}
-        <button
-          onClick={handleSearch}
-          className="button -dark-1 bg-accent-1 text-white col-12 flight-search__submit"
-          type="button"
-        >
-          <i className="icon-search text-16"></i>
-          {language === "ar" ? "بحث عن رحلات" : "Search Flights"}
+        <button onClick={handleSearch} className="flight-search-btn">
+          <i className="icon-search text-18"></i>
+          {t("flightSearch.buttons.searchFlights")}
         </button>
       </div>
     </div>

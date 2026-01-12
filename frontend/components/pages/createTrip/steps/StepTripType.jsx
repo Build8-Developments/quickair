@@ -15,10 +15,10 @@ const TRIP_TYPES = [
   },
   {
     id: "flight-hotel",
-    titleAr: "طيران + فندق",
-    titleEn: "Flight + Hotel",
-    descAr: "تأشيرة سفر",
-    descEn: "Visa assistance",
+    titleAr: "طيران فقط",
+    titleEn: "Flight Only",
+    descAr: "حجز رحلات طيران",
+    descEn: "Book flights",
     icon: "flight",
   },
   {
