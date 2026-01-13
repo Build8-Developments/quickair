@@ -228,11 +228,18 @@ function extractDestinationFromMessage(message = "") {
  */
 export function determineNextWidget(sessionData, userAnalysis) {
   if (!sessionData) {
+    console.log("[WidgetGenerator] No session data");
     return null;
   }
   
   const { tripData, contextMemory, conversationHistory } = sessionData;
   const { intent, destination, originalMessage } = userAnalysis || {};
+  
+  console.log("[WidgetGenerator] Determining widget:", { 
+    tripData: Object.keys(tripData || {}).filter(k => tripData[k]),
+    intent,
+    destination 
+  });
   
   // ✅ تحليل نوع السؤال أولاً
   const questionType = analyzeQuestionType(originalMessage);

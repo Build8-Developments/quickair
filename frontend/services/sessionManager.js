@@ -15,6 +15,8 @@ class SessionManager {
    * إنشاء جلسة جديدة - Create new session
    */
   createSession(sessionId, userInfo) {
+    console.log("[SessionManager] Creating session:", sessionId);
+    
     const session = {
       sessionId,
       userInfo: {
@@ -337,13 +339,19 @@ class SessionManager {
   cleanup() {
     const now = new Date();
     const HOUR_IN_MS = 60 * 60 * 1000;
+    let cleanedCount = 0;
 
     for (const [sessionId, session] of this.sessions.entries()) {
       const inactiveTime = now - session.metadata.lastActivity;
       // حذف الجلسات غير النشطة لأكثر من ساعة
       if (inactiveTime > HOUR_IN_MS) {
         this.sessions.delete(sessionId);
+        cleanedCount++;
       }
+    }
+    
+    if (cleanedCount > 0) {
+      console.log(`[SessionManager] Cleaned ${cleanedCount} inactive sessions`);
     }
   }
 

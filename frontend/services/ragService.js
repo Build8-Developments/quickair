@@ -3,6 +3,13 @@
  * نظام استرجاع وتوليد محتوى ذكي لـ QuickAir
  * 
  * ❗ CRITICAL: NO HALLUCINATIONS - Only real data from database
+ * 
+ * Main Functions:
+ * - analyzeUserMessage: تحليل رسالة المستخدم واستخراج النية والكيانات
+ * - searchHotels: البحث في الفنادق بناءً على الفلاتر
+ * - buildRAGContext: بناء السياق للـ AI
+ * - findMatchingPage: البحث عن صفحة مناسبة
+ * - getChatbotKnowledgeBase: الحصول على قاعدة المعرفة الكاملة
  */
 
 import baliData from "@/data/tours/bali.json";
@@ -354,9 +361,27 @@ const ALL_FAQS = {
 };
 
 /**
- * 1️⃣ فهم اللغة الطبيعية - Extract Intent and Entities (12 Intent Types)
+ * 1️⃣ فهم اللغة الطبيعية - Extract Intent and Entities (20+ Intent Types)
+ * @param {string} message - رسالة المستخدم
+ * @param {string} language - اللغة (ar/en)
+ * @returns {Object} تحليل الرسالة مع النية والكيانات
  */
 export function analyzeUserMessage(message, language = "ar") {
+  if (!message || typeof message !== 'string') {
+    return {
+      intent: "unknown",
+      confidence: 0,
+      destination: null,
+      hotelNames: [],
+      budget: null,
+      travelers: null,
+      nights: null,
+      stars: null,
+      originalMessage: message || "",
+      language
+    };
+  }
+
   const msg = message.toLowerCase();
   const isArabic = language === "ar";
 
@@ -691,11 +716,13 @@ export function analyzeUserMessage(message, language = "ar") {
 
 /**
  * 2️⃣ RAG - البحث في البيانات الحقيقية فقط
+ * @param {Object} filters - فلاتر البحث
+ * @returns {Array} قائمة الفنادق المطابقة
  */
 export function searchHotels(filters = {}) {
   const {
     destination,
-    budget, // This is maxEGP from BudgetWidget
+    budget,
     stars,
     language = "ar",
     maxResults = 5
@@ -703,53 +730,78 @@ export function searchHotels(filters = {}) {
 
   let results = [];
 
-  // البحث في الوجهات
-  const destData = destination ? [ALL_DESTINATIONS[destination]] : Object.values(ALL_DESTINATIONS);
+  try {
+    // البحث في الوجهات
+    const destData = destination ? [ALL_DESTINATIONS[destination]] : Object.values(ALL_DESTINATIONS);
 
-  destData.forEach(dest => {
-    if (!dest || !dest.hotels) return;
+    destData.forEach(dest => {
+      if (!dest || !dest.hotels) return;
 
-    dest.hotels.forEach(hotel => {
-      // تطبيق الفلاتر - budget is in EGP
-      if (budget && hotel.price_egp > budget) return;
-      if (stars && hotel.stars !== stars) return;
+      dest.hotels.forEach(hotel => {
+        // تطبيق الفلاتر - budget is in EGP
+        if (budget && hotel.price_egp > budget) return;
+        if (stars && hotel.stars !== stars) return;
 
-      results.push({
-        ...hotel,
-        destination: dest.location,
-        includes: dest.includes?.[language] || [],
-        not_included: dest.not_included?.[language] || [],
-        optional_tours: dest.optional_tours || []
+        results.push({
+          ...hotel,
+          destination: dest.location,
+          includes: dest.includes?.[language] || [],
+          not_included: dest.not_included?.[language] || [],
+          optional_tours: dest.optional_tours || []
+        });
       });
     });
-  });
 
-  // ترتيب حسب السعر
-  results.sort((a, b) => a.price_egp - b.price_egp);
+    // ترتيب حسب السعر
+    results.sort((a, b) => a.price_egp - b.price_egp);
+  } catch (error) {
+    console.error("[RAG] Error searching hotels:", error.message);
+    return [];
+  }
 
   return results.slice(0, maxResults);
 }
 
 /**
  * 3️⃣ الحصول على معلومات وجهة محددة
+ * @param {string} destination - معرف الوجهة
+ * @param {string} language - اللغة
+ * @returns {Object|null} معلومات الوجهة
  */
 export function getDestinationInfo(destination, language = "ar") {
   const destData = ALL_DESTINATIONS[destination];
-  if (!destData) return null;
+  if (!destData) {
+    console.warn("[RAG] Destination not found:", destination);
+    return null;
+  }
 
   const isArabic = language === "ar";
+  const hotels = destData.hotels || [];
+
+  // Handle empty hotels array
+  if (hotels.length === 0) {
+    return {
+      location: destData.location,
+      hotels_count: 0,
+      price_range: { min: 0, max: 0, min_usd: 0, max_usd: 0 },
+      includes: destData.includes?.[language] || [],
+      not_included: destData.not_included?.[language] || [],
+      optional_tours: destData.optional_tours || [],
+      notes: destData.notes?.[language] || null
+    };
+  }
 
   return {
     location: destData.location,
-    hotels_count: destData.hotels?.length || 0,
+    hotels_count: hotels.length,
     price_range: {
-      min: Math.min(...(destData.hotels || []).map(h => h.price_egp)),
-      max: Math.max(...(destData.hotels || []).map(h => h.price_egp)),
-      min_usd: Math.min(...(destData.hotels || []).map(h => h.price_usd_reference)),
-      max_usd: Math.max(...(destData.hotels || []).map(h => h.price_usd_reference))
+      min: Math.min(...hotels.map(h => h.price_egp)),
+      max: Math.max(...hotels.map(h => h.price_egp)),
+      min_usd: Math.min(...hotels.map(h => h.price_usd_reference)),
+      max_usd: Math.max(...hotels.map(h => h.price_usd_reference))
     },
-    includes: destData.includes[language],
-    not_included: destData.not_included[language],
+    includes: destData.includes?.[language] || [],
+    not_included: destData.not_included?.[language] || [],
     optional_tours: destData.optional_tours || [],
     notes: destData.notes?.[language] || null
   };
@@ -757,8 +809,13 @@ export function getDestinationInfo(destination, language = "ar") {
 
 /**
  * 4️⃣ البحث في الأسئلة الشائعة
+ * @param {string} query - نص البحث
+ * @param {string} language - اللغة
+ * @returns {Array} الأسئلة المطابقة
  */
 export function searchFAQs(query, language = "ar") {
+  if (!query || typeof query !== 'string') return [];
+  
   const faqs = ALL_FAQS[language];
   if (!faqs) return [];
 
@@ -1114,7 +1171,7 @@ export function getVisaInfo(destination, language = "ar") {
  * 1️⃣5️⃣ بناء السياق الكامل للـ AI
  */
 export function buildRAGContext(userAnalysis, language = "ar") {
-  const { intent, destination, budget, travelers, hotelNames } = userAnalysis;
+  const { intent, destination, budget, travelers, hotelNames } = userAnalysis || {};
 
   let context = "";
   const isArabic = language === "ar";
@@ -1261,18 +1318,23 @@ export function buildRAGContext(userAnalysis, language = "ar") {
 /**
  * البحث عن صفحة مناسبة بناءً على الرسالة
  * Find appropriate page based on message
+ * @param {string} message - رسالة المستخدم
+ * @param {string} language - اللغة
+ * @returns {Object|null} معلومات الصفحة المطابقة
  */
 export function findMatchingPage(message, language = "ar") {
+  if (!message || typeof message !== 'string') return null;
+  
   const msg = message.toLowerCase();
   const isArabic = language === "ar";
 
-  console.log("🔎 findMatchingPage called with:", { message, msg, language });
+  console.log("[RAG] findMatchingPage:", { messageLength: msg.length, language });
 
   // ✅ أولاً: فحص كلمات التخصيص - أولوية عالية لـ create-trip
   const customTripPatterns = /اخصص|خصص|صمم رحل|خطط رحل|انشئ رحل|رحلتي|custom|plan.*trip|create.*trip|design.*trip|my trip/i;
   if (customTripPatterns.test(msg)) {
     const pageInfo = SITE_PAGES.createTrip;
-    console.log("✅ Found createTrip by custom pattern");
+    console.log("[RAG] Found createTrip by custom pattern");
     return {
       page: "createTrip",
       url: pageInfo.url,
@@ -1292,7 +1354,7 @@ export function findMatchingPage(message, language = "ar") {
     // تحقق من الكلمات المفتاحية
     for (const keyword of keywords) {
       if (msg.includes(keyword.toLowerCase())) {
-        console.log("✅ Found match by keyword:", { key, keyword });
+        console.log("[RAG] Found match by keyword:", { key, keyword });
         return {
           page: key,
           url: pageInfo.url,

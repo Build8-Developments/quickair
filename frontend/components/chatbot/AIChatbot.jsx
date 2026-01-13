@@ -256,7 +256,7 @@ export default function AIChatbot() {
     setUserInfo({ ...userInfo, preferredLanguage: lang });
     
     // Generate unique session ID
-    const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
     setSessionId(newSessionId);
     console.log("Created session:", newSessionId);
     
@@ -345,10 +345,10 @@ export default function AIChatbot() {
 
         // ✅ Handle automatic navigation if requested
         if (data.navigation && data.navigation.shouldNavigate && data.navigation.url) {
-          const locale = userInfo.preferredLanguage || language || 'en';
-          const urlWithLocale = data.navigation.url.startsWith(`/${locale}`) 
+          // Use site language, not chat language
+          const urlWithLocale = data.navigation.url.startsWith(`/${language}`) 
             ? data.navigation.url 
-            : `/${locale}${data.navigation.url}`;
+            : `/${language}${data.navigation.url}`;
           
           // Navigate after a short delay to show the message first
           setTimeout(() => {
@@ -435,7 +435,7 @@ export default function AIChatbot() {
     setMessages([]);
     
     // Generate new session
-    const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
     setSessionId(newSessionId);
     
     // Update localStorage
@@ -934,11 +934,10 @@ export default function AIChatbot() {
                     {message.suggestedPages && message.suggestedPages.length > 0 && (
                       <div className={styles.suggestedLinks}>
                         {message.suggestedPages.map((link, linkIndex) => {
-                          // Add locale to URL if not already present
-                          const locale = userInfo.preferredLanguage || language || 'en';
-                          const urlWithLocale = link.url.startsWith(`/${locale}`) 
+                          // Use site language for URLs
+                          const urlWithLocale = link.url.startsWith(`/${language}`) 
                             ? link.url 
-                            : `/${locale}${link.url}`;
+                            : `/${language}${link.url}`;
                           
                           return (
                             <a

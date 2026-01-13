@@ -1,23 +1,9 @@
 import {
   analyzeUserMessage,
   buildRAGContext,
-  searchHotels,
   isOutOfScope,
-  getVisaInfo,
-  getOptionalTours,
-  getAllDestinations,
-  suggestDestinationsByBudget,
   getSuggestedPages,
   findMatchingPage,
-  getAllPages,
-  SITE_PAGES,
-  // New imports for comprehensive knowledge
-  getCompanyInfo,
-  getAllServices,
-  getServiceInfo,
-  getPolicies,
-  getCurrentOffers,
-  comprehensiveSearch,
   getChatbotKnowledgeBase
 } from "@/services/ragService";
 import sessionManager from "@/services/sessionManager";
@@ -94,9 +80,7 @@ function generateQuickOptions(userAnalysis, language, reply) {
 function buildSystemPrompt(language = "ar") {
   const isArabic = language === "ar";
   
-  // Get comprehensive knowledge base (always in Arabic/English for data)
   const knowledge = getChatbotKnowledgeBase(isArabic ? "ar" : "en");
-  const company = knowledge.company;
   const services = knowledge.services;
   const policies = knowledge.policies;
   const offers = knowledge.offers;
@@ -195,7 +179,6 @@ export async function POST(request) {
       language: userLanguage, 
       conversationHistory,
       userInfo,
-      tripData,
       sessionId,
       widgetSelection 
     } = await request.json();
@@ -204,11 +187,18 @@ export async function POST(request) {
     // Handle message validation - message can be string or object from widget
     const messageText = typeof message === 'string' ? message : (message?.message || JSON.stringify(message));
     
+    // Input validation
     if (!messageText || messageText.trim().length === 0) {
       return Response.json(
-        { error: "Message is required" },
+        { error: "Message is required", success: false },
         { status: 400 }
       );
+    }
+    
+    // Sanitize and limit message length
+    const sanitizedMessage = messageText.trim().slice(0, 2000);
+    if (sanitizedMessage.length !== messageText.trim().length) {
+      console.warn("[Chatbot] Message truncated from", messageText.length, "to 2000 chars");
     }
 
     const isArabic = language === "ar";
@@ -218,7 +208,7 @@ export async function POST(request) {
     if (sessionId) {
       session = sessionManager.getSession(sessionId) || sessionManager.createSession(sessionId, userInfo || {});
     } else {
-      const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
       session = sessionManager.createSession(newSessionId, userInfo || {});
     }
 
@@ -228,13 +218,18 @@ export async function POST(request) {
     }
 
     // Add message to session history
-    sessionManager.addMessage(session.sessionId, { role: "user", content: messageText });
+    sessionManager.addMessage(session.sessionId, { role: "user", content: sanitizedMessage });
 
     // ✅ Step 1: تحليل رسالة المستخدم
-    const userAnalysis = analyzeUserMessage(messageText, language);
+    const userAnalysis = analyzeUserMessage(sanitizedMessage, language);
+    console.log("[Chatbot] User analysis:", { 
+      intent: userAnalysis.intent, 
+      destination: userAnalysis.destination,
+      confidence: userAnalysis.confidence 
+    });
 
     // ✅ Step 2: فحص إذا كان السؤال خارج النطاق
-    if (isOutOfScope(messageText)) {
+    if (isOutOfScope(sanitizedMessage)) {
       const outOfScopeMessage = isArabic
         ? "أساعدك في حجز الرحلات والفنادق والتأشيرات فقط.\n\nكيف أساعدك في رحلتك؟"
         : "I help with flight, hotel, and visa bookings only.\n\nHow can I help with your trip?";
@@ -248,6 +243,11 @@ export async function POST(request) {
 
     // ✅ Step 3: بناء سياق RAG بالبيانات الحقيقية
     const ragContext = buildRAGContext(userAnalysis, language);
+    console.log("[Chatbot] RAG context built:", { 
+      hotelsFound: ragContext.hotels?.length || 0,
+      faqsFound: ragContext.faqs?.length || 0,
+      hasDestInfo: !!ragContext.destInfo
+    });
     
     // ✅ Step 3.5: الحصول على الروابط المقترحة
     const suggestedPages = getSuggestedPages(userAnalysis, language);
@@ -256,12 +256,12 @@ export async function POST(request) {
     let navigationAction = null;
     
     // البحث عن صفحة مطابقة - حتى لو الـ intent مختلف
-    const matchedPage = findMatchingPage(messageText, language);
+    const matchedPage = findMatchingPage(sanitizedMessage, language);
     
     // تحقق من وجود كلمات التنقل في الرسالة
-    const hasNavigationIntent = /وديني|ودني|خدني|روح|افتح|ورني|اذهب|توجه|صفحة|صفحه|اشوف|شوفني|عرض|لا صفح|لا الصفح|طب |هات|ابي|أبي|أبغى|ابغى|عايز|اريد|أريد|take me|go to|open|show me|navigate|page|view|see|want|need/i.test(messageText);
+    const hasNavigationIntent = /وديني|ودني|خدني|روح|افتح|ورني|اذهب|توجه|صفحة|صفحه|اشوف|شوفني|عرض|لا صفح|لا الصفح|طب |هات|ابي|أبي|أبغى|ابغى|عايز|اريد|أريد|take me|go to|open|show me|navigate|page|view|see|want|need/i.test(sanitizedMessage);
     
-    console.log("🔍 Navigation check:", { messageText, matchedPage, hasNavigationIntent, intent: userAnalysis.intent });
+    console.log("🔍 Navigation check:", { sanitizedMessage, matchedPage, hasNavigationIntent, intent: userAnalysis.intent });
     
     // ✅ إذا طلب صفحة معينة - أعطيه زرار بدل ما يفتح أوتوماتيك
     if (matchedPage) {
@@ -298,7 +298,13 @@ export async function POST(request) {
     const systemPrompt = buildSystemPrompt(language);
     
     let enhancedPrompt = systemPrompt;
-    // Only add minimal context - don't overwhelm the AI
+    
+    // Add RAG context for better responses
+    if (ragContext.context && ragContext.context.trim()) {
+      enhancedPrompt += `\n\n📊 Relevant Information:\n${ragContext.context}`;
+    }
+    
+    // Add hotel summary if available
     if (ragContext.hotels && ragContext.hotels.length > 0) {
       const hotelSummary = isArabic 
         ? `فنادق متاحة: ${ragContext.hotels.length}`
@@ -329,33 +335,59 @@ export async function POST(request) {
 
     // Add current message
     const currentPrompt = isArabic 
-      ? `${messageText}\n\n(تذكر: جملة واحدة قصيرة فقط 10-15 كلمة - سؤال مباشر فقط)`
-      : `${messageText}\n\n(Remember: One short sentence only, 10-15 words - direct question only)`;
+      ? `${sanitizedMessage}\n\n(تذكر: جملة واحدة قصيرة فقط 10-15 كلمة - سؤال مباشر فقط)`
+      : `${sanitizedMessage}\n\n(Remember: One short sentence only, 10-15 words - direct question only)`;
     
     chatMessages.push({ role: "user", content: currentPrompt });
 
-    // ✅ Step 6: إرسال الرسالة إلى OpenRouter
-    const openRouterResponse = await fetch(OPENROUTER_BASE_URL, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
-        "HTTP-Referer": "https://quickair.com",
-        "X-Title": "QuickAir Travel Assistant",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "openai/gpt-4o-mini",
-        messages: chatMessages,
-        max_tokens: 100,
-        temperature: 0.5,
-        top_p: 0.9,
-      })
-    });
+    // ✅ Step 6: إرسال الرسالة إلى OpenRouter مع retry logic
+    const MAX_RETRIES = 3;
+    let openRouterResponse;
+    let lastError;
+    
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+      try {
+        openRouterResponse = await fetch(OPENROUTER_BASE_URL, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+            "HTTP-Referer": "https://quickair.com",
+            "X-Title": "QuickAir Travel Assistant",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "openai/gpt-4o-mini",
+            messages: chatMessages,
+            max_tokens: 100,
+            temperature: 0.5,
+            top_p: 0.9,
+          })
+        });
+        
+        if (openRouterResponse.ok) {
+          break; // Success, exit retry loop
+        }
+        
+        lastError = `API error: ${openRouterResponse.status}`;
+        console.warn(`[Chatbot] Attempt ${attempt} failed: ${lastError}`);
+        
+        if (attempt < MAX_RETRIES) {
+          await new Promise(resolve => setTimeout(resolve, 1000 * attempt)); // Exponential backoff
+        }
+      } catch (fetchError) {
+        lastError = fetchError.message;
+        console.warn(`[Chatbot] Attempt ${attempt} fetch error: ${lastError}`);
+        
+        if (attempt < MAX_RETRIES) {
+          await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+        }
+      }
+    }
 
-    if (!openRouterResponse.ok) {
-      const errorData = await openRouterResponse.text();
-      console.error("OpenRouter API error:", errorData);
-      throw new Error(`OpenRouter API error: ${openRouterResponse.status}`);
+    if (!openRouterResponse || !openRouterResponse.ok) {
+      const errorData = openRouterResponse ? await openRouterResponse.text() : lastError;
+      console.error("OpenRouter API error after retries:", errorData);
+      throw new Error(`OpenRouter API error: ${lastError || openRouterResponse?.status}`);
     }
 
     const responseData = await openRouterResponse.json();
@@ -372,7 +404,7 @@ export async function POST(request) {
     const sessionData = sessionManager.getSession(session.sessionId);
     sessionData.conversationHistory = conversationHistory; // Pass conversation history for smart analysis
     
-    const nextWidget = determineNextWidget(sessionData, { ...userAnalysis, originalMessage: messageText });
+    const nextWidget = determineNextWidget(sessionData, { ...userAnalysis, originalMessage: sanitizedMessage });
     let widgetData = null;
 
     // ✅ Only generate widget if it's a valid type
@@ -414,20 +446,29 @@ export async function POST(request) {
       },
     });
   } catch (error) {
-    console.error("Chatbot API error:", error);
-    console.error("Error stack:", error.stack);
+    console.error("[Chatbot] API error:", error.message);
+    console.error("[Chatbot] Error stack:", error.stack);
 
     const isArabic = language === "ar";
-    const fallbackMessage = isArabic
-      ? "عذراً، أواجه صعوبة في الإجابة الآن. يرجى المحاولة مرة أخرى."
-      : "Sorry, I'm having trouble responding right now. Please try again.";
+    
+    // Provide more specific error messages
+    let fallbackMessage;
+    if (error.message?.includes("API")) {
+      fallbackMessage = isArabic
+        ? "عذراً، الخدمة غير متاحة حالياً. يرجى المحاولة بعد قليل."
+        : "Sorry, the service is currently unavailable. Please try again shortly.";
+    } else {
+      fallbackMessage = isArabic
+        ? "عذراً، حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى."
+        : "Sorry, an unexpected error occurred. Please try again.";
+    }
 
     return Response.json(
       {
         reply: fallbackMessage,
-        success: true,
+        success: false,
         error: error.message || "AI processing error",
-        widget: null, // ✅ No widget on error - let user chat normally
+        widget: null,
       },
       { status: 200 }
     );
