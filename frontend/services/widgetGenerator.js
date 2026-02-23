@@ -12,7 +12,7 @@ import { searchHotels } from "./ragService";
 // قائمة الـ widgets المسموح بها فقط
 const ALLOWED_WIDGET_TYPES = [
   "destinations",
-  "dateRange", 
+  "dateRange",
   "travelers",
   "budget",
   "hotelCards",
@@ -23,16 +23,16 @@ const ALLOWED_WIDGET_TYPES = [
 
 /**
  * تحليل ذكي لنية اليوزر - Smart Intent Analysis
- * يفهم السياق والنية - يبدأ الـ flow لأي سؤال عن رحلات أو فنادق
+ * يفهم السياق والنية - بس يبدأ الـ flow لما اليوزر يكون جاهز فعلاً
  */
 function analyzeBookingIntent(message = "", conversationContext = {}) {
   const msgLower = message.toLowerCase().trim();
   const { tripData, contextMemory, conversationHistory } = conversationContext;
-  
+
   // 1. إذا اليوزر في وسط flow الحجز، أي رد إيجابي يكمل
   const isInBookingFlow = contextMemory?.bookingMode === true;
   const hasStartedBooking = tripData?.destination || tripData?.dates || tripData?.travelers;
-  
+
   if (isInBookingFlow || hasStartedBooking) {
     // أي رد قصير أو إيجابي يعني موافقة
     if (msgLower.length < 20) {
@@ -41,7 +41,7 @@ function analyzeBookingIntent(message = "", conversationContext = {}) {
         /^لا\b/, /^لأ/, /^مش عايز/, /^no\b/, /^nope/, /^cancel/, /^stop/,
         /الغ/, /وقف/, /خلاص/, /مش دلوقتي/, /بعدين/
       ];
-      
+
       const isNegative = negativePatterns.some(p => p.test(msgLower));
       if (!isNegative) {
         return { wantsToBook: true, confidence: 0.9, reason: "continuing_flow" };
@@ -49,87 +49,71 @@ function analyzeBookingIntent(message = "", conversationContext = {}) {
     }
     return { wantsToBook: true, confidence: 0.8, reason: "in_booking_flow" };
   }
-  
-  // 2. ✅ أي سؤال عن رحلات أو فنادق يبدأ الـ flow مباشرة
-  const travelRelatedPatterns = [
-    // رحلات وسفر - بأي صيغة
-    /رحل/i, /سفر/i, /trip/i, /travel/i, /vacation/i, /holiday/i,
-    /جول[ةه]/i, /tour/i, /journey/i,
-    
-    // فنادق وإقامة - بأي صيغة  
-    /فندق/i, /فنادق/i, /hotel/i, /hotels/i,
-    /إقام/i, /اقام/i, /accommodat/i, /stay/i, /room/i,
-    /منتجع/i, /resort/i,
-    
-    // حجز - بأي صيغة
-    /حج[زو]/i, /احج[زو]/i, /book/i, /reserv/i,
-    
-    // عروض وباقات
-    /عرض/i, /عروض/i, /offer/i, /deal/i, /باق[ةه]/i, /package/i,
-    /برنامج/i, /program/i,
-    
-    // أسعار وتكلفة
-    /سعر/i, /اسعار/i, /price/i, /cost/i, /كام/i, /how much/i,
-    /تكلف/i, /ميزاني/i, /budget/i, /cheap/i, /رخيص/i,
-    
-    // وجهات ومدن
-    /وجه[ةه]/i, /destination/i, /مكان/i, /place/i,
-    /بالي/i, /bali/i, /شرم/i, /sharm/i, /الغردق/i, /hurghada/i,
-    /دهب/i, /dahab/i, /إسطنبول/i, /اسطنبول/i, /istanbul/i,
-    /بيروت/i, /beirut/i, /لبنان/i, /lebanon/i,
-    /تركيا/i, /turkey/i, /السخن/i, /sokhna/i,
-    /دبي/i, /dubai/i, /المالديف/i, /maldives/i,
-    /مصر/i, /egypt/i, /البحر/i, /sea/i, /beach/i, /شاطئ/i,
-    
-    // نية السفر العامة
-    /عايز اروح/i, /عايز أروح/i, /أريد أذهب/i, /want to go/i,
-    /نفسي اسافر/i, /أبي أسافر/i, /ابغى اسافر/i,
-    /فين اروح/i, /وين أروح/i, /where.*go/i,
-    /اقترح/i, /suggest/i, /recommend/i, /توصي/i,
-    
-    // أسئلة عامة عن السياحة
-    /سياح/i, /tourism/i, /tourist/i,
-    /اجاز[ةه]/i, /إجاز/i, /شهر عسل/i, /honeymoon/i,
-    /عائل/i, /family/i, /أصحاب/i, /friends/i,
-    
-    // ردود إيجابية
+
+  // 2. ✅ نية حجز واضحة وصريحة فقط - مش أي سؤال عام
+  const explicitBookingPatterns = [
+    // حجز صريح
+    /عايز احجز/i, /عاوز احجز/i, /ابغى احجز/i, /أبي احجز/i,
+    /نفسي احجز/i, /محتاج احجز/i, /اريد احجز/i, /أريد أن أحجز/i,
+    /want to book/i, /wanna book/i, /need to book/i, /i want book/i,
+    /book.*trip/i, /book.*hotel/i, /make.*reservation/i,
+
+    // بدء رحلة صريح
+    /ابدأ.*رحل/i, /ابدا.*رحل/i, /start.*trip/i, /plan.*trip/i,
+    /خطط.*رحل/i, /نظم.*رحل/i, /organize.*trip/i,
+
+    // جاهز للحجز
+    /جاهز.*احجز/i, /مستعد.*احجز/i, /ready.*book/i,
+    /يلا.*نحجز/i, /هيا.*نحجز/i, /let'?s book/i,
+
+    // ردود إيجابية بعد سؤال البوت مباشرة
     /^(اه|أه|آه|ايوه|نعم|اوك|تمام|ماشي|يلا|طيب|حاضر|موافق|اكيد)$/i,
     /^(yes|yeah|yep|ok|okay|sure|alright|go|let'?s)$/i,
   ];
-  
-  // ✅ لو أي pattern اتطابق، ابدأ الـ flow
-  for (const pattern of travelRelatedPatterns) {
+
+  // ✅ لو في نية حجز صريحة، ابدأ الـ flow
+  for (const pattern of explicitBookingPatterns) {
     if (pattern.test(msgLower)) {
       return {
         wantsToBook: true,
         confidence: 1.0,
-        reason: "travel_related_query",
+        reason: "explicit_booking_intent",
         matchedPattern: pattern.source
       };
     }
   }
-  
+
   // 3. تحليل السياق من المحادثة السابقة
-  const recentMessages = conversationHistory?.slice(-3) || [];
-  const botAskedAboutBooking = recentMessages.some(m => 
-    m.role === "assistant" && 
-    (m.content?.includes("رحلة") || m.content?.includes("حجز") || 
-     m.content?.includes("trip") || m.content?.includes("book") ||
-     m.content?.includes("وجهة") || m.content?.includes("destination"))
-  );
+  // لو البوت سأل سؤال مباشر عن الحجز واليوزر رد
+  const recentMessages = conversationHistory?.slice(-2) || [];
+  const lastBotMessage = recentMessages.find(m => m.role === "assistant");
   
-  if (botAskedAboutBooking && msgLower.length < 30) {
-    return {
-      wantsToBook: true,
-      confidence: 0.8,
-      reason: "responding_to_bot"
-    };
+  if (lastBotMessage) {
+    const botAskedToBook = 
+      /عايز تحجز|تبدأ.*رحل|جاهز.*تسافر|want.*book|ready.*travel|start.*journey/i.test(lastBotMessage.content);
+    
+    if (botAskedToBook && msgLower.length < 30) {
+      // رد قصير بعد سؤال مباشر = موافقة
+      const negativePatterns = [
+        /^لا\b/, /^لأ/, /^مش/, /^no\b/, /^nope/, /بعدين/, /مش دلوقتي/
+      ];
+      
+      const isNegative = negativePatterns.some(p => p.test(msgLower));
+      if (!isNegative) {
+        return {
+          wantsToBook: true,
+          confidence: 0.85,
+          reason: "responding_to_booking_question"
+        };
+      }
+    }
   }
-  
+
+  // 4. أسئلة عامة عن السفر = مش حجز، خليه يتكلم
   return {
     wantsToBook: false,
     confidence: 0,
-    reason: "no_travel_intent"
+    reason: "general_inquiry_let_bot_talk"
   };
 }
 
@@ -138,22 +122,22 @@ function analyzeBookingIntent(message = "", conversationContext = {}) {
  */
 function analyzeQuestionType(message = "") {
   const msgLower = message.toLowerCase();
-  
+
   // سؤال عن فنادق
   if (/فندق|فنادق|hotel|hotels|إقام|accommodat|احسن فندق|best hotel/i.test(msgLower)) {
     return "hotels";
   }
-  
+
   // سؤال عن أسعار
   if (/سعر|اسعار|كام|price|cost|how much|تكلف/i.test(msgLower)) {
     return "prices";
   }
-  
+
   // سؤال عن وجهات
   if (/وجه|وين|فين|اروح|destination|where|go to/i.test(msgLower)) {
     return "destinations";
   }
-  
+
   return "general";
 }
 
@@ -162,28 +146,28 @@ function analyzeQuestionType(message = "") {
  */
 function extractDestinationFromMessage(message = "") {
   const msgLower = message.toLowerCase();
-  
+
   const destinations = {
     // Bali
     "بالي": "bali",
     "bali": "bali",
     "اندونيسيا": "bali",
     "indonesia": "bali",
-    
+
     // Sharm
     "شرم": "sharm",
     "sharm": "sharm",
     "شرم الشيخ": "sharm",
-    
+
     // Hurghada
     "الغردق": "hurghada",
     "غردق": "hurghada",
     "hurghada": "hurghada",
-    
+
     // Dahab
     "دهب": "dahab",
     "dahab": "dahab",
-    
+
     // Istanbul
     "إسطنبول": "istanbul",
     "اسطنبول": "istanbul",
@@ -191,13 +175,13 @@ function extractDestinationFromMessage(message = "") {
     "تركيا": "istanbul",
     "istanbul": "istanbul",
     "turkey": "istanbul",
-    
+
     // Beirut / Lebanon
     "بيروت": "beirut",
     "beirut": "beirut",
     "لبنان": "beirut",
     "lebanon": "beirut",
-    
+
     // Ain Sokhna
     "السخن": "ainsokhna",
     "العين السخنة": "ainsokhna",
@@ -205,47 +189,48 @@ function extractDestinationFromMessage(message = "") {
     "سخنة": "ainsokhna",
     "sokhna": "ainsokhna",
     "ain sokhna": "ainsokhna",
-    
+
     // Sahl Hasheesh
     "سهل حشيش": "sahlhashish",
     "حشيش": "sahlhashish",
     "hasheesh": "sahlhashish",
     "sahl": "sahlhashish"
   };
-  
+
   for (const [keyword, id] of Object.entries(destinations)) {
     if (msgLower.includes(keyword.toLowerCase())) {
       return id;
     }
   }
-  
+
   return null;
 }
 
 /**
  * تحديد الـ widget التالي المناسب
- * Determine next appropriate widget
+ * Smart widget flow that adapts to user behavior
  */
 export function determineNextWidget(sessionData, userAnalysis) {
   if (!sessionData) {
     console.log("[WidgetGenerator] No session data");
     return null;
   }
-  
+
   const { tripData, contextMemory, conversationHistory } = sessionData;
   const { intent, destination, originalMessage } = userAnalysis || {};
-  
-  console.log("[WidgetGenerator] Determining widget:", { 
+
+  console.log("[WidgetGenerator] Determining widget:", {
     tripData: Object.keys(tripData || {}).filter(k => tripData[k]),
     intent,
-    destination 
+    destination,
+    bookingMode: contextMemory?.bookingMode
   });
-  
+
   // ✅ تحليل نوع السؤال أولاً
   const questionType = analyzeQuestionType(originalMessage);
   const mentionedDestination = extractDestinationFromMessage(originalMessage);
-  
-  // ✅ إذا سأل عن فنادق في وجهة معينة - اعرض الفنادق مباشرة
+
+  // ✅ إذا سأل عن فنادق في وجهة معينة - اعرض الفنادق مباشرة (skip flow)
   if (questionType === "hotels" && mentionedDestination) {
     return {
       type: "hotelCards",
@@ -254,16 +239,26 @@ export function determineNextWidget(sessionData, userAnalysis) {
       skipFlow: true
     };
   }
-  
+
+  // ✅ إذا سأل عن أسعار في وجهة معينة - اعرض الفنادق (الأسعار في البطاقات)
+  if (questionType === "prices" && mentionedDestination) {
+    return {
+      type: "hotelCards",
+      reason: "price_query_with_destination",
+      data: { destination: mentionedDestination },
+      skipFlow: true
+    };
+  }
+
   // ✅ إذا سأل عن وجهات - اعرض الوجهات
-  if (questionType === "destinations") {
+  if (questionType === "destinations" && !tripData?.destination && !mentionedDestination) {
     return {
       type: "destinations",
       reason: "destination_query",
       startBookingFlow: true
     };
   }
-  
+
   // ✅ إذا اليوزر اختار فندق (من direct query أو من flow)، كمل من هناك
   if (tripData?.selectedHotel) {
     // 6. نظام الوجبات
@@ -288,23 +283,24 @@ export function determineNextWidget(sessionData, userAnalysis) {
       reason: "booking_complete"
     };
   }
-  
+
   // تحليل ذكي للنية
   const intentAnalysis = analyzeBookingIntent(originalMessage, {
     tripData,
     contextMemory,
     conversationHistory
   });
-  
+
   // إذا اليوزر مش عايز يحجز، مفيش widget
   if (!intentAnalysis.wantsToBook) {
     return null;
   }
-  
-  // ✅ User wants to book - show appropriate widget based on flow
-  
-  // 1. الوجهة
-  if (!tripData?.destination && !destination && !mentionedDestination) {
+
+  // ✅ User wants to book - smart flow based on what we already know
+
+  // 1. الوجهة - skip if destination already mentioned
+  const effectiveDestination = tripData?.destination || destination || mentionedDestination;
+  if (!effectiveDestination) {
     return {
       type: "destinations",
       reason: "destination_selection",
@@ -313,7 +309,7 @@ export function determineNextWidget(sessionData, userAnalysis) {
   }
 
   // 2. التاريخ
-  if ((tripData?.destination || destination || mentionedDestination) && !tripData?.dates) {
+  if (effectiveDestination && !tripData?.dates) {
     return {
       type: "dateRange",
       reason: "date_selection"
@@ -341,7 +337,7 @@ export function determineNextWidget(sessionData, userAnalysis) {
     return {
       type: "hotelCards",
       reason: "hotel_selection",
-      data: { destination: tripData.destination?.id || tripData.destination || destination }
+      data: { destination: tripData.destination?.id || tripData.destination || destination || mentionedDestination }
     };
   }
 
@@ -357,7 +353,7 @@ export function generateWidgetData(widgetType, sessionData, language = "ar", wid
   if (!widgetType || !ALLOWED_WIDGET_TYPES.includes(widgetType)) {
     return null;
   }
-  
+
   const tripData = sessionData?.tripData || {};
 
   switch (widgetType) {
@@ -393,7 +389,7 @@ export function generateWidgetData(widgetType, sessionData, language = "ar", wid
       // استخدم الوجهة من widgetInfo.data أو من tripData
       const destId = widgetInfo?.data?.destination || tripData.destination?.id || tripData.destination;
       console.log("[HotelCards] destId:", destId, "widgetInfo:", widgetInfo);
-      
+
       if (!destId) {
         console.log("[HotelCards] No destination found!");
         return {
@@ -402,22 +398,22 @@ export function generateWidgetData(widgetType, sessionData, language = "ar", wid
           props: { hotels: [], language }
         };
       }
-      
+
       const hotels = searchHotels({
         destination: destId,
         budget: tripData.budget?.maxEGP,
         language,
         maxResults: 5
       });
-      
+
       console.log("[HotelCards] Found hotels:", hotels.length);
-      
+
       return {
         type: "hotelCards",
         component: "HotelCardsWidget",
-        props: { 
-          hotels, 
-          language 
+        props: {
+          hotels,
+          language
         }
       };
 
@@ -452,50 +448,51 @@ export function generateWidgetData(widgetType, sessionData, language = "ar", wid
 }
 
 /**
- * توليد رد نصي مناسب مع الـ widget
+ * توليد رد نصي مناسب مع الـ widget - ردود ملهمة وأسطورية
  */
 export function generateWidgetResponse(widgetInfo, language = "ar") {
   if (!widgetInfo) return "";
-  
+
   const isArabic = language === "ar";
   const { type } = widgetInfo;
 
   const responses = {
     destinations: {
-      ar: "اختر وجهتك:",
-      en: "Choose destination:"
+      ar: "🌍 العالم كله قدامك! اختار وجهة أحلامك واستعد لمغامرة العمر 👇",
+      en: "🌍 The world awaits! Pick your dream destination and get ready for the adventure of a lifetime 👇"
     },
     dateRange: {
-      ar: "متى تريد السفر؟ 🗓️",
-      en: "When to travel? 🗓️"
+      ar: "📅 امتى نبدأ المغامرة؟ اختار التواريخ المثالية لرحلتك الأسطورية ✨",
+      en: "📅 When shall we begin the adventure? Choose the perfect dates for your epic journey ✨"
     },
     travelers: {
-      ar: "كم عدد المسافرين؟",
-      en: "How many travelers?"
+      ar: "👥 مين هيشاركك الذكريات الجميلة دي؟ حدد عدد المسافرين 🎒",
+      en: "👥 Who's joining you on this beautiful journey? Tell me the number of travelers 🎒"
     },
     budget: {
-      ar: "ما ميزانيتك؟",
-      en: "Your budget?"
+      ar: "💎 كل ميزانية عندنا ليها سحرها الخاص! اختار المستوى اللي يناسبك وسيبنا نبهرك",
+      en: "💎 Every budget has its own magic! Choose your level and let us amaze you"
     },
     hotelCards: {
-      ar: "اختر فندقك:",
-      en: "Choose hotel:"
+      ar: "🏨 دول أفضل الفنادق اللي اخترناها ليك بعناية! كل واحد فيهم قصة نجاح 👇",
+      en: "🏨 Here are the finest hotels we've handpicked for you! Each one is a success story 👇"
     },
     mealPlan: {
-      ar: "نظام الوجبات:",
-      en: "Meal plan:"
+      ar: "🍽️ الأكل جزء من المتعة! اختار نظام الوجبات اللي يخليك مرتاح طول الرحلة",
+      en: "🍽️ Food is part of the joy! Choose the meal plan that keeps you comfortable throughout"
     },
     roomType: {
-      ar: "نوع الغرفة:",
-      en: "Room type:"
+      ar: "🛏️ راحتك أولوية! اختار نوع الغرفة اللي يناسب أحلامك",
+      en: "🛏️ Your comfort is priority! Select the room type that matches your dreams"
     },
     bookingSummary: {
-      ar: "ملخص الحجز:",
-      en: "Booking summary:"
+      ar: "🎉 تقريباً خلصنا! راجع تفاصيل رحلتك الأسطورية وأكد الحجز — المغامرة بدأت! ✨",
+      en: "🎉 Almost there! Review your epic journey details and confirm — the adventure begins! ✨"
     }
   };
 
-  return responses[type]?.[isArabic ? "ar" : "en"] || "";
+  // For all non-Arabic languages, use English widget response
+  return responses[type]?.[language === "ar" ? "ar" : "en"] || "";
 }
 
 /**

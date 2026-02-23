@@ -475,14 +475,15 @@ export function analyzeUserMessage(message, language = "ar") {
     intent = "navigate_page";
     confidence = 0.85;
   }
-  // 10. تغيير التاريخ - Date Change
+  // 10. تغيير التاريخ - Date Change (requires BOTH change word + date word)
   else if (
-    msg.includes("تغيير") || msg.includes("change") ||
-    msg.includes("تعديل") || msg.includes("modify") ||
-    (msg.includes("تاريخ") || msg.includes("date"))
+    (msg.includes("تغيير") || msg.includes("change") ||
+      msg.includes("تعديل") || msg.includes("modify")) &&
+    (msg.includes("تاريخ") || msg.includes("date") ||
+      msg.includes("موعد") || msg.includes("time"))
   ) {
     intent = "change_date";
-    confidence = 0.7;
+    confidence = 0.8;
   }
   // 10. السؤال عن الميزانية - Budget Query
   else if (
@@ -584,8 +585,8 @@ export function analyzeUserMessage(message, language = "ar") {
   // 20. ساعات العمل - Working Hours
   else if (
     msg.includes("مواعيد") || msg.includes("hours") ||
-    msg.includes("فتح") || msg.includes("open") ||
-    msg.includes("شغالين") || msg.includes("working")
+    msg.includes("شغالين") || msg.includes("working") ||
+    msg.match(/متى.*(فتح|بتفتح|مفتوح)/) || msg.match(/when.*(open|close)/)
   ) {
     intent = "working_hours";
     confidence = 0.85;
@@ -815,7 +816,7 @@ export function getDestinationInfo(destination, language = "ar") {
  */
 export function searchFAQs(query, language = "ar") {
   if (!query || typeof query !== 'string') return [];
-  
+
   const faqs = ALL_FAQS[language];
   if (!faqs) return [];
 
@@ -1324,7 +1325,7 @@ export function buildRAGContext(userAnalysis, language = "ar") {
  */
 export function findMatchingPage(message, language = "ar") {
   if (!message || typeof message !== 'string') return null;
-  
+
   const msg = message.toLowerCase();
   const isArabic = language === "ar";
 

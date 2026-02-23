@@ -65,22 +65,22 @@ export default function AIChatbot() {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
-  
+
   // Language dropdown state
   const [selectedLang, setSelectedLang] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  
+
   // Popup state
   const [showPopup, setShowPopup] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
   const [popupDismissed, setPopupDismissed] = useState(false);
   const popupTimerRef = useRef(null);
   const messageIndexRef = useRef(0);
-  
+
   const messagesEndRef = useRef(null);
   const { language } = useLanguage();
   const isArabic = language === "ar";
-  
+
   // Use selected language if available, otherwise use system language
   const chatLanguage = userInfo.preferredLanguage || language;
   const isChatArabic = chatLanguage === "ar";
@@ -89,13 +89,13 @@ export default function AIChatbot() {
   // ✅ Show popup message
   const showNextPopup = useCallback(() => {
     if (isOpen || popupDismissed) return;
-    
+
     const msgs = isArabic ? POPUP_MESSAGES.ar : POPUP_MESSAGES.en;
     const msg = msgs[messageIndexRef.current % msgs.length];
     setPopupMessage(msg);
     setShowPopup(true);
     messageIndexRef.current++;
-    
+
     // Auto hide after 5 seconds
     setTimeout(() => {
       setShowPopup(false);
@@ -112,17 +112,17 @@ export default function AIChatbot() {
         return;
       }
     }
-    
+
     // First popup after 5 seconds
     const initialTimer = setTimeout(() => {
       showNextPopup();
     }, 5000);
-    
+
     // Recurring popups every 30 seconds
     popupTimerRef.current = setInterval(() => {
       showNextPopup();
     }, 30000);
-    
+
     return () => {
       clearTimeout(initialTimer);
       if (popupTimerRef.current) {
@@ -161,7 +161,7 @@ export default function AIChatbot() {
         const savedStep = localStorage.getItem(STORAGE_KEYS.CURRENT_STEP);
 
         if (savedSessionId) setSessionId(savedSessionId);
-        
+
         // Safely parse JSON with validation
         if (savedUserInfo) {
           try {
@@ -172,7 +172,7 @@ export default function AIChatbot() {
             localStorage.removeItem(STORAGE_KEYS.USER_INFO);
           }
         }
-        
+
         if (savedTripData) {
           try {
             const parsed = JSON.parse(savedTripData);
@@ -182,7 +182,7 @@ export default function AIChatbot() {
             localStorage.removeItem(STORAGE_KEYS.TRIP_DATA);
           }
         }
-        
+
         if (savedMessages) {
           try {
             const parsed = JSON.parse(savedMessages);
@@ -192,15 +192,15 @@ export default function AIChatbot() {
             localStorage.removeItem(STORAGE_KEYS.MESSAGES);
           }
         }
-        
+
         if (savedStep && savedStep !== "welcome") setCurrentStep(savedStep);
-        
+
         console.log("✅ Chat data restored from localStorage");
       } catch (error) {
         console.error("Error loading chat data:", error);
         // Clear all potentially corrupted data
         Object.values(STORAGE_KEYS).forEach(key => {
-          try { localStorage.removeItem(key); } catch (e) {}
+          try { localStorage.removeItem(key); } catch (e) { }
         });
       }
       setIsInitialized(true);
@@ -254,56 +254,64 @@ export default function AIChatbot() {
   const handleLanguageSelect = async (lang) => {
     console.log("Language selected:", lang);
     setUserInfo({ ...userInfo, preferredLanguage: lang });
-    
+
     // Generate unique session ID
     const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
     setSessionId(newSessionId);
     console.log("Created session:", newSessionId);
-    
+
     // Don't reload page, just change internal language
     setCurrentStep("chat");
-    
-    // ✅ Welcome messages in all supported languages
+
+    // ✅ Premium welcome messages in all supported languages
     const welcomeMessages = {
-      ar: `أهلاً ${userInfo.name}! 👋\n\nأنا كويك، مساعدك الذكي من Quick Air.\n\nكيف أقدر أساعدك اليوم؟`,
-      en: `Hi ${userInfo.name}! �\n\nI'm Quوick, your smart assistant from Quick Air.\n\nHow can I help you today?`,
-      fr: `Bonjour ${userInfo.name}! 👋\n\nJe suis Quick, votre assistant intelligent de Quick Air.\n\nComment puis-je vous aider aujourd'hui?`,
-      de: `Hallo ${userInfo.name}! 👋\n\nIch bin Quick, Ihr intelligenter Assistent von Quick Air.\n\nWie kann ich Ihnen heute helfen?`,
-      es: `¡Hola ${userInfo.name}! 👋\n\nSoy Quick, tu asistente inteligente de Quick Air.\n\n¿Cómo puedo ayudarte hoy?`,
-      it: `Ciao ${userInfo.name}! 👋\n\nSono Quick, il tuo assistente intelligente di Quick Air.\n\nCome posso aiutarti oggi?`,
-      ru: `Привет ${userInfo.name}! 👋\n\nЯ Quick, ваш умный помощник от Quick Air.\n\nКак я могу помочь вам сегодня?`,
-      zh: `你好 ${userInfo.name}！👋\n\n我是Quick，来自Quick Air的智能助手。\n\n今天我能帮您什么？`,
-      ja: `こんにちは ${userInfo.name}さん！👋\n\n私はQuick、Quick Airのスマートアシスタントです。\n\n今日はどのようにお手伝いできますか？`,
-      ko: `안녕하세요 ${userInfo.name}님! 👋\n\n저는 Quick Air의 스마트 어시스턴트 Quick입니다.\n\n오늘 어떻게 도와드릴까요?`,
-      pt: `Olá ${userInfo.name}! 👋\n\nSou o Quick, seu assistente inteligente da Quick Air.\n\nComo posso ajudá-lo hoje?`,
-      tr: `Merhaba ${userInfo.name}! 👋\n\nBen Quick, Quick Air'den akıllı asistanınız.\n\nBugün size nasıl yardımcı olabilirim?`,
-      hi: `नमस्ते ${userInfo.name}! 👋\n\nमैं Quick हूं, Quick Air से आपका स्मार्ट असिस्टेंट।\n\nआज मैं आपकी कैसे मदद कर सकता हूं?`,
-      nl: `Hallo ${userInfo.name}! 👋\n\nIk ben Quick, uw slimme assistent van Quick Air.\n\nHoe kan ik u vandaag helpen?`,
-      pl: `Cześć ${userInfo.name}! 👋\n\nJestem Quick, Twój inteligentny asystent z Quick Air.\n\nJak mogę Ci dzisiaj pomóc?`,
-      th: `สวัสดี ${userInfo.name}! 👋\n\nฉันคือ Quick ผู้ช่วยอัจฉริยะจาก Quick Air\n\nวันนี้ฉันช่วยอะไรคุณได้บ้าง?`,
+      ar: `أهلاً وسهلاً ${userInfo.name}! ✨\n\nأنا كويك، مستشارك الشخصي للسفر من Quick Air ✈️\n\nمن 1986 وإحنا بنصنع أحلى الذكريات! كيف أقدر أساعدك؟`,
+      en: `Welcome ${userInfo.name}! ✨\n\nI'm Quick, your personal travel concierge from Quick Air ✈️\n\nWe've been crafting dream vacations since 1986! How can I help you today?`,
+      fr: `Bienvenue ${userInfo.name} ! ✨\n\nJe suis Quick, votre concierge de voyage de Quick Air ✈️\n\nDepuis 1986, nous créons des vacances de rêve ! Comment puis-je vous aider ?`,
+      de: `Willkommen ${userInfo.name}! ✨\n\nIch bin Quick, Ihr persönlicher Reiseberater von Quick Air ✈️\n\nSeit 1986 gestalten wir Traumurlaube! Wie kann ich Ihnen helfen?`,
+      es: `¡Bienvenido/a ${userInfo.name}! ✨\n\nSoy Quick, tu concierge de viajes de Quick Air ✈️\n\n¡Desde 1986 creando vacaciones soñadas! ¿Cómo puedo ayudarte?`,
+      it: `Benvenuto/a ${userInfo.name}! ✨\n\nSono Quick, il tuo concierge di viaggio di Quick Air ✈️\n\nDal 1986 creiamo vacanze da sogno! Come posso aiutarti?`,
+      ru: `Добро пожаловать ${userInfo.name}! ✨\n\nЯ Quick, ваш персональный консьерж от Quick Air ✈️\n\nС 1986 года мы создаём путешествия мечты! Чем могу помочь?`,
+      zh: `欢迎 ${userInfo.name}！✨\n\n我是Quick，来自Quick Air的私人旅行顾问 ✈️\n\n自1986年以来，我们一直在打造梦想假期！有什么可以帮您？`,
+      ja: `ようこそ ${userInfo.name}さん！✨\n\nQuick Airのパーソナルトラベルコンシェルジュ、Quickです ✈️\n\n1986年から夢の旅を作り続けています！何かお手伝いしましょうか？`,
+      ko: `환영합니다 ${userInfo.name}님! ✨\n\nQuick Air의 개인 여행 컨시어지 Quick입니다 ✈️\n\n1986년부터 꿈의 여행을 만들어 왔습니다! 어떻게 도와드릴까요?`,
+      pt: `Bem-vindo/a ${userInfo.name}! ✨\n\nSou o Quick, seu concierge de viagem pessoal da Quick Air ✈️\n\nDesde 1986 criando férias dos sonhos! Como posso ajudá-lo?`,
+      tr: `Hoş geldiniz ${userInfo.name}! ✨\n\nBen Quick, Quick Air'den kişisel seyahat danışmanınız ✈️\n\n1986'dan beri hayallerdeki tatilleri yaratıyoruz! Nasıl yardımcı olabilirim?`,
+      hi: `स्वागत है ${userInfo.name}! ✨\n\nमैं Quick हूं, Quick Air से आपका पर्सनल ट्रैवल कंसीयज ✈️\n\n1986 से हम सपनों की छुट्टियां बना रहे हैं! आज कैसे मदद करूं?`,
+      nl: `Welkom ${userInfo.name}! ✨\n\nIk ben Quick, uw persoonlijke reisconcierge van Quick Air ✈️\n\nSinds 1986 creëren wij droomvakanties! Hoe kan ik u helpen?`,
+      pl: `Witamy ${userInfo.name}! ✨\n\nJestem Quick, Twój osobisty concierge podróży z Quick Air ✈️\n\nOd 1986 roku tworzymy wymarzone wakacje! Jak mogę Ci pomóc?`,
+      th: `ยินดีต้อนรับ ${userInfo.name}! ✨\n\nฉันคือ Quick ที่ปรึกษาการท่องเที่ยวส่วนตัวจาก Quick Air ✈️\n\nตั้งแต่ปี 1986 เราสร้างวันหยุดในฝัน! วันนี้ช่วยอะไรได้บ้าง?`,
     };
-    
+
     const welcomeMessage = welcomeMessages[lang] || welcomeMessages.en;
-    
+
     console.log("Setting messages with:", welcomeMessage);
-    
-    // ✅ Just show welcome message - no widget
+
+    const isAr = lang === "ar";
+
+    // ✅ Show welcome message with quick action buttons
     setMessages([
       {
         role: "assistant",
         content: welcomeMessage,
-        // No widget here - let user chat first
+        quickOptions: [
+          { label: isAr ? "احجز رحلة ✈️" : "Book a Trip ✈️", value: isAr ? "عايز احجز رحلة" : "I want to book a trip", autoSend: true },
+          { label: isAr ? "العروض 🎁" : "Offers 🎁", value: isAr ? "ايه العروض المتاحة؟" : "What offers are available?", autoSend: true },
+          { label: isAr ? "فنادق 🏨" : "Hotels 🏨", value: isAr ? "عايز اشوف الفنادق" : "Show me hotels", autoSend: true },
+          { label: isAr ? "تواصل معنا 📞" : "Contact Us 📞", value: isAr ? "عايز اتواصل معاكم" : "I want to contact you", autoSend: true },
+        ],
       },
     ]);
-    
+
     // ✅ No API call needed for initial message
     // User will start chatting and widgets will appear when they want to book
   };
 
-  const handleSend = async () => {
-    if (!inputValue.trim() || isLoading) return;
+  const handleSend = async (overrideMessage) => {
+    const messageToSend = overrideMessage || inputValue.trim();
+    if (!messageToSend || isLoading) return;
 
-    const userMessage = inputValue.trim();
+    const userMessage = messageToSend;
     setInputValue("");
 
     // Add user message
@@ -320,7 +328,7 @@ export default function AIChatbot() {
           conversationHistory: messages,
           userInfo: userInfo,
           tripData: tripData,
-          sessionId: sessionId, // Send session ID
+          sessionId: sessionId,
         }),
       });
 
@@ -333,8 +341,8 @@ export default function AIChatbot() {
           suggestedPages: data.suggestedPages || [],
           tripUpdate: data.tripUpdate || null,
           quickOptions: data.quickOptions || null,
-          widget: data.widget || null, // Add widget data from API
-          navigation: data.navigation || null, // Add navigation data
+          widget: data.widget || null,
+          navigation: data.navigation || null,
         };
         setMessages((prev) => [...prev, assistantMessage]);
 
@@ -345,12 +353,10 @@ export default function AIChatbot() {
 
         // ✅ Handle automatic navigation if requested
         if (data.navigation && data.navigation.shouldNavigate && data.navigation.url) {
-          // Use site language, not chat language
-          const urlWithLocale = data.navigation.url.startsWith(`/${language}`) 
-            ? data.navigation.url 
+          const urlWithLocale = data.navigation.url.startsWith(`/${language}`)
+            ? data.navigation.url
             : `/${language}${data.navigation.url}`;
-          
-          // Navigate after a short delay to show the message first
+
           setTimeout(() => {
             window.open(urlWithLocale, '_blank');
           }, 800);
@@ -380,14 +386,12 @@ export default function AIChatbot() {
     }
   };
 
-  // Handle quick option selection
+  // Handle quick option selection - pass value directly to avoid stale closure
   const handleQuickOption = (option) => {
-    setInputValue(option.value);
-    // Auto send if specified
     if (option.autoSend) {
-      setTimeout(() => {
-        handleSend();
-      }, 100);
+      handleSend(option.value);
+    } else {
+      setInputValue(option.value);
     }
   };
 
@@ -408,7 +412,13 @@ export default function AIChatbot() {
 
       const data = await response.json();
       if (data.success) {
+        alert(t(
+          "تم إرسال ملخص رحلتك بنجاح! تحقق من بريدك الإلكتروني.",
+          "Trip summary sent successfully! Check your email."
+        ));
         handleReset();
+      } else {
+        throw new Error(data.error || "Failed");
       }
     } catch (error) {
       console.error("Summary error:", error);
@@ -433,18 +443,18 @@ export default function AIChatbot() {
     // Clear trip data and messages but keep user info
     setTripData({ destination: null, budget: null, duration: null, travelers: null, preferences: [] });
     setMessages([]);
-    
+
     // Generate new session
     const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
     setSessionId(newSessionId);
-    
+
     // Update localStorage
     if (typeof window !== "undefined") {
       localStorage.removeItem(STORAGE_KEYS.TRIP_DATA);
       localStorage.removeItem(STORAGE_KEYS.MESSAGES);
       localStorage.setItem(STORAGE_KEYS.SESSION_ID, newSessionId);
     }
-    
+
     // Show welcome message again
     const lang = userInfo.preferredLanguage || "ar";
     const welcomeMessages = {
@@ -454,7 +464,7 @@ export default function AIChatbot() {
       de: `Hallo ${userInfo.name}! 👋\n\nChat neu gestartet.\n\nWie kann ich helfen?`,
       es: `¡Hola ${userInfo.name}! 👋\n\nChat reiniciado.\n\n¿Cómo puedo ayudarte?`,
     };
-    
+
     setMessages([{
       role: "assistant",
       content: welcomeMessages[lang] || welcomeMessages.en,
@@ -463,17 +473,16 @@ export default function AIChatbot() {
 
   // Render widget based on type - only allowed widgets
   const ALLOWED_WIDGETS = ["destinations", "dateRange", "travelers", "budget", "hotelCards", "mealPlan", "roomType", "bookingSummary"];
-  
+
   const renderWidget = (widget, messageIndex) => {
     // ✅ Only render allowed widget types
     if (!widget || !widget.type || !ALLOWED_WIDGETS.includes(widget.type)) {
       return null;
     }
-    if (!widget || !widget.type) return null;
 
     const handleWidgetSelection = async (data) => {
       console.log("Widget selection:", data);
-      
+
       // Extract message string from data
       let selectionMessage;
       if (typeof data === 'string') {
@@ -487,11 +496,11 @@ export default function AIChatbot() {
       } else {
         selectionMessage = JSON.stringify(data);
       }
-      
+
       // Update messages and trip data immediately
       const updatedMessages = [...messages, { role: "user", content: selectionMessage }];
       const updatedTripData = { ...tripData, ...data };
-      
+
       setMessages(updatedMessages);
       setTripData(updatedTripData);
       setIsLoading(true);
@@ -560,7 +569,7 @@ export default function AIChatbot() {
             onSelect={handleWidgetSelection}
           />
         );
-      
+
       case "dateRange":
         return (
           <DateRangeWidget
@@ -569,7 +578,7 @@ export default function AIChatbot() {
             onSelect={handleWidgetSelection}
           />
         );
-      
+
       case "travelers":
         return (
           <TravelersWidget
@@ -578,7 +587,7 @@ export default function AIChatbot() {
             onSelect={handleWidgetSelection}
           />
         );
-      
+
       case "budget":
         return (
           <BudgetWidget
@@ -587,7 +596,7 @@ export default function AIChatbot() {
             onSelect={handleWidgetSelection}
           />
         );
-      
+
       case "hotelCards":
         return (
           <HotelCardsWidget
@@ -596,7 +605,7 @@ export default function AIChatbot() {
             onSelect={handleWidgetSelection}
           />
         );
-      
+
       case "mealPlan":
         return (
           <MealPlanWidget
@@ -605,7 +614,7 @@ export default function AIChatbot() {
             onSelect={handleWidgetSelection}
           />
         );
-      
+
       case "roomType":
         return (
           <RoomTypeWidget
@@ -614,7 +623,7 @@ export default function AIChatbot() {
             onSelect={handleWidgetSelection}
           />
         );
-      
+
       case "bookingSummary":
         // Map field names to widget types
         const fieldToWidget = {
@@ -653,13 +662,13 @@ export default function AIChatbot() {
             roomType: isChatArabic ? "الغرفة" : "room type"
           };
 
-          const editMessage = isChatArabic 
+          const editMessage = isChatArabic
             ? `تعديل ${fieldNames[field]}`
             : `Edit ${fieldNames[field]}`;
 
           // Generate the widget data
           let widgetData = { type: widgetType, props: { language: userInfo.preferredLanguage || "ar" } };
-          
+
           // For hotel cards, we need to pass hotels
           if (widgetType === "hotelCards") {
             widgetData.props.hotels = widget.props?.hotels || [];
@@ -669,8 +678,8 @@ export default function AIChatbot() {
           setMessages((prev) => [
             ...prev,
             { role: "user", content: editMessage },
-            { 
-              role: "assistant", 
+            {
+              role: "assistant",
               content: isChatArabic ? `اختر ${fieldNames[field]} الجديد:` : `Choose new ${fieldNames[field]}:`,
               widget: widgetData
             }
@@ -698,9 +707,9 @@ export default function AIChatbot() {
                 if (data.success) {
                   setMessages((prev) => [
                     ...prev,
-                    { 
-                      role: "assistant", 
-                      content: isChatArabic 
+                    {
+                      role: "assistant",
+                      content: isChatArabic
                         ? "تم تأكيد حجزك بنجاح! ✅\n\nتم إرسال تفاصيل الحجز إلى بريدك الإلكتروني وسيتواصل معك فريقنا قريباً."
                         : "Booking confirmed successfully! ✅\n\nBooking details sent to your email and our team will contact you soon."
                     }
@@ -716,7 +725,7 @@ export default function AIChatbot() {
             onEdit={handleEdit}
           />
         );
-      
+
       default:
         return null;
     }
@@ -737,7 +746,7 @@ export default function AIChatbot() {
           <div className={styles.welcomeStep}>
             <div className={styles.welcomeIcon}>
               <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#019fb1" strokeWidth="2">
-                <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+                <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
               </svg>
             </div>
             <h2 className={styles.welcomeTitle}>
@@ -810,7 +819,7 @@ export default function AIChatbot() {
           { code: "pl", countryCode: "pl", name: "Polski", subtext: "Polish" },
           { code: "th", countryCode: "th", name: "ไทย", subtext: "Thai" },
         ];
-        
+
         return (
           <div className={styles.languageStep}>
             <div className={styles.stepIcon}>
@@ -837,7 +846,7 @@ export default function AIChatbot() {
               >
                 {selectedLang ? (
                   <>
-                    <img 
+                    <img
                       src={`https://flagcdn.com/24x18/${selectedLang.countryCode}.png`}
                       alt={selectedLang.name}
                       className={styles.flagIcon}
@@ -866,7 +875,7 @@ export default function AIChatbot() {
                         handleLanguageSelect(lang.code);
                       }}
                     >
-                      <img 
+                      <img
                         src={`https://flagcdn.com/24x18/${lang.countryCode}.png`}
                         alt={lang.name}
                         className={styles.flagIcon}
@@ -886,7 +895,7 @@ export default function AIChatbot() {
         const lastWidgetIndex = messages.reduce((lastIdx, msg, idx) => {
           return msg.widget ? idx : lastIdx;
         }, -1);
-        
+
         return (
           <>
             {/* Messages */}
@@ -894,9 +903,8 @@ export default function AIChatbot() {
               {messages.map((message, index) => (
                 <div
                   key={index}
-                  className={`${styles.message} ${
-                    message.role === "user" ? styles.messageUser : styles.messageAssistant
-                  }`}
+                  className={`${styles.message} ${message.role === "user" ? styles.messageUser : styles.messageAssistant
+                    }`}
                 >
                   {message.role === "assistant" && (
                     <div className={styles.messageAvatar}>
@@ -907,14 +915,14 @@ export default function AIChatbot() {
                   )}
                   <div className={styles.messageContent}>
                     <p style={{ whiteSpace: 'pre-wrap' }}>{message.content}</p>
-                    
+
                     {/* Interactive Widgets - Only show the last one */}
                     {message.widget && index === lastWidgetIndex && (
                       <div className={styles.widgetContainer}>
                         {renderWidget(message.widget, index)}
                       </div>
                     )}
-                    
+
                     {/* Quick Options */}
                     {message.quickOptions && message.quickOptions.length > 0 && (
                       <div className={styles.quickOptionsWidget}>
@@ -930,15 +938,15 @@ export default function AIChatbot() {
                         ))}
                       </div>
                     )}
-                    
+
                     {message.suggestedPages && message.suggestedPages.length > 0 && (
                       <div className={styles.suggestedLinks}>
                         {message.suggestedPages.map((link, linkIndex) => {
                           // Use site language for URLs
-                          const urlWithLocale = link.url.startsWith(`/${language}`) 
-                            ? link.url 
+                          const urlWithLocale = link.url.startsWith(`/${language}`)
+                            ? link.url
                             : `/${language}${link.url}`;
-                          
+
                           return (
                             <a
                               key={linkIndex}
@@ -982,7 +990,7 @@ export default function AIChatbot() {
                 placeholder={t("اكتب رسالتك هنا...", "Type your message here...")}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleKeyPress}
+                onKeyDown={handleKeyPress}
                 rows={1}
                 disabled={isLoading}
               />
@@ -1019,7 +1027,7 @@ export default function AIChatbot() {
                 "Thank you for using our AI assistant. Here's your trip summary:"
               )}
             </p>
-            
+
             <div className={styles.summaryDetails}>
               <div className={styles.summaryCard}>
                 <strong>{t("المعلومات الشخصية", "Personal Info")}</strong>
@@ -1027,7 +1035,7 @@ export default function AIChatbot() {
                 <p>{t("البريد الإلكتروني:", "Email:")} {userInfo?.email || "-"}</p>
                 <p>{t("رقم الهاتف:", "Phone:")} {userInfo?.phone || "-"}</p>
               </div>
-              
+
               {tripData.destination && (
                 <div className={styles.summaryCard}>
                   <strong>{t("تفاصيل الرحلة", "Trip Details")}</strong>
@@ -1049,7 +1057,7 @@ export default function AIChatbot() {
               </svg>
               {t("إرسال الملخص للبريد الإلكتروني", "Send Summary to Email")}
             </button>
-            
+
             <button onClick={handleReset} className={styles.resetButton}>
               {t("بدء رحلة جديدة", "Start New Trip")}
             </button>
@@ -1066,8 +1074,8 @@ export default function AIChatbot() {
       {/* Popup Message Bubble */}
       {showPopup && !isOpen && (
         <div className={styles.popupBubble} dir={isArabic ? "rtl" : "ltr"}>
-          <button 
-            className={styles.popupClose} 
+          <button
+            className={styles.popupClose}
             onClick={(e) => {
               e.stopPropagation();
               dismissPopup();
@@ -1076,7 +1084,7 @@ export default function AIChatbot() {
           >
             ×
           </button>
-          <div 
+          <div
             className={styles.popupContent}
             onClick={() => {
               setShowPopup(false);
