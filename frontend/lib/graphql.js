@@ -1,5 +1,6 @@
 import {
   API_URLS,
+  STRAPI_CONFIG,
   DEFAULT_FETCH_OPTIONS,
   AUTHENTICATED_FETCH_OPTIONS,
   TIMEOUT_CONFIG,
@@ -13,7 +14,8 @@ import {
  */
 
 // Helper to log errors only at runtime (not during build)
-const shouldLog = () => process.env.NODE_ENV !== "production" || typeof window !== "undefined";
+const shouldLog = () =>
+  process.env.NODE_ENV !== "production" || typeof window !== "undefined";
 
 /**
  * Execute a GraphQL query
@@ -43,23 +45,45 @@ export async function graphqlRequest(query, variables = {}, options = {}) {
       });
     }
 
-    const fetchOptions = authenticated
-      ? AUTHENTICATED_FETCH_OPTIONS
-      : DEFAULT_FETCH_OPTIONS;
+    // Build headers dynamically at request time so the token is always read
+    // from the current env value rather than a stale module-load-time snapshot.
+    const apiToken =
+      STRAPI_CONFIG.apiToken ||
+      process.env.NEXT_PUBLIC_STRAPI_API_TOKEN ||
+      process.env.STRAPI_API_TOKEN;
+    const useAuth = authenticated || !!apiToken;
+    const requestHeaders = {
+      "Content-Type": "application/json; charset=utf-8",
+      "Accept-Charset": "utf-8",
+      ...(useAuth && apiToken ? { Authorization: `Bearer ${apiToken}` } : {}),
+    };
+
+    // Build `next` option by merging revalidate and tags together so they
+    // don't overwrite each other.  When `next` is provided, omit `cache`
+    // because Next.js treats them as mutually exclusive.
+    const nextOption = {};
+    if (revalidate !== undefined) nextOption.revalidate = revalidate;
+    if (tags.length > 0) nextOption.tags = tags;
+    const hasNext = Object.keys(nextOption).length > 0;
 
     const response = await fetch(API_URLS.graphql, {
       method: "POST",
-      headers: fetchOptions.headers,
+      headers: requestHeaders,
       body: JSON.stringify({ query, variables }),
       signal: controller.signal,
-      cache,
-      ...(revalidate !== undefined && { next: { revalidate } }),
-      ...(tags.length > 0 && { next: { tags } }),
+      ...(hasNext ? { next: nextOption } : { cache }),
     });
 
     clearTimeout(timeoutId);
 
     if (!response.ok) {
+      // Read body to surface the actual GraphQL/Strapi error message
+      const errText = await response.text().catch(() => "");
+      if (shouldLog())
+        console.error(
+          `❌ HTTP ${response.status} response body:`,
+          errText.substring(0, 600),
+        );
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
@@ -67,13 +91,16 @@ export async function graphqlRequest(query, variables = {}, options = {}) {
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
       const text = await response.text();
-      if (shouldLog()) console.error("❌ Non-JSON response:", text.substring(0, 200));
-      throw new Error(`Expected JSON response but got: ${contentType || "unknown"}`);
+      if (shouldLog())
+        console.error("❌ Non-JSON response:", text.substring(0, 200));
+      throw new Error(
+        `Expected JSON response but got: ${contentType || "unknown"}`,
+      );
     }
 
     // Get response text first to handle potential parsing errors
     const responseText = await response.text();
-    
+
     let result;
     try {
       result = JSON.parse(responseText);
@@ -156,8 +183,8 @@ export async function graphqlBatch(queries, options = {}) {
   try {
     const results = await Promise.all(
       batchQuery.map(({ query, variables }) =>
-        graphqlRequest(query, variables, options)
-      )
+        graphqlRequest(query, variables, options),
+      ),
     );
 
     return results;
@@ -175,9 +202,11 @@ export async function graphqlBatch(queries, options = {}) {
 export function formatImageUrl(image) {
   if (!image) return null;
 
-  // If it's an object (Strapi format)
+  // If it's an object
   if (typeof image === "object") {
-    const url = image.data?.attributes?.url || image.url;
+    // Strapi v5: flat { url, alternativeText }
+    // Strapi v4: { data: { attributes: { url } } }
+    const url = image.url || image.data?.attributes?.url;
     if (!url) return null;
     return url.startsWith("http") ? url : `${API_URLS.uploads}${url}`;
   }
@@ -199,11 +228,20 @@ export function formatImageUrl(image) {
 export function extractStrapiData(response, key) {
   if (!response || !response[key]) return null;
 
-  const data = response[key].data;
+  const collection = response[key];
 
+  // Strapi v5: response is a direct array of flat objects
+  if (Array.isArray(collection)) {
+    return collection.map((item) => ({
+      id: item.documentId ?? item.id,
+      ...item,
+    }));
+  }
+
+  // Strapi v4 compat: { data: [{ id, attributes }] }
+  const data = collection.data;
   if (!data) return null;
 
-  // If it's an array, map and return attributes
   if (Array.isArray(data)) {
     return data.map((item) => ({
       id: item.id,
@@ -211,7 +249,6 @@ export function extractStrapiData(response, key) {
     }));
   }
 
-  // If it's a single item, return attributes
   return {
     id: data.id,
     ...data.attributes,

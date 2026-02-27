@@ -39,13 +39,12 @@
       }
     },
     "content": {
-      "type": "richtext",
+      "type": "blocks",
       "pluginOptions": {
         "i18n": {
           "localized": true
         }
-      },
-      "required": true
+      }
     },
     "coverImage": {
       "type": "media",
@@ -56,7 +55,9 @@
       },
       "multiple": false,
       "required": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "author": {
       "type": "string",
@@ -82,14 +83,6 @@
         "guides"
       ]
     },
-    "tags": {
-      "type": "json",
-      "pluginOptions": {
-        "i18n": {
-          "localized": false
-        }
-      }
-    },
     "readTime": {
       "type": "integer",
       "pluginOptions": {
@@ -106,6 +99,15 @@
         }
       },
       "default": false
+    },
+    "visible": {
+      "type": "boolean",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      },
+      "default": true
     }
   }
 }

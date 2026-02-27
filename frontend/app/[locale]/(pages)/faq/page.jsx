@@ -1,6 +1,6 @@
 import Header3 from "@/components/layout/header/Header3";
 import FooterTwo from "@/components/layout/footers/FooterTwo";
-import FaqHero from "@/components/pages/faq/FaqHero";
+import PageHero from "@/components/common/PageHero";
 import FaqContent from "@/components/pages/faq/FaqContent";
 import { generateLocalizedMetadata } from "@/utils/seo";
 import { siteInfo } from "@/data/seo";
@@ -30,8 +30,20 @@ export default async function FaqPage({ params }) {
     <>
       <main>
         <Header3 locale={locale} />
-        <div className="header-margin"></div>
-        <FaqHero locale={locale} />
+        <PageHero
+          locale={locale}
+          title={
+            locale === "ar" ? "الأسئلة الشائعة" : "Frequently Asked Questions"
+          }
+          image="/img/faq-bg.webp"
+          badge={locale === "ar" ? "مركز المساعدة" : "Help Center"}
+          description={
+            locale === "ar"
+              ? "احصل على إجابات لجميع أسئلتك حول خدماتنا والحجوزات والسفر"
+              : "Get answers to all your questions about our services, bookings, and travel"
+          }
+          icon="faq"
+        />
         <FaqContent locale={locale} />
         <FooterTwo locale={locale} />
       </main>

@@ -26,28 +26,16 @@ export const offersAPI = {
     const query = `
       query GetOffers($locale: I18NLocaleCode!, $limit: Int, $start: Int) {
         offers(locale: $locale, pagination: { limit: $limit, start: $start }${filters}) {
-          data {
-            id
-            attributes {
-              title
-              slug
-              description
-              price
-              discount
-              startDate
-              endDate
-              image {
-                data {
-                  attributes {
-                    url
-                    alternativeText
-                  }
-                }
-              }
-              createdAt
-              updatedAt
-            }
+          documentId
+          title
+          slug
+          description
+          coverImage {
+            url
+            alternativeText
           }
+          createdAt
+          updatedAt
         }
       }
     `;
@@ -58,7 +46,7 @@ export const offersAPI = {
       {
         revalidate: CACHE_CONFIG.revalidate.dynamic,
         tags: [CACHE_CONFIG.tags.offers],
-      }
+      },
     );
 
     return extractStrapiData(data, "offers");
@@ -74,41 +62,25 @@ export const offersAPI = {
     const query = `
       query GetOffer($slug: String!, $locale: I18NLocaleCode!) {
         offers(filters: { slug: { eq: $slug } }, locale: $locale) {
-          data {
-            id
-            attributes {
-              title
-              slug
-              description
-              price
-              discount
-              startDate
-              endDate
-              image {
-                data {
-                  attributes {
-                    url
-                    alternativeText
-                  }
-                }
-              }
-              seo {
-                metaTitle
-                metaDescription
-                keywords
-                ogImage {
-                  data {
-                    attributes {
-                      url
-                      alternativeText
-                    }
-                  }
-                }
-              }
-              createdAt
-              updatedAt
+          documentId
+          title
+          slug
+          description
+          coverImage {
+            url
+            alternativeText
+          }
+          seo {
+            metaTitle
+            metaDescription
+            keywords
+            ogImage {
+              url
+              alternativeText
             }
           }
+          createdAt
+          updatedAt
         }
       }
     `;
@@ -119,7 +91,7 @@ export const offersAPI = {
       {
         revalidate: CACHE_CONFIG.revalidate.dynamic,
         tags: [CACHE_CONFIG.tags.offers],
-      }
+      },
     );
 
     const offers = extractStrapiData(data, "offers");
@@ -141,34 +113,22 @@ export const toursAPI = {
     const query = `
       query GetTours($locale: I18NLocaleCode!, $limit: Int, $start: Int) {
         tours(locale: $locale, pagination: { limit: $limit, start: $start }) {
-          data {
-            id
-            attributes {
-              title
-              slug
-              description
-              price
-              duration
-              rating
-              images {
-                data {
-                  attributes {
-                    url
-                    alternativeText
-                  }
-                }
-              }
-              destination {
-                data {
-                  attributes {
-                    name
-                    slug
-                  }
-                }
-              }
-              createdAt
-            }
+          documentId
+          title
+          slug
+          description
+          price
+          duration
+          rating
+          images {
+            url
+            alternativeText
           }
+          destination {
+            name
+            slug
+          }
+          createdAt
         }
       }
     `;
@@ -179,7 +139,7 @@ export const toursAPI = {
       {
         revalidate: CACHE_CONFIG.revalidate.dynamic,
         tags: [CACHE_CONFIG.tags.tours],
-      }
+      },
     );
 
     return extractStrapiData(data, "tours");
@@ -192,47 +152,31 @@ export const toursAPI = {
     const query = `
       query GetTour($slug: String!, $locale: I18NLocaleCode!) {
         tours(filters: { slug: { eq: $slug } }, locale: $locale) {
-          data {
-            id
-            attributes {
-              title
-              slug
-              description
-              price
-              duration
-              rating
-              images {
-                data {
-                  attributes {
-                    url
-                    alternativeText
-                  }
-                }
-              }
-              destination {
-                data {
-                  attributes {
-                    name
-                    slug
-                  }
-                }
-              }
-              seo {
-                metaTitle
-                metaDescription
-                keywords
-                ogImage {
-                  data {
-                    attributes {
-                      url
-                      alternativeText
-                    }
-                  }
-                }
-              }
-              createdAt
+          documentId
+          title
+          slug
+          description
+          price
+          duration
+          rating
+          images {
+            url
+            alternativeText
+          }
+          destination {
+            name
+            slug
+          }
+          seo {
+            metaTitle
+            metaDescription
+            keywords
+            ogImage {
+              url
+              alternativeText
             }
           }
+          createdAt
         }
       }
     `;
@@ -243,7 +187,7 @@ export const toursAPI = {
       {
         revalidate: CACHE_CONFIG.revalidate.dynamic,
         tags: [CACHE_CONFIG.tags.tours],
-      }
+      },
     );
 
     const tours = extractStrapiData(data, "tours");
@@ -265,24 +209,16 @@ export const destinationsAPI = {
     const query = `
       query GetDestinations($locale: I18NLocaleCode!, $limit: Int, $start: Int) {
         destinations(locale: $locale, pagination: { limit: $limit, start: $start }) {
-          data {
-            id
-            attributes {
-              name
-              slug
-              description
-              country
-              image {
-                data {
-                  attributes {
-                    url
-                    alternativeText
-                  }
-                }
-              }
-              createdAt
-            }
+          documentId
+          name
+          slug
+          description
+          country
+          image {
+            url
+            alternativeText
           }
+          createdAt
         }
       }
     `;
@@ -293,7 +229,7 @@ export const destinationsAPI = {
       {
         revalidate: CACHE_CONFIG.revalidate.static,
         tags: [CACHE_CONFIG.tags.destinations],
-      }
+      },
     );
 
     return extractStrapiData(data, "destinations");
@@ -306,37 +242,25 @@ export const destinationsAPI = {
     const query = `
       query GetDestination($slug: String!, $locale: I18NLocaleCode!) {
         destinations(filters: { slug: { eq: $slug } }, locale: $locale) {
-          data {
-            id
-            attributes {
-              name
-              slug
-              description
-              country
-              image {
-                data {
-                  attributes {
-                    url
-                    alternativeText
-                  }
-                }
-              }
-              seo {
-                metaTitle
-                metaDescription
-                keywords
-                ogImage {
-                  data {
-                    attributes {
-                      url
-                      alternativeText
-                    }
-                  }
-                }
-              }
-              createdAt
+          documentId
+          name
+          slug
+          description
+          country
+          image {
+            url
+            alternativeText
+          }
+          seo {
+            metaTitle
+            metaDescription
+            keywords
+            ogImage {
+              url
+              alternativeText
             }
           }
+          createdAt
         }
       }
     `;
@@ -347,7 +271,7 @@ export const destinationsAPI = {
       {
         revalidate: CACHE_CONFIG.revalidate.static,
         tags: [CACHE_CONFIG.tags.destinations],
-      }
+      },
     );
 
     const destinations = extractStrapiData(data, "destinations");
@@ -368,30 +292,22 @@ export const blogsAPI = {
 
     const query = `
       query GetBlogs($locale: I18NLocaleCode!, $limit: Int, $start: Int) {
-        blogs(locale: $locale, pagination: { limit: $limit, start: $start }, sort: "publishedAt:desc") {
-          data {
-            id
-            attributes {
-              title
-              slug
-              excerpt
-              content
-              category
-              author
-              readTime
-              featured
-              coverImage {
-                data {
-                  attributes {
-                    url
-                    alternativeText
-                  }
-                }
-              }
-              createdAt
-              publishedAt
-            }
+        blogs(locale: $locale, pagination: { limit: $limit, start: $start }, sort: ["publishedAt:desc"], filters: { visible: { eq: true } }) {
+          documentId
+          title
+          slug
+          excerpt
+          content
+          category
+          author
+          readTime
+          featured
+          coverImage {
+            url
+            alternativeText
           }
+          createdAt
+          publishedAt
         }
       }
     `;
@@ -402,7 +318,7 @@ export const blogsAPI = {
       {
         revalidate: CACHE_CONFIG.revalidate.dynamic,
         tags: [CACHE_CONFIG.tags.blogs],
-      }
+      },
     );
 
     return extractStrapiData(data, "blogs");
@@ -414,31 +330,23 @@ export const blogsAPI = {
   async getBySlug(slug, locale = "en") {
     const query = `
       query GetBlog($slug: String!, $locale: I18NLocaleCode!) {
-        blogs(filters: { slug: { eq: $slug } }, locale: $locale) {
-          data {
-            id
-            attributes {
-              title
-              slug
-              excerpt
-              content
-              category
-              author
-              readTime
-              featured
-              tags
-              coverImage {
-                data {
-                  attributes {
-                    url
-                    alternativeText
-                  }
-                }
-              }
-              createdAt
-              publishedAt
-            }
+        blogs(filters: { slug: { eq: $slug }, visible: { eq: true } }, locale: $locale) {
+          documentId
+          title
+          slug
+          excerpt
+          content
+          category
+          author
+          readTime
+          featured
+          tags
+          coverImage {
+            url
+            alternativeText
           }
+          createdAt
+          publishedAt
         }
       }
     `;
@@ -449,7 +357,7 @@ export const blogsAPI = {
       {
         revalidate: CACHE_CONFIG.revalidate.dynamic,
         tags: [CACHE_CONFIG.tags.blogs],
-      }
+      },
     );
 
     const blogs = extractStrapiData(data, "blogs");
@@ -464,25 +372,17 @@ export const blogsAPI = {
 
     const query = `
       query GetFeaturedBlogs($locale: I18NLocaleCode!, $limit: Int) {
-        blogs(locale: $locale, pagination: { limit: $limit }, filters: { featured: { eq: true } }, sort: "publishedAt:desc") {
-          data {
-            id
-            attributes {
-              title
-              slug
-              excerpt
-              category
-              coverImage {
-                data {
-                  attributes {
-                    url
-                    alternativeText
-                  }
-                }
-              }
-              publishedAt
-            }
+        blogs(locale: $locale, pagination: { limit: $limit }, filters: { featured: { eq: true }, visible: { eq: true } }, sort: ["publishedAt:desc"]) {
+          documentId
+          title
+          slug
+          excerpt
+          category
+          coverImage {
+            url
+            alternativeText
           }
+          publishedAt
         }
       }
     `;
@@ -493,7 +393,7 @@ export const blogsAPI = {
       {
         revalidate: CACHE_CONFIG.revalidate.dynamic,
         tags: [CACHE_CONFIG.tags.blogs],
-      }
+      },
     );
 
     return extractStrapiData(data, "blogs");

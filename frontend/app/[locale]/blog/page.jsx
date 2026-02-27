@@ -41,7 +41,6 @@ export default async function BlogPage({ params }) {
     <>
       <main style={{ overflowX: "hidden" }}>
         <Header3 locale={locale} />
-        <div className="header-margin"></div>
         <BlogPageContent locale={locale} initialPosts={posts} />
         <FooterTwo locale={locale} />
       </main>

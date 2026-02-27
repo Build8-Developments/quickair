@@ -7,10 +7,10 @@ import { notFound } from "next/navigation";
 
 export async function generateMetadata({ params }) {
   const { id, locale } = await params;
-  
+
   try {
     const post = await blogsAPI.getBySlug(id, locale);
-    
+
     if (!post) {
       return {
         title: locale === "ar" ? "المقال غير موجود" : "Blog Post Not Found",
@@ -26,8 +26,8 @@ export async function generateMetadata({ params }) {
         title: post.title,
         description: post.excerpt || post.title,
         locale: locale === "ar" ? "ar_SA" : "en_US",
-        images: post.coverImage?.data?.attributes?.url 
-          ? [{ url: post.coverImage.data.attributes.url, alt: post.title }]
+        images: post.coverImage?.url
+          ? [{ url: post.coverImage.url, alt: post.title }]
           : [],
       },
       alternates: {
@@ -61,7 +61,7 @@ async function getRelatedPosts(category, currentSlug, locale) {
   try {
     const allPosts = await blogsAPI.getAll({ locale, limit: 10 });
     return (allPosts || [])
-      .filter(p => p.category === category && p.slug !== currentSlug)
+      .filter((p) => p.category === category && p.slug !== currentSlug)
       .slice(0, 3);
   } catch (error) {
     console.error("Error fetching related posts:", error);
@@ -83,8 +83,11 @@ export default async function BlogDetailPage({ params }) {
     <>
       <main style={{ overflowX: "hidden" }}>
         <Header3 locale={locale} />
-        <div className="header-margin"></div>
-        <BlogDetailContent post={post} relatedPosts={relatedPosts} locale={locale} />
+        <BlogDetailContent
+          post={post}
+          relatedPosts={relatedPosts}
+          locale={locale}
+        />
         <FooterTwo locale={locale} />
       </main>
     </>

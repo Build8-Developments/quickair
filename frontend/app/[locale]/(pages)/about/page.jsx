@@ -1,7 +1,7 @@
 import BrandsOne from "@/components/homes/brands/BrandsOne";
 import FooterTwo from "@/components/layout/footers/FooterTwo";
 import Header3 from "@/components/layout/header/Header3";
-import Hero from "@/components/pages/about/Hero";
+import PageHero from "@/components/common/PageHero";
 import Information from "@/components/pages/about/Information";
 import { generateLocalizedMetadata } from "@/utils/seo";
 import { siteInfo } from "@/data/seo";
@@ -31,8 +31,18 @@ export default async function AboutPage({ params }) {
     <>
       <main>
         <Header3 locale={locale} />
-        <div className="header-margin"></div>
-        <Hero locale={locale} />
+        <PageHero
+          locale={locale}
+          title={locale === "ar" ? "نحن Quick Air Travel" : "About Quick Air"}
+          badge={locale === "ar" ? "منذ 1986" : "Since 1986"}
+          image="/img/about-bg.webp"
+          description={
+            locale === "ar"
+              ? "شريكك الموثوق في السفر منذ أكثر من 38 عاماً. نقدم خدمات سياحية متكاملة بمعايير عالمية."
+              : "Your trusted travel partner for over 38 years, delivering world-class tourism services."
+          }
+          icon="about"
+        />
         <Information locale={locale} />
         <BrandsOne locale={locale} />
         <FooterTwo locale={locale} />
