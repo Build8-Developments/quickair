@@ -5,6 +5,9 @@ import { generateLocalizedMetadata } from "@/utils/seo";
 import { siteInfo } from "@/data/seo";
 import { blogsAPI } from "@/services/api";
 
+// ISR: revalidate every 60 s; build-time empty shell is replaced on first request
+export const revalidate = 60;
+
 export async function generateMetadata({ params }) {
   const { locale } = await params;
   const metadata = generateLocalizedMetadata("blog", locale);

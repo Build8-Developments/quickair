@@ -5,6 +5,10 @@ import { blogsAPI } from "@/services/api";
 import { siteInfo } from "@/data/seo";
 import { notFound } from "next/navigation";
 
+// ISR: individual posts are rendered on first visit and cached for 60 s
+export const revalidate = 60;
+export const dynamicParams = true;
+
 export async function generateMetadata({ params }) {
   const { id, locale } = await params;
 
