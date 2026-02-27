@@ -98,8 +98,8 @@ export interface OfferKidsPricing extends Struct.ComponentSchema {
     displayName: 'Kids Pricing';
   };
   attributes: {
-    ageFrom: Schema.Attribute.Integer & Schema.Attribute.Required;
-    ageTo: Schema.Attribute.Integer & Schema.Attribute.Required;
+    ageFrom: Schema.Attribute.Integer;
+    ageTo: Schema.Attribute.Integer;
     discount: Schema.Attribute.Integer;
     isFree: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     notes: Schema.Attribute.Text;
@@ -114,12 +114,11 @@ export interface OfferOptionalTrip extends Struct.ComponentSchema {
     displayName: 'Optional Trip';
   };
   attributes: {
-    currency: Schema.Attribute.Enumeration<['EGP', 'USD', 'EUR', 'GBP']> &
-      Schema.Attribute.Required;
+    currency: Schema.Attribute.Enumeration<['EGP', 'USD', 'EUR', 'GBP']>;
     description: Schema.Attribute.Text;
     inclusions: Schema.Attribute.Component<'offer.trip-inclusion', true>;
-    pricePerPerson: Schema.Attribute.Decimal & Schema.Attribute.Required;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
+    pricePerPerson: Schema.Attribute.Decimal;
+    title: Schema.Attribute.String;
   };
 }
 

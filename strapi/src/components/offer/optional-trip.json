@@ -7,20 +7,17 @@
   "options": {},
   "attributes": {
     "title": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "description": {
       "type": "text"
     },
     "pricePerPerson": {
-      "type": "decimal",
-      "required": true
+      "type": "decimal"
     },
     "currency": {
       "type": "enumeration",
-      "enum": ["EGP", "USD", "EUR", "GBP"],
-      "required": true
+      "enum": ["EGP", "USD", "EUR", "GBP"]
     },
     "inclusions": {
       "type": "component",

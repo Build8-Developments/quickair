@@ -7,12 +7,10 @@
   "options": {},
   "attributes": {
     "ageFrom": {
-      "type": "integer",
-      "required": true
+      "type": "integer"
     },
     "ageTo": {
-      "type": "integer",
-      "required": true
+      "type": "integer"
     },
     "price": {
       "type": "decimal"
