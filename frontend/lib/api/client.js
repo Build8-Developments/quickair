@@ -15,9 +15,8 @@ const GRAPHQL_ENDPOINT = `${STRAPI_URL}/graphql`;
  * @returns {Promise<any>} Query result
  */
 export async function executeGraphQL(query, variables = {}, options = {}) {
-  // Use force-cache during build, no-store at runtime for fresh data
-  const defaultCache = process.env.NODE_ENV === "production" ? "force-cache" : "no-store";
-  const { cache = defaultCache, next = { revalidate: 60 }, headers = {}, timeout = 25000 } = options;
+  // Always use no-store to ensure fresh data from Strapi on every request
+  const { cache = "no-store", next = {}, headers = {}, timeout = 25000 } = options;
 
   // Create abort controller for timeout
   const controller = new AbortController();
