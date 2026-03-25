@@ -27,8 +27,8 @@ export const GET_ALL_HOTELS = `
 // Get all hotels with pagination metadata for server-side pagination
 // Requirements: 2.1, 2.2
 export const GET_ALL_HOTELS_PAGINATED = `
-  query HotelsPaginated($locale: I18NLocaleCode, $pagination: PaginationArg) {
-    hotels(locale: $locale, pagination: $pagination) {
+  query HotelsPaginated($locale: I18NLocaleCode, $pagination: PaginationArg, $filters: HotelFiltersInput, $sort: [String]) {
+    hotels(locale: $locale, pagination: $pagination, filters: $filters, sort: $sort) {
       documentId
       name
       shortDescription
@@ -49,7 +49,7 @@ export const GET_ALL_HOTELS_PAGINATED = `
         name
       }
     }
-    hotels_connection(locale: $locale) {
+    hotels_connection(locale: $locale, filters: $filters) {
       pageInfo {
         total
       }

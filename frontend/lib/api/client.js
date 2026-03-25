@@ -15,9 +15,13 @@ const GRAPHQL_ENDPOINT = `${STRAPI_URL}/graphql`;
  * @returns {Promise<any>} Query result
  */
 export async function executeGraphQL(query, variables = {}, options = {}) {
-  // Use force-cache during build, no-store at runtime for fresh data
-  const defaultCache = process.env.NODE_ENV === "production" ? "force-cache" : "no-store";
-  const { cache = defaultCache, next = { revalidate: 60 }, headers = {}, timeout = 25000 } = options;
+  // Default to force-cache with revalidation for optimal ISR behavior
+  const {
+    cache = "force-cache",
+    next = { revalidate: 60 },
+    headers = {},
+    timeout = 25000,
+  } = options;
 
   // Create abort controller for timeout
   const controller = new AbortController();
@@ -50,12 +54,14 @@ export async function executeGraphQL(query, variables = {}, options = {}) {
     if (!contentType || !contentType.includes("application/json")) {
       const text = await response.text();
       console.error("Non-JSON response received:", text.substring(0, 200));
-      throw new Error(`Expected JSON response but got: ${contentType || "unknown"}`);
+      throw new Error(
+        `Expected JSON response but got: ${contentType || "unknown"}`,
+      );
     }
 
     // Get response text first to handle potential parsing errors
     const responseText = await response.text();
-    
+
     let result;
     try {
       result = JSON.parse(responseText);
@@ -74,9 +80,12 @@ export async function executeGraphQL(query, variables = {}, options = {}) {
     return result.data;
   } catch (error) {
     clearTimeout(timeoutId);
-    
+
     // Only log errors at runtime, not during build
-    if (process.env.NODE_ENV !== "production" || typeof window !== "undefined") {
+    if (
+      process.env.NODE_ENV !== "production" ||
+      typeof window !== "undefined"
+    ) {
       console.error("GraphQL Request Failed:", error);
     }
     throw error;

@@ -1,13 +1,12 @@
 import Header3 from "@/components/layout/header/Header3";
 import FooterTwo from "@/components/layout/footers/FooterTwo";
 import HotelsList from "@/components/hotels/HotelsList";
-import PageHeader from "@/components/common/PageHeader";
+import PageHero from "@/components/common/PageHero";
 import { getAllHotelsPaginated } from "@/lib/api/services/hotel";
 import { generateLocalizedMetadata } from "@/utils/seo";
 import { siteInfo } from "@/data/seo";
 
-// Force dynamic rendering to avoid build-time API calls
-export const dynamic = "force-dynamic";
+export const revalidate = 60; // Revalidates every 60 seconds
 
 // Default page size for hotels list (Requirements: 2.3)
 const PAGE_SIZE = 12;
@@ -44,11 +43,60 @@ export default async function HotelsPage({ params, searchParams }) {
     requestedPage = 1;
   }
 
+  // Parse sort parameter from URL
+  const sortParam = resolvedSearchParams?.sort || "newest";
+  const sortMap = {
+    newest: ["createdAt:desc"],
+    "rating-high": ["stars:desc", "createdAt:desc"],
+    "rating-low": ["stars:asc", "createdAt:desc"],
+    "name-az": ["name:asc"],
+    featured: ["featured:desc", "createdAt:desc"],
+  };
+  const sortArray = sortMap[sortParam] || sortMap.newest;
+
+  // Parse filters from URL parameters (Requirements: 6.3)
+  const locationSlugs = resolvedSearchParams?.locations
+    ? resolvedSearchParams.locations.split(",").filter(Boolean)
+    : [];
+  const amenities = resolvedSearchParams?.amenities
+    ? resolvedSearchParams.amenities.split(",").filter(Boolean)
+    : [];
+
+  // Build GraphQL filters object
+  let graphqlFilters = null;
+  if (locationSlugs.length > 0 || amenities.length > 0) {
+    graphqlFilters = { and: [] };
+
+    // Add location filter if specified
+    if (locationSlugs.length > 0) {
+      graphqlFilters.and.push({
+        location: {
+          slug: {
+            in: locationSlugs,
+          },
+        },
+      });
+    }
+
+    // Add amenities filter if specified
+    if (amenities.length > 0) {
+      graphqlFilters.and.push({
+        amenities: {
+          name: {
+            in: amenities,
+          },
+        },
+      });
+    }
+  }
+
   // Fetch paginated data for the requested page
   let paginatedResult = await getAllHotelsPaginated({
     locale,
     page: requestedPage,
     pageSize: PAGE_SIZE,
+    filters: graphqlFilters,
+    sort: sortArray,
   });
 
   // Handle case where requested page exceeds total pages (Requirements: 1.4)
@@ -64,6 +112,8 @@ export default async function HotelsPage({ params, searchParams }) {
       locale,
       page: paginatedResult.totalPages,
       pageSize: PAGE_SIZE,
+      filters: graphqlFilters,
+      sort: sortArray,
     });
   }
 
@@ -78,12 +128,14 @@ export default async function HotelsPage({ params, searchParams }) {
     <>
       <main style={{ overflowX: "hidden" }}>
         <Header3 locale={locale} />
-        <div className="header-margin"></div>
 
-        <PageHeader
-          icon="hotels"
+        <PageHero
+          locale={locale}
           title={pageTitle}
           description={pageDescription}
+          badge={locale === "ar" ? "إقامة فاخرة" : "Luxury Stays"}
+          image="/img/blog-bg.webp"
+          icon="hotels"
         />
 
         {/* Hotels List with server-side pagination data */}
@@ -95,6 +147,7 @@ export default async function HotelsPage({ params, searchParams }) {
           pageSize={paginatedResult.pageSize}
           isLoading={false}
           locale={locale}
+          initialSort={sortParam}
         />
 
         <FooterTwo locale={locale} />

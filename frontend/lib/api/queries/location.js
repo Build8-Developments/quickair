@@ -17,10 +17,11 @@ export const GET_ALL_LOCATIONS = `
         name
         url
       }
-      hotels_connection {
-        nodes {
-          documentId
-        }
+      hotels {
+        documentId
+      }
+      offers {
+        documentId
       }
       shortDescription
       featured

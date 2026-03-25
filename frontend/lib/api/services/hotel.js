@@ -28,6 +28,8 @@ export async function getAllHotels({ locale = "en" } = {}) {
  * @param {string} params.locale - Locale code ('en' or 'ar')
  * @param {number} params.page - Page number (1-indexed)
  * @param {number} params.pageSize - Items per page
+ * @param {object} params.filters - GraphQL filter object
+ * @param {array} params.sort - Sort array (e.g., ["createdAt:desc"])
  * @returns {Promise<object>} Paginated result with items, total, page, pageSize, totalPages
  * Requirements: 2.1, 2.2, 2.3
  */
@@ -35,6 +37,8 @@ export async function getAllHotelsPaginated({
   locale = "en",
   page = 1,
   pageSize = 12,
+  filters = null,
+  sort = ["createdAt:desc"],
 } = {}) {
   try {
     // Calculate start offset from page number (0-indexed for GraphQL)
@@ -43,6 +47,8 @@ export async function getAllHotelsPaginated({
     const data = await executeGraphQL(GET_ALL_HOTELS_PAGINATED, {
       locale,
       pagination: { start, limit: pageSize },
+      filters,
+      sort,
     });
 
     const items = data?.hotels || [];
@@ -93,7 +99,7 @@ export async function getHotelWithOffer({ id, locale = "en" } = {}) {
     let hotelOption = null;
     if (offer && offer.hotelOptions) {
       hotelOption = offer.hotelOptions.find(
-        (option) => option.hotel?.documentId === id
+        (option) => option.hotel?.documentId === id,
       );
     }
 

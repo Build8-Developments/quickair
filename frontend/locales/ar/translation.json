@@ -315,7 +315,13 @@
     "pageDescription": "استكشف مجموعتنا المنتقاة من الفنادق الفاخرة حول العالم",
     "destination": "الوجهة",
     "noDestinationsAvailable": "لا توجد وجهات متاحة",
-    "noAmenitiesAvailable": "لا توجد مرافق متاحة"
+    "noAmenitiesAvailable": "لا توجد مرافق متاحة",
+    "sortBy": "ترتيب حسب",
+    "sortNewest": "الأحدث أولاً",
+    "sortRatingHigh": "التقييم: الأعلى إلى الأقل",
+    "sortRatingLow": "التقييم: الأقل إلى الأعلى",
+    "sortNameAZ": "الاسم: أ-ي",
+    "sortFeatured": "المميز أولاً"
   },
   "haj": {
     "pageTitle": "الحج",

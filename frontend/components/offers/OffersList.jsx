@@ -16,6 +16,14 @@ import {
   buildFilteredUrl,
   parseFiltersFromUrl,
 } from "@/utils/pagination";
+import {
+  Search,
+  Clock,
+  ArrowDownAZ,
+  TrendingUp,
+  TrendingDown,
+  X,
+} from "lucide-react";
 
 /**
  * OffersList component with server-side pagination support
@@ -56,13 +64,25 @@ export default function OffersList({
   const [showCards, setShowCards] = useState(true);
   const [isInitialMount, setIsInitialMount] = useState(true);
 
+  // Search state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+
+  // Debounced search effect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   // Client-side pagination state (only used when filters are active)
   const [clientPage, setClientPage] = useState(1);
 
   // Initialize filter state from URL parameters (Requirements: 6.3)
   const initialFilters = parseFiltersFromUrl(
     Object.fromEntries(searchParams.entries()),
-    ["locations", "months"]
+    ["locations", "months"],
   );
 
   // Filter state
@@ -77,6 +97,9 @@ export default function OffersList({
       months: [],
     };
     setFilters(clearedFilters);
+    setSearchQuery("");
+    setDebouncedSearchQuery("");
+    setSortOption("Newest");
     setClientPage(1);
 
     // Navigate to page 1 without filter params
@@ -97,7 +120,7 @@ export default function OffersList({
       const newUrl = buildFilteredUrl(pathname, newFilters, 1);
       router.push(newUrl);
     },
-    [pathname, router]
+    [pathname, router],
   );
 
   // Translate English month names to Arabic
@@ -177,6 +200,16 @@ export default function OffersList({
         result = result.filter((offer) => filters.months.includes(offer.month));
       }
 
+      // Filter by search query
+      if (debouncedSearchQuery.trim() !== "") {
+        const query = debouncedSearchQuery.toLowerCase();
+        result = result.filter(
+          (offer) =>
+            offer.title?.toLowerCase().includes(query) ||
+            offer.description?.toLowerCase().includes(query),
+        );
+      }
+
       // Apply sorting
       if (sortOption === "Price Low to High") {
         result.sort((a, b) => {
@@ -205,7 +238,7 @@ export default function OffersList({
     }, 300);
 
     return () => clearTimeout(filterTimeout);
-  }, [filters, sortOption, offers]);
+  }, [filters, sortOption, offers, debouncedSearchQuery]);
 
   const getMinPrice = (offer) => {
     if (!offer.hotelOptions || offer.hotelOptions.length === 0) return 0;
@@ -218,7 +251,7 @@ export default function OffersList({
             room.doubleOccupancyPrice || 0,
             room.singleOccupancyPrice || 0,
             room.tripleOccupancyPrice || 0,
-          ]) || [0]
+          ]) || [0],
       )
       .filter((price) => price > 0);
 
@@ -230,19 +263,19 @@ export default function OffersList({
     // First check if any hotel option has a currency set
     if (offer.hotelOptions && offer.hotelOptions.length > 0) {
       const firstOptionWithCurrency = offer.hotelOptions.find(
-        (opt) => opt.currency
+        (opt) => opt.currency,
       );
       if (firstOptionWithCurrency) {
         return firstOptionWithCurrency.currency;
       }
       // Check hotel location
       const firstHotelWithLocation = offer.hotelOptions.find(
-        (opt) => opt.hotel?.location?.country
+        (opt) => opt.hotel?.location?.country,
       );
       if (firstHotelWithLocation) {
         return getCurrencyByCountry(
           firstHotelWithLocation.hotel.location.country,
-          "USD"
+          "USD",
         );
       }
     }
@@ -277,7 +310,7 @@ export default function OffersList({
     paginationRange = calculatePaginationRange(
       currentPage,
       pageSize,
-      totalCount
+      totalCount,
     );
   } else {
     // Client-side pagination: paginate filtered results
@@ -290,7 +323,7 @@ export default function OffersList({
     paginationRange = calculatePaginationRange(
       clientPage,
       pageSize,
-      filteredOffers.length
+      filteredOffers.length,
     );
   }
 
@@ -305,7 +338,7 @@ export default function OffersList({
   }
 
   return (
-    <section className="layout-pb-xl">
+    <section className="layout-pt-md layout-pb-xl">
       <div className="container">
         <div className="row">
           <div className="col-xl-3 col-lg-4">
@@ -352,24 +385,368 @@ export default function OffersList({
           </div>
 
           <div className="col-xl-9 col-lg-8">
-            {hasActiveFilters && (
+            {/* Sort and Filter Controls Bar */}
+            <div
+              className="d-flex flex-column gap-15 mb-20"
+              style={{ direction: isRTL ? "rtl" : "ltr" }}
+            >
+              {/* Top Row: Search and Sort */}
               <div
                 className={`d-flex ${
-                  isRTL ? "justify-start" : "justify-start"
-                } mb-20 clear-filters-enter`}
-                style={{ direction: isRTL ? "rtl" : "ltr" }}
+                  isRTL ? "flex-row-reverse" : "flex-row"
+                } justify-between items-center`}
+                style={{ gap: "15px" }}
               >
-                <button
-                  onClick={clearAllFilters}
-                  className="button -sm -outline-accent-1 text-accent-1 px-20 py-10 rounded-8 d-flex items-center gap-10"
+                {/* Search Bar */}
+                <div
+                  className="search-bar d-flex items-center bg-white"
+                  style={{
+                    flex: 1,
+                    maxWidth: "400px",
+                    borderRadius: "12px",
+                    border: "1px solid #e5e7eb",
+                    padding: "0 15px",
+                    boxShadow: "0 2px 4px rgba(0,0,0,0.02)",
+                    transition: "all 0.3s ease",
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = "#019fb1";
+                    e.currentTarget.style.boxShadow =
+                      "0 4px 6px rgba(1,159,177,0.15)";
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = "#e5e7eb";
+                    e.currentTarget.style.boxShadow =
+                      "0 2px 4px rgba(0,0,0,0.02)";
+                  }}
                 >
-                  <i className="icon-close text-14"></i>
-                  <span className="text-14">
-                    {t("offersList.clearAllFilters")}
-                  </span>
-                </button>
+                  <div
+                    style={{
+                      color: "#6b7280",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Search size={18} />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder={t(
+                      "offersList.searchPlaceholder",
+                      "Search offers...",
+                    )}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="py-10"
+                    style={{
+                      border: "none",
+                      outline: "none",
+                      width: "100%",
+                      padding: "0 10px",
+                      background: "transparent",
+                    }}
+                  />
+                </div>
+
+                {/* Sort Dropdown */}
+                <div
+                  className={`dropdown -type-2 js-dropdown ${
+                    ddActives ? "is-active" : ""
+                  }`}
+                  ref={dropDownContainer}
+                >
+                  <div
+                    className="dropdown__button d-flex items-center px-20 py-10 border-1 bg-white"
+                    onClick={() => setDdActives((prev) => !prev)}
+                    style={{
+                      cursor: "pointer",
+                      minWidth: "200px",
+                      justifyContent: "space-between",
+                      borderRadius: "50px",
+                    }}
+                  >
+                    <div className="d-flex items-center gap-5">
+                      <span className="text-14">{t("hotelsList.sortBy")}:</span>
+                      <span className="text-14 fw-500 js-title">
+                        {sortOption === "Newest" && t("hotelsList.sortNewest")}
+                        {sortOption === "Price Low to High" &&
+                          t("hotelsList.sortPriceLow", "Price (Low to High)")}
+                        {sortOption === "Price High to Low" &&
+                          t("hotelsList.sortPriceHigh", "Price (High to Low)")}
+                        {sortOption === "Name A-Z" &&
+                          t("hotelsList.sortNameAZ")}
+                        {!sortOption && t("hotelsList.sortNewest")}
+                      </span>
+                    </div>
+                    <i className="icon-chevron-down text-14"></i>
+                  </div>
+
+                  <div
+                    className="dropdown__menu"
+                    style={{
+                      padding: "8px",
+                      borderRadius: "24px",
+                      minWidth: "max-content",
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+                      border: "none",
+                      zIndex: 10,
+                    }}
+                  >
+                    <div
+                      className={`dropdown__item ${
+                        !sortOption || sortOption === "Newest"
+                          ? "is-active"
+                          : ""
+                      }`}
+                      onClick={() => {
+                        setSortOption("Newest");
+                        setDdActives(false);
+                      }}
+                      style={{
+                        backgroundColor:
+                          !sortOption || sortOption === "Newest"
+                            ? "#019fb1"
+                            : "transparent",
+                        color:
+                          !sortOption || sortOption === "Newest"
+                            ? "white"
+                            : "inherit",
+                        fontWeight:
+                          !sortOption || sortOption === "Newest"
+                            ? "500"
+                            : "normal",
+                        borderRadius: "50px",
+                        padding: "8px 16px",
+                        marginBottom: "4px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        transition: "all 0.2s ease",
+                        cursor: "pointer",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <Clock size={16} />
+                      {t("hotelsList.sortNewest")}
+                    </div>
+                    <div
+                      className={`dropdown__item ${
+                        sortOption === "Price Low to High" ? "is-active" : ""
+                      }`}
+                      onClick={() => {
+                        setSortOption("Price Low to High");
+                        setDdActives(false);
+                      }}
+                      style={{
+                        backgroundColor:
+                          sortOption === "Price Low to High"
+                            ? "#019fb1"
+                            : "transparent",
+                        color:
+                          sortOption === "Price Low to High"
+                            ? "white"
+                            : "inherit",
+                        fontWeight:
+                          sortOption === "Price Low to High" ? "500" : "normal",
+                        borderRadius: "50px",
+                        padding: "8px 16px",
+                        marginBottom: "4px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        transition: "all 0.2s ease",
+                        cursor: "pointer",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <TrendingUp size={16} />
+                      {t("hotelsList.sortPriceLow", "Price (Low to High)")}
+                    </div>
+                    <div
+                      className={`dropdown__item ${
+                        sortOption === "Price High to Low" ? "is-active" : ""
+                      }`}
+                      onClick={() => {
+                        setSortOption("Price High to Low");
+                        setDdActives(false);
+                      }}
+                      style={{
+                        backgroundColor:
+                          sortOption === "Price High to Low"
+                            ? "#019fb1"
+                            : "transparent",
+                        color:
+                          sortOption === "Price High to Low"
+                            ? "white"
+                            : "inherit",
+                        fontWeight:
+                          sortOption === "Price High to Low" ? "500" : "normal",
+                        borderRadius: "50px",
+                        padding: "8px 16px",
+                        marginBottom: "4px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        transition: "all 0.2s ease",
+                        cursor: "pointer",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <TrendingDown size={16} />
+                      {t("hotelsList.sortPriceHigh", "Price (High to Low)")}
+                    </div>
+                    <div
+                      className={`dropdown__item ${
+                        sortOption === "Name A-Z" ? "is-active" : ""
+                      }`}
+                      onClick={() => {
+                        setSortOption("Name A-Z");
+                        setDdActives(false);
+                      }}
+                      style={{
+                        backgroundColor:
+                          sortOption === "Name A-Z" ? "#019fb1" : "transparent",
+                        color: sortOption === "Name A-Z" ? "white" : "inherit",
+                        fontWeight:
+                          sortOption === "Name A-Z" ? "500" : "normal",
+                        borderRadius: "50px",
+                        padding: "8px 16px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        transition: "all 0.2s ease",
+                        cursor: "pointer",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      <ArrowDownAZ size={16} />
+                      {t("hotelsList.sortNameAZ")}
+                    </div>
+                  </div>
+                </div>
               </div>
-            )}
+
+              {/* Bottom Row: Active Filter Chips */}
+              {(hasActiveFilters || searchQuery.trim() !== "") && (
+                <div className="d-flex items-center flex-wrap gap-10 mt-10">
+                  {/* Location Chips */}
+                  {filters.locations.map((loc) => {
+                    const locationName =
+                      offers.find((o) => o.location?.slug === loc)?.location
+                        ?.name ||
+                      loc
+                        .split("-")
+                        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                        .join(" ");
+                    return (
+                      <button
+                        key={`loc-${loc}`}
+                        onClick={() => {
+                          const newFilters = {
+                            ...filters,
+                            locations: filters.locations.filter(
+                              (l) => l !== loc,
+                            ),
+                          };
+                          handleFilterChange(newFilters);
+                        }}
+                        className="d-flex items-center gap-10 px-15 py-5 text-14"
+                        style={{
+                          backgroundColor: "white",
+                          color: "#019fb1",
+                          border: "1px solid #019fb1",
+                          borderRadius: "50px",
+                          transition: "all 0.2s ease",
+                          flexDirection: isRTL ? "row-reverse" : "row",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = "#019fb1";
+                          e.currentTarget.style.color = "white";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = "white";
+                          e.currentTarget.style.color = "#019fb1";
+                        }}
+                      >
+                        <span className="fw-500">{locationName}</span>
+                        <X size={14} strokeWidth={2.5} />
+                      </button>
+                    );
+                  })}
+
+                  {/* Month Chips */}
+                  {filters.months.map((month) => (
+                    <button
+                      key={`month-${month}`}
+                      onClick={() => {
+                        const newFilters = {
+                          ...filters,
+                          months: filters.months.filter((m) => m !== month),
+                        };
+                        handleFilterChange(newFilters);
+                      }}
+                      className="d-flex items-center gap-10 px-15 py-5 text-14"
+                      style={{
+                        backgroundColor: "white",
+                        color: "#019fb1",
+                        border: "1px solid #019fb1",
+                        borderRadius: "50px",
+                        transition: "all 0.2s ease",
+                        flexDirection: isRTL ? "row-reverse" : "row",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = "#019fb1";
+                        e.currentTarget.style.color = "white";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = "white";
+                        e.currentTarget.style.color = "#019fb1";
+                      }}
+                    >
+                      <span className="fw-500">{translateMonth(month)}</span>
+                      <X size={14} strokeWidth={2.5} />
+                    </button>
+                  ))}
+
+                  {/* Search Chip */}
+                  {searchQuery.trim() !== "" && (
+                    <button
+                      onClick={() => {
+                        setSearchQuery("");
+                        setDebouncedSearchQuery("");
+                      }}
+                      className="d-flex items-center gap-10 px-15 py-5 text-14"
+                      style={{
+                        backgroundColor: "white",
+                        color: "#019fb1",
+                        border: "1px solid #019fb1",
+                        borderRadius: "50px",
+                        transition: "all 0.2s ease",
+                        flexDirection: isRTL ? "row-reverse" : "row",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = "#019fb1";
+                        e.currentTarget.style.color = "white";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = "white";
+                        e.currentTarget.style.color = "#019fb1";
+                      }}
+                    >
+                      <span className="fw-500">"{searchQuery}"</span>
+                      <X size={14} strokeWidth={2.5} />
+                    </button>
+                  )}
+                  {/* Clear All Button */}
+                  <button
+                    onClick={clearAllFilters}
+                    className={`text-14 text-accent-1 fw-500 underline ${isRTL ? "mr-10" : "ml-10"}`}
+                  >
+                    {t("hotelsList.clearAllFilters", "Clear All")}
+                  </button>
+                </div>
+              )}
+            </div>
 
             <div className="row y-gap-30">
               {isLoading || isFiltering ? (

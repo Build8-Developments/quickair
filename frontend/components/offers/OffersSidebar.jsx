@@ -18,7 +18,11 @@ export default function OffersSidebar({ offers, filters, setFilters }) {
     const fetchLocations = async () => {
       setLocationsLoading(true);
       const data = await getAllLocations({ locale: language });
-      setLocations(data);
+      // Only show locations that have active offers
+      const locationsWithOffers = data.filter(
+        (loc) => loc.offers && loc.offers.length > 0
+      );
+      setLocations(locationsWithOffers);
       setLocationsLoading(false);
     };
     fetchLocations();

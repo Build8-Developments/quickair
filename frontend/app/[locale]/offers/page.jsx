@@ -1,13 +1,12 @@
 import Header3 from "@/components/layout/header/Header3";
 import FooterTwo from "@/components/layout/footers/FooterTwo";
 import OffersList from "@/components/offers/OffersList";
-import PageHeader from "@/components/common/PageHeader";
+import PageHero from "@/components/common/PageHero";
 import { getAllOffersPaginated } from "@/lib/api/services/offer";
 import { generateLocalizedMetadata } from "@/utils/seo";
 import { siteInfo } from "@/data/seo";
 
-// Force dynamic rendering to avoid build-time API calls
-export const dynamic = "force-dynamic";
+export const revalidate = 60; // Revalidates every 60 seconds
 
 // Default page size for offers list (Requirements: 2.4)
 const PAGE_SIZE = 12;
@@ -81,12 +80,14 @@ export default async function OffersPage({ params, searchParams }) {
     <>
       <main style={{ overflowX: "hidden" }}>
         <Header3 locale={locale} />
-        <div className="header-margin"></div>
 
-        <PageHeader
-          icon="offers"
+        <PageHero
+          locale={locale}
           title={pageTitle}
           description={pageDescription}
+          badge={locale === "ar" ? "عروض حصرية" : "Exclusive"}
+          image="/img/blog-bg.webp"
+          icon="offers"
         />
 
         {/* Offers List with server-side pagination data */}

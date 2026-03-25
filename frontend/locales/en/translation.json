@@ -315,7 +315,13 @@
     "pageDescription": "Explore our curated collection of premium hotels worldwide",
     "destination": "Destination",
     "noDestinationsAvailable": "No destinations available",
-    "noAmenitiesAvailable": "No amenities available"
+    "noAmenitiesAvailable": "No amenities available",
+    "sortBy": "Sort by",
+    "sortNewest": "Newest First",
+    "sortRatingHigh": "Star Rating: High to Low",
+    "sortRatingLow": "Star Rating: Low to High",
+    "sortNameAZ": "Name: A-Z",
+    "sortFeatured": "Featured First"
   },
   "haj": {
     "pageTitle": "Hajj",

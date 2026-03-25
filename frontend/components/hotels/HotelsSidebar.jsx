@@ -18,38 +18,32 @@ export default function HotelsSidebar({ hotels, filters, setFilters }) {
     const fetchLocations = async () => {
       setLocationsLoading(true);
       const data = await getAllLocations({ locale: language });
-      setLocations(data);
+
+      // Filter to only show locations that have hotels
+      const locationsWithHotels = data.filter(
+        (location) =>
+          location.hotels &&
+          location.hotels.length > 0,
+      );
+
+      setLocations(locationsWithHotels);
       setLocationsLoading(false);
     };
     fetchLocations();
   }, [language]);
 
-  // Extract unique amenities from hotels
-  const uniqueAmenities = Array.from(
-    new Set(
-      hotels
-        .flatMap((hotel) => hotel.amenities || [])
-        .map((amenity) => amenity.name)
-    )
-  ).sort();
+
 
   const handleLocationChange = (slug) => {
-    setFilters((prev) => ({
-      ...prev,
-      locations: prev.locations.includes(slug)
-        ? prev.locations.filter((loc) => loc !== slug)
-        : [...prev.locations, slug],
-    }));
+    setFilters({
+      ...filters,
+      locations: filters.locations.includes(slug)
+        ? filters.locations.filter((loc) => loc !== slug)
+        : [...filters.locations, slug],
+    });
   };
 
-  const handleAmenityChange = (amenity) => {
-    setFilters((prev) => ({
-      ...prev,
-      amenities: prev.amenities.includes(amenity)
-        ? prev.amenities.filter((a) => a !== amenity)
-        : [...prev.amenities, amenity],
-    }));
-  };
+
 
   return (
     <div
@@ -132,65 +126,7 @@ export default function HotelsSidebar({ hotels, filters, setFilters }) {
           </div>
         </div>
 
-        {/* Amenities Filter */}
-        <div className="sidebar__item mt-30">
-          <h5
-            className="text-18 fw-500 mb-15"
-            style={{ textAlign: isRTL ? "right" : "left" }}
-          >
-            {t("hotelsList.amenities")}
-          </h5>
-          <div className="d-flex flex-column y-gap-15">
-            {uniqueAmenities.length > 0 ? (
-              uniqueAmenities.map((amenity, i) => (
-                <div key={i}>
-                  <div
-                    className="d-flex items-center"
-                    style={{
-                      flexDirection: isRTL ? "row-reverse" : "row",
-                      justifyContent: isRTL ? "flex-end" : "flex-start",
-                    }}
-                  >
-                    <div
-                      className="form-checkbox"
-                      style={{ order: isRTL ? 1 : 0 }}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={filters.amenities.includes(amenity)}
-                        onChange={() => handleAmenityChange(amenity)}
-                      />
-                      <div className="form-checkbox__mark">
-                        <div className="form-checkbox__icon">
-                          <Image
-                            width="10"
-                            height="8"
-                            src="/img/icons/check.svg"
-                            alt="icon"
-                          />
-                        </div>
-                      </div>
-                    </div>
 
-                    <div
-                      className={`lh-11 ${isRTL ? "mr-10" : "ml-10"}`}
-                      style={{ textAlign: isRTL ? "right" : "left" }}
-                    >
-                      {amenity}
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div
-                className="text-14 text-light-1"
-                style={{ textAlign: isRTL ? "right" : "left" }}
-              >
-                {t("hotelsList.noAmenitiesAvailable")}
-              </div>
-            )}
-          </div>
-        </div>
       </div>
     </div>
   );
