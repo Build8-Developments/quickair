@@ -9,6 +9,49 @@
 
 import { searchHotels } from "./ragService";
 
+function normalizeDestinationId(value) {
+  if (!value) return null;
+
+  const raw = String(value).toLowerCase().trim();
+  const normalized = raw
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\u0600-\u06ff\s-]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const map = {
+    sharm: "sharm",
+    "sharm el sheikh": "sharm",
+    "sharm el-sheikh": "sharm",
+    "شرم": "sharm",
+    "شرم الشيخ": "sharm",
+    hurghada: "hurghada",
+    "الغردقة": "hurghada",
+    "غردقة": "hurghada",
+    dahab: "dahab",
+    "دهب": "dahab",
+    bali: "bali",
+    "بالي": "bali",
+    istanbul: "istanbul",
+    "اسطنبول": "istanbul",
+    "إسطنبول": "istanbul",
+    "استانبول": "istanbul",
+    beirut: "beirut",
+    "بيروت": "beirut",
+    ainsokhna: "ainsokhna",
+    "ain sokhna": "ainsokhna",
+    "عين السخنة": "ainsokhna",
+    "العين السخنة": "ainsokhna",
+    sokhna: "ainsokhna",
+    sahlhashish: "sahlhashish",
+    "sahl hasheesh": "sahlhashish",
+    "سهل حشيش": "sahlhashish",
+  };
+
+  return map[normalized] || raw;
+}
+
 // قائمة الـ widgets المسموح بها فقط
 const ALLOWED_WIDGET_TYPES = [
   "destinations",
@@ -387,8 +430,9 @@ export async function generateWidgetData(widgetType, sessionData, language = "ar
 
     case "hotelCards":
       // استخدم الوجهة من widgetInfo.data أو من tripData
-      const destId = widgetInfo?.data?.destination || tripData.destination?.id || tripData.destination;
-      console.log("[HotelCards] destId:", destId, "widgetInfo:", widgetInfo);
+      const rawDestId = widgetInfo?.data?.destination || tripData.destination?.id || tripData.destination;
+      const destId = normalizeDestinationId(rawDestId);
+      console.log("[HotelCards] destination:", { rawDestId, destId, widgetInfo });
 
       if (!destId) {
         console.log("[HotelCards] No destination found!");

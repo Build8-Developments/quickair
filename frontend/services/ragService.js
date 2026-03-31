@@ -500,6 +500,7 @@ function buildDestinationsFromStrapi(offers = [], hotels = [], language = "ar") 
 
 async function ensureStrapiData(language = "ar") {
   const locale = language === "ar" ? "ar" : "en";
+  const fallbackLocale = locale === "ar" ? "en" : "ar";
   const now = Date.now();
   const cacheEntry = strapiDataCache[locale];
 
@@ -515,7 +516,27 @@ async function ensureStrapiData(language = "ar") {
       getAllHotels({ locale }),
     ]);
 
-    const builtData = buildDestinationsFromStrapi(offers, hotels, locale);
+    let builtData = buildDestinationsFromStrapi(offers, hotels, locale);
+    const hasPrimaryData = Object.keys(builtData.destinations || {}).length > 0;
+
+    // If selected locale has no published data, fall back to the other supported locale.
+    if (!hasPrimaryData) {
+      const fallbackCacheEntry = strapiDataCache[fallbackLocale];
+      if (
+        fallbackCacheEntry?.data &&
+        now - fallbackCacheEntry.updatedAt < STRAPI_CACHE_TTL_MS
+      ) {
+        builtData = fallbackCacheEntry.data;
+      } else {
+        const [fallbackOffers, fallbackHotels] = await Promise.all([
+          getAllOffers({ locale: fallbackLocale, limit: 300 }),
+          getAllHotels({ locale: fallbackLocale }),
+        ]);
+        builtData = buildDestinationsFromStrapi(fallbackOffers, fallbackHotels, fallbackLocale);
+        strapiDataCache[fallbackLocale] = { data: builtData, updatedAt: now };
+      }
+    }
+
     strapiDataCache[locale] = { data: builtData, updatedAt: now };
 
     ALL_DESTINATIONS = builtData.destinations;
@@ -1374,8 +1395,8 @@ export async function buildRAGContext(userAnalysis, language = "ar") {
         : `- Available hotels: ${destInfo.hotels_count} hotels\n`;
 
       context += isArabic
-        ? `- نطاق الأسعار: ${destInfo.price_range.min_egp?.toLocaleString()}-${destInfo.price_range.max_egp?.toLocaleString()} جنيه (${destInfo.price_range.min_usd}-${destInfo.price_range.max_usd} دولار)\n`
-        : `- Price range: ${destInfo.price_range.min_egp?.toLocaleString()}-${destInfo.price_range.max_egp?.toLocaleString()} EGP ($${destInfo.price_range.min_usd}-${destInfo.price_range.max_usd})\n`;
+        ? `- نطاق الأسعار: ${destInfo.price_range.min?.toLocaleString()}-${destInfo.price_range.max?.toLocaleString()} جنيه (${destInfo.price_range.min_usd}-${destInfo.price_range.max_usd} دولار)\n`
+        : `- Price range: ${destInfo.price_range.min?.toLocaleString()}-${destInfo.price_range.max?.toLocaleString()} EGP ($${destInfo.price_range.min_usd}-${destInfo.price_range.max_usd})\n`;
 
       // الشهور المتاحة للعرض
       if (destData.valid_months && destData.valid_months.length > 0) {
