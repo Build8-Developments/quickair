@@ -348,7 +348,7 @@ export function determineNextWidget(sessionData, userAnalysis) {
  * توليد بيانات الـ widget - فقط الـ widgets المسموح بها
  * Generate widget data - only allowed widgets
  */
-export function generateWidgetData(widgetType, sessionData, language = "ar", widgetInfo = null) {
+export async function generateWidgetData(widgetType, sessionData, language = "ar", widgetInfo = null) {
   // ✅ تأكد إن الـ widget من القائمة المسموح بها
   if (!widgetType || !ALLOWED_WIDGET_TYPES.includes(widgetType)) {
     return null;
@@ -399,7 +399,7 @@ export function generateWidgetData(widgetType, sessionData, language = "ar", wid
         };
       }
 
-      const hotels = searchHotels({
+      const hotels = await searchHotels({
         destination: destId,
         budget: tripData.budget?.maxEGP,
         language,

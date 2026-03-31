@@ -37,5 +37,8 @@
     "remark-breaks": "^4.0.0",
     "remark-gfm": "^4.0.1",
     "swiper": "^12.1.2"
+  },
+  "devDependencies": {
+    "eslint-config-next": "16.2.1"
   }
 }
