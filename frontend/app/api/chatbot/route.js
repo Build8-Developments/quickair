@@ -94,11 +94,63 @@ function generateQuickOptions(userAnalysis, language, reply) {
   return null;
 }
 
+async function buildStrapiFallbackReply(userAnalysis, ragContext, language = "ar", message = "") {
+  const isArabic = language === "ar";
+  const normalized = (message || "").toLowerCase();
+  const normalizedIntent = (userAnalysis?.intent || "").toLowerCase();
+
+  const asksOffers = /عرض|عروض|offers?|deals?|discount/.test(normalized)
+    || normalizedIntent.includes("offer")
+    || normalizedIntent.includes("deal")
+    || normalizedIntent.includes("discount");
+
+  const asksHotels = /فندق|فنادق|hotels?|accommodation|stay/.test(normalized)
+    || normalizedIntent.includes("hotel");
+
+  if (asksOffers) {
+    const knowledge = await getChatbotKnowledgeBase(isArabic ? "ar" : "en");
+    const offers = knowledge?.offers || [];
+
+    if (offers.length > 0) {
+      const topOffers = offers.slice(0, 3);
+      const lines = topOffers.map((offer, idx) => `${idx + 1}) ${offer.title} - ${offer.discount}`);
+
+      return isArabic
+        ? `العروض المتاحة حالياً من سترابي:\n${lines.join("\n")}\n\nلو تحب أفتح لك تفاصيل عرض معيّن اكتب رقمه أو اسم الوجهة.`
+        : `Current available offers from Strapi:\n${lines.join("\n")}\n\nTell me the offer number or destination and I'll show details.`;
+    }
+
+    return isArabic
+      ? "لا توجد عروض منشورة حالياً. جرب بعد قليل أو اسألني عن وجهة محددة."
+      : "No published offers are currently available. Try again shortly or ask for a specific destination.";
+  }
+
+  if (asksHotels && ragContext?.hotels?.length > 0) {
+    const topHotels = ragContext.hotels.slice(0, 3);
+    const lines = topHotels.map((hotel, idx) => `${idx + 1}) ${hotel.name} - ${hotel.price_egp?.toLocaleString()} EGP`);
+
+    return isArabic
+      ? `دي أفضل الفنادق المتاحة الآن:\n${lines.join("\n")}\n\nاختار رقم الفندق اللي عايز تفاصيله.`
+      : `Here are the best currently available hotels:\n${lines.join("\n")}\n\nChoose a hotel number to see more details.`;
+  }
+
+  if (ragContext?.destInfo) {
+    const destinationName = ragContext.destInfo.location;
+    return isArabic
+      ? `ممتاز! لقيت بيانات محدثة عن ${destinationName} من سترابي. تحب أبدأ بالعروض ولا الفنادق؟`
+      : `Great! I found fresh ${destinationName} data from Strapi. Do you want to start with offers or hotels?`;
+  }
+
+  return isArabic
+    ? "أنا متصل حالياً ببيانات سترابي مباشرة. اكتب الوجهة أو قل: ايه العروض المتاحة؟"
+    : "I'm currently connected to Strapi data directly. Type a destination or ask: what offers are available?";
+}
+
 // بناء السياق النظامي الكامل - Premium Travel Concierge Prompt
-function buildSystemPrompt(language = "ar") {
+async function buildSystemPrompt(language = "ar") {
   const isArabic = language === "ar";
 
-  const knowledge = getChatbotKnowledgeBase(isArabic ? "ar" : "en");
+  const knowledge = await getChatbotKnowledgeBase(isArabic ? "ar" : "en");
   const services = knowledge.services;
   const policies = knowledge.policies;
   const offers = knowledge.offers;
@@ -264,6 +316,7 @@ ${offers.map(o => `• ${o.title} — ${o.discount}`).join('\n')}
 
 export async function POST(request) {
   let language = "ar"; // Default language
+  let uiLanguage = "ar"; // Widget/UX language (ar/en only)
 
   try {
     const {
@@ -276,6 +329,7 @@ export async function POST(request) {
       widgetSelection
     } = await request.json();
     language = userLanguage || "ar";
+    uiLanguage = language === "ar" ? "ar" : "en";
 
     // Handle message validation - message can be string or object from widget
     const messageText = typeof message === 'string' ? message : (message?.message || JSON.stringify(message));
@@ -294,7 +348,7 @@ export async function POST(request) {
       console.warn("[Chatbot] Message truncated from", messageText.length, "to 2000 chars");
     }
 
-    const isArabic = language === "ar";
+    const isArabic = uiLanguage === "ar";
 
     // ✅ Session Management
     let session;
@@ -319,7 +373,7 @@ export async function POST(request) {
     sessionManager.addMessage(session.sessionId, { role: "user", content: sanitizedMessage });
 
     // ✅ Step 1: تحليل رسالة المستخدم
-    const userAnalysis = analyzeUserMessage(sanitizedMessage, language);
+    const userAnalysis = analyzeUserMessage(sanitizedMessage, uiLanguage);
     console.log("[Chatbot] User analysis:", {
       intent: userAnalysis.intent,
       destination: userAnalysis.destination,
@@ -340,7 +394,7 @@ export async function POST(request) {
     }
 
     // ✅ Step 3: بناء سياق RAG بالبيانات الحقيقية
-    const ragContext = buildRAGContext(userAnalysis, language);
+    const ragContext = await buildRAGContext(userAnalysis, uiLanguage);
     console.log("[Chatbot] RAG context built:", {
       hotelsFound: ragContext.hotels?.length || 0,
       faqsFound: ragContext.faqs?.length || 0,
@@ -348,7 +402,7 @@ export async function POST(request) {
     });
 
     // ✅ Step 3.5: الحصول على الروابط المقترحة
-    const suggestedPages = getSuggestedPages(userAnalysis, language);
+    const suggestedPages = getSuggestedPages(userAnalysis, uiLanguage);
 
     // ✅ Step 3.6: فحص إذا كان يطلب التوجيه لصفحة معينة
     // ⚠️ IMPORTANT: Check booking intent FIRST before navigation
@@ -401,103 +455,99 @@ export async function POST(request) {
       });
     }
 
-    // ✅ Step 4: بناء Prompt للـ AI
-    const systemPrompt = buildSystemPrompt(language);
+    let reply = "";
 
-    let enhancedPrompt = systemPrompt;
+    // ✅ Step 4-7: LLM response if available, else deterministic Strapi fallback
+    if (OPENROUTER_API_KEY) {
+      const systemPrompt = await buildSystemPrompt(uiLanguage);
+      let enhancedPrompt = systemPrompt;
 
-    // Add RAG context for better responses
-    if (ragContext.context && ragContext.context.trim()) {
-      enhancedPrompt += `\n\n📊 Relevant Information:\n${ragContext.context}`;
-    }
+      if (ragContext.context && ragContext.context.trim()) {
+        enhancedPrompt += `\n\n📊 Relevant Information:\n${ragContext.context}`;
+      }
 
-    // Add hotel summary if available
-    if (ragContext.hotels && ragContext.hotels.length > 0) {
-      const hotelSummary = isArabic
-        ? `فنادق متاحة: ${ragContext.hotels.length}`
-        : `Hotels available: ${ragContext.hotels.length}`;
-      enhancedPrompt += `\n\n${hotelSummary}`;
-    }
+      if (ragContext.hotels && ragContext.hotels.length > 0) {
+        const hotelSummary = isArabic
+          ? `فنادق متاحة: ${ragContext.hotels.length}`
+          : `Hotels available: ${ragContext.hotels.length}`;
+        enhancedPrompt += `\n\n${hotelSummary}`;
+      }
 
-    // ✅ Step 5: إعداد المحادثة مع OpenRouter
-    const chatMessages = [
-      { role: "system", content: enhancedPrompt }
-    ];
+      const chatMessages = [{ role: "system", content: enhancedPrompt }];
 
-    // Add conversation history
-    const recentHistory = (conversationHistory || [])
-      .slice(-6)
-      .filter((msg) => msg.role && msg.content);
+      const recentHistory = (conversationHistory || [])
+        .slice(-6)
+        .filter((msg) => msg.role && msg.content);
 
-    for (const msg of recentHistory) {
-      const content = typeof msg.content === 'string'
-        ? msg.content
-        : (msg.content?.message || JSON.stringify(msg.content));
+      for (const msg of recentHistory) {
+        const content = typeof msg.content === 'string'
+          ? msg.content
+          : (msg.content?.message || JSON.stringify(msg.content));
 
-      chatMessages.push({
-        role: msg.role === "user" ? "user" : "assistant",
-        content: content
-      });
-    }
-
-    // Add current message (no artificial length restrictions)
-    chatMessages.push({ role: "user", content: sanitizedMessage });
-
-    // ✅ Step 6: إرسال الرسالة إلى OpenRouter مع retry logic
-    const MAX_RETRIES = 3;
-    let openRouterResponse;
-    let lastError;
-
-    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-      try {
-        openRouterResponse = await fetch(OPENROUTER_BASE_URL, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
-            "HTTP-Referer": "https://quickair.com",
-            "X-Title": "QuickAir Travel Assistant",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            model: process.env.OPENROUTER_MODEL || "google/gemini-2.0-flash-001",
-            messages: chatMessages,
-            max_tokens: 400,
-            temperature: 0.7,
-            top_p: 0.95,
-          })
+        chatMessages.push({
+          role: msg.role === "user" ? "user" : "assistant",
+          content: content
         });
+      }
 
-        if (openRouterResponse.ok) {
-          break; // Success, exit retry loop
-        }
+      chatMessages.push({ role: "user", content: sanitizedMessage });
 
-        lastError = `API error: ${openRouterResponse.status}`;
-        console.warn(`[Chatbot] Attempt ${attempt} failed: ${lastError}`);
+      const MAX_RETRIES = 3;
+      let openRouterResponse;
+      let lastError;
 
-        if (attempt < MAX_RETRIES) {
-          await new Promise(resolve => setTimeout(resolve, 1000 * attempt)); // Exponential backoff
-        }
-      } catch (fetchError) {
-        lastError = fetchError.message;
-        console.warn(`[Chatbot] Attempt ${attempt} fetch error: ${lastError}`);
+      for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+        try {
+          openRouterResponse = await fetch(OPENROUTER_BASE_URL, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
+              "HTTP-Referer": "https://quickair.com",
+              "X-Title": "QuickAir Travel Assistant",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              model: process.env.OPENROUTER_MODEL || "google/gemini-2.0-flash-001",
+              messages: chatMessages,
+              max_tokens: 400,
+              temperature: 0.7,
+              top_p: 0.95,
+            })
+          });
 
-        if (attempt < MAX_RETRIES) {
-          await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+          if (openRouterResponse.ok) {
+            break;
+          }
+
+          lastError = `API error: ${openRouterResponse.status}`;
+          console.warn(`[Chatbot] Attempt ${attempt} failed: ${lastError}`);
+
+          if (attempt < MAX_RETRIES) {
+            await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+          }
+        } catch (fetchError) {
+          lastError = fetchError.message;
+          console.warn(`[Chatbot] Attempt ${attempt} fetch error: ${lastError}`);
+
+          if (attempt < MAX_RETRIES) {
+            await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+          }
         }
       }
+
+      if (!openRouterResponse || !openRouterResponse.ok) {
+        const errorData = openRouterResponse ? await openRouterResponse.text() : lastError;
+        console.error("OpenRouter API error after retries:", errorData);
+        reply = await buildStrapiFallbackReply(userAnalysis, ragContext, uiLanguage, sanitizedMessage);
+      } else {
+        const responseData = await openRouterResponse.json();
+        reply = responseData.choices?.[0]?.message?.content || "";
+        reply = reply.trim();
+      }
+    } else {
+      console.warn("[Chatbot] OPENROUTER_API_KEY missing. Using Strapi fallback reply.");
+      reply = await buildStrapiFallbackReply(userAnalysis, ragContext, uiLanguage, sanitizedMessage);
     }
-
-    if (!openRouterResponse || !openRouterResponse.ok) {
-      const errorData = openRouterResponse ? await openRouterResponse.text() : lastError;
-      console.error("OpenRouter API error after retries:", errorData);
-      throw new Error(`OpenRouter API error: ${lastError || openRouterResponse?.status}`);
-    }
-
-    const responseData = await openRouterResponse.json();
-    let reply = responseData.choices?.[0]?.message?.content || "";
-
-    // ✅ Step 7: تنظيف الرد
-    reply = reply.trim();
 
     // ✅ Step 8: Add AI response to session
     sessionManager.addMessage(session.sessionId, { role: "assistant", content: reply });
@@ -509,6 +559,7 @@ export async function POST(request) {
 
     const nextWidget = determineNextWidget(sessionData, { ...userAnalysis, originalMessage: sanitizedMessage });
     let widgetData = null;
+    let forcedQuickOptions = null;
 
     // ✅ Only generate widget if it's a valid type
     if (nextWidget && isValidWidget(nextWidget.type)) {
@@ -518,12 +569,32 @@ export async function POST(request) {
       }
 
       // Pass widgetInfo for direct queries (like hotel search)
-      widgetData = generateWidgetData(nextWidget.type, sessionData, language, nextWidget);
-      const widgetResponse = generateWidgetResponse(nextWidget, language);
+      widgetData = await generateWidgetData(nextWidget.type, sessionData, uiLanguage, nextWidget);
+      const isEmptyHotelWidget =
+        widgetData?.type === "hotelCards" &&
+        (!Array.isArray(widgetData?.props?.hotels) || widgetData.props.hotels.length === 0);
 
-      // Enhance reply with widget context if needed
-      if (widgetResponse && !reply.includes(widgetResponse.substring(0, 20))) {
-        reply = reply + "\n\n" + widgetResponse;
+      if (isEmptyHotelWidget) {
+        widgetData = null;
+        reply += uiLanguage === "ar"
+          ? "\n\nحالياً لا توجد فنادق منشورة لهذه الوجهة. جرّب وجهة أخرى أو اسألني عن العروض المتاحة."
+          : "\n\nThere are currently no published hotels for this destination. Try another destination or ask for available offers.";
+        forcedQuickOptions = uiLanguage === "ar"
+          ? [
+            { label: "🎁 شوف العروض", value: "ايه العروض المتاحة؟", autoSend: true },
+            { label: "🌍 وجهات تانية", value: "عايز أشوف وجهات تانية", autoSend: true },
+          ]
+          : [
+            { label: "🎁 Show Offers", value: "What offers are available?", autoSend: true },
+            { label: "🌍 Other Destinations", value: "Show me other destinations", autoSend: true },
+          ];
+      } else {
+        const widgetResponse = generateWidgetResponse(nextWidget, uiLanguage);
+
+        // Enhance reply with widget context if needed
+        if (widgetResponse && !reply.includes(widgetResponse.substring(0, 20))) {
+          reply = reply + "\n\n" + widgetResponse;
+        }
       }
     }
 
@@ -533,7 +604,7 @@ export async function POST(request) {
       success: true,
       suggestedPages,
       navigation: navigationAction,
-      quickOptions: widgetData ? null : generateQuickOptions(userAnalysis, language, reply),
+      quickOptions: forcedQuickOptions || (widgetData ? null : generateQuickOptions(userAnalysis, uiLanguage, reply)),
       widget: widgetData, // Will be null if user is just chatting
       sessionId: session.sessionId,
       tripUpdate: widgetSelection || null,

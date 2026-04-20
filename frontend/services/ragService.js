@@ -12,24 +12,8 @@
  * - getChatbotKnowledgeBase: الحصول على قاعدة المعرفة الكاملة
  */
 
-import baliData from "@/data/tours/bali.json";
-import istanbulData from "@/data/tours/Istanbul.json";
-import sharmData from "@/data/tours/sharm_el_sheikh.json";
-import hurghadaData from "@/data/tours/hurghada.json";
-import dahabData from "@/data/tours/dahab.json";
-import beirutData from "@/data/tours/Beirut.json";
-import ainSokhnaData from "@/data/tours/ain_sokhna.json";
-import sahlHashishData from "@/data/tours/sahl_hashish.json";
-
-// FAQs
-import arAviationFAQ from "@/data/faq_output/ar_قسم_الطيران.json";
-import enAviationFAQ from "@/data/faq_output/en_Aviation.json";
-import arHotelsFAQ from "@/data/faq_output/ar_قسم_الفنادق.json";
-import enHotelsFAQ from "@/data/faq_output/en_Hotels.json";
-import arHajjFAQ from "@/data/faq_output/ar_قسم_الحج_والعمرة.json";
-import enHajjFAQ from "@/data/faq_output/en_Hajj_and_Umrah.json";
-import arVisasFAQ from "@/data/faq_output/ar_قسم_التأشيرات.json";
-import enVisasFAQ from "@/data/faq_output/en_Visas.json";
+import { getAllOffers } from "@/lib/api/services/offer";
+import { getAllHotels } from "@/lib/api/services/hotel";
 
 /**
  * ===================================
@@ -191,7 +175,7 @@ const POLICIES = {
  * العروض الحالية - Current Offers
  * ===================================
  */
-const CURRENT_OFFERS = {
+const FALLBACK_CURRENT_OFFERS = {
   ar: [
     { title: "عرض شهر العسل في بالي", discount: "15%", validUntil: "نهاية ديسمبر 2024" },
     { title: "رحلات شرم الشيخ", discount: "خصم 500 جنيه للحجز المبكر", validUntil: "متاح الآن" },
@@ -334,31 +318,245 @@ const SITE_PAGES = {
 /**
  * جميع البيانات الحقيقية
  */
-const ALL_DESTINATIONS = {
-  bali: baliData,
-  istanbul: istanbulData,
-  sharm: sharmData,
-  hurghada: hurghadaData,
-  dahab: dahabData,
-  beirut: beirutData,
-  ainsokhna: ainSokhnaData,
-  sahlhashish: sahlHashishData
+let CURRENT_OFFERS = {
+  ar: [...FALLBACK_CURRENT_OFFERS.ar],
+  en: [...FALLBACK_CURRENT_OFFERS.en]
 };
 
+let ALL_DESTINATIONS = {};
+
 const ALL_FAQS = {
-  ar: {
-    aviation: arAviationFAQ,
-    hotels: arHotelsFAQ,
-    hajj: arHajjFAQ,
-    visas: arVisasFAQ
-  },
-  en: {
-    aviation: enAviationFAQ,
-    hotels: enHotelsFAQ,
-    hajj: enHajjFAQ,
-    visas: enVisasFAQ
-  }
+  ar: {},
+  en: {}
 };
+
+const STRAPI_CACHE_TTL_MS = 5 * 60 * 1000;
+const strapiDataCache = {
+  ar: { data: null, updatedAt: 0 },
+  en: { data: null, updatedAt: 0 }
+};
+
+function normalizeDestinationKey(slugOrName = "") {
+  if (!slugOrName) return "unknown";
+
+  const normalized = slugOrName
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "")
+    .replace(/[-_]/g, "");
+
+  const aliasMap = {
+    sharmelsheikh: "sharm",
+    sharm: "sharm",
+    hurghada: "hurghada",
+    dahab: "dahab",
+    beirut: "beirut",
+    istanbul: "istanbul",
+    bali: "bali",
+    ainsokhna: "ainsokhna",
+    sahlhasheesh: "sahlhashish",
+    sahlhashish: "sahlhashish"
+  };
+
+  return aliasMap[normalized] || normalized;
+}
+
+function parseOfferPricing(option = {}) {
+  const roomPricing = option.roomPricing || [];
+  const allNumbers = roomPricing
+    .flatMap((room) => [
+      room?.singleOccupancyPrice,
+      room?.doubleOccupancyPrice,
+      room?.tripleOccupancyPrice,
+    ])
+    .filter((value) => typeof value === "number" && value > 0);
+
+  if (allNumbers.length === 0) {
+    return {
+      priceEGP: null,
+      pricesEGP: null,
+      priceUSD: null,
+      roomTypeAr: null,
+      roomTypeEn: null,
+    };
+  }
+
+  const exchangeRate = Number(process.env.CHATBOT_USD_EXCHANGE_RATE || 50);
+  const isUSD = (option.currency || "").toUpperCase() === "USD";
+  const convertToEGP = (value) => (isUSD ? Math.round(value * exchangeRate) : Math.round(value));
+
+  const pricesEGP = {
+    single: roomPricing[0]?.singleOccupancyPrice ? convertToEGP(roomPricing[0].singleOccupancyPrice) : null,
+    double: roomPricing[0]?.doubleOccupancyPrice ? convertToEGP(roomPricing[0].doubleOccupancyPrice) : null,
+    triple: roomPricing[0]?.tripleOccupancyPrice ? convertToEGP(roomPricing[0].tripleOccupancyPrice) : null,
+  };
+
+  const minRawPrice = Math.min(...allNumbers);
+
+  return {
+    priceEGP: convertToEGP(minRawPrice),
+    pricesEGP,
+    priceUSD: isUSD ? minRawPrice : Math.round(minRawPrice / exchangeRate),
+    roomTypeAr: roomPricing[0]?.roomType || null,
+    roomTypeEn: roomPricing[0]?.roomType || null,
+  };
+}
+
+function buildDestinationsFromStrapi(offers = [], hotels = [], language = "ar") {
+  const destinations = {};
+  const hotelMap = new Map();
+
+  hotels.forEach((hotel) => {
+    if (!hotel?.documentId) return;
+    hotelMap.set(hotel.documentId, hotel);
+  });
+
+  const localizedOffers = [];
+
+  offers.forEach((offer) => {
+    const destinationKey = normalizeDestinationKey(
+      offer?.location?.slug || offer?.location?.name,
+    );
+    const locationName = offer?.location?.name || offer?.location?.slug || destinationKey;
+
+    if (!destinations[destinationKey]) {
+      destinations[destinationKey] = {
+        location: locationName,
+        hotels: [],
+        includes: { ar: [], en: [] },
+        not_included: { ar: [], en: [] },
+        optional_tours: [],
+        valid_months: [],
+      };
+    }
+
+    const destination = destinations[destinationKey];
+    const inclusions = (offer?.inclusions || []).map((item) => item?.item).filter(Boolean);
+    const exclusions = (offer?.exclusions || []).map((item) => item?.item).filter(Boolean);
+    const monthLabel = [offer?.month, offer?.year].filter(Boolean).join(" ").trim();
+
+    destination.includes[language] = Array.from(
+      new Set([...(destination.includes[language] || []), ...inclusions]),
+    );
+    destination.not_included[language] = Array.from(
+      new Set([...(destination.not_included[language] || []), ...exclusions]),
+    );
+
+    if (monthLabel) {
+      destination.valid_months = Array.from(
+        new Set([...(destination.valid_months || []), monthLabel]),
+      );
+    }
+
+    (offer?.optionalTrips || []).forEach((trip) => {
+      destination.optional_tours.push({
+        tour_name_ar: trip?.title || "",
+        tour_name_en: trip?.title || "",
+        details_ar: trip?.description || "",
+        details_en: trip?.description || "",
+        price_usd: trip?.pricePerPerson || 0,
+      });
+    });
+
+    localizedOffers.push({
+      title: offer?.title || "",
+      discount: monthLabel || "Available now",
+      validUntil: monthLabel || "Available now",
+    });
+
+    (offer?.hotelOptions || []).forEach((option) => {
+      const hotelId = option?.hotel?.documentId;
+      const hotel = hotelMap.get(hotelId);
+      if (!hotel) return;
+
+      const pricing = parseOfferPricing(option);
+      if (!pricing.priceEGP) return;
+
+      destination.hotels.push({
+        hotel_name_ar: hotel.name,
+        hotel_name_en: hotel.name,
+        stars: Number(hotel.stars || 0),
+        area: hotel?.location?.name || locationName,
+        room_type_ar: pricing.roomTypeAr,
+        room_type_en: pricing.roomTypeEn,
+        price_egp: pricing.priceEGP,
+        price_usd_reference: pricing.priceUSD,
+        prices_egp: pricing.pricesEGP,
+      });
+    });
+  });
+
+  Object.values(destinations).forEach((destination) => {
+    destination.optional_tours = destination.optional_tours.slice(0, 20);
+    destination.hotels.sort((a, b) => a.price_egp - b.price_egp);
+  });
+
+  return {
+    destinations,
+    currentOffers: localizedOffers.slice(0, 10),
+  };
+}
+
+async function ensureStrapiData(language = "ar") {
+  const locale = language === "ar" ? "ar" : "en";
+  const fallbackLocale = locale === "ar" ? "en" : "ar";
+  const now = Date.now();
+  const cacheEntry = strapiDataCache[locale];
+
+  if (cacheEntry.data && now - cacheEntry.updatedAt < STRAPI_CACHE_TTL_MS) {
+    ALL_DESTINATIONS = cacheEntry.data.destinations;
+    CURRENT_OFFERS[locale] = cacheEntry.data.currentOffers;
+    return cacheEntry.data;
+  }
+
+  try {
+    const [offers, hotels] = await Promise.all([
+      getAllOffers({ locale, limit: 300 }),
+      getAllHotels({ locale }),
+    ]);
+
+    let builtData = buildDestinationsFromStrapi(offers, hotels, locale);
+    const hasPrimaryData = Object.keys(builtData.destinations || {}).length > 0;
+
+    // If selected locale has no published data, fall back to the other supported locale.
+    if (!hasPrimaryData) {
+      const fallbackCacheEntry = strapiDataCache[fallbackLocale];
+      if (
+        fallbackCacheEntry?.data &&
+        now - fallbackCacheEntry.updatedAt < STRAPI_CACHE_TTL_MS
+      ) {
+        builtData = fallbackCacheEntry.data;
+      } else {
+        const [fallbackOffers, fallbackHotels] = await Promise.all([
+          getAllOffers({ locale: fallbackLocale, limit: 300 }),
+          getAllHotels({ locale: fallbackLocale }),
+        ]);
+        builtData = buildDestinationsFromStrapi(fallbackOffers, fallbackHotels, fallbackLocale);
+        strapiDataCache[fallbackLocale] = { data: builtData, updatedAt: now };
+      }
+    }
+
+    strapiDataCache[locale] = { data: builtData, updatedAt: now };
+
+    ALL_DESTINATIONS = builtData.destinations;
+    CURRENT_OFFERS[locale] = builtData.currentOffers;
+
+    return builtData;
+  } catch (error) {
+    console.error("[RAG] Failed to load Strapi data:", error?.message || error);
+
+    const fallback = {
+      destinations: {},
+      currentOffers: FALLBACK_CURRENT_OFFERS[locale],
+    };
+
+    ALL_DESTINATIONS = fallback.destinations;
+    CURRENT_OFFERS[locale] = fallback.currentOffers;
+
+    return fallback;
+  }
+}
 
 /**
  * 1️⃣ فهم اللغة الطبيعية - Extract Intent and Entities (20+ Intent Types)
@@ -656,12 +854,7 @@ export function analyzeUserMessage(message, language = "ar") {
 
   // استخراج أسماء الفنادق المذكورة
   const hotelNames = [];
-  const allHotels = [];
-  Object.values(ALL_DESTINATIONS).forEach(dest => {
-    if (dest.hotels) {
-      allHotels.push(...dest.hotels);
-    }
-  });
+  const allHotels = Object.values(ALL_DESTINATIONS).flatMap((dest) => dest.hotels || []);
 
   allHotels.forEach(hotel => {
     const nameAr = hotel.hotel_name_ar?.toLowerCase() || "";
@@ -720,7 +913,7 @@ export function analyzeUserMessage(message, language = "ar") {
  * @param {Object} filters - فلاتر البحث
  * @returns {Array} قائمة الفنادق المطابقة
  */
-export function searchHotels(filters = {}) {
+export async function searchHotels(filters = {}) {
   const {
     destination,
     budget,
@@ -732,6 +925,8 @@ export function searchHotels(filters = {}) {
   let results = [];
 
   try {
+    await ensureStrapiData(language);
+
     // البحث في الوجهات
     const destData = destination ? [ALL_DESTINATIONS[destination]] : Object.values(ALL_DESTINATIONS);
 
@@ -769,7 +964,9 @@ export function searchHotels(filters = {}) {
  * @param {string} language - اللغة
  * @returns {Object|null} معلومات الوجهة
  */
-export function getDestinationInfo(destination, language = "ar") {
+export async function getDestinationInfo(destination, language = "ar") {
+  await ensureStrapiData(language);
+
   const destData = ALL_DESTINATIONS[destination];
   if (!destData) {
     console.warn("[RAG] Destination not found:", destination);
@@ -817,7 +1014,7 @@ export function getDestinationInfo(destination, language = "ar") {
 export function searchFAQs(query, language = "ar") {
   if (!query || typeof query !== 'string') return [];
 
-  const faqs = ALL_FAQS[language];
+  const faqs = ALL_FAQS[language] || {};
   if (!faqs) return [];
 
   const queryLower = query.toLowerCase();
@@ -885,7 +1082,9 @@ export function formatHotelForDisplay(hotel, language = "ar") {
 /**
  * 7️⃣ الحصول على جميع الوجهات المتاحة
  */
-export function getAllDestinations() {
+export async function getAllDestinations(language = "ar") {
+  await ensureStrapiData(language);
+
   return Object.keys(ALL_DESTINATIONS).map(key => ({
     id: key,
     name: ALL_DESTINATIONS[key].location,
@@ -896,7 +1095,9 @@ export function getAllDestinations() {
 /**
  * 8️⃣ اقتراح وجهات بناءً على الميزانية
  */
-export function suggestDestinationsByBudget(budget, language = "ar") {
+export async function suggestDestinationsByBudget(budget, language = "ar") {
+  await ensureStrapiData(language);
+
   const suggestions = [];
 
   Object.entries(ALL_DESTINATIONS).forEach(([key, dest]) => {
@@ -1171,15 +1372,17 @@ export function getVisaInfo(destination, language = "ar") {
 /**
  * 1️⃣5️⃣ بناء السياق الكامل للـ AI
  */
-export function buildRAGContext(userAnalysis, language = "ar") {
+export async function buildRAGContext(userAnalysis, language = "ar") {
   const { intent, destination, budget, travelers, hotelNames } = userAnalysis || {};
 
   let context = "";
   const isArabic = language === "ar";
 
+  await ensureStrapiData(language);
+
   // معلومات الوجهة الشاملة
   if (destination) {
-    const destInfo = getDestinationInfo(destination, language);
+    const destInfo = await getDestinationInfo(destination, language);
     const destData = ALL_DESTINATIONS[destination];
 
     if (destInfo && destData) {
@@ -1192,8 +1395,8 @@ export function buildRAGContext(userAnalysis, language = "ar") {
         : `- Available hotels: ${destInfo.hotels_count} hotels\n`;
 
       context += isArabic
-        ? `- نطاق الأسعار: ${destInfo.price_range.min_egp?.toLocaleString()}-${destInfo.price_range.max_egp?.toLocaleString()} جنيه (${destInfo.price_range.min_usd}-${destInfo.price_range.max_usd} دولار)\n`
-        : `- Price range: ${destInfo.price_range.min_egp?.toLocaleString()}-${destInfo.price_range.max_egp?.toLocaleString()} EGP ($${destInfo.price_range.min_usd}-${destInfo.price_range.max_usd})\n`;
+        ? `- نطاق الأسعار: ${destInfo.price_range.min?.toLocaleString()}-${destInfo.price_range.max?.toLocaleString()} جنيه (${destInfo.price_range.min_usd}-${destInfo.price_range.max_usd} دولار)\n`
+        : `- Price range: ${destInfo.price_range.min?.toLocaleString()}-${destInfo.price_range.max?.toLocaleString()} EGP ($${destInfo.price_range.min_usd}-${destInfo.price_range.max_usd})\n`;
 
       // الشهور المتاحة للعرض
       if (destData.valid_months && destData.valid_months.length > 0) {
@@ -1266,7 +1469,7 @@ export function buildRAGContext(userAnalysis, language = "ar") {
   }
 
   // الفنادق المطابقة مع تفاصيل كاملة
-  const hotels = searchHotels({ destination, budget, language, maxResults: 2 });
+  const hotels = await searchHotels({ destination, budget, language, maxResults: 2 });
   if (hotels.length > 0) {
     context += isArabic
       ? `\n🏨 الفنادق المتاحة مع التفاصيل:\n`
@@ -1308,7 +1511,7 @@ export function buildRAGContext(userAnalysis, language = "ar") {
   return {
     context,
     hotels,
-    destInfo: destination ? getDestinationInfo(destination, language) : null,
+    destInfo: destination ? await getDestinationInfo(destination, language) : null,
     faqs,
     comparison: (intent === "compare_hotels" && hotelNames && hotelNames.length >= 2)
       ? compareHotels(hotelNames[0], hotelNames[1], language)
@@ -1607,15 +1810,16 @@ export function getPolicies(language = "ar") {
  * الحصول على العروض الحالية
  * Get current offers
  */
-export function getCurrentOffers(language = "ar") {
-  return CURRENT_OFFERS[language];
+export async function getCurrentOffers(language = "ar") {
+  await ensureStrapiData(language);
+  return CURRENT_OFFERS[language] || [];
 }
 
 /**
  * البحث الشامل في كل البيانات
  * Comprehensive search across all data
  */
-export function comprehensiveSearch(query, language = "ar") {
+export async function comprehensiveSearch(query, language = "ar") {
   const isArabic = language === "ar";
   const results = {
     hotels: [],
@@ -1628,14 +1832,16 @@ export function comprehensiveSearch(query, language = "ar") {
   const queryLower = query.toLowerCase();
 
   // البحث في الفنادق
-  results.hotels = searchHotels({ language, maxResults: 5 }).filter(hotel => {
+  const searchableHotels = await searchHotels({ language, maxResults: 50 });
+  results.hotels = searchableHotels.filter(hotel => {
     const name = isArabic ? hotel.hotel_name_ar : hotel.hotel_name_en;
     return name?.toLowerCase().includes(queryLower) ||
       hotel.area?.toLowerCase().includes(queryLower);
   });
 
   // البحث في الوجهات
-  results.destinations = getAllDestinations().filter(dest =>
+  const allDestinations = await getAllDestinations(language);
+  results.destinations = allDestinations.filter(dest =>
     dest.name?.toLowerCase().includes(queryLower)
   );
 
@@ -1661,17 +1867,25 @@ export function comprehensiveSearch(query, language = "ar") {
  * الحصول على معلومات شاملة للبوت
  * Get comprehensive info for chatbot context
  */
-export function getChatbotKnowledgeBase(language = "ar") {
+export async function getChatbotKnowledgeBase(language = "ar") {
   const isArabic = language === "ar";
+
+  await ensureStrapiData(language);
+  const destinations = await getAllDestinations(language);
+  const offers = await getCurrentOffers(language);
+  const totalHotels = Object.values(ALL_DESTINATIONS).reduce(
+    (sum, dest) => sum + (dest.hotels?.length || 0),
+    0,
+  );
 
   return {
     company: getCompanyInfo(language),
     services: getAllServices(language),
-    destinations: getAllDestinations(),
+    destinations,
     policies: getPolicies(language),
-    offers: getCurrentOffers(language),
+    offers,
     pages: getAllPages(language),
-    totalHotels: Object.values(ALL_DESTINATIONS).reduce((sum, dest) => sum + (dest.hotels?.length || 0), 0),
+    totalHotels,
     supportedLanguages: ["ar", "en"]
   };
 }
