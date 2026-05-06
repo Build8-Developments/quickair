@@ -264,3 +264,141 @@
     font-size: 11px;
   }
 }
+
+/* ✅ Form Styles */
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.formLabel {
+  font-size: 11px;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.required {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.formInput {
+  padding: 10px 12px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #1f2937;
+  background: white;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.formInput:focus {
+  border-color: #019fb1;
+  box-shadow: 0 0 0 3px rgba(1, 159, 177, 0.1);
+}
+
+.formInput::placeholder {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.inputError {
+  border-color: #ef4444;
+}
+
+.inputError:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.errorText {
+  font-size: 10px;
+  color: #ef4444;
+  font-weight: 500;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.errorText::before {
+  content: "⚠";
+  font-size: 11px;
+}
+
+.privacyNote {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  background: #f0fdff;
+  border: 1px solid #b3e5ec;
+  border-radius: 6px;
+  font-size: 10px;
+  color: #0c7489;
+  margin-top: 4px;
+}
+
+.privacyNote svg {
+  flex-shrink: 0;
+}
+
+/* Mobile Responsive for Form */
+@media (max-width: 480px) {
+  .formContainer {
+    gap: 10px;
+  }
+
+  .formLabel {
+    font-size: 10px;
+  }
+
+  .formInput {
+    padding: 8px 10px;
+    font-size: 11px;
+    border-radius: 6px;
+  }
+
+  .errorText {
+    font-size: 9px;
+  }
+
+  .privacyNote {
+    padding: 6px 8px;
+    font-size: 9px;
+    border-radius: 5px;
+  }
+}
+
+@media (max-width: 360px) {
+  .formContainer {
+    gap: 8px;
+  }
+
+  .formLabel {
+    font-size: 9px;
+  }
+
+  .formInput {
+    padding: 7px 8px;
+    font-size: 10px;
+  }
+
+  .privacyNote {
+    padding: 5px 6px;
+    font-size: 8px;
+  }
+}

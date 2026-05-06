@@ -21,20 +21,47 @@ export async function POST(request) {
     console.log("Language:", language);
     console.log("=".repeat(60));
 
+    // ✅ FIX: Validate userInfo before sending emails
+    const hasValidUserInfo = userInfo && userInfo.email && userInfo.name && userInfo.phone;
+    
+    if (!hasValidUserInfo) {
+      console.log("⚠️  Incomplete user info - Booking saved to console only");
+      console.log("💡 Missing:", {
+        email: !userInfo?.email,
+        name: !userInfo?.name,
+        phone: !userInfo?.phone
+      });
+      
+      return Response.json({
+        success: true,
+        message: isArabic
+          ? "تم حفظ طلب الحجز! يرجى إكمال بياناتك للتأكيد."
+          : "Booking request saved! Please complete your information for confirmation.",
+        warning: "incomplete_user_info"
+      });
+    }
+
     // For now, skip email sending if SMTP not configured
     const smtpConfigured =
-      process.env.SMTP_USER && process.env.SMTP_PASS;
+      process.env.SMTP_USER && 
+      process.env.SMTP_PASS &&
+      process.env.SMTP_HOST &&
+      process.env.SMTP_PORT;
 
     if (smtpConfigured) {
       // إعداد transporter للإيميل
       const transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
         port: parseInt(process.env.SMTP_PORT),
-        secure: true,
+        secure: process.env.SMTP_PORT === "465", // true for 465, false for other ports
         auth: {
           user: process.env.SMTP_USER,
           pass: process.env.SMTP_PASS,
         },
+        // ✅ FIX: Add connection pooling to prevent "too many sessions" error
+        pool: true,
+        maxConnections: 1,
+        maxMessages: 3,
       });
 
       // بناء محتوى الإيميل للفريق
@@ -47,30 +74,42 @@ export async function POST(request) {
         language
       );
 
-      // إرسال إيميل للفريق
-      await transporter.sendMail({
-        from: `"QuickAir Chatbot" <${process.env.SMTP_USER}>`,
-        to: process.env.CONTACT_EMAIL || process.env.SMTP_USER,
-        subject: isArabic
-          ? `🎯 حجز جديد من ${userInfo.name}`
-          : `🎯 New Booking from ${userInfo.name}`,
-        html: teamEmailContent,
-      });
+      try {
+        // إرسال إيميل للفريق
+        await transporter.sendMail({
+          from: `"QuickAir Chatbot" <${process.env.SMTP_USER}>`,
+          to: process.env.CONTACT_EMAIL || process.env.SMTP_USER,
+          subject: isArabic
+            ? `🎯 حجز جديد من ${userInfo.name}`
+            : `🎯 New Booking from ${userInfo.name}`,
+          html: teamEmailContent,
+        });
 
-      // إرسال إيميل للعميل
-      await transporter.sendMail({
-        from: `"QuickAir" <${process.env.SMTP_USER}>`,
-        to: userInfo.email,
-        subject: isArabic
-          ? "تأكيد طلب حجزك - QuickAir"
-          : "Booking Request Confirmation - QuickAir",
-        html: customerEmailContent,
-      });
+        // إرسال إيميل للعميل
+        if (userInfo.email) {
+          await transporter.sendMail({
+            from: `"QuickAir" <${process.env.SMTP_USER}>`,
+            to: userInfo.email,
+            subject: isArabic
+              ? "تأكيد طلب حجزك - QuickAir"
+              : "Booking Request Confirmation - QuickAir",
+            html: customerEmailContent,
+          });
+        }
 
-      console.log("✅ Emails sent successfully");
+        console.log("✅ Emails sent successfully");
+        
+        // Close the transporter
+        transporter.close();
+      } catch (emailError) {
+        console.error("Email sending error:", emailError.message);
+        // Don't fail the request if email fails - booking is still saved
+        console.log("⚠️  Email failed but booking saved to console");
+      }
     } else {
       console.log("⚠️  SMTP not configured - Booking saved to console only");
-      console.log("💡 To enable emails, add SMTP_USER and SMTP_PASS to .env file");
+      console.log("💡 To enable emails, add SMTP credentials to .env file");
+      console.log("Required: SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS");
     }
 
     // إرسال إشعار واتساب (اختياري - يحتاج WhatsApp Business API)
@@ -88,6 +127,7 @@ export async function POST(request) {
       {
         success: false,
         error: "Failed to send booking confirmation",
+        details: error.message
       },
       { status: 500 }
     );

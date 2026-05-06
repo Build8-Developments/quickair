@@ -13,6 +13,7 @@ import HotelCardsWidget from "./widgets/HotelCardsWidget";
 import MealPlanWidget from "./widgets/MealPlanWidget";
 import RoomTypeWidget from "./widgets/RoomTypeWidget";
 import BookingSummaryWidget from "./widgets/BookingSummaryWidget";
+import OffersPopup from "./OffersPopup";
 
 // LocalStorage keys
 const STORAGE_KEYS = {
@@ -134,6 +135,28 @@ export default function AIChatbot() {
     };
   }, [showNextPopup]);
 
+  // ✅ Offers Popup Timer - show after 15 seconds if not dismissed
+  const [showOffersPopup, setShowOffersPopup] = useState(false);
+  
+  useEffect(() => {
+    // Check if offers popup was dismissed before
+    if (typeof window !== "undefined") {
+      const dismissed = localStorage.getItem("offersPopupDismissed");
+      if (dismissed === "true") {
+        return;
+      }
+    }
+
+    // Show offers popup after 15 seconds
+    const offersTimer = setTimeout(() => {
+      if (!isOpen) {
+        setShowOffersPopup(true);
+      }
+    }, 15000);
+
+    return () => clearTimeout(offersTimer);
+  }, [isOpen]);
+
   // ✅ Hide popup when chat opens
   useEffect(() => {
     if (isOpen) {
@@ -169,7 +192,10 @@ export default function AIChatbot() {
         if (savedUserInfo) {
           try {
             const parsed = JSON.parse(savedUserInfo);
-            if (parsed && typeof parsed === 'object') setUserInfo(parsed);
+            if (parsed && typeof parsed === 'object') {
+              setUserInfo(parsed);
+              console.log("✅ Restored preferredLanguage:", parsed.preferredLanguage);
+            }
           } catch (e) {
             console.warn("Invalid userInfo in localStorage, clearing...");
             localStorage.removeItem(STORAGE_KEYS.USER_INFO);
@@ -210,12 +236,29 @@ export default function AIChatbot() {
     }
   }, []);
 
+  // ✅ Initialize preferredLanguage from context if not set
+  useEffect(() => {
+    if (isInitialized && !userInfo.preferredLanguage && language) {
+      console.log("🔄 Initializing preferredLanguage from context:", language);
+      setUserInfo(prev => ({
+        ...prev,
+        preferredLanguage: language
+      }));
+    }
+  }, [isInitialized, userInfo.preferredLanguage, language]);
+
   // ✅ Save data to localStorage whenever it changes
   useEffect(() => {
     if (isInitialized && typeof window !== "undefined") {
       try {
         if (sessionId) localStorage.setItem(STORAGE_KEYS.SESSION_ID, sessionId);
-        if (userInfo.name) localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(userInfo));
+        
+        // ✅ Always save userInfo if it has preferredLanguage
+        if (userInfo.preferredLanguage || userInfo.name) {
+          localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(userInfo));
+          console.log("💾 Saved userInfo with language:", userInfo.preferredLanguage);
+        }
+        
         if (Object.keys(tripData).some(k => tripData[k])) {
           localStorage.setItem(STORAGE_KEYS.TRIP_DATA, JSON.stringify(tripData));
         }
@@ -756,6 +799,12 @@ export default function AIChatbot() {
             {...commonProps}
             bookingData={{ ...widget.props?.bookingData, ...tripData }}
             userInfo={userInfo}
+            onUserInfoUpdate={(updatedUserInfo) => {
+              // ✅ Update userInfo state when user fills the form
+              setUserInfo(updatedUserInfo);
+              // Save to localStorage
+              localStorage.setItem(STORAGE_KEYS.USER_INFO, JSON.stringify(updatedUserInfo));
+            }}
             onConfirm={async () => {
               setIsLoading(true);
               try {
@@ -765,7 +814,7 @@ export default function AIChatbot() {
                   body: JSON.stringify({
                     userInfo,
                     tripData,
-                    language: userInfo.preferredLanguage,
+                    language: userInfo.preferredLanguage || language || "ar", // ✅ FIX: Fallback to current language
                   }),
                 });
                 const data = await response.json();
@@ -780,9 +829,29 @@ export default function AIChatbot() {
                     }
                   ]);
                   setTimeout(() => setCurrentStep("summary"), 2000);
+                } else if (data.warning === "incomplete_user_info") {
+                  // ✅ FIX: Handle incomplete user info
+                  setMessages((prev) => [
+                    ...prev,
+                    {
+                      role: "assistant",
+                      content: isChatArabic
+                        ? "⚠️ يرجى إكمال بياناتك (الاسم، الإيميل، الهاتف) لتأكيد الحجز."
+                        : "⚠️ Please complete your information (name, email, phone) to confirm the booking."
+                    }
+                  ]);
                 }
               } catch (error) {
                 console.error("Confirmation error:", error);
+                setMessages((prev) => [
+                  ...prev,
+                  {
+                    role: "assistant",
+                    content: isChatArabic
+                      ? "❌ حدث خطأ في إرسال الحجز. يرجى المحاولة مرة أخرى أو التواصل معنا على 19102."
+                      : "❌ Error sending booking. Please try again or contact us at 19102."
+                  }
+                ]);
               } finally {
                 setIsLoading(false);
               }
@@ -1214,6 +1283,24 @@ export default function AIChatbot() {
             {renderContent()}
           </div>
         </div>
+      )}
+
+      {/* ✅ Offers Popup - Shows after 15 seconds if not dismissed */}
+      {showOffersPopup && !isOpen && (
+        <OffersPopup
+          language={language}
+          onClose={() => {
+            // Mark as dismissed so it doesn't show again
+            setShowOffersPopup(false);
+            localStorage.setItem("offersPopupDismissed", "true");
+          }}
+          onSubmit={(leadData) => {
+            console.log("Lead captured:", leadData);
+            // Mark as dismissed after successful submission
+            setShowOffersPopup(false);
+            localStorage.setItem("offersPopupDismissed", "true");
+          }}
+        />
       )}
     </>
   );

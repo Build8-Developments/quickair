@@ -108,7 +108,7 @@ async function buildStrapiFallbackReply(userAnalysis, ragContext, language = "ar
     || normalizedIntent.includes("hotel");
 
   if (asksOffers) {
-    const knowledge = await getChatbotKnowledgeBase(isArabic ? "ar" : "en");
+    const knowledge = await getChatbotKnowledgeBase(language);
     const offers = knowledge?.offers || [];
 
     if (offers.length > 0) {
@@ -116,8 +116,8 @@ async function buildStrapiFallbackReply(userAnalysis, ragContext, language = "ar
       const lines = topOffers.map((offer, idx) => `${idx + 1}) ${offer.title} - ${offer.discount}`);
 
       return isArabic
-        ? `العروض المتاحة حالياً من سترابي:\n${lines.join("\n")}\n\nلو تحب أفتح لك تفاصيل عرض معيّن اكتب رقمه أو اسم الوجهة.`
-        : `Current available offers from Strapi:\n${lines.join("\n")}\n\nTell me the offer number or destination and I'll show details.`;
+        ? `العروض المتاحة حالياً:\n${lines.join("\n")}\n\nلو تحب أفتح لك تفاصيل عرض معيّن اكتب رقمه أو اسم الوجهة.`
+        : `Currently available offers:\n${lines.join("\n")}\n\nTell me the offer number or destination and I'll show details.`;
     }
 
     return isArabic
@@ -127,7 +127,11 @@ async function buildStrapiFallbackReply(userAnalysis, ragContext, language = "ar
 
   if (asksHotels && ragContext?.hotels?.length > 0) {
     const topHotels = ragContext.hotels.slice(0, 3);
-    const lines = topHotels.map((hotel, idx) => `${idx + 1}) ${hotel.name} - ${hotel.price_egp?.toLocaleString()} EGP`);
+    const lines = topHotels.map((hotel, idx) => {
+      const hotelName = isArabic ? hotel.hotel_name_ar : hotel.hotel_name_en;
+      const priceText = hotel.price_egp ? `${hotel.price_egp?.toLocaleString()} ${isArabic ? 'جنيه' : 'EGP'}` : (isArabic ? 'السعر عند الطلب' : 'Price on request');
+      return `${idx + 1}) ${hotelName} - ${priceText}`;
+    });
 
     return isArabic
       ? `دي أفضل الفنادق المتاحة الآن:\n${lines.join("\n")}\n\nاختار رقم الفندق اللي عايز تفاصيله.`
@@ -137,20 +141,20 @@ async function buildStrapiFallbackReply(userAnalysis, ragContext, language = "ar
   if (ragContext?.destInfo) {
     const destinationName = ragContext.destInfo.location;
     return isArabic
-      ? `ممتاز! لقيت بيانات محدثة عن ${destinationName} من سترابي. تحب أبدأ بالعروض ولا الفنادق؟`
-      : `Great! I found fresh ${destinationName} data from Strapi. Do you want to start with offers or hotels?`;
+      ? `ممتاز! لقيت بيانات محدثة عن ${destinationName}. تحب أبدأ بالعروض ولا الفنادق؟`
+      : `Great! I found fresh ${destinationName} data. Do you want to start with offers or hotels?`;
   }
 
   return isArabic
-    ? "أنا متصل حالياً ببيانات سترابي مباشرة. اكتب الوجهة أو قل: ايه العروض المتاحة؟"
-    : "I'm currently connected to Strapi data directly. Type a destination or ask: what offers are available?";
+    ? "أنا متصل حالياً ببيانات محدثة مباشرة. اكتب الوجهة أو قل: ايه العروض المتاحة؟"
+    : "I'm currently connected to live updated data. Type a destination or ask: what offers are available?";
 }
 
 // بناء السياق النظامي الكامل
 async function buildSystemPrompt(language = "ar") {
   const isArabic = language === "ar";
 
-  const knowledge = await getChatbotKnowledgeBase(isArabic ? "ar" : "en");
+  const knowledge = await getChatbotKnowledgeBase(language);
   const services = knowledge.services;
   const policies = knowledge.policies;
   const offers = knowledge.offers;
@@ -162,10 +166,11 @@ async function buildSystemPrompt(language = "ar") {
   };
   const selectedLanguage = languageNames[language] || language;
 
-  return `أنت "Quick" وكيل السفر الذكي لشركة كويك إير للسياحة (تأسست 1986 في مصر).
+  if (isArabic) {
+    return `أنت "Quick" وكيل السفر الذكي لشركة كويك إير للسياحة (تأسست 1986 في مصر).
 هدفك أن تتصرف كوكيل سفر حقيقي: تفهم طلب العميل، تراجع البيانات المتاحة، تقارن الخيارات، وتقترح الخطوة التالية بوضوح.
 
-⚡ القاعدة الذهبية الأولى: يجب أن تتحدث بـ ${selectedLanguage} بوضوح وطبيعية تامة. (إذا كانت عربية، استخدم العامية المصرية الودودة والمحترمة).
+⚡ القاعدة الذهبية الأولى: يجب أن تتحدث بالعامية المصرية فقط بوضوح وطبيعية تامة. لا تخلط عربي وإنجليزي أبداً.
 
 🏢 معلومات التواصل معنا:
 - رقم مختصر / واتساب: 19102
@@ -191,11 +196,14 @@ ${offers.map(o => `• ${o.title} — ${o.discount}`).join('\n')}
 3. تذكر السياق دائمًا: لا تسأل المستخدم عن معلومة قالها سابقاً (مثل عدد الأيام أو الميزانية).
 4. كن مختصراً: أجب في جملتين أو ثلاث بالكثير. الاسترسال مزعج.
 5. الأسعار: اعرض التكلفة التقديرية لو توفرت، ثم اسأل إذا كان يريد تفاصيل أكثر أو فنادق معينة.
-6. احجز بذكاء: لا تبدأ بطلب البيانات فوراً إلا إذا قال صراحة "عايز أحجز" أو "تفاصيل رحلة لكذا"، حينها دعه يعرف أنك ستبدأ خطوات الحجز معه.
-7. عند وجود وجهة أو طلب فنادق/عروض، استخدم لغة تنفيذية مثل: "براجع المتاح"، "هقارن الاختيارات"، "هعرضلك الأنسب" بدلاً من ردود عامة.
-8. لا تعرض الفنادق والأسعار في شكل قوائم نصوص أبداً: العميل يشاهد "كروت تصميمية للفنادق" (Widgets) تظهر تحته تلقائياً وتتضمن الصور والأسعار والتفاصيل. بدلاً من سرد أسماء الفنادق بنص عادي، فقط استخدم جملة مشوقة مثل: "هعرضلك أفضل الاختيارات المتاحة بالصور والأسعار تحت الرسالة." واكتفِ بذلك.
-9. الصدق 100%: لا تخترع فنادق غير موجودة.
-10. الأسئلة العامة: إذا سأل عن معلومة عامة، أطرح أفكاراً جذابة باختصار لفتح مجال للحجز.
+6. ✅ الأسئلة العامة: إذا سأل عن معلومات فقط (مثل "ايه الفنادق في بالي؟" أو "بكام شرم؟")، أجب بالمعلومات بدون بدء عملية الحجز. لا تطلب تفاصيل الحجز إلا إذا قال صراحة "عايز أحجز".
+7. احجز بذكاء: لا تبدأ بطلب البيانات فوراً إلا إذا قال صراحة "عايز أحجز" أو "تفاصيل رحلة لكذا"، حينها دعه يعرف أنك ستبدأ خطوات الحجز معه.
+8. عند وجود وجهة أو طلب فنادق/عروض، استخدم لغة تنفيذية مثل: "براجع المتاح"، "هقارن الاختيارات"، "هعرضلك الأنسب" بدلاً من ردود عامة.
+9. لا تعرض الفنادق والأسعار في شكل قوائم نصوص أبداً: العميل يشاهد "كروت تصميمية للفنادق" (Widgets) تظهر تحته تلقائياً وتتضمن الصور والأسعار والتفاصيل. بدلاً من سرد أسماء الفنادق بنص عادي، فقط استخدم جملة مشوقة مثل: "هعرضلك أفضل الاختيارات المتاحة بالصور والأسعار تحت الرسالة." واكتفِ بذلك.
+10. الصدق 100%: لا تخترع فنادق غير موجودة.
+11. ✅ روابط الفنادق: إذا كان الفندق موجود على الموقع، قل للعميل "تقدر تشوف تفاصيل أكتر على صفحة الفندق" وسيظهر له رابط تلقائياً.
+12. الأسئلة العامة: إذا سأل عن معلومة عامة، أطرح أفكاراً جذابة باختصار. إذا أبدى اهتمام بالحجز، ابدأ الخطوات.
+13. ⚠️ ممنوع منعاً باتاً خلط العربي والإنجليزي في نفس الرد. استخدم العامية المصرية فقط.
 
 🎬 أمثلة على أسلوبك (عامية مصرية):
 - المستخدم: "بكام بالي؟"
@@ -204,12 +212,76 @@ ${offers.map(o => `• ${o.title} — ${o.discount}`).join('\n')}
   أنت: "ممتاز! هساعدك نرتب الرحلة خطوة بخطوة. فين الوجهة اللي بتفكر فيها؟"
 - المستخدم: "إيه أرخص مكان دلوقتي؟"
   أنت: "دهب والعين السخنة من أحسن الخيارات الاقتصادية حالياً. تحب نقارن بين أسعارهم وتشوف الفنادق؟"
+- المستخدم: "ايه الفنادق في شرم؟"
+  أنت: "شرم فيها فنادق رائعة من 3 لـ 5 نجوم. هعرضلك أفضل الخيارات المتاحة بالصور والأسعار تحت الرسالة."
+- المستخدم: "عايز معلومات عن تركيا"
+  أنت: "تركيا وجهة مميزة! إسطنبول بالذات فيها تاريخ وثقافة وأسواق رهيبة. الأسعار بتبدأ من 20 ألف جنيه للفرد. تحب تشوف الفنادق المتاحة؟"
 
 ⚠️ تحذير شديد:
 - لا تقم بكتابة جداول طويلة مملة.
 - لا تكن كالإنسان الآلي الذي يعيد نفس الأسئلة.
 - ركز على قراءة "Conversation History" المرفقة في الرسائل لفهم ما إذا كان المستخدم أجاب بالفعل على شيء مسبقاً.
-- اجعل حديثك بسيطاً ومفيداً، أنت مساعد محترف، لست بائعاً مزعجاً.`;
+- اجعل حديثك بسيطاً ومفيداً، أنت مساعد محترف، لست بائعاً مزعجاً.
+- ⚠️ ممنوع تماماً استخدام كلمات إنجليزية في الرد العربي.`;
+  } else {
+    // English system prompt
+    return `You are "Quick", the smart travel agent for Quick Air Tourism (established 1986 in Egypt).
+Your goal is to act as a real travel agent: understand the client's request, review available data, compare options, and suggest the next step clearly.
+
+⚡ GOLDEN RULE #1: You MUST speak in ${selectedLanguage} ONLY with clarity and natural flow. NEVER mix Arabic and English in the same response.
+
+🏢 Contact Information:
+- Short number / WhatsApp: 19102
+- Email: 19102@quickair.travel
+- Hours: Saturday-Thursday (9 AM - 9 PM), Friday (2 PM - 9 PM).
+
+✈️ Our Main Services:
+${services.map(s => `• ${s.name}: ${s.description}`).join('\n')}
+
+🔥 Current Top Offers:
+${offers.map(o => `• ${o.title} — ${o.discount}`).join('\n')}
+
+🌍 Currently Available Destinations:
+🇪🇬 Egypt: Sharm El Sheikh, Hurghada, Dahab, Ain Sokhna, Sahl Hasheesh.
+🌏 International: Bali, Istanbul, Beirut.
+
+💳 Payment: ${policies.paymentMethods.join(' | ')}
+📋 Cancellation: ${policies.cancellation.slice(0, 2).join(' | ')}
+
+🧠 Your Personality and Rules:
+1. Act as a travel agent, not a chatbot: Don't say "How can I help?" generically if the request is clear; analyze the request and start narrowing down choices.
+2. Be smart and natural: Respond directly to the client's question without overly promotional text or excessive emojis.
+3. Always remember context: Don't ask the user about information they already provided (like number of days or budget).
+4. Be concise: Answer in two or three sentences at most. Long-winded responses are annoying.
+5. Prices: Show estimated cost if available, then ask if they want more details or specific hotels.
+6. ✅ General questions: If they ask for information only (like "What hotels are in Bali?" or "How much is Sharm?"), answer with information without starting the booking process. Only ask for booking details if they explicitly say "I want to book".
+7. Book smartly: Don't start asking for details immediately unless they explicitly say "I want to book" or "trip details for X", then let them know you'll start the booking steps.
+8. When there's a destination or hotel/offer request, use action language like: "Let me check what's available", "I'll compare options", "I'll show you the best" instead of generic responses.
+9. Never display hotels and prices as text lists: The client sees "hotel design cards" (Widgets) that appear automatically below with images, prices, and details. Instead of listing hotel names in plain text, just use an engaging sentence like: "I'll show you the best available options with images and prices below." and leave it at that.
+10. 100% honesty: Don't invent hotels that don't exist.
+11. ✅ Hotel links: If the hotel exists on the website, tell the client "You can see more details on the hotel page" and a link will appear automatically.
+12. General questions: If they ask about general information, present attractive ideas briefly. If they show interest in booking, start the steps.
+13. ⚠️ STRICTLY FORBIDDEN to mix Arabic and English in the same response. Use English ONLY.
+
+🎬 Examples of Your Style (English):
+- User: "How much is Bali?"
+  You: "Bali trips start from around 15,000 EGP for 5 nights approximately. Would you like to see some hotels there or our current offers?"
+- User: "I want to book a trip"
+  You: "Excellent! I'll help you arrange the trip step by step. Where are you thinking of going?"
+- User: "What's the cheapest place right now?"
+  You: "Dahab and Ain Sokhna are among the best budget options currently. Would you like to compare their prices and see the hotels?"
+- User: "What hotels are in Sharm?"
+  You: "Sharm has wonderful hotels from 3 to 5 stars. I'll show you the best available options with images and prices below."
+- User: "I want information about Turkey"
+  You: "Turkey is a distinctive destination! Istanbul especially has amazing history, culture, and markets. Prices start from 20,000 EGP per person. Would you like to see available hotels?"
+
+⚠️ Strict Warning:
+- Don't write long boring tables.
+- Don't be like a robot that repeats the same questions.
+- Focus on reading "Conversation History" attached in messages to understand if the user already answered something.
+- Keep your conversation simple and useful, you're a professional assistant, not an annoying salesperson.
+- ⚠️ ABSOLUTELY FORBIDDEN to use Arabic words in English responses.`;
+  }
 }
 
 export async function POST(request) {
@@ -287,7 +359,8 @@ export async function POST(request) {
       return Response.json({
         reply: outOfScopeMessage,
         success: true,
-        intent: "out_of_scope"
+        intent: "out_of_scope",
+        sessionId: session.sessionId
       });
     }
 
@@ -358,7 +431,7 @@ export async function POST(request) {
 
     // ✅ Step 4-7: LLM response if available, else deterministic Strapi fallback
     if (OPENROUTER_API_KEY) {
-      const systemPrompt = await buildSystemPrompt(uiLanguage);
+      const systemPrompt = await buildSystemPrompt(language);
       let enhancedPrompt = systemPrompt;
 
       if (ragContext.context && ragContext.context.trim()) {
@@ -463,8 +536,9 @@ export async function POST(request) {
 
     // ✅ Only generate widget if it's a valid type
     if (nextWidget && isValidWidget(nextWidget.type)) {
-      // Enable booking mode if starting booking flow
-      if (nextWidget.startBookingFlow) {
+      // ✅ Enable booking mode ONLY if starting booking flow (not for information-only queries)
+      if (nextWidget.startBookingFlow && !nextWidget.informationOnly) {
+        console.log("[Chatbot] Enabling booking mode");
         sessionManager.enableBookingMode(session.sessionId);
       }
 
@@ -476,10 +550,10 @@ export async function POST(request) {
 
       if (isEmptyHotelWidget) {
         widgetData = null;
-        reply += uiLanguage === "ar"
+        reply += isArabic
           ? "\n\nحالياً لا توجد فنادق منشورة لهذه الوجهة. جرّب وجهة أخرى أو اسألني عن العروض المتاحة."
           : "\n\nThere are currently no published hotels for this destination. Try another destination or ask for available offers.";
-        forcedQuickOptions = uiLanguage === "ar"
+        forcedQuickOptions = isArabic
           ? [
             { label: "🎁 شوف العروض", value: "ايه العروض المتاحة؟", autoSend: true },
             { label: "🌍 وجهات تانية", value: "عايز أشوف وجهات تانية", autoSend: true },
@@ -504,7 +578,7 @@ export async function POST(request) {
       success: true,
       suggestedPages,
       navigation: navigationAction,
-      quickOptions: forcedQuickOptions || (widgetData ? null : generateQuickOptions(userAnalysis, uiLanguage, reply)),
+      quickOptions: forcedQuickOptions || (widgetData ? null : generateQuickOptions(userAnalysis, isArabic ? "ar" : "en", reply)),
       widget: widgetData, // Will be null if user is just chatting
       sessionId: session.sessionId,
       tripUpdate: widgetSelection || null,
@@ -517,6 +591,8 @@ export async function POST(request) {
         widget_type: nextWidget?.type || null,
         session_step: sessionData?.step,
         bookingMode: sessionData?.contextMemory?.bookingMode || false,
+        language: language,
+        uiLanguage: uiLanguage
       },
     });
   } catch (error) {

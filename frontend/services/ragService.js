@@ -392,6 +392,10 @@ function parseOfferPricing(option = {}) {
     .filter((value) => typeof value === "number" && value > 0);
 
   if (allNumbers.length === 0) {
+    console.log(`[RAG] parseOfferPricing: No valid prices found in roomPricing`, { 
+      roomPricingLength: roomPricing.length,
+      currency: option.currency 
+    });
     return {
       priceEGP: null,
       pricesEGP: null,
@@ -401,7 +405,7 @@ function parseOfferPricing(option = {}) {
     };
   }
 
-  const exchangeRate = Number(process.env.CHATBOT_USD_EXCHANGE_RATE || 50);
+  const exchangeRate = Number(process.env.CHATBOT_USD_EXCHANGE_RATE || process.env.NEXT_PUBLIC_USD_TO_EGP_RATE || 50);
   const isUSD = (option.currency || "").toUpperCase() === "USD";
   const convertToEGP = (value) => (isUSD ? Math.round(value * exchangeRate) : Math.round(value));
 
@@ -412,11 +416,22 @@ function parseOfferPricing(option = {}) {
   };
 
   const minRawPrice = Math.min(...allNumbers);
+  const priceEGP = convertToEGP(minRawPrice);
+  const priceUSD = isUSD ? minRawPrice : Math.round(minRawPrice / exchangeRate);
+
+  console.log(`[RAG] parseOfferPricing: Parsed prices`, { 
+    minRawPrice, 
+    priceEGP, 
+    priceUSD, 
+    isUSD, 
+    exchangeRate,
+    currency: option.currency 
+  });
 
   return {
-    priceEGP: convertToEGP(minRawPrice),
+    priceEGP,
     pricesEGP,
-    priceUSD: isUSD ? minRawPrice : Math.round(minRawPrice / exchangeRate),
+    priceUSD,
     roomTypeAr: roomPricing[0]?.roomType || null,
     roomTypeEn: roomPricing[0]?.roomType || null,
   };
@@ -426,12 +441,15 @@ function buildDestinationsFromStrapi(offers = [], hotels = [], language = "ar") 
   const destinations = {};
   const hotelMap = new Map();
 
+  // Build hotel map for quick lookup
   hotels.forEach((hotel) => {
     if (!hotel?.documentId) return;
     hotelMap.set(hotel.documentId, hotel);
   });
 
   const localizedOffers = [];
+
+  console.log(`[RAG] Building destinations from ${offers.length} offers and ${hotels.length} hotels`);
 
   offers.forEach((offer) => {
     const destinationKey = normalizeDestinationKey(
@@ -484,31 +502,103 @@ function buildDestinationsFromStrapi(offers = [], hotels = [], language = "ar") 
       validUntil: monthLabel || "Available now",
     });
 
+    // Process hotel options from offers
     (offer?.hotelOptions || []).forEach((option) => {
       const hotelId = option?.hotel?.documentId;
       const hotel = hotelMap.get(hotelId);
-      if (!hotel) return;
+      
+      // ✅ FIX: Even if hotel not in hotelMap, use data from option.hotel
+      const hotelData = hotel || option?.hotel;
+      
+      if (!hotelData) {
+        console.warn(`[RAG] Hotel not found for option in offer ${offer?.title}`);
+        return;
+      }
 
       const pricing = parseOfferPricing(option);
-      if (!pricing.priceEGP) return;
+      
+      // ✅ FIX: Allow hotels even without pricing - they might have pricing in other offers
+      const hotelEntry = {
+        hotel_name_ar: hotelData.name,
+        hotel_name_en: hotelData.name,
+        stars: Number(hotelData.stars || 0),
+        area: hotelData?.location?.name || locationName,
+        room_type_ar: pricing.roomTypeAr || null,
+        room_type_en: pricing.roomTypeEn || null,
+        price_egp: pricing.priceEGP || null,
+        price_usd_reference: pricing.priceUSD || null,
+        prices_egp: pricing.pricesEGP || null,
+        offer_title: offer?.title || null,
+        valid_from: offer?.month || null,
+        valid_to: offer?.year || null,
+      };
 
+      destination.hotels.push(hotelEntry);
+    });
+  });
+
+  // ✅ FIX: Add standalone hotels that aren't in offers
+  hotels.forEach((hotel) => {
+    const locationKey = normalizeDestinationKey(
+      hotel?.location?.slug || hotel?.location?.name
+    );
+    
+    if (!destinations[locationKey]) {
+      const locationName = hotel?.location?.name || hotel?.location?.slug || locationKey;
+      destinations[locationKey] = {
+        location: locationName,
+        hotels: [],
+        includes: { ar: [], en: [] },
+        not_included: { ar: [], en: [] },
+        optional_tours: [],
+        valid_months: [],
+      };
+    }
+
+    // Check if hotel already exists in destination
+    const destination = destinations[locationKey];
+    const hotelExists = destination.hotels.some(
+      h => h.hotel_name_en === hotel.name || h.hotel_name_ar === hotel.name
+    );
+
+    if (!hotelExists) {
       destination.hotels.push({
         hotel_name_ar: hotel.name,
         hotel_name_en: hotel.name,
         stars: Number(hotel.stars || 0),
-        area: hotel?.location?.name || locationName,
-        room_type_ar: pricing.roomTypeAr,
-        room_type_en: pricing.roomTypeEn,
-        price_egp: pricing.priceEGP,
-        price_usd_reference: pricing.priceUSD,
-        prices_egp: pricing.pricesEGP,
+        area: hotel?.location?.name || destination.location,
+        room_type_ar: null,
+        room_type_en: null,
+        price_egp: null, // No pricing for standalone hotels
+        price_usd_reference: null,
+        prices_egp: null,
+        offer_title: null,
+        valid_from: null,
+        valid_to: null,
       });
-    });
+    }
   });
 
+  // Clean up and sort
   Object.values(destinations).forEach((destination) => {
     destination.optional_tours = destination.optional_tours.slice(0, 20);
-    destination.hotels.sort((a, b) => a.price_egp - b.price_egp);
+    
+    // ✅ FIX: Sort hotels - put priced hotels first, then by price
+    destination.hotels.sort((a, b) => {
+      // Hotels with prices come first
+      if (a.price_egp && !b.price_egp) return -1;
+      if (!a.price_egp && b.price_egp) return 1;
+      
+      // Both have prices - sort by price
+      if (a.price_egp && b.price_egp) {
+        return a.price_egp - b.price_egp;
+      }
+      
+      // Both don't have prices - sort by stars
+      return (b.stars || 0) - (a.stars || 0);
+    });
+
+    console.log(`[RAG] Destination ${destination.location}: ${destination.hotels.length} hotels`);
   });
 
   return {
@@ -946,16 +1036,28 @@ export async function searchHotels(filters = {}) {
   try {
     await ensureStrapiData(language);
 
+    console.log(`[RAG] searchHotels called with:`, { destination, budget, stars, language, maxResults });
+
     // البحث في الوجهات
     const normalizedDestination = destination ? normalizeDestinationKey(destination) : null;
+    console.log(`[RAG] Normalized destination: ${destination} -> ${normalizedDestination}`);
+    
     const destData = normalizedDestination ? [ALL_DESTINATIONS[normalizedDestination]] : Object.values(ALL_DESTINATIONS);
+    console.log(`[RAG] Searching in ${destData.length} destinations`);
 
     destData.forEach(dest => {
-      if (!dest || !dest.hotels) return;
+      if (!dest || !dest.hotels) {
+        console.log(`[RAG] Skipping destination (no hotels):`, dest?.location);
+        return;
+      }
+
+      console.log(`[RAG] Checking ${dest.hotels.length} hotels in ${dest.location}`);
 
       dest.hotels.forEach(hotel => {
-        // تطبيق الفلاتر - budget is in EGP
-        if (budget && hotel.price_egp > budget) return;
+        // ✅ FIX: Only apply budget filter if hotel has price AND budget is specified
+        if (budget && hotel.price_egp && hotel.price_egp > budget) return;
+        
+        // ✅ FIX: Only apply stars filter if specified
         if (stars && hotel.stars !== stars) return;
 
         results.push({
@@ -968,8 +1070,22 @@ export async function searchHotels(filters = {}) {
       });
     });
 
-    // ترتيب حسب السعر
-    results.sort((a, b) => a.price_egp - b.price_egp);
+    console.log(`[RAG] Found ${results.length} hotels before sorting`);
+
+    // ✅ FIX: Sort hotels - priced hotels first, then by price, then by stars
+    results.sort((a, b) => {
+      // Hotels with prices come first
+      if (a.price_egp && !b.price_egp) return -1;
+      if (!a.price_egp && b.price_egp) return 1;
+      
+      // Both have prices - sort by price
+      if (a.price_egp && b.price_egp) {
+        return a.price_egp - b.price_egp;
+      }
+      
+      // Both don't have prices - sort by stars
+      return (b.stars || 0) - (a.stars || 0);
+    });
   } catch (error) {
     console.error("[RAG] Error searching hotels:", error.message);
     return [];
@@ -1009,15 +1125,27 @@ export async function getDestinationInfo(destination, language = "ar") {
     };
   }
 
+  // ✅ FIX: Filter hotels with valid prices for price range calculation
+  const hotelsWithPrices = hotels.filter(h => 
+    h.price_egp && 
+    typeof h.price_egp === 'number' && 
+    h.price_egp > 0 &&
+    h.price_usd_reference &&
+    typeof h.price_usd_reference === 'number' &&
+    h.price_usd_reference > 0
+  );
+
+  const priceRange = hotelsWithPrices.length > 0 ? {
+    min: Math.min(...hotelsWithPrices.map(h => h.price_egp)),
+    max: Math.max(...hotelsWithPrices.map(h => h.price_egp)),
+    min_usd: Math.min(...hotelsWithPrices.map(h => h.price_usd_reference)),
+    max_usd: Math.max(...hotelsWithPrices.map(h => h.price_usd_reference))
+  } : { min: 0, max: 0, min_usd: 0, max_usd: 0 };
+
   return {
     location: destData.location,
     hotels_count: hotels.length,
-    price_range: {
-      min: Math.min(...hotels.map(h => h.price_egp)),
-      max: Math.max(...hotels.map(h => h.price_egp)),
-      min_usd: Math.min(...hotels.map(h => h.price_usd_reference)),
-      max_usd: Math.max(...hotels.map(h => h.price_usd_reference))
-    },
+    price_range: priceRange,
     includes: destData.includes?.[language] || [],
     not_included: destData.not_included?.[language] || [],
     optional_tours: destData.optional_tours || [],

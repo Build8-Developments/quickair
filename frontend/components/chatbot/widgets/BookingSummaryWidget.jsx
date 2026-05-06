@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import styles from "./BookingSummaryWidget.module.css";
 
 export default function BookingSummaryWidget({ 
@@ -8,15 +9,75 @@ export default function BookingSummaryWidget({
   userInfo = {},
   language = "ar", 
   onConfirm,
-  onEdit 
+  onEdit,
+  onUserInfoUpdate
 }) {
   const isArabic = language === "ar";
   const t = (ar, en) => (isArabic ? ar : en);
+
+  // ✅ Local state for user info form
+  const [formData, setFormData] = useState({
+    name: userInfo?.name || "",
+    email: userInfo?.email || "",
+    phone: userInfo?.phone || "",
+    preferredLanguage: userInfo?.preferredLanguage || language
+  });
+
+  const [formErrors, setFormErrors] = useState({});
+  const [showForm, setShowForm] = useState(true);
 
   // Support both bookingData and tripData props
   const data = Object.keys(bookingData).length > 0 ? bookingData : tripData;
   const { destination, dates, travelers, budget, selectedHotel, hotel, mealPlan, roomType } = data;
   const hotelData = selectedHotel || hotel;
+
+  // ✅ Validate form
+  const validateForm = () => {
+    const errors = {};
+    
+    if (!formData.name || formData.name.trim().length < 2) {
+      errors.name = t("الاسم مطلوب (حرفين على الأقل)", "Name required (min 2 characters)");
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email || !emailRegex.test(formData.email)) {
+      errors.email = t("البريد الإلكتروني غير صحيح", "Invalid email address");
+    }
+    
+    const phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
+    if (!formData.phone || !phoneRegex.test(formData.phone)) {
+      errors.phone = t("رقم الهاتف غير صحيح (10 أرقام على الأقل)", "Invalid phone (min 10 digits)");
+    }
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // ✅ Handle form submission
+  const handleSubmit = () => {
+    if (validateForm()) {
+      // Update parent component with user info
+      if (onUserInfoUpdate) {
+        onUserInfoUpdate(formData);
+      }
+      setShowForm(false);
+      // Call confirm after a short delay
+      setTimeout(() => {
+        if (onConfirm) {
+          onConfirm();
+        }
+      }, 300);
+    }
+  };
+
+  // ✅ Handle input change
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error for this field
+    if (formErrors[field]) {
+      setFormErrors(prev => ({ ...prev, [field]: null }));
+    }
+  };
 
   // Edit button component
   const EditBtn = ({ field }) => (
@@ -39,8 +100,73 @@ export default function BookingSummaryWidget({
       </div>
 
       <div className={styles.sections}>
-        {/* User Info */}
-        {userInfo && (userInfo.name || userInfo.email || userInfo.phone) && (
+        {/* ✅ User Info Form - Always show at top */}
+        {showForm && (
+          <div className={styles.section}>
+            <div className={styles.sectionHeader}>
+              <div className={styles.sectionTitle}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#019fb1" strokeWidth="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                {t("بياناتك للتواصل", "Your Contact Info")}
+              </div>
+            </div>
+            <div className={styles.formContainer}>
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>
+                  {t("الاسم الكامل", "Full Name")} <span className={styles.required}>*</span>
+                </label>
+                <input
+                  type="text"
+                  className={`${styles.formInput} ${formErrors.name ? styles.inputError : ""}`}
+                  placeholder={t("أدخل اسمك الكامل", "Enter your full name")}
+                  value={formData.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
+                />
+                {formErrors.name && <span className={styles.errorText}>{formErrors.name}</span>}
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>
+                  {t("البريد الإلكتروني", "Email")} <span className={styles.required}>*</span>
+                </label>
+                <input
+                  type="email"
+                  className={`${styles.formInput} ${formErrors.email ? styles.inputError : ""}`}
+                  placeholder={t("example@email.com", "example@email.com")}
+                  value={formData.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                />
+                {formErrors.email && <span className={styles.errorText}>{formErrors.email}</span>}
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>
+                  {t("رقم الهاتف", "Phone Number")} <span className={styles.required}>*</span>
+                </label>
+                <input
+                  type="tel"
+                  className={`${styles.formInput} ${formErrors.phone ? styles.inputError : ""}`}
+                  placeholder={t("+20 1XX XXX XXXX", "+20 1XX XXX XXXX")}
+                  value={formData.phone}
+                  onChange={(e) => handleInputChange("phone", e.target.value)}
+                />
+                {formErrors.phone && <span className={styles.errorText}>{formErrors.phone}</span>}
+              </div>
+
+              <div className={styles.privacyNote}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" width="16" height="16">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <span>{t("بياناتك آمنة ومحمية معنا", "Your data is safe and secure with us")}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Show user info summary if form is hidden */}
+        {!showForm && (formData.name || formData.email || formData.phone) && (
           <div className={styles.section}>
             <div className={styles.sectionHeader}>
               <div className={styles.sectionTitle}>
@@ -50,11 +176,21 @@ export default function BookingSummaryWidget({
                 </svg>
                 {t("بيانات العميل", "Customer Info")}
               </div>
+              <button 
+                className={styles.editBtn} 
+                onClick={() => setShowForm(true)}
+                title={t("تعديل", "Edit")}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14" height="14">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </button>
             </div>
             <div className={styles.details}>
-              {userInfo.name && <div className={styles.detailValue}>{t("الاسم:", "Name:")} {userInfo.name}</div>}
-              {userInfo.email && <div className={styles.detailValue}>{t("الإيميل:", "Email:")} {userInfo.email}</div>}
-              {userInfo.phone && <div className={styles.detailValue}>{t("الهاتف:", "Phone:")} {userInfo.phone}</div>}
+              {formData.name && <div className={styles.detailValue}>{t("الاسم:", "Name:")} {formData.name}</div>}
+              {formData.email && <div className={styles.detailValue}>{t("الإيميل:", "Email:")} {formData.email}</div>}
+              {formData.phone && <div className={styles.detailValue}>{t("الهاتف:", "Phone:")} {formData.phone}</div>}
             </div>
           </div>
         )}
@@ -226,7 +362,7 @@ export default function BookingSummaryWidget({
 
       {/* Action Buttons */}
       <div className={styles.actions}>
-        <button className={styles.confirmButton} onClick={onConfirm}>
+        <button className={styles.confirmButton} onClick={handleSubmit}>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <path d="M20 6L9 17l-5-5"/>
           </svg>
