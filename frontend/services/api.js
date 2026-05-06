@@ -340,7 +340,6 @@ export const blogsAPI = {
           author
           readTime
           featured
-          tags
           coverImage {
             url
             alternativeText

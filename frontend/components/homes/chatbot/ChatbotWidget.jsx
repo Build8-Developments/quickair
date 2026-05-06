@@ -11,12 +11,14 @@ export default function ChatbotWidget() {
   const t = (ar, en) => (isArabic ? ar : en);
 
   const scrollToChatbot = () => {
-    // Try multiple selectors to find the chatbot button (works for both Arabic and English)
-    const chatButton = document.querySelector('[aria-label*="AI"]') || 
+    window.dispatchEvent(new CustomEvent("quickair-open-agent"));
+    const chatButton = document.querySelector('[data-chatbot-trigger="quickair-agent"]') ||
+                       document.querySelector('[aria-label*="AI"]') ||
+                       document.querySelector('[aria-label*="وكيل"]') ||
                        document.querySelector('[aria-label*="مساعد"]') ||
                        document.querySelector('[aria-label*="ذكي"]');
     if (chatButton) {
-      chatButton.click();
+      chatButton.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   };
 
@@ -28,8 +30,8 @@ export default function ChatbotWidget() {
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
         </svg>
       ),
-      title: t("ابدأ المحادثة", "Start Chat"),
-      description: t("اسأل عن أي شيء تريده", "Ask anything you want"),
+      title: t("اكتب طلب الرحلة", "Share your trip brief"),
+      description: t("قلّي الوجهة والمدة والميزانية", "Tell me destination, duration and budget"),
     },
     {
       id: 2,
@@ -39,8 +41,8 @@ export default function ChatbotWidget() {
           <circle cx="12" cy="10" r="3"></circle>
         </svg>
       ),
-      title: t("اختر وجهتك", "Pick Destination"),
-      description: t("احصل على توصيات مخصصة", "Get personalized suggestions"),
+      title: t("تحليل المتاح", "Analyze options"),
+      description: t("أراجع العروض والفنادق الحقيقية", "I review real offers and hotels"),
     },
     {
       id: 3,
@@ -52,8 +54,8 @@ export default function ChatbotWidget() {
           <line x1="3" y1="10" x2="21" y2="10"></line>
         </svg>
       ),
-      title: t("خطط رحلتك", "Plan Journey"),
-      description: t("حدد التواريخ والتفاصيل", "Set dates and details"),
+      title: t("مقارنة ذكية", "Smart comparison"),
+      description: t("أقارن السعر والموقع والمستوى", "Compare price, location and rating"),
     },
     {
       id: 4,
@@ -63,8 +65,8 @@ export default function ChatbotWidget() {
           <polyline points="22 4 12 14.01 9 11.01"></polyline>
         </svg>
       ),
-      title: t("احجز الآن", "Book Now"),
-      description: t("أكمل حجزك بسهولة", "Complete with ease"),
+      title: t("خطة جاهزة", "Ready plan"),
+      description: t("استلم أفضل اختيار وخطوة الحجز", "Get the best option and next step"),
     },
   ];
 
@@ -82,12 +84,12 @@ export default function ChatbotWidget() {
             </svg>
           </div>
           <h2 className={styles.pageTitle}>
-            {t("مساعدك الذكي للسفر", "Your AI Travel Assistant")}
+            {t("وكيل سفرك الذكي", "Your AI Travel Agent")}
           </h2>
           <p className={styles.pageSubtitle}>
             {t(
-              "خطط رحلتك بذكاء مع مساعدنا الذكي - من اختيار الوجهة إلى إتمام الحجز",
-              "Plan your trip smartly with our AI - from destination to booking"
+              "اكتب طلبك مرة واحدة، وQuick يراجع العروض والفنادق ويجهز لك اختيارات مناسبة من بيانات QuickAir الحقيقية",
+              "Share your trip brief once, and Quick reviews real QuickAir offers and hotels to prepare suitable options"
             )}
           </p>
         </div>
@@ -144,10 +146,10 @@ export default function ChatbotWidget() {
                   </svg>
                 </div>
                 <div className={styles.chatHeaderText}>
-                  <h4>{t("مساعد QuickAir", "QuickAir Assistant")}</h4>
+                  <h4>{t("وكيل QuickAir", "QuickAir Agent")}</h4>
                   <p>
                     <span className={styles.onlineDot}></span>
-                    {t("متصل الآن", "Online now")}
+                    {t("يبحث ويقارن", "Searching & comparing")}
                   </p>
                 </div>
               </div>
@@ -160,13 +162,13 @@ export default function ChatbotWidget() {
                     </svg>
                   </div>
                   <div className={styles.messageBubble}>
-                    {t("مرحباً! 👋 كيف يمكنني مساعدتك في تخطيط رحلتك؟", "Hello! 👋 How can I help you plan your trip?")}
+                    {t("أنا Quick، وكيل سفرك. قلّي عايز تسافر فين وميزانيتك كام؟", "I'm Quick, your travel agent. Where do you want to go and what's your budget?")}
                   </div>
                 </div>
 
                 <div className={styles.messageUser}>
                   <div className={styles.messageBubble}>
-                    {t("أريد رحلة شاطئية لمدة 5 أيام", "I want a 5-day beach vacation")}
+                    {t("عايز شرم 5 أيام بميزانية متوسطة", "I want Sharm for 5 days with a mid-range budget")}
                   </div>
                 </div>
 
@@ -178,8 +180,8 @@ export default function ChatbotWidget() {
                   </div>
                   <div className={styles.messageBubble}>
                     {t(
-                      "رائع! 🏝️ لدي عدة خيارات مميزة:\n• المالديف - فنادق 5 نجوم\n• شرم الشيخ - عروض خاصة\n• دبي - تجربة فاخرة",
-                      "Perfect! 🏝️ I have great options:\n• Maldives - 5-star resorts\n• Sharm El Sheikh - special deals\n• Dubai - luxury experience"
+                      "تمام، بفهم طلبك وبراجع المتاح:\n✓ شرم الشيخ\n✓ 5 أيام\n✓ ميزانية متوسطة\n\nهعرضلك أفضل فنادق وعروض مناسبة.",
+                      "Great, I'm reviewing your brief:\n✓ Sharm El Sheikh\n✓ 5 days\n✓ Mid-range budget\n\nI'll show the best suitable hotels and offers."
                     )}
                   </div>
                 </div>
@@ -205,18 +207,18 @@ export default function ChatbotWidget() {
                   </svg>
                 </span>
                 <span className={styles.badgeText}>
-                  {t("مدعوم بالذكاء الاصطناعي", "AI-Powered")}
+                  {t("وكيل سفر مدعوم بالذكاء الاصطناعي", "AI-Powered Travel Agent")}
                 </span>
               </div>
 
               <h3 className={styles.ctaTitle}>
-                {t("جاهز لتخطيط رحلتك المثالية؟", "Ready to Plan Your Perfect Trip?")}
+                {t("جاهز تخلي Quick يجهز رحلتك؟", "Ready for Quick to plan your trip?")}
               </h3>
 
               <p className={styles.ctaDescription}>
                 {t(
-                  "دع مساعدنا الذكي يساعدك في كل خطوة - من اختيار الوجهة المثالية إلى إتمام الحجز بأفضل الأسعار",
-                  "Let our AI assistant help you every step - from choosing the perfect destination to completing booking at best prices"
+                  "بدل ما تدور في صفحات كتير، اكتب طلبك وQuick يختصر لك الاختيارات حسب الوجهة والمدة والميزانية.",
+                  "Instead of browsing multiple pages, share your brief and Quick narrows options by destination, duration and budget."
                 )}
               </p>
 
@@ -228,8 +230,8 @@ export default function ChatbotWidget() {
                     </svg>
                   </div>
                   <div>
-                    <strong>{t("استجابة فورية", "Instant Replies")}</strong>
-                    <p>{t("إجابات فورية على جميع استفساراتك", "Instant answers to all queries")}</p>
+                    <strong>{t("تحليل سريع", "Fast Analysis")}</strong>
+                    <p>{t("يفهم طلب الرحلة ويحدد المطلوب", "Understands your trip brief and intent")}</p>
                   </div>
                 </div>
                 <div className={styles.featureItem}>
@@ -244,8 +246,8 @@ export default function ChatbotWidget() {
                     </svg>
                   </div>
                   <div>
-                    <strong>{t("توصيات ذكية", "Smart Suggestions")}</strong>
-                    <p>{t("مبنية على تفضيلاتك وميزانيتك", "Based on preferences & budget")}</p>
+                    <strong>{t("مقارنة حقيقية", "Real Comparison")}</strong>
+                    <p>{t("يعتمد على عروض وفنادق QuickAir", "Uses QuickAir offers and hotels")}</p>
                   </div>
                 </div>
                 <div className={styles.featureItem}>
@@ -256,8 +258,8 @@ export default function ChatbotWidget() {
                     </svg>
                   </div>
                   <div>
-                    <strong>{t("حجز آمن", "Secure Booking")}</strong>
-                    <p>{t("معاملات آمنة ومشفرة", "Safe & encrypted transactions")}</p>
+                    <strong>{t("خطوة حجز واضحة", "Clear Booking Step")}</strong>
+                    <p>{t("يوجهك لأفضل اختيار أو طلب الحجز", "Guides you to the best option or request")}</p>
                   </div>
                 </div>
               </div>
@@ -266,7 +268,7 @@ export default function ChatbotWidget() {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                 </svg>
-                <span>{t("ابدأ التخطيط الآن", "Start Planning Now")}</span>
+                <span>{t("ابدأ مع الوكيل", "Start with Agent")}</span>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                   <polyline points="12 5 19 12 12 19"></polyline>

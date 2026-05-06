@@ -1,17 +1,19 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { DOMESTIC_DESTINATIONS, INTERNATIONAL_DESTINATIONS } from "@/data/toursData";
 import { useLanguage } from "@/contexts/LanguageContext";
 import styles from "./StepLocation.module.css";
 
-export default function StepLocation({ data, onUpdate, onNext, onPrev }) {
+export default function StepLocation({ data, destinations = [], onUpdate, onNext, onPrev }) {
   const [selected, setSelected] = useState(data || null);
   const { language } = useLanguage();
   const isRTL = language === "ar";
   const t = (ar, en) => (isRTL ? ar : en);
 
   const options = useMemo(() => {
+    const domesticDestinations = destinations.filter((d) => d.locationType === "domestic");
+    const internationalDestinations = destinations.filter((d) => d.locationType === "international");
+
     const getStats = (destinations) => {
       const hotels = destinations.reduce((sum, d) => sum + (d.hotelCount || 0), 0);
       const prices = destinations.map((d) => d.priceRange?.min).filter(Boolean);
@@ -32,7 +34,7 @@ export default function StepLocation({ data, onUpdate, onNext, onPrev }) {
         descAr: "استكشف وجهات داخل مصر",
         descEn: "Explore destinations within Egypt",
         icon: "egypt",
-        stats: getStats(DOMESTIC_DESTINATIONS),
+        stats: getStats(domesticDestinations),
       },
       {
         id: "international",
@@ -41,10 +43,10 @@ export default function StepLocation({ data, onUpdate, onNext, onPrev }) {
         descAr: "اكتشف العالم من حولك",
         descEn: "Discover the world around you",
         icon: "world",
-        stats: getStats(INTERNATIONAL_DESTINATIONS),
+        stats: getStats(internationalDestinations),
       },
     ];
-  }, [isRTL]);
+  }, [isRTL, destinations]);
 
   const handleSelect = (id) => {
     setSelected(id);

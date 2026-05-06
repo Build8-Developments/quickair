@@ -16,6 +16,9 @@ import StepSummary from "./steps/StepSummary";
 import { useLanguage } from "@/contexts/LanguageContext";
 import styles from "./CreateTripFlow.module.css";
 import FlightSearch from "@/components/homes/heros/FlightSearch";
+import { getAllLocations } from "@/lib/api/services/location";
+import { getAllHotels } from "@/lib/api/services/hotel";
+import { getAllOffers } from "@/lib/api/services/offer";
 
 const TRIP_TYPES_MAP = {
   package: {
@@ -67,6 +70,7 @@ export default function CreateTripFlow() {
 
   const [currentStep, setCurrentStep] = useState(initialStep);
   const [showFlightSearch, setShowFlightSearch] = useState(false);
+  const [strapiDestinations, setStrapiDestinations] = useState([]);
   const [tripData, setTripData] = useState({
     tripType: initialTripType,
     locationType: null,
@@ -115,6 +119,186 @@ export default function CreateTripFlow() {
   const { language } = useLanguage();
   const isArabic = language === "ar";
   const t = (ar, en) => (isArabic ? ar : en);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadStrapiTripData = async () => {
+      try {
+        const locale = isArabic ? "ar" : "en";
+        const [locations, hotels, offers] = await Promise.all([
+          getAllLocations({ locale, limit: 200 }),
+          getAllHotels({ locale }),
+          getAllOffers({ locale, limit: 400 }),
+        ]);
+
+        const getImageUrl = (loc) => {
+          const src = loc?.image?.url || "";
+          if (!src) return "";
+          if (src.startsWith("http")) return src;
+          const base = process.env.NEXT_PUBLIC_STRAPI_URL || "";
+          return `${base}${src}`;
+        };
+
+        const normalizeText = (value) =>
+          String(value || "")
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, " ")
+            .replace(/[-_]/g, " ");
+
+        const usdRate = Number(process.env.NEXT_PUBLIC_USD_TO_EGP_RATE || 50);
+        const convertToEGP = (value, currency) => {
+          if (typeof value !== "number" || !Number.isFinite(value) || value <= 0) return null;
+          const isUSD = String(currency || "").toUpperCase() === "USD";
+          return Math.round(isUSD ? value * usdRate : value);
+        };
+
+        const parseRoomPricing = (roomPricing = [], currency = "EGP") => {
+          const base = roomPricing?.[0] || {};
+          const pricesEGP = {
+            single: convertToEGP(base?.singleOccupancyPrice, currency),
+            double: convertToEGP(base?.doubleOccupancyPrice, currency),
+            triple: convertToEGP(base?.tripleOccupancyPrice, currency),
+          };
+
+          const allValues = Object.values(pricesEGP).filter(
+            (v) => typeof v === "number" && Number.isFinite(v) && v > 0,
+          );
+
+          return {
+            price_egp: allValues.length ? Math.min(...allValues) : null,
+            prices_egp: pricesEGP,
+          };
+        };
+
+        const hotelMap = new Map();
+        hotels.forEach((hotel) => {
+          if (hotel?.documentId) hotelMap.set(hotel.documentId, hotel);
+        });
+
+        const normalized = locations.map((loc) => {
+          const locDocumentId = normalizeText(loc?.documentId);
+          const locSlug = normalizeText(loc?.slug);
+          const locName = normalizeText(loc?.name);
+
+          const locationHotels = hotels
+            .filter((hotel) => {
+              const hotelLocDocumentId = normalizeText(hotel?.location?.documentId);
+              const hotelLocSlug = normalizeText(hotel?.location?.slug);
+              const hotelLocName = normalizeText(hotel?.location?.name);
+
+              return (
+                (locDocumentId && hotelLocDocumentId && locDocumentId === hotelLocDocumentId) ||
+                (locSlug && hotelLocSlug && locSlug === hotelLocSlug) ||
+                (locName && hotelLocName && locName === hotelLocName)
+              );
+            })
+            .map((hotel) => ({
+              hotel_name_en: hotel?.name || "",
+              hotel_name_ar: hotel?.name || "",
+              stars: hotel?.stars || 0,
+              area: hotel?.location?.name || "",
+              room_type_en: null,
+              room_type_ar: null,
+              price_egp: null,
+              prices_egp: null,
+            }));
+
+          const offerHotels = offers
+            .filter((offer) => {
+              const offerLocDocumentId = normalizeText(offer?.location?.documentId);
+              const offerLocSlug = normalizeText(offer?.location?.slug);
+              const offerLocName = normalizeText(offer?.location?.name);
+
+              return (
+                (locDocumentId && offerLocDocumentId && locDocumentId === offerLocDocumentId) ||
+                (locSlug && offerLocSlug && locSlug === offerLocSlug) ||
+                (locName && offerLocName && locName === offerLocName)
+              );
+            })
+            .flatMap((offer) =>
+              (offer?.hotelOptions || []).map((option) => {
+                const hotelFromMap = hotelMap.get(option?.hotel?.documentId);
+                const hotelFromOption = option?.hotel || {};
+                const pricing = parseRoomPricing(
+                  option?.roomPricing || [],
+                  option?.currency || "EGP",
+                );
+
+                return {
+                  hotel_name_en: hotelFromOption?.name || hotelFromMap?.name || "",
+                  hotel_name_ar: hotelFromOption?.name || hotelFromMap?.name || "",
+                  stars: hotelFromOption?.stars || hotelFromMap?.stars || 0,
+                  area:
+                    hotelFromOption?.location?.name ||
+                    hotelFromMap?.location?.name ||
+                    loc?.name ||
+                    "",
+                  room_type_en: null,
+                  room_type_ar: null,
+                  price_egp: pricing.price_egp,
+                  prices_egp: pricing.prices_egp,
+                };
+              }),
+            )
+            .filter((hotel) => hotel.hotel_name_en);
+
+          const allHotels = [...offerHotels, ...locationHotels].reduce((acc, hotel) => {
+            const key = normalizeText(hotel.hotel_name_en);
+            if (!key) return acc;
+            if (!acc.some((existing) => normalizeText(existing.hotel_name_en) === key)) {
+              acc.push(hotel);
+            }
+            return acc;
+          }, []);
+
+          const validPrices = allHotels
+            .map((hotel) => hotel?.price_egp)
+            .filter((price) => typeof price === "number" && Number.isFinite(price) && price > 0);
+
+          const country = (loc?.country || "").toLowerCase();
+          const isDomestic =
+            country.includes("egypt") || country.includes("مصر");
+
+          return {
+            id: loc?.slug || loc?.documentId,
+            name: loc?.name || "",
+            nameEn: loc?.name || "",
+            country: loc?.country || "",
+            countryEn: loc?.country || "",
+            image: getImageUrl(loc),
+            popular: Boolean(loc?.featured),
+            description: loc?.shortDescription || "",
+            descriptionEn: loc?.shortDescription || "",
+            hotelCount: allHotels.length,
+            priceRange: validPrices.length
+              ? {
+                  min: Math.min(...validPrices),
+                  max: Math.max(...validPrices),
+                  currency: "EGP",
+                }
+              : null,
+            locationType: isDomestic ? "domestic" : "international",
+            data: { hotels: allHotels },
+          };
+        });
+
+        if (mounted) {
+          setStrapiDestinations(normalized);
+        }
+      } catch (error) {
+        console.error("[CreateTripFlow] Failed to load Strapi trip data:", error);
+        if (mounted) setStrapiDestinations([]);
+      }
+    };
+
+    loadStrapiTripData();
+
+    return () => {
+      mounted = false;
+    };
+  }, [isArabic]);
 
   const nextStep = (selectedTripType = null) => {
     const effectiveTripType = selectedTripType || tripData.tripType;
@@ -170,6 +354,7 @@ export default function CreateTripFlow() {
         return (
           <StepLocation
             data={tripData.locationType}
+            destinations={strapiDestinations}
             onUpdate={(value) => updateTripData("locationType", value)}
             onNext={nextStep}
             onPrev={prevStep}
@@ -180,6 +365,7 @@ export default function CreateTripFlow() {
           <StepDestination
             data={tripData.destination}
             locationType={tripData.locationType}
+            destinations={strapiDestinations}
             onUpdate={(value) => updateTripData("destination", value)}
             onNext={nextStep}
             onPrev={prevStep}

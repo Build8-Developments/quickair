@@ -347,14 +347,33 @@ function normalizeDestinationKey(slugOrName = "") {
     .replace(/[-_]/g, "");
 
   const aliasMap = {
+    شرمالشيخ: "sharm",
+    شرم: "sharm",
     sharmelsheikh: "sharm",
     sharm: "sharm",
+    الغردقة: "hurghada",
+    غردقة: "hurghada",
     hurghada: "hurghada",
+    دهب: "dahab",
     dahab: "dahab",
+    بيروت: "beirut",
     beirut: "beirut",
+    اسطنبول: "istanbul",
+    إسطنبول: "istanbul",
+    استانبول: "istanbul",
+    تركيا: "istanbul",
     istanbul: "istanbul",
+    بالي: "bali",
+    اندونيسيا: "bali",
+    إندونيسيا: "bali",
     bali: "bali",
+    العينالسخنة: "ainsokhna",
+    عينالسخنة: "ainsokhna",
+    السخنة: "ainsokhna",
+    سخنة: "ainsokhna",
     ainsokhna: "ainsokhna",
+    سهلحشيش: "sahlhashish",
+    حشيش: "sahlhashish",
     sahlhasheesh: "sahlhashish",
     sahlhashish: "sahlhashish"
   };
@@ -928,7 +947,8 @@ export async function searchHotels(filters = {}) {
     await ensureStrapiData(language);
 
     // البحث في الوجهات
-    const destData = destination ? [ALL_DESTINATIONS[destination]] : Object.values(ALL_DESTINATIONS);
+    const normalizedDestination = destination ? normalizeDestinationKey(destination) : null;
+    const destData = normalizedDestination ? [ALL_DESTINATIONS[normalizedDestination]] : Object.values(ALL_DESTINATIONS);
 
     destData.forEach(dest => {
       if (!dest || !dest.hotels) return;
@@ -1469,7 +1489,8 @@ export async function buildRAGContext(userAnalysis, language = "ar") {
   }
 
   // الفنادق المطابقة مع تفاصيل كاملة
-  const hotels = await searchHotels({ destination, budget, language, maxResults: 2 });
+  // Modified from maxResults: 2 to maxResults: 5 to give the AI more options to recommend
+  const hotels = await searchHotels({ destination, budget, language, maxResults: 5 });
   if (hotels.length > 0) {
     context += isArabic
       ? `\n🏨 الفنادق المتاحة مع التفاصيل:\n`

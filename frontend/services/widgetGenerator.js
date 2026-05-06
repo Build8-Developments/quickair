@@ -8,6 +8,24 @@
  */
 
 import { searchHotels } from "./ragService";
+import { getAllLocations } from "@/lib/api/services/location";
+
+function getFlagCodeFromCountry(country) {
+  if (!country) return "eg"; // default to Egypt
+  const c = country.toLowerCase();
+  if (c.includes("مصر") || c.includes("egypt")) return "eg";
+  if (c.includes("اندونيسيا") || c.includes("indonesia") || c.includes("بالي") || c.includes("bali")) return "id";
+  if (c.includes("تركيا") || c.includes("turkey") || c.includes("إسطنبول") || c.includes("istanbul")) return "tr";
+  if (c.includes("لبنان") || c.includes("lebanon") || c.includes("بيروت") || c.includes("beirut")) return "lb";
+  if (c.includes("امارات") || c.includes("uae") || c.includes("dubai")) return "ae";
+  if (c.includes("سعودية") || c.includes("saudi")) return "sa";
+  if (c.includes("مالديف") || c.includes("maldives")) return "mv";
+  if (c.includes("يونان") || c.includes("greece")) return "gr";
+  if (c.includes("اسبانيا") || c.includes("spain") || c.includes("سبانيا")) return "es";
+  if (c.includes("ايطاليا") || c.includes("italy")) return "it";
+  if (c.includes("فرنسا") || c.includes("france")) return "fr";
+  return "eg";
+}
 
 function normalizeDestinationId(value) {
   if (!value) return null;
@@ -172,12 +190,17 @@ function analyzeQuestionType(message = "") {
   }
 
   // سؤال عن أسعار
-  if (/سعر|اسعار|كام|price|cost|how much|تكلف/i.test(msgLower)) {
+  if (/سعر|اسعار|بك?ام|بكام|price|cost|how much|تكلف/i.test(msgLower)) {
     return "prices";
   }
 
+  // سؤال عن العروض
+  if (/عرض|عروض|خصم|تخفيض|خصومات|تخفيضات|بكدج|باكدج|باكج|offers?|deals?|discounts?/i.test(msgLower)) {
+    return "offers";
+  }
+
   // سؤال عن وجهات
-  if (/وجه|وين|فين|اروح|destination|where|go to/i.test(msgLower)) {
+  if (/وجه|وين|فين|أروح|اروح|أكمل|اكمل|مكان|أماكن|امكن|destination|where|go\s?to/i.test(msgLower)) {
     return "destinations";
   }
 
@@ -283,6 +306,15 @@ export function determineNextWidget(sessionData, userAnalysis) {
     };
   }
 
+  // ✅ إذا سأل عن فنادق بدون تحديد وجهة - ابدأ باختيار الوجهة
+  if (questionType === "hotels" && !mentionedDestination && !tripData?.destination) {
+    return {
+      type: "destinations",
+      reason: "hotel_query_without_destination",
+      startBookingFlow: true
+    };
+  }
+
   // ✅ إذا سأل عن أسعار في وجهة معينة - اعرض الفنادق (الأسعار في البطاقات)
   if (questionType === "prices" && mentionedDestination) {
     return {
@@ -293,12 +325,31 @@ export function determineNextWidget(sessionData, userAnalysis) {
     };
   }
 
-  // ✅ إذا سأل عن وجهات - اعرض الوجهات
+  // ✅ إذا سأل عن أسعار بدون وجهة - نبدأ بالوجهة أولاً
+  if (questionType === "prices" && !mentionedDestination && !tripData?.destination) {
+    return {
+      type: "destinations",
+      reason: "price_query_without_destination",
+      startBookingFlow: true
+    };
+  }
+
+  // ✅ إذا سأل عن وجهات واسعة (بدون تحديد) - اعرض ديسكفري
   if (questionType === "destinations" && !tripData?.destination && !mentionedDestination) {
     return {
       type: "destinations",
       reason: "destination_query",
       startBookingFlow: true
+    };
+  }
+
+  // ✅ إذا ذكر وجهة وسأل عن الفنادق أو الأسعار أو قال "عايز فنادق"
+  if ((questionType === "hotels" || questionType === "prices") || (intent === "search_hotel" || intent === "hotel_query") && mentionedDestination) {
+    return {
+      type: "hotelCards",
+      reason: "hotel_query_with_destination",
+      data: { destination: mentionedDestination },
+      skipFlow: true
     };
   }
 
@@ -400,12 +451,28 @@ export async function generateWidgetData(widgetType, sessionData, language = "ar
   const tripData = sessionData?.tripData || {};
 
   switch (widgetType) {
-    case "destinations":
+    case "destinations": {
+      const isArabic = language === "ar";
+      const locations = await getAllLocations({ locale: isArabic ? "ar" : "en", limit: 50 });
+      
+      const dynamicDestinations = locations.map(loc => {
+        const country = loc.country?.toLowerCase() || "";
+        const isDomestic = typeof country === "string" && (country.includes("مصر") || country.includes("egypt"));
+        
+        return {
+          id: loc.slug,
+          name: loc.name,
+          category: isDomestic ? "domestic" : "international",
+          flagCode: getFlagCodeFromCountry(country || loc.name) // fallback flag check on name
+        };
+      });
+
       return {
         type: "destinations",
         component: "DestinationsWidget",
-        props: { language }
+        props: { language, dynamicDestinations }
       };
+    }
 
     case "dateRange":
       return {

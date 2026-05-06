@@ -210,36 +210,36 @@ export async function POST(request) {
       </div>
 
       ${
-        tripData.destination
+        displayData.destination
           ? `
       <div class="section">
         <h2>🗺️ ${isArabic ? "تفاصيل الرحلة" : "Trip Details"}</h2>
         ${
-          tripData.destination
+          displayData.destination
             ? `<div class="info-row"><strong>📍 ${
                 isArabic ? "الوجهة:" : "Destination:"
-              }</strong> ${tripData.destination}</div>`
+              }</strong> ${displayData.destination}</div>`
             : ""
         }
         ${
-          tripData.duration
+          displayData.dates
             ? `<div class="info-row"><strong>📅 ${
-                isArabic ? "المدة:" : "Duration:"
-              }</strong> ${tripData.duration}</div>`
+                isArabic ? "التواريخ:" : "Dates:"
+              }</strong> ${displayData.dates}</div>`
             : ""
         }
         ${
-          tripData.budget
+          displayData.budget
             ? `<div class="info-row"><strong>💰 ${
                 isArabic ? "الميزانية:" : "Budget:"
-              }</strong> ${tripData.budget}</div>`
+              }</strong> ${displayData.budget}</div>`
             : ""
         }
         ${
-          tripData.travelers
+          displayData.travelers
             ? `<div class="info-row"><strong>👥 ${
                 isArabic ? "عدد المسافرين:" : "Travelers:"
-              }</strong> ${tripData.travelers}</div>`
+              }</strong> ${displayData.travelers}</div>`
             : ""
         }
         ${

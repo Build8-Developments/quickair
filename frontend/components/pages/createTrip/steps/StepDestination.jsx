@@ -1,18 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { DOMESTIC_DESTINATIONS, INTERNATIONAL_DESTINATIONS } from "@/data/toursData";
 import { useLanguage } from "@/contexts/LanguageContext";
 import styles from "./StepDestination.module.css";
 
-export default function StepDestination({ data, locationType, onUpdate, onNext, onPrev }) {
+export default function StepDestination({ data, locationType, destinations = [], onUpdate, onNext, onPrev }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDestination, setSelectedDestination] = useState(data);
   const { language } = useLanguage();
   const isRTL = language === "ar";
   const t = (ar, en) => (isRTL ? ar : en);
 
-  const destinationsList = locationType === 'domestic' ? DOMESTIC_DESTINATIONS : INTERNATIONAL_DESTINATIONS;
+  const destinationsList = destinations.filter((dest) =>
+    locationType === "domestic"
+      ? dest.locationType === "domestic"
+      : dest.locationType === "international"
+  );
 
   const filteredDestinations = destinationsList.filter((dest) =>
     dest.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -70,7 +73,7 @@ export default function StepDestination({ data, locationType, onUpdate, onNext, 
               onClick={() => handleSelect(destination)}
             >
               <div className={styles.cardImage}>
-                <img src={destination.image} alt={destination.name} loading="lazy" />
+                <img src={destination.image || "/img/hero/5/mobile.svg"} alt={destination.name} loading="lazy" />
                 {destination.popular && (
                   <span className={styles.badge}>
                     {t('شائع', 'Popular')}

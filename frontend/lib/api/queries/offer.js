@@ -28,11 +28,15 @@ export const GET_ALL_OFFERS = `
       hotelOptions {
         hotel {
           documentId
+          name
+          stars
           externalImageUrl
           coverImage {
             url
           }
           location {
+            name
+            slug
             country
           }
         }
@@ -74,11 +78,15 @@ export const GET_ALL_OFFERS_PAGINATED = `
       hotelOptions {
         hotel {
           documentId
+          name
+          stars
           externalImageUrl
           coverImage {
             url
           }
           location {
+            name
+            slug
             country
           }
         }

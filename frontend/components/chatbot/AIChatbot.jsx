@@ -27,20 +27,20 @@ const STORAGE_KEYS = {
 // Popup messages - رسائل جذب الانتباه
 const POPUP_MESSAGES = {
   ar: [
-    "👋 أهلاً! محتاج مساعدة في تخطيط رحلتك؟",
-    "🌴 عروض حصرية على شرم الشيخ ودبي!",
-    "✈️ خطط رحلة أحلامك معانا",
-    "🎁 خصومات تصل لـ 30% على الرحلات",
-    "💬 عندك سؤال؟ أنا هنا للمساعدة!",
-    "🏨 أفضل الفنادق بأقل الأسعار",
+    "وكيل سفرك جاهز يجهزلك أفضل خطة",
+    "قلّي الوجهة والميزانية وأنا أراجع المتاح",
+    "أقدر أقارنلك الفنادق والعروض في دقائق",
+    "عايز رحلة؟ هطلعلك اختيارات مناسبة فوراً",
+    "ابدأ بس بجملة: عايز أسافر شرم 5 أيام",
+    "خليني أجهزلك أفضل فنادق وأسعار",
   ],
   en: [
-    "👋 Hi! Need help planning your trip?",
-    "🌴 Exclusive deals on Sharm & Dubai!",
-    "✈️ Plan your dream trip with us",
-    "🎁 Up to 30% off on tours",
-    "💬 Got questions? I'm here to help!",
-    "🏨 Best hotels at lowest prices",
+    "Your travel agent is ready to plan",
+    "Tell me the destination and budget",
+    "I can compare hotels and offers for you",
+    "Need a trip? I'll shortlist real options",
+    "Start with: I want Sharm for 5 days",
+    "Let me prepare the best hotels and prices",
   ],
 };
 
@@ -78,8 +78,11 @@ export default function AIChatbot() {
   const messageIndexRef = useRef(0);
 
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
+  const languageDropdownRef = useRef(null);
   const { language } = useLanguage();
   const isArabic = language === "ar";
+  const brandLogoSrc = `/img/general/${isArabic ? "ar-logo" : "en-logo"}.svg`;
 
   // Use selected language if available, otherwise use system language
   const chatLanguage = userInfo.preferredLanguage || language;
@@ -238,9 +241,69 @@ export default function AIChatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const adjustTextareaHeight = useCallback(() => {
+    if (!inputRef.current) return;
+    inputRef.current.style.height = "auto";
+    const nextHeight = Math.min(inputRef.current.scrollHeight, 120);
+    inputRef.current.style.height = `${nextHeight}px`;
+  }, []);
+
   useEffect(() => {
     scrollToBottom();
-  }, [messages, currentStep]);
+  }, [messages, isLoading]);
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [inputValue, adjustTextareaHeight]);
+
+  // Focus input automatically when chat opens in chat step
+  useEffect(() => {
+    if (isOpen && currentStep === "chat") {
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 180);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, currentStep]);
+
+  // Close language dropdown on outside click / Escape
+  useEffect(() => {
+    const onPointerDown = (event) => {
+      if (
+        dropdownOpen &&
+        languageDropdownRef.current &&
+        !languageDropdownRef.current.contains(event.target)
+      ) {
+        setDropdownOpen(false);
+      }
+    };
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [dropdownOpen]);
+
+  useEffect(() => {
+    const openAgent = () => {
+      setShowPopup(false);
+      setIsOpen(true);
+    };
+
+    window.addEventListener("quickair-open-agent", openAgent);
+
+    return () => {
+      window.removeEventListener("quickair-open-agent", openAgent);
+    };
+  }, []);
 
   // Handle user info submission
   const handleUserInfoSubmit = (e) => {
@@ -265,8 +328,8 @@ export default function AIChatbot() {
 
     // ✅ Premium welcome messages in all supported languages
     const welcomeMessages = {
-      ar: `أهلاً وسهلاً ${userInfo.name}! ✨\n\nأنا كويك، مستشارك الشخصي للسفر من Quick Air ✈️\n\nمن 1986 وإحنا بنصنع أحلى الذكريات! كيف أقدر أساعدك؟`,
-      en: `Welcome ${userInfo.name}! ✨\n\nI'm Quick, your personal travel concierge from Quick Air ✈️\n\nWe've been crafting dream vacations since 1986! How can I help you today?`,
+      ar: `أنا Quick، وكيل سفرك الشخصي من Quick Air.\n\nقلّي عايز تسافر فين، كام يوم، وميزانيتك تقريباً — وأنا أراجع المتاح وأطلعلك أفضل اختيارات حقيقية.`,
+      en: `I'm Quick, your personal travel agent from Quick Air.\n\nTell me where you want to go, for how many days, and your approximate budget — I'll review real options and shortlist the best ones.`,
       fr: `Bienvenue ${userInfo.name} ! ✨\n\nJe suis Quick, votre concierge de voyage de Quick Air ✈️\n\nDepuis 1986, nous créons des vacances de rêve ! Comment puis-je vous aider ?`,
       de: `Willkommen ${userInfo.name}! ✨\n\nIch bin Quick, Ihr persönlicher Reiseberater von Quick Air ✈️\n\nSeit 1986 gestalten wir Traumurlaube! Wie kann ich Ihnen helfen?`,
       es: `¡Bienvenido/a ${userInfo.name}! ✨\n\nSoy Quick, tu concierge de viajes de Quick Air ✈️\n\n¡Desde 1986 creando vacaciones soñadas! ¿Cómo puedo ayudarte?`,
@@ -295,10 +358,9 @@ export default function AIChatbot() {
         role: "assistant",
         content: welcomeMessage,
         quickOptions: [
-          { label: isAr ? "احجز رحلة ✈️" : "Book a Trip ✈️", value: isAr ? "عايز احجز رحلة" : "I want to book a trip", autoSend: true },
-          { label: isAr ? "العروض 🎁" : "Offers 🎁", value: isAr ? "ايه العروض المتاحة؟" : "What offers are available?", autoSend: true },
-          { label: isAr ? "فنادق 🏨" : "Hotels 🏨", value: isAr ? "عايز اشوف الفنادق" : "Show me hotels", autoSend: true },
-          { label: isAr ? "تواصل معنا 📞" : "Contact Us 📞", value: isAr ? "عايز اتواصل معاكم" : "I want to contact you", autoSend: true },
+          { label: isAr ? "جهزلي رحلة" : "Plan a trip", value: isAr ? "عايزك تجهزلي رحلة مناسبة" : "Plan a suitable trip for me", autoSend: true },
+          { label: isAr ? "قارن فنادق" : "Compare hotels", value: isAr ? "قارنلي الفنادق المتاحة" : "Compare available hotels for me", autoSend: true },
+          { label: isAr ? "شوف العروض" : "Find offers", value: isAr ? "راجعلي العروض المتاحة" : "Find available offers for me", autoSend: true },
         ],
       },
     ]);
@@ -313,6 +375,9 @@ export default function AIChatbot() {
 
     const userMessage = messageToSend;
     setInputValue("");
+    if (inputRef.current) {
+      inputRef.current.style.height = "auto";
+    }
 
     // Add user message
     setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
@@ -750,53 +815,26 @@ export default function AIChatbot() {
               </svg>
             </div>
             <h2 className={styles.welcomeTitle}>
-              {t("مرحباً بك في QuickAir!", "Welcome to QuickAir!")}
+              {t("وكيل سفرك الشخصي", "Your Personal Travel Agent")}
             </h2>
             <p className={styles.welcomeText}>
               {t(
-                "لنبدأ بتخطيط رحلتك المثالية معاً. أولاً، دعني أتعرف عليك",
-                "Let's plan your perfect trip together. First, let me get to know you"
+                "قلّي وجهتك، عدد الأيام والميزانية — وأنا أبحث وأقارن وأجهز لك أفضل اختيارات متاحة من QuickAir.",
+                "Tell me your destination, dates and budget — I'll search, compare, and prepare the best available QuickAir options."
               )}
             </p>
-            <form onSubmit={handleUserInfoSubmit} className={styles.userInfoForm}>
-              <div className={styles.formGroup}>
-                <label>{t("الاسم الكامل", "Full Name")}</label>
-                <input
-                  type="text"
-                  required
-                  placeholder={t("أدخل اسمك", "Enter your name")}
-                  value={userInfo.name}
-                  onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label>{t("البريد الإلكتروني", "Email Address")}</label>
-                <input
-                  type="email"
-                  required
-                  placeholder={t("example@email.com", "example@email.com")}
-                  value={userInfo.email}
-                  onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
-                />
-              </div>
-              <div className={styles.formGroup}>
-                <label>{t("رقم الهاتف", "Phone Number")}</label>
-                <input
-                  type="tel"
-                  required
-                  placeholder={t("+966 XX XXX XXXX", "+966 XX XXX XXXX")}
-                  value={userInfo.phone}
-                  onChange={(e) => setUserInfo({ ...userInfo, phone: e.target.value })}
-                />
-              </div>
-              <button type="submit" className={styles.submitButton}>
-                {t("التالي", "Next")}
+            <div className={styles.agentStartActions}>
+              <button type="button" className={styles.submitButton} onClick={() => handleLanguageSelect(isArabic ? "ar" : "en")}>
+                {t("ابدأ مع الوكيل", "Start with Agent")}
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                   <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
               </button>
-            </form>
+              <button type="button" className={styles.secondaryStartButton} onClick={() => setCurrentStep("language")}>
+                {t("تغيير اللغة", "Change Language")}
+              </button>
+            </div>
           </div>
         );
 
@@ -838,7 +876,7 @@ export default function AIChatbot() {
                 "We speak all languages! Choose yours"
               )}
             </p>
-            <div className={styles.languageDropdownWrapper}>
+            <div className={styles.languageDropdownWrapper} ref={languageDropdownRef}>
               <button
                 type="button"
                 className={styles.languageDropdownTrigger}
@@ -908,9 +946,7 @@ export default function AIChatbot() {
                 >
                   {message.role === "assistant" && (
                     <div className={styles.messageAvatar}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                      </svg>
+                      <img src={brandLogoSrc} alt="QuickAir logo" />
                     </div>
                   )}
                   <div className={styles.messageContent}>
@@ -967,15 +1003,16 @@ export default function AIChatbot() {
               {isLoading && (
                 <div className={`${styles.message} ${styles.messageAssistant}`}>
                   <div className={styles.messageAvatar}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                    </svg>
+                    <img src={brandLogoSrc} alt="QuickAir logo" />
                   </div>
                   <div className={styles.messageContent}>
-                    <div className={styles.typingIndicator}>
-                      <span></span>
-                      <span></span>
-                      <span></span>
+                    <div className={styles.agentActivity}>
+                      <div className={styles.agentActivityTitle}>
+                        {t("Quick بيجهز اختياراتك", "Quick is preparing your options")}
+                      </div>
+                      <div className={styles.agentActivityStep}>{t("يفهم طلبك ووجهتك", "Understanding your request")}</div>
+                      <div className={styles.agentActivityStep}>{t("يراجع العروض والفنادق المتاحة", "Checking available offers and hotels")}</div>
+                      <div className={styles.agentActivityStep}>{t("يجهز أفضل رد مناسب", "Preparing the best recommendation")}</div>
                     </div>
                   </div>
                 </div>
@@ -986,12 +1023,14 @@ export default function AIChatbot() {
             {/* Input */}
             <div className={styles.chatInput}>
               <textarea
+                ref={inputRef}
                 className={styles.inputField}
-                placeholder={t("اكتب رسالتك هنا...", "Type your message here...")}
+                placeholder={t("مثال: شرم 5 أيام - ميزانية متوسطة", "Example: Sharm 5 days - mid-range budget")}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyPress}
                 rows={1}
+                wrap="off"
                 disabled={isLoading}
               />
               <button
@@ -1101,7 +1140,8 @@ export default function AIChatbot() {
       <button
         className={`${styles.chatButton} ${isOpen ? styles.chatButtonOpen : ""} ${isOpen ? styles.chatButtonHiddenMobile : ""} ${showPopup ? styles.chatButtonPulse : ""}`}
         onClick={() => setIsOpen(!isOpen)}
-        aria-label={t("مساعد ذكي", "AI Assistant")}
+        data-chatbot-trigger="quickair-agent"
+        aria-label={t("وكيل سفر ذكي", "AI Travel Agent")}
         suppressHydrationWarning
       >
         {isOpen ? (
@@ -1110,9 +1150,7 @@ export default function AIChatbot() {
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         ) : (
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          </svg>
+          <img src={brandLogoSrc} alt="QuickAir logo" className={styles.logoImage} />
         )}
         <span className={styles.chatBadge}>AI</span>
       </button>
@@ -1124,21 +1162,19 @@ export default function AIChatbot() {
           <div className={styles.chatHeader}>
             <div className={styles.chatHeaderContent}>
               <div className={styles.chatHeaderIcon}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                </svg>
+                <img src={brandLogoSrc} alt="QuickAir logo" className={styles.logoImage} />
               </div>
               <div>
                 <h3 className={styles.chatTitle}>
-                  {t("مساعد QuickAir الذكي", "QuickAir AI Assistant")}
+                  {t("وكيل QuickAir للسفر", "QuickAir Travel Agent")}
                 </h3>
                 <p className={styles.chatStatus}>
-                  {currentStep === "welcome" && t("ابدأ رحلتك", "Start Your Journey")}
+                  {currentStep === "welcome" && t("جاهز لتخطيط رحلتك", "Ready to plan your trip")}
                   {currentStep === "language" && t("اختر اللغة", "Choose Language")}
                   {currentStep === "chat" && (
                     <>
                       <span className={styles.statusDot}></span>
-                      {t("جاري التخطيط...", "Planning...")}
+                      {t("يبحث ويقارن لك", "Searching and comparing")}
                     </>
                   )}
                   {currentStep === "summary" && t("ملخص الرحلة", "Trip Summary")}
