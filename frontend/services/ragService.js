@@ -14,6 +14,12 @@
 
 import { getAllOffers } from "@/lib/api/services/offer";
 import { getAllHotels } from "@/lib/api/services/hotel";
+import { getStrapiMediaURL } from "@/lib/strapi";
+import { pilgrimageAPI } from "@/services/api";
+import {
+  mapHajPageFromStrapi,
+  mapUmrahPageFromStrapi,
+} from "@/utils/mapPilgrimageFromStrapi";
 
 /**
  * ===================================
@@ -235,7 +241,7 @@ const SITE_PAGES = {
     name_en: "Plan Your Trip",
     desc_ar: "صمم رحلتك الخاصة حسب احتياجاتك",
     desc_en: "Design your custom trip",
-    keywords_ar: ["تخطيط", "رحلة مخصصة", "خطط", "plan", "صمم رحلتك", "خطط رحلتك", "رحلة خاصة", "تصميم رحلة", "اخصص", "خصص", "رحله", "رحلة", "اخصص رحله", "خصص رحلة", "صمم", "انشئ رحلة", "رحلتي"],
+    keywords_ar: ["تخطيط", "رحلة مخصصة", "خطط", "صمم رحلتك", "خطط رحلتك", "رحلة خاصة", "تصميم رحلة", "اخصص", "خصص", "اخصص رحله", "خصص رحلة", "صمم", "انشئ رحلة", "رحلتي"],
     keywords_en: ["plan", "create", "custom trip", "design", "build trip", "customize", "my trip", "plan trip"]
   },
   contact: {
@@ -289,7 +295,7 @@ const SITE_PAGES = {
     name_en: "Hajj",
     desc_ar: "برامج الحج المتكاملة",
     desc_en: "Complete Hajj programs",
-    keywords_ar: ["حج", "مكة", "الحرم", "hajj", "الحج", "برامج الحج", "رحلات الحج"],
+    keywords_ar: ["الحج", "برامج الحج", "رحلات الحج", "مناسك الحج", "hajj", "مكة المكرمة"],
     keywords_en: ["hajj", "mecca", "pilgrimage", "hajj programs"]
   },
   umrah: {
@@ -298,7 +304,7 @@ const SITE_PAGES = {
     name_en: "Umrah",
     desc_ar: "برامج العمرة على مدار العام",
     desc_en: "Year-round Umrah programs",
-    keywords_ar: ["عمرة", "umrah", "مكة", "المدينة", "العمرة", "برامج العمرة", "رحلات العمرة", "عمره"],
+    keywords_ar: ["العمرة", "عمرة", "برامج العمرة", "رحلات العمرة", "umrah", "المدينة المنورة"],
     keywords_en: ["umrah", "mecca", "medina", "umrah programs"]
   },
 
@@ -336,7 +342,7 @@ const strapiDataCache = {
   en: { data: null, updatedAt: 0 }
 };
 
-function normalizeDestinationKey(slugOrName = "") {
+export function normalizeDestinationKey(slugOrName = "") {
   if (!slugOrName) return "unknown";
 
   const normalized = slugOrName
@@ -437,6 +443,10 @@ function parseOfferPricing(option = {}) {
   };
 }
 
+function hotelImageFromStrapi(hotelData) {
+  return getStrapiMediaURL(hotelData?.coverImage) || null;
+}
+
 function buildDestinationsFromStrapi(offers = [], hotels = [], language = "ar") {
   const destinations = {};
   const hotelMap = new Map();
@@ -521,6 +531,8 @@ function buildDestinationsFromStrapi(offers = [], hotels = [], language = "ar") 
       const hotelEntry = {
         hotel_name_ar: hotelData.name,
         hotel_name_en: hotelData.name,
+        name: hotelData.name,
+        image: hotelImageFromStrapi(hotelData),
         stars: Number(hotelData.stars || 0),
         area: hotelData?.location?.name || locationName,
         room_type_ar: pricing.roomTypeAr || null,
@@ -565,6 +577,8 @@ function buildDestinationsFromStrapi(offers = [], hotels = [], language = "ar") 
       destination.hotels.push({
         hotel_name_ar: hotel.name,
         hotel_name_en: hotel.name,
+        name: hotel.name,
+        image: hotelImageFromStrapi(hotel),
         stars: Number(hotel.stars || 0),
         area: hotel?.location?.name || destination.location,
         room_type_ar: null,
@@ -879,13 +893,8 @@ export function analyzeUserMessage(message, language = "ar") {
     intent = "offers_inquiry";
     confidence = 0.9;
   }
-  // 19. الحج والعمرة - Hajj & Umrah
-  else if (
-    msg.includes("حج") || msg.includes("hajj") ||
-    msg.includes("عمرة") || msg.includes("umrah") ||
-    msg.includes("مكة") || msg.includes("mecca") ||
-    msg.includes("المدينة") || msg.includes("medina")
-  ) {
+  // 19. الحج والعمرة - Hajj & Umrah (لا تخلط مع "احجز" = حجز رحلة)
+  else if (matchesHajjUmrahTopic(msg)) {
     intent = "hajj_umrah";
     confidence = 0.95;
   }
@@ -1117,7 +1126,7 @@ export async function getDestinationInfo(destination, language = "ar") {
     return {
       location: destData.location,
       hotels_count: 0,
-      price_range: { min: 0, max: 0, min_usd: 0, max_usd: 0 },
+      price_range: { min: 0, max: 0, min_usd: 0, max_usd: 0, has_prices: false },
       includes: destData.includes?.[language] || [],
       not_included: destData.not_included?.[language] || [],
       optional_tours: destData.optional_tours || [],
@@ -1135,12 +1144,16 @@ export async function getDestinationInfo(destination, language = "ar") {
     h.price_usd_reference > 0
   );
 
-  const priceRange = hotelsWithPrices.length > 0 ? {
-    min: Math.min(...hotelsWithPrices.map(h => h.price_egp)),
-    max: Math.max(...hotelsWithPrices.map(h => h.price_egp)),
-    min_usd: Math.min(...hotelsWithPrices.map(h => h.price_usd_reference)),
-    max_usd: Math.max(...hotelsWithPrices.map(h => h.price_usd_reference))
-  } : { min: 0, max: 0, min_usd: 0, max_usd: 0 };
+  const priceRange =
+    hotelsWithPrices.length > 0
+      ? {
+          min: Math.min(...hotelsWithPrices.map((h) => h.price_egp)),
+          max: Math.max(...hotelsWithPrices.map((h) => h.price_egp)),
+          min_usd: Math.min(...hotelsWithPrices.map((h) => h.price_usd_reference)),
+          max_usd: Math.max(...hotelsWithPrices.map((h) => h.price_usd_reference)),
+          has_prices: true,
+        }
+      : { min: 0, max: 0, min_usd: 0, max_usd: 0, has_prices: false };
 
   return {
     location: destData.location,
@@ -1213,17 +1226,25 @@ export function calculateTotalPrice(hotel, travelers = 1, nights = 3) {
  */
 export function formatHotelForDisplay(hotel, language = "ar") {
   const isArabic = language === "ar";
+  const hasPrice =
+    hotel.price_egp && typeof hotel.price_egp === "number" && hotel.price_egp > 0;
 
   return {
     name: isArabic ? hotel.hotel_name_ar : hotel.hotel_name_en,
-    stars: "⭐".repeat(hotel.stars),
+    stars: "⭐".repeat(hotel.stars || 0),
     area: hotel.area,
     room_type: isArabic ? hotel.room_type_ar : hotel.room_type_en,
-    price_egp: hotel.price_egp?.toLocaleString("ar-EG"),
-    price_usd: hotel.price_usd_reference,
+    price_egp: hasPrice
+      ? hotel.price_egp.toLocaleString(isArabic ? "ar-EG" : "en-US")
+      : isArabic
+        ? "عند الطلب"
+        : "On request",
+    price_usd:
+      hasPrice && hotel.price_usd_reference ? hotel.price_usd_reference : null,
+    has_price: hasPrice,
     destination: hotel.destination,
     includes: hotel.includes,
-    not_included: hotel.not_included
+    not_included: hotel.not_included,
   };
 }
 
@@ -1517,16 +1538,186 @@ export function getVisaInfo(destination, language = "ar") {
   return isArabic ? info.ar : info.en;
 }
 
+function formatEgp(amount, isArabic) {
+  if (amount == null || Number.isNaN(Number(amount))) return null;
+  const n = Number(amount);
+  return isArabic
+    ? `${n.toLocaleString("ar-EG")} جنيه`
+    : `${n.toLocaleString("en-US")} EGP`;
+}
+
+/**
+ * تمييز الحج/العمرة عن "احجز" (حجز رحلة) — كان يسبب خلط أسعار
+ */
+function matchesHajjUmrahTopic(message = "") {
+  const msg = (message || "").toLowerCase();
+
+  const isBookingOnly =
+    /(?:احجز|حجز|book|reserve)/i.test(msg) &&
+    !/(?:الحج\b|حج\b|hajj|عمرة|umrah|pilgrimage|مناسك|مكة\s*المكرمة|المدينة\s*المنورة)/i.test(
+      msg,
+    );
+  if (isBookingOnly) return false;
+
+  return (
+    /(?:الحج\b|\bhajj\b|مناسك\s*الحج)/i.test(msg) ||
+    /(?:العمرة\b|عمرة\b|\bumrah\b|مناسك\s*العمرة)/i.test(msg) ||
+    /(?:مكة\s*المكرمة|المدينة\s*المنورة|الحرم\s*الشريف)/i.test(msg) ||
+    (/\b(?:مكة|mecca)\b/i.test(msg) &&
+      /(?:حج|عمرة|hajj|umrah|حرم|pilgrimage)/i.test(msg))
+  );
+}
+
+function isPilgrimageQuery(message = "", intent = "") {
+  if (intent === "hajj_umrah") return true;
+  return matchesHajjUmrahTopic(message);
+}
+
+function isUmrahQuery(message = "") {
+  return /(?:العمرة|عمرة\b|\bumrah\b)/i.test((message || "").toLowerCase());
+}
+
+async function buildPilgrimagePricingContext(language = "ar") {
+  const isArabic = language === "ar";
+  const lines = [];
+
+  try {
+    const [hajRaw, umrahRaw] = await Promise.all([
+      pilgrimageAPI.getHajPage(language),
+      pilgrimageAPI.getUmrahPage(language),
+    ]);
+
+    const haj = hajRaw?.content ?? (hajRaw ? mapHajPageFromStrapi(hajRaw) : null);
+    const umrah =
+      umrahRaw?.content ?? (umrahRaw ? mapUmrahPageFromStrapi(umrahRaw) : null);
+
+    if (haj?.vipPackage || haj?.distinguishedPackage) {
+      lines.push(isArabic ? "\n🕋 أسعار الحج (من الموقع — Strapi):" : "\n🕋 Hajj prices (from website — Strapi):");
+      const vip = haj.pricing?.vip;
+      const dist = haj.pricing?.distinguished;
+      if (vip?.double) {
+        lines.push(
+          isArabic
+            ? `  • باقة VIP — مزدوج: ${vip.double}${vip.triple ? ` | ثلاثي: ${vip.triple}` : ""}${vip.quad ? ` | رباعي: ${vip.quad}` : ""}`
+            : `  • VIP — double: ${vip.double}${vip.triple ? ` | triple: ${vip.triple}` : ""}${vip.quad ? ` | quad: ${vip.quad}` : ""}`,
+        );
+      }
+      if (dist?.double) {
+        lines.push(
+          isArabic
+            ? `  • باقة مميزة — مزدوج: ${dist.double}${dist.triple ? ` | ثلاثي: ${dist.triple}` : ""}${dist.quad ? ` | رباعي: ${dist.quad}` : ""}`
+            : `  • Distinguished — double: ${dist.double}${dist.triple ? ` | triple: ${dist.triple}` : ""}${dist.quad ? ` | quad: ${dist.quad}` : ""}`,
+        );
+      }
+      if (vip?.reservation) {
+        lines.push(
+          isArabic
+            ? `  • جدية حجز VIP: ${vip.reservation}`
+            : `  • VIP reservation deposit: ${vip.reservation}`,
+        );
+      }
+    }
+
+    if (umrah?.premium?.packages?.length || umrah?.economy?.package) {
+      lines.push(isArabic ? "\n🕌 أسعار العمرة (من الموقع — Strapi):" : "\n🕌 Umrah prices (from website — Strapi):");
+      const economy = umrah.economy?.package;
+      if (economy?.prices?.double) {
+        lines.push(
+          isArabic
+            ? `  • اقتصادية — مزدوج: ${formatEgp(economy.prices.double, true)}${economy.prices.triple ? ` | ثلاثي: ${formatEgp(economy.prices.triple, true)}` : ""}`
+            : `  • Economy — double: ${formatEgp(economy.prices.double, false)}`,
+        );
+      }
+      (umrah.premium?.packages || []).slice(0, 4).forEach((pkg, i) => {
+        if (!pkg?.prices?.double) return;
+        const label = pkg.makkahHotel || `Package ${i + 1}`;
+        lines.push(
+          isArabic
+            ? `  • مميزة (${label}) — من ${formatEgp(pkg.prices.double, true)} للفرد (مزدوج)`
+            : `  • Premium (${label}) — from ${formatEgp(pkg.prices.double, false)} pp (double)`,
+        );
+      });
+    }
+  } catch (error) {
+    console.warn("[RAG] Pilgrimage pricing unavailable:", error?.message);
+  }
+
+  return lines.join("\n");
+}
+
+function buildDestinationPricesSummary(language = "ar") {
+  const isArabic = language === "ar";
+  const lines = [];
+
+  for (const dest of Object.values(ALL_DESTINATIONS)) {
+    if (!dest?.hotels?.length) continue;
+    const priced = dest.hotels.filter(
+      (h) => h.price_egp && typeof h.price_egp === "number" && h.price_egp > 0,
+    );
+    if (!priced.length) continue;
+
+    const min = Math.min(...priced.map((h) => h.price_egp));
+    const max = Math.max(...priced.map((h) => h.price_egp));
+    lines.push(
+      isArabic
+        ? `  • ${dest.location}: من ${formatEgp(min, true)} إلى ${formatEgp(max, true)} (حسب الفندق والغرفة)`
+        : `  • ${dest.location}: ${formatEgp(min, false)} – ${formatEgp(max, false)} (by hotel/room)`,
+    );
+  }
+
+  if (!lines.length) return "";
+
+  return isArabic
+    ? `\n💰 نطاق أسعار الوجهات (Strapi — استخدمها فقط، لا تخترع أرقاماً):\n${lines.join("\n")}`
+    : `\n💰 Destination price ranges (Strapi — use ONLY these, do not invent):\n${lines.join("\n")}`;
+}
+
+/**
+ * ملخص أسعار حي لحقنها في system prompt
+ */
+export async function getLivePriceSummaryForPrompt(language = "ar") {
+  await ensureStrapiData(language);
+  const destinationSummary = buildDestinationPricesSummary(language);
+  const pilgrimageSummary = await buildPilgrimagePricingContext(language);
+  return [destinationSummary, pilgrimageSummary].filter(Boolean).join("\n");
+}
+
 /**
  * 1️⃣5️⃣ بناء السياق الكامل للـ AI
  */
 export async function buildRAGContext(userAnalysis, language = "ar") {
-  const { intent, destination, budget, travelers, hotelNames } = userAnalysis || {};
+  const {
+    intent,
+    destination,
+    budget,
+    travelers,
+    hotelNames,
+    originalMessage,
+  } = userAnalysis || {};
 
   let context = "";
   const isArabic = language === "ar";
 
   await ensureStrapiData(language);
+
+  const needsPilgrimage = isPilgrimageQuery(originalMessage, intent);
+  const needsPriceSummary =
+    intent === "price_inquiry" ||
+    intent === "budget_query" ||
+    intent === "hajj_umrah" ||
+    /سعر|كام|price|how much|تكلفة|cost/i.test((originalMessage || "").toLowerCase());
+
+  if (needsPriceSummary && !destination) {
+    context += buildDestinationPricesSummary(language);
+  }
+
+  if (needsPilgrimage) {
+    const pilgrimageCtx = await buildPilgrimagePricingContext(language);
+    if (pilgrimageCtx) context += pilgrimageCtx;
+  } else if (needsPriceSummary && isUmrahQuery(originalMessage)) {
+    const pilgrimageCtx = await buildPilgrimagePricingContext(language);
+    if (pilgrimageCtx) context += pilgrimageCtx;
+  }
 
   // معلومات الوجهة الشاملة
   if (destination) {
@@ -1542,9 +1733,15 @@ export async function buildRAGContext(userAnalysis, language = "ar") {
         ? `- عدد الفنادق المتاحة: ${destInfo.hotels_count} فندق\n`
         : `- Available hotels: ${destInfo.hotels_count} hotels\n`;
 
-      context += isArabic
-        ? `- نطاق الأسعار: ${destInfo.price_range.min?.toLocaleString()}-${destInfo.price_range.max?.toLocaleString()} جنيه (${destInfo.price_range.min_usd}-${destInfo.price_range.max_usd} دولار)\n`
-        : `- Price range: ${destInfo.price_range.min?.toLocaleString()}-${destInfo.price_range.max?.toLocaleString()} EGP ($${destInfo.price_range.min_usd}-${destInfo.price_range.max_usd})\n`;
+      if (destInfo.price_range?.has_prices) {
+        context += isArabic
+          ? `- نطاق الأسعار: ${destInfo.price_range.min?.toLocaleString()}-${destInfo.price_range.max?.toLocaleString()} جنيه ($${destInfo.price_range.min_usd}-${destInfo.price_range.max_usd})\n`
+          : `- Price range: ${destInfo.price_range.min?.toLocaleString()}-${destInfo.price_range.max?.toLocaleString()} EGP ($${destInfo.price_range.min_usd}-${destInfo.price_range.max_usd})\n`;
+      } else {
+        context += isArabic
+          ? `- الأسعار: حسب التواريخ والفندق — راجع الكروت أو اتصل على 19102\n`
+          : `- Prices depend on dates/hotel — see cards below or call 19102\n`;
+      }
 
       // الشهور المتاحة للعرض
       if (destData.valid_months && destData.valid_months.length > 0) {
@@ -1629,7 +1826,16 @@ export async function buildRAGContext(userAnalysis, language = "ar") {
       context += `\n${index + 1}. ${formatted.name} ${"⭐".repeat(hotel.stars)}\n`;
       context += `   📍 المنطقة: ${hotel.area}\n`;
       context += `   🛏️ ${formatted.room_type}\n`;
-      context += `   💰 ${formatted.price_egp} جنيه / $${formatted.price_usd}\n`;
+      if (formatted.has_price) {
+        const usdPart = formatted.price_usd ? ` / $${formatted.price_usd}` : "";
+        context += isArabic
+          ? `   💰 ${formatted.price_egp} جنيه${usdPart}\n`
+          : `   💰 ${formatted.price_egp} EGP${usdPart}\n`;
+      } else {
+        context += isArabic
+          ? `   💰 السعر عند الطلب\n`
+          : `   💰 Price on request\n`;
+      }
 
       // معلومات إضافية إن وجدت
       if (hotel.valid_from && hotel.valid_to) {
@@ -1643,6 +1849,12 @@ export async function buildRAGContext(userAnalysis, language = "ar") {
         if (hotel.prices_egp.triple) context += `      • ثلاثي: ${hotel.prices_egp.triple?.toLocaleString()} جنيه\n`;
       }
     });
+  }
+
+  if (needsPriceSummary || intent === "price_inquiry") {
+    context += isArabic
+      ? "\n\n⚠️ تعليمات أسعار: اذكر أرقاماً فقط إذا وردت أعلاه في بيانات Strapi. إن لم يوجد سعر للوجهة، قل أن السعر يعتمد على التواريخ والفندق واطلب الاتصال على 19102 أو عرض الفنادق بالكروت."
+      : "\n\n⚠️ Price rule: Only quote numbers listed above from Strapi. If no price is listed, say it depends on dates/hotel and suggest calling 19102 or viewing hotel cards.";
   }
 
   // FAQs ذات الصلة
@@ -1666,6 +1878,29 @@ export async function buildRAGContext(userAnalysis, language = "ar") {
       ? compareHotels(hotelNames[0], hotelNames[1], language)
       : null
   };
+}
+
+function matchPageKeyword(message, keyword, pageKey = "") {
+  const msg = (message || "").toLowerCase();
+  const kw = (keyword || "").toLowerCase().trim();
+  if (!kw) return false;
+
+  if (pageKey === "hajj") {
+    return /(?:الحج\b|hajj|مناسك\s*الحج|برامج\s*الحج|رحلات\s*الحج)/i.test(msg);
+  }
+  if (pageKey === "umrah") {
+    return /(?:العمرة\b|عمرة\b|umrah|برامج\s*العمرة|رحلات\s*العمرة)/i.test(msg);
+  }
+  if (pageKey === "terms" && kw === "سياسة") {
+    return /(?:سياسة\s*(?:الإلغاء|الخصوصية|الاستخدام)|الشروط\s*والأحكام)/i.test(msg);
+  }
+
+  if (/^[a-z0-9][a-z0-9\s-]*$/i.test(kw)) {
+    const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(`(?:^|\\s|[,.!?])${escaped}(?:\\s|$|[,.!?])`, "i").test(` ${msg} `);
+  }
+
+  return msg.includes(kw);
 }
 
 /**
@@ -1706,7 +1941,7 @@ export function findMatchingPage(message, language = "ar") {
 
     // تحقق من الكلمات المفتاحية
     for (const keyword of keywords) {
-      if (msg.includes(keyword.toLowerCase())) {
+      if (matchPageKeyword(msg, keyword, key)) {
         console.log("[RAG] Found match by keyword:", { key, keyword });
         return {
           page: key,
@@ -1726,7 +1961,7 @@ export function findMatchingPage(message, language = "ar") {
       { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:رحل|سفر|جول|الرحلات)/i, page: "tours" },
       { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:فند|إقام|سكن|الفنادق)/i, page: "hotels" },
       { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:عرو|عروض|العروض|خصم|تخفيض)/i, page: "offers" },
-      { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:حج|الحج)/i, page: "hajj" },
+      { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:الحج\b|مناسك)/i, page: "hajj" },
       { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:عمر|العمرة)/i, page: "umrah" },
       { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:تواصل|اتصل|كلم|اتصال)/i, page: "contact" },
       { pattern: /(?:وديني|ودني|خدني|روح|افتح|ورني|عايز|أبي|اذهب|توجه).*(?:سؤال|أسئل|استفسار|الأسئلة)/i, page: "faq" },

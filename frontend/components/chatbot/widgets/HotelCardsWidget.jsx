@@ -81,12 +81,23 @@ export default function HotelCardsWidget({ hotels = [], language = "ar", onSelec
             {/* Price */}
             <div className={styles.priceSection}>
               <div className={styles.price}>
-                <span className={styles.priceEGP}>
-                  {hotel.price_egp?.toLocaleString()} {t("ج.م", "EGP")}
-                </span>
-                <span className={styles.priceUSD}>
-                  ${hotel.price_usd_reference}
-                </span>
+                {hotel.price_egp && hotel.price_egp > 0 ? (
+                  <>
+                    <span className={styles.priceEGP}>
+                      {hotel.price_egp.toLocaleString(isArabic ? "ar-EG" : "en-US")}{" "}
+                      {t("ج.م", "EGP")}
+                    </span>
+                    {hotel.price_usd_reference ? (
+                      <span className={styles.priceUSD}>
+                        ${hotel.price_usd_reference}
+                      </span>
+                    ) : null}
+                  </>
+                ) : (
+                  <span className={styles.priceEGP}>
+                    {t("السعر عند الطلب", "Price on request")}
+                  </span>
+                )}
               </div>
               <button className={styles.selectButton}>
                 {selectedHotel === hotel

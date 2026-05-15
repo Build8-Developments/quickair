@@ -77,13 +77,20 @@ export async function graphqlRequest(query, variables = {}, options = {}) {
     clearTimeout(timeoutId);
 
     if (!response.ok) {
-      // Read body to surface the actual GraphQL/Strapi error message
       const errText = await response.text().catch(() => "");
       if (shouldLog())
         console.error(
           `❌ HTTP ${response.status} response body:`,
           errText.substring(0, 600),
         );
+      try {
+        const errJson = JSON.parse(errText);
+        if (errJson?.errors?.length) {
+          throw new GraphQLError(errJson.errors);
+        }
+      } catch (parseErr) {
+        if (parseErr instanceof GraphQLError) throw parseErr;
+      }
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 

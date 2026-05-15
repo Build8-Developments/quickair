@@ -7,7 +7,7 @@
  * ✅ Only our custom widgets - no AI-generated widgets
  */
 
-import { searchHotels } from "./ragService";
+import { searchHotels, normalizeDestinationKey } from "./ragService";
 import { getAllLocations } from "@/lib/api/services/location";
 
 function getFlagCodeFromCountry(country) {
@@ -29,45 +29,8 @@ function getFlagCodeFromCountry(country) {
 
 function normalizeDestinationId(value) {
   if (!value) return null;
-
-  const raw = String(value).toLowerCase().trim();
-  const normalized = raw
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\u0600-\u06ff\s-]/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  const map = {
-    sharm: "sharm",
-    "sharm el sheikh": "sharm",
-    "sharm el-sheikh": "sharm",
-    "شرم": "sharm",
-    "شرم الشيخ": "sharm",
-    hurghada: "hurghada",
-    "الغردقة": "hurghada",
-    "غردقة": "hurghada",
-    dahab: "dahab",
-    "دهب": "dahab",
-    bali: "bali",
-    "بالي": "bali",
-    istanbul: "istanbul",
-    "اسطنبول": "istanbul",
-    "إسطنبول": "istanbul",
-    "استانبول": "istanbul",
-    beirut: "beirut",
-    "بيروت": "beirut",
-    ainsokhna: "ainsokhna",
-    "ain sokhna": "ainsokhna",
-    "عين السخنة": "ainsokhna",
-    "العين السخنة": "ainsokhna",
-    sokhna: "ainsokhna",
-    sahlhashish: "sahlhashish",
-    "sahl hasheesh": "sahlhashish",
-    "سهل حشيش": "sahlhashish",
-  };
-
-  return map[normalized] || raw;
+  const key = normalizeDestinationKey(value);
+  return key && key !== "unknown" ? key : null;
 }
 
 // قائمة الـ widgets المسموح بها فقط
@@ -267,8 +230,8 @@ function extractDestinationFromMessage(message = "") {
     "شرم الشيخ": "sharm",
 
     // Hurghada
-    "الغردق": "hurghada",
-    "غردق": "hurghada",
+    "الغردقة": "hurghada",
+    "غردقة": "hurghada",
     "hurghada": "hurghada",
 
     // Dahab
@@ -290,7 +253,6 @@ function extractDestinationFromMessage(message = "") {
     "lebanon": "beirut",
 
     // Ain Sokhna
-    "السخن": "ainsokhna",
     "العين السخنة": "ainsokhna",
     "عين السخنة": "ainsokhna",
     "سخنة": "ainsokhna",
@@ -299,7 +261,6 @@ function extractDestinationFromMessage(message = "") {
 
     // Sahl Hasheesh
     "سهل حشيش": "sahlhashish",
-    "حشيش": "sahlhashish",
     "hasheesh": "sahlhashish",
     "sahl": "sahlhashish"
   };

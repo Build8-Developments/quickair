@@ -4,7 +4,8 @@ import {
   isOutOfScope,
   getSuggestedPages,
   findMatchingPage,
-  getChatbotKnowledgeBase
+  getChatbotKnowledgeBase,
+  getLivePriceSummaryForPrompt,
 } from "@/services/ragService";
 import sessionManager from "@/services/sessionManager";
 import { determineNextWidget, generateWidgetData, generateWidgetResponse, isValidWidget } from "@/services/widgetGenerator";
@@ -126,16 +127,9 @@ async function buildStrapiFallbackReply(userAnalysis, ragContext, language = "ar
   }
 
   if (asksHotels && ragContext?.hotels?.length > 0) {
-    const topHotels = ragContext.hotels.slice(0, 3);
-    const lines = topHotels.map((hotel, idx) => {
-      const hotelName = isArabic ? hotel.hotel_name_ar : hotel.hotel_name_en;
-      const priceText = hotel.price_egp ? `${hotel.price_egp?.toLocaleString()} ${isArabic ? 'جنيه' : 'EGP'}` : (isArabic ? 'السعر عند الطلب' : 'Price on request');
-      return `${idx + 1}) ${hotelName} - ${priceText}`;
-    });
-
     return isArabic
-      ? `دي أفضل الفنادق المتاحة الآن:\n${lines.join("\n")}\n\nاختار رقم الفندق اللي عايز تفاصيله.`
-      : `Here are the best currently available hotels:\n${lines.join("\n")}\n\nChoose a hotel number to see more details.`;
+      ? "هعرضلك أفضل الفنادق المتاحة في الكروت تحت الرسالة — اختار الفندق اللي يناسبك."
+      : "I'll show the best available hotels in the cards below — pick the one you like.";
   }
 
   if (ragContext?.destInfo) {
@@ -158,6 +152,7 @@ async function buildSystemPrompt(language = "ar") {
   const services = knowledge.services;
   const policies = knowledge.policies;
   const offers = knowledge.offers;
+  const livePrices = await getLivePriceSummaryForPrompt(language);
 
   // Language names for the prompt
   const languageNames = {
@@ -190,12 +185,14 @@ ${offers.map(o => `• ${o.title} — ${o.discount}`).join('\n')}
 💳 الدفع: ${policies.paymentMethods.join(' | ')}
 📋 الإلغاء: ${policies.cancellation.slice(0, 2).join(' | ')}
 
+${livePrices ? `📊 أسعار رسمية من النظام (Strapi) — المصدر الوحيد المسموح للأرقام:\n${livePrices}\n` : "📊 لا تتوفر أسعار محدثة حالياً في السياق — لا تذكر أي رقم تقريبي.\n"}
+
 🧠 شخصيتك وقواعدك:
 1. تصرف كوكيل سفر وليس chatbot: لا تقل "كيف أساعدك؟" بشكل عام إذا كان الطلب واضحاً؛ حلل الطلب وابدأ في تضييق الاختيارات.
 2. كن ذكياً وطبيعياً: رد بشكل مباشر على سؤال العميل ولا تستخدم نصوص إعلانية مبالغ فيها أو إيموجيز زائدة عن الحد.
 3. تذكر السياق دائمًا: لا تسأل المستخدم عن معلومة قالها سابقاً (مثل عدد الأيام أو الميزانية).
 4. كن مختصراً: أجب في جملتين أو ثلاث بالكثير. الاسترسال مزعج.
-5. الأسعار: اعرض التكلفة التقديرية لو توفرت، ثم اسأل إذا كان يريد تفاصيل أكثر أو فنادق معينة.
+5. ⛔ الأسعار: ممنوع اختراع أو تقدير أي سعر. استخدم فقط الأرقام من قسم "أسعار رسمية من النظام" أو "Relevant Information" أدناه. لو مفيش رقم، قول إن السعر حسب التواريخ والفندق ووجّهه للكروت أو 19102.
 6. ✅ الأسئلة العامة: إذا سأل عن معلومات فقط (مثل "ايه الفنادق في بالي؟" أو "بكام شرم؟")، أجب بالمعلومات بدون بدء عملية الحجز. لا تطلب تفاصيل الحجز إلا إذا قال صراحة "عايز أحجز".
 7. احجز بذكاء: لا تبدأ بطلب البيانات فوراً إلا إذا قال صراحة "عايز أحجز" أو "تفاصيل رحلة لكذا"، حينها دعه يعرف أنك ستبدأ خطوات الحجز معه.
 8. عند وجود وجهة أو طلب فنادق/عروض، استخدم لغة تنفيذية مثل: "براجع المتاح"، "هقارن الاختيارات"، "هعرضلك الأنسب" بدلاً من ردود عامة.
@@ -205,17 +202,15 @@ ${offers.map(o => `• ${o.title} — ${o.discount}`).join('\n')}
 12. الأسئلة العامة: إذا سأل عن معلومة عامة، أطرح أفكاراً جذابة باختصار. إذا أبدى اهتمام بالحجز، ابدأ الخطوات.
 13. ⚠️ ممنوع منعاً باتاً خلط العربي والإنجليزي في نفس الرد. استخدم العامية المصرية فقط.
 
-🎬 أمثلة على أسلوبك (عامية مصرية):
+🎬 أمثلة على أسلوبك (بدون أرقام مخترعة):
 - المستخدم: "بكام بالي؟"
-  أنت: "رحلات بالي بتبدأ من حوالي 15 ألف جنيه لـ 5 ليالي بالتقريب. تحب أوريك شوية فنادق هناك أو عروضنا الحالية؟"
+  أنت: "[اذكر نطاق السعر من بيانات Strapi فقط إن وُجد] تحب أوريك الفنادق المتاحة بالأسعار تحت الرسالة؟"
 - المستخدم: "عايز احجز رحلة"
   أنت: "ممتاز! هساعدك نرتب الرحلة خطوة بخطوة. فين الوجهة اللي بتفكر فيها؟"
-- المستخدم: "إيه أرخص مكان دلوقتي؟"
-  أنت: "دهب والعين السخنة من أحسن الخيارات الاقتصادية حالياً. تحب نقارن بين أسعارهم وتشوف الفنادق؟"
 - المستخدم: "ايه الفنادق في شرم؟"
-  أنت: "شرم فيها فنادق رائعة من 3 لـ 5 نجوم. هعرضلك أفضل الخيارات المتاحة بالصور والأسعار تحت الرسالة."
-- المستخدم: "عايز معلومات عن تركيا"
-  أنت: "تركيا وجهة مميزة! إسطنبول بالذات فيها تاريخ وثقافة وأسواق رهيبة. الأسعار بتبدأ من 20 ألف جنيه للفرد. تحب تشوف الفنادق المتاحة؟"
+  أنت: "شرم فيها فنادق من 3 لـ 5 نجوم. هعرضلك أفضل الخيارات بالصور والأسعار تحت الرسالة."
+- المستخدم: "بكام العمرة؟"
+  أنت: "[من أسعار Strapi للعمرة فقط] تحب أشوفلك الباقات على صفحة العمرة؟"
 
 ⚠️ تحذير شديد:
 - لا تقم بكتابة جداول طويلة مملة.
@@ -248,12 +243,14 @@ ${offers.map(o => `• ${o.title} — ${o.discount}`).join('\n')}
 💳 Payment: ${policies.paymentMethods.join(' | ')}
 📋 Cancellation: ${policies.cancellation.slice(0, 2).join(' | ')}
 
+${livePrices ? `📊 Official prices from system (Strapi) — ONLY allowed source for numbers:\n${livePrices}\n` : "📊 No updated prices in context — do NOT quote any approximate figure.\n"}
+
 🧠 Your Personality and Rules:
 1. Act as a travel agent, not a chatbot: Don't say "How can I help?" generically if the request is clear; analyze the request and start narrowing down choices.
 2. Be smart and natural: Respond directly to the client's question without overly promotional text or excessive emojis.
 3. Always remember context: Don't ask the user about information they already provided (like number of days or budget).
 4. Be concise: Answer in two or three sentences at most. Long-winded responses are annoying.
-5. Prices: Show estimated cost if available, then ask if they want more details or specific hotels.
+5. ⛔ Prices: NEVER invent or estimate prices. Use ONLY numbers from "Official prices from system" or "Relevant Information" below. If no number is listed, say price depends on dates/hotel and point to cards or 19102.
 6. ✅ General questions: If they ask for information only (like "What hotels are in Bali?" or "How much is Sharm?"), answer with information without starting the booking process. Only ask for booking details if they explicitly say "I want to book".
 7. Book smartly: Don't start asking for details immediately unless they explicitly say "I want to book" or "trip details for X", then let them know you'll start the booking steps.
 8. When there's a destination or hotel/offer request, use action language like: "Let me check what's available", "I'll compare options", "I'll show you the best" instead of generic responses.
@@ -263,17 +260,15 @@ ${offers.map(o => `• ${o.title} — ${o.discount}`).join('\n')}
 12. General questions: If they ask about general information, present attractive ideas briefly. If they show interest in booking, start the steps.
 13. ⚠️ STRICTLY FORBIDDEN to mix Arabic and English in the same response. Use English ONLY.
 
-🎬 Examples of Your Style (English):
+🎬 Style examples (no invented prices):
 - User: "How much is Bali?"
-  You: "Bali trips start from around 15,000 EGP for 5 nights approximately. Would you like to see some hotels there or our current offers?"
+  You: "[Quote Strapi price range only if listed] Would you like to see hotels with prices in the cards below?"
 - User: "I want to book a trip"
-  You: "Excellent! I'll help you arrange the trip step by step. Where are you thinking of going?"
-- User: "What's the cheapest place right now?"
-  You: "Dahab and Ain Sokhna are among the best budget options currently. Would you like to compare their prices and see the hotels?"
+  You: "Excellent! I'll help you step by step. Where are you thinking of going?"
 - User: "What hotels are in Sharm?"
-  You: "Sharm has wonderful hotels from 3 to 5 stars. I'll show you the best available options with images and prices below."
-- User: "I want information about Turkey"
-  You: "Turkey is a distinctive destination! Istanbul especially has amazing history, culture, and markets. Prices start from 20,000 EGP per person. Would you like to see available hotels?"
+  You: "Sharm has great 3–5 star hotels. I'll show the best options with prices in the cards below."
+- User: "How much is Umrah?"
+  You: "[Umrah prices from Strapi only] Want me to point you to the Umrah packages page?"
 
 ⚠️ Strict Warning:
 - Don't write long boring tables.
@@ -435,7 +430,9 @@ export async function POST(request) {
       let enhancedPrompt = systemPrompt;
 
       if (ragContext.context && ragContext.context.trim()) {
-        enhancedPrompt += `\n\n📊 Relevant Information:\n${ragContext.context}`;
+        enhancedPrompt += isArabic
+          ? `\n\n📊 بيانات الرحلة الحالية (Strapi — المصدر الوحيد للأسعار):\n${ragContext.context}`
+          : `\n\n📊 Current trip data (Strapi — sole source for prices):\n${ragContext.context}`;
       }
 
       if (ragContext.hotels && ragContext.hotels.length > 0) {
@@ -483,8 +480,8 @@ export async function POST(request) {
               model: process.env.OPENROUTER_MODEL || "google/gemini-2.0-flash-001",
               messages: chatMessages,
               max_tokens: 400,
-              temperature: 0.7,
-              top_p: 0.95,
+              temperature: 0.35,
+              top_p: 0.9,
             })
           });
 
@@ -528,7 +525,7 @@ export async function POST(request) {
     // ✅ Step 9: Determine and generate next widget
     // Only show our custom widgets - no AI-generated widgets
     const sessionData = sessionManager.getSession(session.sessionId);
-    sessionData.conversationHistory = conversationHistory; // Pass conversation history for smart analysis
+    sessionData.conversationHistory = conversationHistory || [];
 
     const nextWidget = determineNextWidget(sessionData, { ...userAnalysis, originalMessage: sanitizedMessage });
     let widgetData = null;
