@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { usePilgrimageContent } from "@/contexts/PilgrimageContentContext";
 
 /**
  * PoliciesSection Component for Omra Page
@@ -12,19 +12,18 @@ import { useTranslation } from "react-i18next";
  * @param {boolean} props.isRTL - Whether to use RTL layout
  */
 export default function PoliciesSection({ isRTL }) {
-  const { t } = useTranslation();
+  const { pt } = usePilgrimageContent();
 
-  // Get policies data from translations
-  const inclusions = t("omra.policies.inclusions.items", {
+  const inclusions = pt("policies.inclusions.items", {
     returnObjects: true,
   });
-  const exclusions = t("omra.policies.exclusions.items", {
+  const exclusions = pt("policies.exclusions.items", {
     returnObjects: true,
   });
-  const cancellationRules = t("omra.policies.cancellation.rules", {
+  const cancellationRules = pt("policies.cancellation.rules", {
     returnObjects: true,
   });
-  const documents = t("omra.policies.documents.items", { returnObjects: true });
+  const documents = pt("policies.documents.items", { returnObjects: true });
 
   // Icon components for visual distinction
   const CheckIcon = () => (
@@ -170,7 +169,7 @@ export default function PoliciesSection({ isRTL }) {
                   : "inherit",
               }}
             >
-              {t("omra.policies.title")}
+              {pt("policies.title")}
             </h2>
           </div>
         </div>
@@ -195,7 +194,7 @@ export default function PoliciesSection({ isRTL }) {
                   <CheckIcon />
                 </div>
                 <h3 style={{ ...cardTitleStyle, color: "#28a745" }}>
-                  {t("omra.policies.inclusions.title")}
+                  {pt("policies.inclusions.title")}
                 </h3>
               </div>
               <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
@@ -228,7 +227,7 @@ export default function PoliciesSection({ isRTL }) {
                   <CloseIcon />
                 </div>
                 <h3 style={{ ...cardTitleStyle, color: "#dc3545" }}>
-                  {t("omra.policies.exclusions.title")}
+                  {pt("policies.exclusions.title")}
                 </h3>
               </div>
               <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
@@ -261,7 +260,7 @@ export default function PoliciesSection({ isRTL }) {
                   <ExchangeIcon />
                 </div>
                 <h3 style={cardTitleStyle}>
-                  {t("omra.policies.exchangeRate.title")}
+                  {pt("policies.exchangeRate.title")}
                 </h3>
               </div>
               <div
@@ -280,7 +279,7 @@ export default function PoliciesSection({ isRTL }) {
                     marginBottom: "5px",
                   }}
                 >
-                  1 SAR = {t("omra.policies.exchangeRate.rate")} EGP
+                  1 SAR = {pt("policies.exchangeRate.rate")} EGP
                 </div>
               </div>
               <p
@@ -291,7 +290,7 @@ export default function PoliciesSection({ isRTL }) {
                   margin: 0,
                 }}
               >
-                {t("omra.policies.exchangeRate.note")}
+                {pt("policies.exchangeRate.note")}
               </p>
             </div>
           </div>
@@ -314,7 +313,7 @@ export default function PoliciesSection({ isRTL }) {
                   <RoomIcon />
                 </div>
                 <h3 style={cardTitleStyle}>
-                  {t("omra.policies.roomPolicy.title")}
+                  {pt("policies.roomPolicy.title")}
                 </h3>
               </div>
               <p
@@ -325,7 +324,7 @@ export default function PoliciesSection({ isRTL }) {
                   margin: 0,
                 }}
               >
-                {t("omra.policies.roomPolicy.description")}
+                {pt("policies.roomPolicy.description")}
               </p>
             </div>
           </div>
@@ -348,7 +347,7 @@ export default function PoliciesSection({ isRTL }) {
                   <PaymentIcon />
                 </div>
                 <h3 style={cardTitleStyle}>
-                  {t("omra.policies.paymentPolicy.title")}
+                  {pt("policies.paymentPolicy.title")}
                 </h3>
               </div>
               <div style={{ marginBottom: "15px" }}>
@@ -380,7 +379,7 @@ export default function PoliciesSection({ isRTL }) {
                   <span
                     style={{ fontSize: "14px", color: "var(--color-light-2)" }}
                   >
-                    {t("omra.policies.paymentPolicy.initialPayment")}
+                    {pt("policies.paymentPolicy.initialPayment")}
                   </span>
                 </div>
                 <div
@@ -411,7 +410,7 @@ export default function PoliciesSection({ isRTL }) {
                   <span
                     style={{ fontSize: "14px", color: "var(--color-light-2)" }}
                   >
-                    {t("omra.policies.paymentPolicy.finalPayment")}
+                    {pt("policies.paymentPolicy.finalPayment")}
                   </span>
                 </div>
               </div>
@@ -427,7 +426,7 @@ export default function PoliciesSection({ isRTL }) {
                   borderRadius: "6px",
                 }}
               >
-                {t("omra.policies.paymentPolicy.note")}
+                {pt("policies.paymentPolicy.note")}
               </p>
             </div>
           </div>
@@ -450,7 +449,7 @@ export default function PoliciesSection({ isRTL }) {
                   <CancelIcon />
                 </div>
                 <h3 style={{ ...cardTitleStyle, color: "#dc3545" }}>
-                  {t("omra.policies.cancellation.title")}
+                  {pt("policies.cancellation.title")}
                 </h3>
               </div>
               <div
@@ -519,7 +518,7 @@ export default function PoliciesSection({ isRTL }) {
                         }}
                       >
                         {rule.penalty}%{" "}
-                        {t("omra.policies.cancellation.penaltyText")}
+                        {pt("policies.cancellation.penaltyText")}
                       </span>
                     </div>
                   ))}
@@ -545,7 +544,7 @@ export default function PoliciesSection({ isRTL }) {
                   <DocumentIcon />
                 </div>
                 <h3 style={{ ...cardTitleStyle, color: "#b8860b" }}>
-                  {t("omra.policies.documents.title")}
+                  {pt("policies.documents.title")}
                 </h3>
               </div>
               <div

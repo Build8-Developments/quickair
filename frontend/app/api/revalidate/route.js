@@ -2,7 +2,14 @@ import { revalidateTag, revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 // Valid cache tags (must match config/api.js CACHE_CONFIG.tags)
-const VALID_TAGS = ["offers", "tours", "destinations", "blogs"];
+const VALID_TAGS = [
+  "offers",
+  "tours",
+  "destinations",
+  "blogs",
+  "haj-page",
+  "umrah-page",
+];
 
 // Map Strapi model names to cache tags
 const MODEL_TO_TAG = {
@@ -12,6 +19,8 @@ const MODEL_TO_TAG = {
   destination: "destinations",
   location: "destinations", // location model maps to destinations tag
   hotel: "offers", // hotels are part of offers
+  "haj-page": "haj-page",
+  "umrah-page": "umrah-page",
 };
 
 export async function POST(request) {

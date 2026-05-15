@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_pilgrimage_steps_sections",
+  "info": {
+    "displayName": "Steps Section",
+    "icon": "layer"
+  },
+  "options": {},
+  "attributes": {
+    "header": {
+      "type": "component",
+      "component": "pilgrimage.section-header",
+      "repeatable": false
+    },
+    "steps": {
+      "type": "component",
+      "component": "pilgrimage.text-block",
+      "repeatable": true
+    }
+  }
+}

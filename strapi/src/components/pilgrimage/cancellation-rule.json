@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_pilgrimage_cancellation_rules",
+  "info": {
+    "displayName": "Cancellation Rule",
+    "icon": "calendar"
+  },
+  "options": {},
+  "attributes": {
+    "period": {
+      "type": "string",
+      "required": true
+    },
+    "penaltyPercent": {
+      "type": "decimal",
+      "required": true
+    }
+  }
+}

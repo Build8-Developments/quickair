@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { useTranslation } from "react-i18next";
 import HeroSection from "./HeroSection";
 import AboutSection from "./AboutSection";
 import UmrahStepsSection from "./UmrahStepsSection";
@@ -17,8 +16,6 @@ import PoliciesSection from "./PoliciesSection";
  * @param {string} props.locale - Current locale ("ar" or "en")
  */
 export default function OmraPageContent({ locale }) {
-  const { t } = useTranslation();
-
   // Determine RTL/LTR direction based on locale
   const isRTL = locale === "ar";
 

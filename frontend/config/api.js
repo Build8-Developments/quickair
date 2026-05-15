@@ -63,6 +63,8 @@ export const CACHE_CONFIG = {
     tours: "tours",
     destinations: "destinations",
     blogs: "blogs",
+    haj: "haj-page",
+    umrah: "umrah-page",
   },
 };
 

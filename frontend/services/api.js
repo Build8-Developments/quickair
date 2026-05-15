@@ -1,9 +1,19 @@
 import {
   graphqlRequest,
   extractStrapiData,
+  extractStrapiSingle,
   formatImageUrl,
 } from "@/lib/graphql";
 import { CACHE_CONFIG } from "@/config/api";
+import {
+  HAJ_PAGE_QUERY,
+  UMRAH_PAGE_QUERY,
+} from "@/lib/api/queries/pilgrimage";
+import {
+  mapHajPageFromStrapi,
+  mapUmrahPageFromStrapi,
+} from "@/utils/mapPilgrimageFromStrapi";
+import { STRAPI_CONFIG } from "@/config/api";
 
 /**
  * Centralized API service for all data fetching
@@ -399,10 +409,56 @@ export const blogsAPI = {
   },
 };
 
+// ===================================
+// HAJ & UMRAH PAGES (single types)
+// ===================================
+
+export const pilgrimageAPI = {
+  async getHajPage(locale = "en") {
+    const data = await graphqlRequest(
+      HAJ_PAGE_QUERY,
+      { locale },
+      {
+        revalidate: CACHE_CONFIG.revalidate.dynamic,
+        tags: [CACHE_CONFIG.tags.haj],
+      },
+    );
+    const raw = extractStrapiSingle(data, "hajPage");
+    if (!raw) return null;
+
+    const mapped = mapHajPageFromStrapi(raw, STRAPI_CONFIG.url);
+    return {
+      ...raw,
+      content: mapped,
+      media: mapped?._media || null,
+    };
+  },
+
+  async getUmrahPage(locale = "en") {
+    const data = await graphqlRequest(
+      UMRAH_PAGE_QUERY,
+      { locale },
+      {
+        revalidate: CACHE_CONFIG.revalidate.dynamic,
+        tags: [CACHE_CONFIG.tags.umrah],
+      },
+    );
+    const raw = extractStrapiSingle(data, "umrahPage");
+    if (!raw) return null;
+
+    return {
+      ...raw,
+      content: mapUmrahPageFromStrapi(raw),
+      media: null,
+    };
+  },
+};
+
 // Export all APIs
 export default {
   offers: offersAPI,
   tours: toursAPI,
   destinations: destinationsAPI,
   blogs: blogsAPI,
+  pilgrimage: pilgrimageAPI,
 };

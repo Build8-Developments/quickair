@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_pilgrimage_services_sections",
+  "info": {
+    "displayName": "Services Section",
+    "icon": "grid"
+  },
+  "options": {},
+  "attributes": {
+    "header": {
+      "type": "component",
+      "component": "pilgrimage.section-header",
+      "repeatable": false
+    },
+    "services": {
+      "type": "component",
+      "component": "pilgrimage.service-card",
+      "repeatable": true
+    }
+  }
+}

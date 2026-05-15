@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { usePilgrimageContent } from "@/contexts/PilgrimageContentContext";
 
 /**
  * Room type icon component - renders appropriate icon based on room type
@@ -43,7 +43,7 @@ export default function PricingTable({
   reservationAmount,
   isRTL = true,
 }) {
-  const { t } = useTranslation();
+  const { pt } = usePilgrimageContent();
 
   if (!pricing) return null;
 
@@ -52,22 +52,22 @@ export default function PricingTable({
   const roomTypes = [
     {
       id: "double",
-      label: t("haj.pricing.doubleRoom"),
-      desc: t("haj.pricing.doubleRoomDesc"),
+      label: pt("pricing.doubleRoom"),
+      desc: pt("pricing.doubleRoomDesc"),
       price: doubleRoom,
       icon: "double",
     },
     {
       id: "triple",
-      label: t("haj.pricing.tripleRoom"),
-      desc: t("haj.pricing.tripleRoomDesc"),
+      label: pt("pricing.tripleRoom"),
+      desc: pt("pricing.tripleRoomDesc"),
       price: tripleRoom,
       icon: "triple",
     },
     {
       id: "quad",
-      label: t("haj.pricing.quadRoom"),
-      desc: t("haj.pricing.quadRoomDesc"),
+      label: pt("pricing.quadRoom"),
+      desc: pt("pricing.quadRoomDesc"),
       price: quadRoom,
       icon: "quad",
     },
@@ -117,7 +117,7 @@ export default function PricingTable({
             <span
               style={{ color: "#ffffff", fontSize: "15px", fontWeight: 500 }}
             >
-              {t("haj.vipPackage.reservationAmount")}
+              {pt("vipPackage.reservationAmount")}
             </span>
           </div>
           <span style={{ color: "#ffffff", fontSize: "20px", fontWeight: 700 }}>

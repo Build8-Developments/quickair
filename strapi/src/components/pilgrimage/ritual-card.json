@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_pilgrimage_ritual_cards",
+  "info": {
+    "displayName": "Ritual Card",
+    "icon": "landscape"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "featureBullets": {
+      "type": "component",
+      "component": "pilgrimage.bullet",
+      "repeatable": true
+    }
+  }
+}

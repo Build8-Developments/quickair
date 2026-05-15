@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_pilgrimage_service_cards",
+  "info": {
+    "displayName": "Service Card",
+    "icon": "star"
+  },
+  "options": {},
+  "attributes": {
+    "icon": {
+      "type": "enumeration",
+      "enum": ["star", "plane", "users", "train", "book", "list"],
+      "default": "star",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { useTranslation } from "react-i18next";
+import { usePilgrimageContent } from "@/contexts/PilgrimageContentContext";
 
 /**
  * AboutSection Component for Omra Page
@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
  * Requirements: 2.1, 2.2, 2.3, 2.4
  */
 export default function AboutSection({ isRTL }) {
-  const { t } = useTranslation();
+  const { pt } = usePilgrimageContent();
 
   return (
     <section
@@ -36,7 +36,7 @@ export default function AboutSection({ isRTL }) {
             >
               <Image
                 src="/omra.png"
-                alt={t("omra.about.imageAlt")}
+                alt={pt("about.imageAlt")}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -61,7 +61,7 @@ export default function AboutSection({ isRTL }) {
                 data-aos="fade-up"
                 data-aos-delay="100"
               >
-                {t("omra.about.sectionTitle")}
+                {pt("about.sectionTitle")}
               </span>
 
               {/* Title */}
@@ -71,7 +71,7 @@ export default function AboutSection({ isRTL }) {
                 data-aos-delay="200"
                 style={{ lineHeight: 1.4 }}
               >
-                {t("omra.about.title")}
+                {pt("about.title")}
               </h2>
 
               {/* Paragraph 1 */}
@@ -81,7 +81,7 @@ export default function AboutSection({ isRTL }) {
                 data-aos-delay="300"
                 style={{ lineHeight: 1.8 }}
               >
-                {t("omra.about.paragraph1")}
+                {pt("about.paragraph1")}
               </p>
 
               {/* Paragraph 2 */}
@@ -91,7 +91,7 @@ export default function AboutSection({ isRTL }) {
                 data-aos-delay="400"
                 style={{ lineHeight: 1.8 }}
               >
-                {t("omra.about.paragraph2")}
+                {pt("about.paragraph2")}
               </p>
             </div>
           </div>

@@ -1,8 +1,9 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { usePilgrimageContent } from "@/contexts/PilgrimageContentContext";
+import { getMediaUrl } from "@/utils/pilgrimageContent";
 import HotelCard from "./HotelCard";
 import PricingTable from "./PricingTable";
 import RitualCard from "./RitualCard";
@@ -59,7 +60,7 @@ function ServiceIcon({ iconType, size = 32 }) {
  * Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 6.1, 6.2, 6.3
  */
 function ServicesSection({ isRTL }) {
-  const { t } = useTranslation();
+  const { pt } = usePilgrimageContent();
 
   const services = [
     {
@@ -117,14 +118,14 @@ function ServicesSection({ isRTL }) {
               className="text-accent-1 text-15 fw-500 mb-10 d-block"
               data-aos="fade-up"
             >
-              {t("haj.services.sectionTitle")}
+              {pt("services.sectionTitle")}
             </span>
             <h2
               className="text-30 md:text-24 fw-700 text-dark-1 mb-20"
               data-aos="fade-up"
               data-aos-delay="100"
             >
-              {t("haj.services.sectionSubtitle")}
+              {pt("services.sectionSubtitle")}
             </h2>
             <p
               className="text-15 text-light-2 lh-18"
@@ -132,7 +133,7 @@ function ServicesSection({ isRTL }) {
               data-aos-delay="200"
               style={{ textAlign: "center", direction: isRTL ? "rtl" : "ltr" }}
             >
-              {t("haj.services.intro")}
+              {pt("services.intro")}
             </p>
           </div>
         </div>
@@ -205,7 +206,7 @@ function ServicesSection({ isRTL }) {
                     flexShrink: 0,
                   }}
                 >
-                  {t(service.titleKey)}
+                  {pt(service.titleKey)}
                 </h3>
                 <p
                   className="text-14 text-light-2 lh-17"
@@ -218,7 +219,7 @@ function ServicesSection({ isRTL }) {
                     WebkitBoxOrient: "vertical",
                   }}
                 >
-                  {t(service.descKey)}
+                  {pt(service.descKey)}
                 </p>
               </div>
             </div>
@@ -269,60 +270,66 @@ function VIPFeatureIcon({ featureIndex, size = 28 }) {
  * Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 3.10
  */
 function VIPPackageSection({ isRTL }) {
-  const { t } = useTranslation();
+  const { pt, media } = usePilgrimageContent();
 
   const features = [
-    t("haj.vipPackage.features.arafatStay"),
-    t("haj.vipPackage.features.outdoorSeating"),
-    t("haj.vipPackage.features.fiveStarRestaurant"),
-    t("haj.vipPackage.features.kadanaStay"),
-    t("haj.vipPackage.features.roomCorridors"),
-    t("haj.vipPackage.features.kadanaMosque"),
+    pt("vipPackage.features.arafatStay"),
+    pt("vipPackage.features.outdoorSeating"),
+    pt("vipPackage.features.fiveStarRestaurant"),
+    pt("vipPackage.features.kadanaStay"),
+    pt("vipPackage.features.roomCorridors"),
+    pt("vipPackage.features.kadanaMosque"),
   ];
 
   const hotels = [
     {
-      location: t("haj.hotels.madinah.location"),
-      name: t("haj.hotels.madinah.name"),
+      location: pt("hotels.madinah.location"),
+      name: pt("hotels.madinah.name"),
       features: [
-        t("haj.hotels.madinah.feature1"),
-        t("haj.hotels.madinah.feature2"),
+        pt("hotels.madinah.feature1"),
+        pt("hotels.madinah.feature2"),
       ],
-      nightsDates: t("haj.hotels.madinah.nights"),
+      nightsDates: pt("hotels.madinah.nights"),
     },
     {
-      location: t("haj.hotels.makkah.location"),
-      name: t("haj.hotels.makkah.name"),
+      location: pt("hotels.makkah.location"),
+      name: pt("hotels.makkah.name"),
       features: [
-        t("haj.hotels.makkah.feature1"),
-        t("haj.hotels.makkah.feature2"),
+        pt("hotels.makkah.feature1"),
+        pt("hotels.makkah.feature2"),
       ],
-      nightsDates: t("haj.hotels.makkah.nights"),
+      nightsDates: pt("hotels.makkah.nights"),
     },
   ];
 
   const pricing = {
-    doubleRoom: t("haj.pricing.vip.double"),
-    tripleRoom: t("haj.pricing.vip.triple"),
-    quadRoom: t("haj.pricing.vip.quad"),
+    doubleRoom: pt("pricing.vip.double"),
+    tripleRoom: pt("pricing.vip.triple"),
+    quadRoom: pt("pricing.vip.quad"),
   };
 
   const rituals = [
     {
-      title: t("haj.vipPackage.arafatRitual.title"),
-      description: t("haj.vipPackage.arafatRitual.description"),
-      imageUrl:
+      title: pt("vipPackage.arafatRitual.title"),
+      description: pt("vipPackage.arafatRitual.description"),
+      imageUrl: getMediaUrl(
+        media,
+        "vipArafatRitual",
         "https://cnn-arabic-images.cnn.io/cloudinary/image/upload/w_1920,c_scale,q_auto/cnnarabic/2023/06/27/images/243914.avif",
+      ),
     },
     {
-      title: t("haj.vipPackage.minaRitual.title"),
-      imageUrl:
+      title: pt("vipPackage.minaRitual.title"),
+      imageUrl: getMediaUrl(
+        media,
+        "vipMinaRitual",
         "https://cdn4.premiumread.com/?url=https://www.al-madina.com/uploads/images/2024/06/16/2315534.jpg",
+      ),
       features: [
-        t("haj.vipPackage.minaRitual.featuresTitle"),
-        t("haj.vipPackage.minaRitual.feature1"),
-        t("haj.vipPackage.minaRitual.feature2"),
-        t("haj.vipPackage.minaRitual.feature3"),
+        pt("vipPackage.minaRitual.featuresTitle"),
+        pt("vipPackage.minaRitual.feature1"),
+        pt("vipPackage.minaRitual.feature2"),
+        pt("vipPackage.minaRitual.feature3"),
       ],
     },
   ];
@@ -362,13 +369,13 @@ function VIPPackageSection({ isRTL }) {
               >
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
               </svg>
-              <span>{t("haj.vipPackage.badge")}</span>
+              <span>{pt("vipPackage.badge")}</span>
             </div>
             <h2
               className="text-30 md:text-24 fw-700 text-dark-1 mb-15"
               style={{ lineHeight: 1.5 }}
             >
-              {t("haj.vipPackage.title")}
+              {pt("vipPackage.title")}
             </h2>
             <div
               className="lottery-note rounded-12"
@@ -387,7 +394,7 @@ function VIPPackageSection({ isRTL }) {
                   lineHeight: 1.7,
                 }}
               >
-                {t("haj.vipPackage.lotteryNote")}
+                {pt("vipPackage.lotteryNote")}
               </p>
             </div>
           </div>
@@ -403,7 +410,7 @@ function VIPPackageSection({ isRTL }) {
             className="text-20 fw-600 text-dark-1 mb-25"
             style={{ textAlign: isRTL ? "right" : "left" }}
           >
-            {t("haj.vipPackage.featuresTitle")}
+            {pt("vipPackage.featuresTitle")}
           </h3>
           <div
             style={{
@@ -470,7 +477,7 @@ function VIPPackageSection({ isRTL }) {
             style={{ textAlign: isRTL ? "right" : "left" }}
             data-aos="fade-up"
           >
-            {t("haj.vipPackage.hotelsTitle")}
+            {pt("vipPackage.hotelsTitle")}
           </h3>
           <div
             style={{
@@ -497,11 +504,11 @@ function VIPPackageSection({ isRTL }) {
             className="text-20 fw-600 text-dark-1 mb-25"
             style={{ textAlign: isRTL ? "right" : "left" }}
           >
-            {t("haj.vipPackage.pricingTitle")}
+            {pt("vipPackage.pricingTitle")}
           </h3>
           <PricingTable
             pricing={pricing}
-            reservationAmount={t("haj.pricing.vip.reservation")}
+            reservationAmount={pt("pricing.vip.reservation")}
             isRTL={isRTL}
           />
         </div>
@@ -513,7 +520,7 @@ function VIPPackageSection({ isRTL }) {
             style={{ textAlign: isRTL ? "right" : "left" }}
             data-aos="fade-up"
           >
-            {t("haj.vipPackage.ritualsTitle")}
+            {pt("vipPackage.ritualsTitle")}
           </h3>
           <div
             style={{
@@ -568,7 +575,7 @@ function VIPPackageSection({ isRTL }) {
                 lineHeight: 1.7,
               }}
             >
-              {t("haj.vipPackage.directVisaNote")}
+              {pt("vipPackage.directVisaNote")}
             </p>
           </div>
         </div>
@@ -583,48 +590,54 @@ function VIPPackageSection({ isRTL }) {
  * Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8
  */
 function DistinguishedPackageSection({ isRTL }) {
-  const { t } = useTranslation();
+  const { pt, media } = usePilgrimageContent();
 
   const hotels = [
     {
-      location: t("haj.hotels.madinah.location"),
-      name: t("haj.hotels.madinah.name"),
+      location: pt("hotels.madinah.location"),
+      name: pt("hotels.madinah.name"),
       features: [
-        t("haj.hotels.madinah.feature1"),
-        t("haj.hotels.madinah.feature2"),
+        pt("hotels.madinah.feature1"),
+        pt("hotels.madinah.feature2"),
       ],
-      nightsDates: t("haj.hotels.madinah.nights"),
+      nightsDates: pt("hotels.madinah.nights"),
     },
     {
-      location: t("haj.hotels.makkah.location"),
-      name: t("haj.hotels.makkah.name"),
+      location: pt("hotels.makkah.location"),
+      name: pt("hotels.makkah.name"),
       features: [
-        t("haj.hotels.makkah.feature1"),
-        t("haj.hotels.makkah.feature2"),
+        pt("hotels.makkah.feature1"),
+        pt("hotels.makkah.feature2"),
       ],
-      nightsDates: t("haj.hotels.makkah.nights"),
+      nightsDates: pt("hotels.makkah.nights"),
     },
   ];
 
   const pricing = {
-    doubleRoom: t("haj.pricing.distinguished.double"),
-    tripleRoom: t("haj.pricing.distinguished.triple"),
-    quadRoom: t("haj.pricing.distinguished.quad"),
-    note: t("haj.distinguishedPackage.priceWithoutAirfare"),
+    doubleRoom: pt("pricing.distinguished.double"),
+    tripleRoom: pt("pricing.distinguished.triple"),
+    quadRoom: pt("pricing.distinguished.quad"),
+    note: pt("distinguishedPackage.priceWithoutAirfare"),
   };
 
   const rituals = [
     {
-      title: t("haj.distinguishedPackage.arafatRitual.title"),
-      description: t("haj.distinguishedPackage.arafatRitual.description"),
-      imageUrl:
+      title: pt("distinguishedPackage.arafatRitual.title"),
+      description: pt("distinguishedPackage.arafatRitual.description"),
+      imageUrl: getMediaUrl(
+        media,
+        "distinguishedArafatRitual",
         "https://cnn-arabic-images.cnn.io/cloudinary/image/upload/w_1920,c_scale,q_auto/cnnarabic/2023/06/27/images/243914.avif",
+      ),
     },
     {
-      title: t("haj.distinguishedPackage.minaRitual.title"),
-      description: t("haj.distinguishedPackage.minaRitual.description"),
-      imageUrl:
+      title: pt("distinguishedPackage.minaRitual.title"),
+      description: pt("distinguishedPackage.minaRitual.description"),
+      imageUrl: getMediaUrl(
+        media,
+        "distinguishedMinaRitual",
         "https://cdn4.premiumread.com/?url=https://www.al-madina.com/uploads/images/2024/06/16/2315534.jpg",
+      ),
     },
   ];
 
@@ -663,13 +676,13 @@ function DistinguishedPackageSection({ isRTL }) {
               >
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
               </svg>
-              <span>{t("haj.distinguishedPackage.badge")}</span>
+              <span>{pt("distinguishedPackage.badge")}</span>
             </div>
             <h2
               className="text-30 md:text-24 fw-700 text-dark-1 mb-15"
               style={{ lineHeight: 1.5 }}
             >
-              {t("haj.distinguishedPackage.title")}
+              {pt("distinguishedPackage.title")}
             </h2>
             <div
               className="ministry-note rounded-12"
@@ -688,7 +701,7 @@ function DistinguishedPackageSection({ isRTL }) {
                   lineHeight: 1.7,
                 }}
               >
-                {t("haj.distinguishedPackage.ministryNote")}
+                {pt("distinguishedPackage.ministryNote")}
               </p>
             </div>
           </div>
@@ -701,7 +714,7 @@ function DistinguishedPackageSection({ isRTL }) {
             style={{ textAlign: isRTL ? "right" : "left" }}
             data-aos="fade-up"
           >
-            {t("haj.distinguishedPackage.hotelsTitle")}
+            {pt("distinguishedPackage.hotelsTitle")}
           </h3>
           <div
             style={{
@@ -728,11 +741,11 @@ function DistinguishedPackageSection({ isRTL }) {
             className="text-20 fw-600 text-dark-1 mb-25"
             style={{ textAlign: isRTL ? "right" : "left" }}
           >
-            {t("haj.distinguishedPackage.pricingTitle")}
+            {pt("distinguishedPackage.pricingTitle")}
           </h3>
           <PricingTable
             pricing={pricing}
-            reservationAmount={t("haj.pricing.distinguished.reservation")}
+            reservationAmount={pt("pricing.distinguished.reservation")}
             isRTL={isRTL}
           />
         </div>
@@ -744,7 +757,7 @@ function DistinguishedPackageSection({ isRTL }) {
             style={{ textAlign: isRTL ? "right" : "left" }}
             data-aos="fade-up"
           >
-            {t("haj.distinguishedPackage.ritualsTitle")}
+            {pt("distinguishedPackage.ritualsTitle")}
           </h3>
           <div
             style={{
@@ -770,7 +783,7 @@ function DistinguishedPackageSection({ isRTL }) {
  * Displays the main hero section with title, date, and subtitle
  */
 function HeroSection({ isRTL }) {
-  const { t } = useTranslation();
+  const { pt, media } = usePilgrimageContent();
 
   return (
     <section
@@ -832,7 +845,7 @@ function HeroSection({ isRTL }) {
             fontFamily: isRTL ? "'Noto Kufi Arabic', sans-serif" : "inherit",
           }}
         >
-          {t("haj.hero.title")}
+          {pt("hero.title")}
         </h1>
         <div
           data-aos="fade-up"
@@ -846,7 +859,7 @@ function HeroSection({ isRTL }) {
             letterSpacing: "3px",
           }}
         >
-          {t("haj.hero.date")}
+          {pt("hero.date")}
         </div>
         <div
           data-aos="fade-up"
@@ -899,7 +912,7 @@ function HeroSection({ isRTL }) {
             direction: isRTL ? "rtl" : "ltr",
           }}
         >
-          {t("haj.hero.subtitle")}
+          {pt("hero.subtitle")}
         </p>
       </div>
     </section>
@@ -907,7 +920,7 @@ function HeroSection({ isRTL }) {
 }
 
 export default function HajPageContent({ locale }) {
-  const { t } = useTranslation();
+  const { pt, media } = usePilgrimageContent();
   const { language } = useLanguage();
   const isRTL = locale === "ar" || language === "ar";
 

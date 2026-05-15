@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { usePilgrimageContent } from "@/contexts/PilgrimageContentContext";
 
 /**
  * HeroSection Component for Omra Page
@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
  * Requirements: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6
  */
 export default function HeroSection({ isRTL }) {
-  const { t } = useTranslation();
+  const { pt } = usePilgrimageContent();
 
   return (
     <section
@@ -74,7 +74,7 @@ export default function HeroSection({ isRTL }) {
             fontFamily: isRTL ? "'Noto Kufi Arabic', sans-serif" : "inherit",
           }}
         >
-          {t("omra.hero.title")}
+          {pt("hero.title")}
         </h1>
         {/* Season */}
         <div
@@ -89,7 +89,7 @@ export default function HeroSection({ isRTL }) {
             letterSpacing: "3px",
           }}
         >
-          {t("omra.hero.season")}
+          {pt("hero.season")}
         </div>
         {/* Decorative Divider */}
         <div
@@ -144,7 +144,7 @@ export default function HeroSection({ isRTL }) {
             direction: isRTL ? "rtl" : "ltr",
           }}
         >
-          {t("omra.hero.subtitle")}
+          {pt("hero.subtitle")}
         </p>
       </div>
     </section>

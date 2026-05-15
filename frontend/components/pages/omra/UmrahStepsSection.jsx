@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useTranslation } from "react-i18next";
+import { usePilgrimageContent } from "@/contexts/PilgrimageContentContext";
 
 /**
  * UmrahStepsSection Component for Omra Page
@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
  * Requirements: 8.1, 8.2, 8.3
  */
 export default function UmrahStepsSection({ isRTL }) {
-  const { t } = useTranslation();
+  const { pt } = usePilgrimageContent();
 
   // Define the 4 Umrah steps with their translation keys
   const umrahSteps = [
@@ -54,14 +54,14 @@ export default function UmrahStepsSection({ isRTL }) {
               className="text-accent-1 text-15 fw-500 mb-10 d-block"
               data-aos="fade-up"
             >
-              {t("omra.steps.title")}
+              {pt("steps.title")}
             </span>
             <h2
               className="text-30 md:text-24 fw-700 text-dark-1 mb-15"
               data-aos="fade-up"
               data-aos-delay="100"
             >
-              {t("omra.steps.subtitle")}
+              {pt("steps.subtitle")}
             </h2>
             <p
               className="text-15 text-light-2 lh-18"
@@ -69,7 +69,7 @@ export default function UmrahStepsSection({ isRTL }) {
               data-aos-delay="200"
               style={{ textAlign: "center" }}
             >
-              {t("omra.steps.description")}
+              {pt("steps.description")}
             </p>
           </div>
         </div>
@@ -127,7 +127,7 @@ export default function UmrahStepsSection({ isRTL }) {
                       : "inherit",
                   }}
                 >
-                  {t(step.titleKey)}
+                  {pt(step.titleKey)}
                 </h3>
 
                 {/* Step Description */}
@@ -138,7 +138,7 @@ export default function UmrahStepsSection({ isRTL }) {
                     lineHeight: 1.7,
                   }}
                 >
-                  {t(step.descKey)}
+                  {pt(step.descKey)}
                 </p>
               </div>
             </div>

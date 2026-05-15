@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_pilgrimage_room_pricings",
+  "info": {
+    "displayName": "Room Pricing",
+    "icon": "priceTag"
+  },
+  "options": {},
+  "attributes": {
+    "doubleRoom": {
+      "type": "string"
+    },
+    "tripleRoom": {
+      "type": "string"
+    },
+    "quadRoom": {
+      "type": "string"
+    },
+    "reservationAmount": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    }
+  }
+}

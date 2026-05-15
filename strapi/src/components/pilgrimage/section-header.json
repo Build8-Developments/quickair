@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_pilgrimage_section_headers",
+  "info": {
+    "displayName": "Section Header",
+    "icon": "heading"
+  },
+  "options": {},
+  "attributes": {
+    "eyebrow": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

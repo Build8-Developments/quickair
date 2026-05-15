@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_pilgrimage_hotel_cards",
+  "info": {
+    "displayName": "Hotel Card",
+    "icon": "house"
+  },
+  "options": {},
+  "attributes": {
+    "location": {
+      "type": "string",
+      "required": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "feature1": {
+      "type": "string"
+    },
+    "feature2": {
+      "type": "string"
+    },
+    "nightsDates": {
+      "type": "string"
+    }
+  }
+}

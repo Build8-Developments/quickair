@@ -261,6 +261,35 @@ export function extractStrapiData(response, key) {
  * @param {string} key - Data key
  * @returns {object} Data with pagination info
  */
+/**
+ * Extract a Strapi single-type entry from GraphQL response
+ */
+export function extractStrapiSingle(response, key) {
+  if (!response || !response[key]) return null;
+
+  const item = response[key];
+
+  if (Array.isArray(item)) {
+    return item[0]
+      ? { id: item[0].documentId ?? item[0].id, ...item[0] }
+      : null;
+  }
+
+  if (item?.data) {
+    const data = item.data;
+    return {
+      id: data.id ?? data.documentId,
+      ...(data.attributes || data),
+    };
+  }
+
+  if (typeof item === "object") {
+    return { id: item.documentId ?? item.id, ...item };
+  }
+
+  return null;
+}
+
 export function extractPaginatedData(response, key) {
   if (!response || !response[key]) return { data: [], pagination: null };
 
@@ -279,6 +308,7 @@ export default {
   graphqlBatch,
   formatImageUrl,
   extractStrapiData,
+  extractStrapiSingle,
   extractPaginatedData,
   GraphQLError,
 };

@@ -1,0 +1,76 @@
+{
+  "kind": "singleType",
+  "collectionName": "umrah_pages",
+  "info": {
+    "singularName": "umrah-page",
+    "pluralName": "umrah-pages",
+    "displayName": "Umrah Page",
+    "description": "Umrah landing page — structured CMS fields"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "hero": {
+      "type": "component",
+      "component": "pilgrimage.hero",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "stepsSection": {
+      "type": "component",
+      "component": "pilgrimage.steps-section",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "premiumSection": {
+      "type": "component",
+      "component": "pilgrimage.umrah-premium-section",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "economySection": {
+      "type": "component",
+      "component": "pilgrimage.umrah-economy-section",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "policies": {
+      "type": "component",
+      "component": "pilgrimage.umrah-policies",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "pricingLabels": {
+      "type": "component",
+      "component": "pilgrimage.pricing-labels",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    }
+  }
+}

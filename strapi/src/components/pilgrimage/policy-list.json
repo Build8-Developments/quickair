@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_pilgrimage_policy_lists",
+  "info": {
+    "displayName": "Policy List",
+    "icon": "bulletList"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "items": {
+      "type": "component",
+      "component": "pilgrimage.bullet",
+      "repeatable": true
+    }
+  }
+}

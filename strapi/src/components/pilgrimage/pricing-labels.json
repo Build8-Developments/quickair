@@ -1,0 +1,46 @@
+{
+  "collectionName": "components_pilgrimage_pricing_labels",
+  "info": {
+    "displayName": "Pricing Labels",
+    "icon": "priceTag"
+  },
+  "options": {},
+  "attributes": {
+    "doubleRoom": {
+      "type": "string"
+    },
+    "tripleRoom": {
+      "type": "string"
+    },
+    "quadRoom": {
+      "type": "string"
+    },
+    "doubleRoomDesc": {
+      "type": "string"
+    },
+    "tripleRoomDesc": {
+      "type": "string"
+    },
+    "quadRoomDesc": {
+      "type": "string"
+    },
+    "reservationAmount": {
+      "type": "string"
+    },
+    "makkah": {
+      "type": "string"
+    },
+    "madinah": {
+      "type": "string"
+    },
+    "nights": {
+      "type": "string"
+    },
+    "perPerson": {
+      "type": "string"
+    },
+    "currency": {
+      "type": "string"
+    }
+  }
+}

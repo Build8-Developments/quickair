@@ -148,6 +148,292 @@ export interface OfferTripInclusion extends Struct.ComponentSchema {
   };
 }
 
+export interface PilgrimageBullet extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_bullets';
+  info: {
+    displayName: 'Bullet';
+    icon: 'check';
+  };
+  attributes: {
+    text: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface PilgrimageCancellationRule extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_cancellation_rules';
+  info: {
+    displayName: 'Cancellation Rule';
+    icon: 'calendar';
+  };
+  attributes: {
+    penaltyPercent: Schema.Attribute.Decimal & Schema.Attribute.Required;
+    period: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface PilgrimageHajPackage extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_haj_packages';
+  info: {
+    displayName: 'Haj Package';
+    icon: 'gift';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    features: Schema.Attribute.Component<'pilgrimage.bullet', true>;
+    featuresTitle: Schema.Attribute.String;
+    footerNote: Schema.Attribute.Text;
+    hotels: Schema.Attribute.Component<'pilgrimage.hotel-card', true>;
+    hotelsTitle: Schema.Attribute.String;
+    notePrimary: Schema.Attribute.Text;
+    noteSecondary: Schema.Attribute.Text;
+    pricing: Schema.Attribute.Component<'pilgrimage.room-pricing', false>;
+    pricingTitle: Schema.Attribute.String;
+    rituals: Schema.Attribute.Component<'pilgrimage.ritual-card', true>;
+    ritualsTitle: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface PilgrimageHero extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_heroes';
+  info: {
+    displayName: 'Hero';
+    icon: 'picture';
+  };
+  attributes: {
+    backgroundImage: Schema.Attribute.Media<'images'>;
+    dateOrSeason: Schema.Attribute.String;
+    subtitle: Schema.Attribute.Text;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface PilgrimageHotelCard extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_hotel_cards';
+  info: {
+    displayName: 'Hotel Card';
+    icon: 'house';
+  };
+  attributes: {
+    feature1: Schema.Attribute.String;
+    feature2: Schema.Attribute.String;
+    location: Schema.Attribute.String & Schema.Attribute.Required;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    nightsDates: Schema.Attribute.String;
+  };
+}
+
+export interface PilgrimagePolicyList extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_policy_lists';
+  info: {
+    displayName: 'Policy List';
+    icon: 'bulletList';
+  };
+  attributes: {
+    items: Schema.Attribute.Component<'pilgrimage.bullet', true>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface PilgrimagePricingLabels extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_pricing_labels';
+  info: {
+    displayName: 'Pricing Labels';
+    icon: 'priceTag';
+  };
+  attributes: {
+    currency: Schema.Attribute.String;
+    doubleRoom: Schema.Attribute.String;
+    doubleRoomDesc: Schema.Attribute.String;
+    madinah: Schema.Attribute.String;
+    makkah: Schema.Attribute.String;
+    nights: Schema.Attribute.String;
+    perPerson: Schema.Attribute.String;
+    quadRoom: Schema.Attribute.String;
+    quadRoomDesc: Schema.Attribute.String;
+    reservationAmount: Schema.Attribute.String;
+    tripleRoom: Schema.Attribute.String;
+    tripleRoomDesc: Schema.Attribute.String;
+  };
+}
+
+export interface PilgrimageRitualCard extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_ritual_cards';
+  info: {
+    displayName: 'Ritual Card';
+    icon: 'landscape';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    featureBullets: Schema.Attribute.Component<'pilgrimage.bullet', true>;
+    image: Schema.Attribute.Media<'images'>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface PilgrimageRoomPricing extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_room_pricings';
+  info: {
+    displayName: 'Room Pricing';
+    icon: 'priceTag';
+  };
+  attributes: {
+    doubleRoom: Schema.Attribute.String;
+    note: Schema.Attribute.String;
+    quadRoom: Schema.Attribute.String;
+    reservationAmount: Schema.Attribute.String;
+    tripleRoom: Schema.Attribute.String;
+  };
+}
+
+export interface PilgrimageSectionHeader extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_section_headers';
+  info: {
+    displayName: 'Section Header';
+    icon: 'heading';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    eyebrow: Schema.Attribute.String;
+    title: Schema.Attribute.String;
+  };
+}
+
+export interface PilgrimageServiceCard extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_service_cards';
+  info: {
+    displayName: 'Service Card';
+    icon: 'star';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    icon: Schema.Attribute.Enumeration<
+      ['star', 'plane', 'users', 'train', 'book', 'list']
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'star'>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface PilgrimageServicesSection extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_services_sections';
+  info: {
+    displayName: 'Services Section';
+    icon: 'grid';
+  };
+  attributes: {
+    header: Schema.Attribute.Component<'pilgrimage.section-header', false>;
+    services: Schema.Attribute.Component<'pilgrimage.service-card', true>;
+  };
+}
+
+export interface PilgrimageStepsSection extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_steps_sections';
+  info: {
+    displayName: 'Steps Section';
+    icon: 'layer';
+  };
+  attributes: {
+    header: Schema.Attribute.Component<'pilgrimage.section-header', false>;
+    steps: Schema.Attribute.Component<'pilgrimage.text-block', true>;
+  };
+}
+
+export interface PilgrimageTextBlock extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_text_blocks';
+  info: {
+    displayName: 'Text Block';
+    icon: 'bulletList';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface PilgrimageUmrahEconomySection extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_umrah_economy_sections';
+  info: {
+    displayName: 'Umrah Economy Section';
+    icon: 'layer';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    duration: Schema.Attribute.String;
+    fridayPrayers: Schema.Attribute.Component<'pilgrimage.bullet', true>;
+    package: Schema.Attribute.Component<'pilgrimage.umrah-package-card', false>;
+    route: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    travelDates: Schema.Attribute.Component<'pilgrimage.bullet', true>;
+  };
+}
+
+export interface PilgrimageUmrahPackageCard extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_umrah_package_cards';
+  info: {
+    displayName: 'Umrah Package Card';
+    icon: 'stack';
+  };
+  attributes: {
+    isFeatured: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    madinahHotel: Schema.Attribute.String & Schema.Attribute.Required;
+    madinahMeals: Schema.Attribute.String;
+    madinahNights: Schema.Attribute.Integer & Schema.Attribute.Required;
+    makkahHotel: Schema.Attribute.String & Schema.Attribute.Required;
+    makkahMeals: Schema.Attribute.String;
+    makkahNights: Schema.Attribute.Integer & Schema.Attribute.Required;
+    priceDouble: Schema.Attribute.String;
+    priceQuad: Schema.Attribute.String;
+    priceTriple: Schema.Attribute.String;
+  };
+}
+
+export interface PilgrimageUmrahPolicies extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_umrah_policies';
+  info: {
+    displayName: 'Umrah Policies';
+    icon: 'file';
+  };
+  attributes: {
+    cancellationPenaltyText: Schema.Attribute.String;
+    cancellationRules: Schema.Attribute.Component<
+      'pilgrimage.cancellation-rule',
+      true
+    >;
+    cancellationTitle: Schema.Attribute.String;
+    documents: Schema.Attribute.Component<'pilgrimage.policy-list', false>;
+    documentsTitle: Schema.Attribute.String;
+    exchangeRate: Schema.Attribute.Decimal;
+    exchangeRateNote: Schema.Attribute.Text;
+    exchangeRateTitle: Schema.Attribute.String;
+    exclusions: Schema.Attribute.Component<'pilgrimage.policy-list', false>;
+    finalPayment: Schema.Attribute.String;
+    inclusions: Schema.Attribute.Component<'pilgrimage.policy-list', false>;
+    initialPayment: Schema.Attribute.String;
+    paymentNote: Schema.Attribute.Text;
+    paymentPolicyTitle: Schema.Attribute.String;
+    roomPolicyDescription: Schema.Attribute.Text;
+    roomPolicyTitle: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface PilgrimageUmrahPremiumSection extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_umrah_premium_sections';
+  info: {
+    displayName: 'Umrah Premium Section';
+    icon: 'crown';
+  };
+  attributes: {
+    badge: Schema.Attribute.String;
+    duration: Schema.Attribute.String;
+    haramainTrain: Schema.Attribute.String;
+    packages: Schema.Attribute.Component<'pilgrimage.umrah-package-card', true>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface SharedOpenGraph extends Struct.ComponentSchema {
   collectionName: 'components_shared_open_graphs';
   info: {
@@ -212,6 +498,24 @@ declare module '@strapi/strapi' {
       'offer.optional-trip': OfferOptionalTrip;
       'offer.room-pricing': OfferRoomPricing;
       'offer.trip-inclusion': OfferTripInclusion;
+      'pilgrimage.bullet': PilgrimageBullet;
+      'pilgrimage.cancellation-rule': PilgrimageCancellationRule;
+      'pilgrimage.haj-package': PilgrimageHajPackage;
+      'pilgrimage.hero': PilgrimageHero;
+      'pilgrimage.hotel-card': PilgrimageHotelCard;
+      'pilgrimage.policy-list': PilgrimagePolicyList;
+      'pilgrimage.pricing-labels': PilgrimagePricingLabels;
+      'pilgrimage.ritual-card': PilgrimageRitualCard;
+      'pilgrimage.room-pricing': PilgrimageRoomPricing;
+      'pilgrimage.section-header': PilgrimageSectionHeader;
+      'pilgrimage.service-card': PilgrimageServiceCard;
+      'pilgrimage.services-section': PilgrimageServicesSection;
+      'pilgrimage.steps-section': PilgrimageStepsSection;
+      'pilgrimage.text-block': PilgrimageTextBlock;
+      'pilgrimage.umrah-economy-section': PilgrimageUmrahEconomySection;
+      'pilgrimage.umrah-package-card': PilgrimageUmrahPackageCard;
+      'pilgrimage.umrah-policies': PilgrimageUmrahPolicies;
+      'pilgrimage.umrah-premium-section': PilgrimageUmrahPremiumSection;
       'shared.open-graph': SharedOpenGraph;
       'shared.seo': SharedSeo;
     }

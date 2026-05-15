@@ -1,0 +1,76 @@
+{
+  "kind": "singleType",
+  "collectionName": "haj_pages",
+  "info": {
+    "singularName": "haj-page",
+    "pluralName": "haj-pages",
+    "displayName": "Haj Page",
+    "description": "Hajj landing page — structured CMS fields"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "hero": {
+      "type": "component",
+      "component": "pilgrimage.hero",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "servicesSection": {
+      "type": "component",
+      "component": "pilgrimage.services-section",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "vipPackage": {
+      "type": "component",
+      "component": "pilgrimage.haj-package",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "distinguishedPackage": {
+      "type": "component",
+      "component": "pilgrimage.haj-package",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "pricingLabels": {
+      "type": "component",
+      "component": "pilgrimage.pricing-labels",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "stepsSection": {
+      "type": "component",
+      "component": "pilgrimage.steps-section",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "seo": {
+      "type": "component",
+      "component": "shared.seo",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    }
+  }
+}

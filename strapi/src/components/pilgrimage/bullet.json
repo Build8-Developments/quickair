@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_pilgrimage_bullets",
+  "info": {
+    "displayName": "Bullet",
+    "icon": "check"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

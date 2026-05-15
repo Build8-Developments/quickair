@@ -1,8 +1,12 @@
 import Header3 from "@/components/layout/header/Header3";
 import FooterTwo from "@/components/layout/footers/FooterTwo";
 import OmraPageContent from "@/components/pages/omra/OmraPageContent";
+import { PilgrimageContentProvider } from "@/contexts/PilgrimageContentContext";
 import { generateLocalizedMetadata } from "@/utils/seo";
 import { siteInfo } from "@/data/seo";
+import { pilgrimageAPI } from "@/services/api";
+
+export const revalidate = 60;
 
 export async function generateMetadata({ params }) {
   const { locale } = await params;
@@ -22,15 +26,31 @@ export async function generateMetadata({ params }) {
   };
 }
 
+async function getUmrahPageData(locale) {
+  try {
+    return (await pilgrimageAPI.getUmrahPage(locale)) || null;
+  } catch (error) {
+    console.error("Error fetching Umrah page from Strapi:", error);
+    return null;
+  }
+}
+
 export default async function OmraPage({ params }) {
   const { locale } = await params;
+  const pageData = await getUmrahPageData(locale);
 
   return (
     <>
       <main style={{ overflowX: "hidden" }}>
         <Header3 locale={locale} />
         <div className="header-margin"></div>
-        <OmraPageContent locale={locale} />
+        <PilgrimageContentProvider
+          namespace="omra"
+          content={pageData?.content}
+          media={pageData?.media}
+        >
+          <OmraPageContent locale={locale} />
+        </PilgrimageContentProvider>
         <FooterTwo locale={locale} />
       </main>
     </>

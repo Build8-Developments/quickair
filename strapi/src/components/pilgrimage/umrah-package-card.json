@@ -1,0 +1,45 @@
+{
+  "collectionName": "components_pilgrimage_umrah_package_cards",
+  "info": {
+    "displayName": "Umrah Package Card",
+    "icon": "stack"
+  },
+  "options": {},
+  "attributes": {
+    "makkahHotel": {
+      "type": "string",
+      "required": true
+    },
+    "makkahNights": {
+      "type": "integer",
+      "required": true
+    },
+    "makkahMeals": {
+      "type": "string"
+    },
+    "madinahHotel": {
+      "type": "string",
+      "required": true
+    },
+    "madinahNights": {
+      "type": "integer",
+      "required": true
+    },
+    "madinahMeals": {
+      "type": "string"
+    },
+    "priceDouble": {
+      "type": "string"
+    },
+    "priceTriple": {
+      "type": "string"
+    },
+    "priceQuad": {
+      "type": "string"
+    },
+    "isFeatured": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

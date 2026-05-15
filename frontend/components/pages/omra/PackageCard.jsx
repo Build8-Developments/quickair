@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { usePilgrimageContent } from "@/contexts/PilgrimageContentContext";
 
 /**
  * PackageCard Component for Omra Page
@@ -19,13 +20,14 @@ export default function PackageCard({
   isFeatured = false,
 }) {
   const { t } = useTranslation();
+  const { pt } = usePilgrimageContent();
 
   // formatPrice function - COMMENTED OUT (pricing table hidden)
   // const formatPrice = (price) => {
   //   if (price === null || price === undefined) {
-  //     return t("omra.pricing.notAvailable");
+  //     return pt("pricing.notAvailable");
   //   }
-  //   return `${price.toLocaleString()} ${t("omra.pricing.currency")}`;
+  //   return `${price.toLocaleString()} ${pt("pricing.currency")}`;
   // };
 
   // SVG Icons
@@ -135,7 +137,7 @@ export default function PackageCard({
               color: "var(--color-accent-1)",
             }}
           >
-            {t("omra.pricing.makkah")}
+            {pt("pricing.makkah")}
           </span>
         </div>
         <h4
@@ -170,7 +172,7 @@ export default function PackageCard({
             }}
           >
             <NightsIcon color="var(--color-light-2)" />
-            {makkahNights} {t("omra.pricing.nights")}
+            {makkahNights} {pt("pricing.nights")}
           </span>
           <span
             style={{
@@ -220,7 +222,7 @@ export default function PackageCard({
             <HotelIcon color="#28a745" />
           </div>
           <span style={{ fontSize: "14px", fontWeight: 600, color: "#28a745" }}>
-            {t("omra.pricing.madinah")}
+            {pt("pricing.madinah")}
           </span>
         </div>
         <h4
@@ -255,7 +257,7 @@ export default function PackageCard({
             }}
           >
             <NightsIcon color="var(--color-light-2)" />
-            {madinahNights} {t("omra.pricing.nights")}
+            {madinahNights} {pt("pricing.nights")}
           </span>
           <span
             style={{
@@ -300,7 +302,7 @@ export default function PackageCard({
             }}
           >
             <span style={{ fontSize: "13px", color: "var(--color-dark-1)" }}>
-              {t("omra.pricing.doubleRoom")}
+              {pt("pricing.doubleRoom")}
             </span>
             <span
               style={{
@@ -325,7 +327,7 @@ export default function PackageCard({
             }}
           >
             <span style={{ fontSize: "13px", color: "var(--color-dark-1)" }}>
-              {t("omra.pricing.tripleRoom")}
+              {pt("pricing.tripleRoom")}
             </span>
             <span
               style={{
@@ -354,7 +356,7 @@ export default function PackageCard({
             }}
           >
             <span style={{ fontSize: "13px", color: "var(--color-dark-1)" }}>
-              {t("omra.pricing.quadRoom")}
+              {pt("pricing.quadRoom")}
             </span>
             <span
               style={{
@@ -378,7 +380,7 @@ export default function PackageCard({
             fontStyle: "italic",
           }}
         >
-          {t("omra.pricing.perPerson")}
+          {pt("pricing.perPerson")}
         </p>
       </div> */}
     </div>

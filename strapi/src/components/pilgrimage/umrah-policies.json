@@ -1,0 +1,70 @@
+{
+  "collectionName": "components_pilgrimage_umrah_policies",
+  "info": {
+    "displayName": "Umrah Policies",
+    "icon": "file"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "inclusions": {
+      "type": "component",
+      "component": "pilgrimage.policy-list",
+      "repeatable": false
+    },
+    "exclusions": {
+      "type": "component",
+      "component": "pilgrimage.policy-list",
+      "repeatable": false
+    },
+    "exchangeRateTitle": {
+      "type": "string"
+    },
+    "exchangeRate": {
+      "type": "decimal"
+    },
+    "exchangeRateNote": {
+      "type": "text"
+    },
+    "roomPolicyTitle": {
+      "type": "string"
+    },
+    "roomPolicyDescription": {
+      "type": "text"
+    },
+    "paymentPolicyTitle": {
+      "type": "string"
+    },
+    "initialPayment": {
+      "type": "string"
+    },
+    "finalPayment": {
+      "type": "string"
+    },
+    "paymentNote": {
+      "type": "text"
+    },
+    "cancellationTitle": {
+      "type": "string"
+    },
+    "cancellationRules": {
+      "type": "component",
+      "component": "pilgrimage.cancellation-rule",
+      "repeatable": true
+    },
+    "documentsTitle": {
+      "type": "string"
+    },
+    "documents": {
+      "type": "component",
+      "component": "pilgrimage.policy-list",
+      "repeatable": false
+    },
+    "cancellationPenaltyText": {
+      "type": "string"
+    }
+  }
+}
