@@ -369,6 +369,28 @@ export interface PilgrimageUmrahEconomySection extends Struct.ComponentSchema {
   };
 }
 
+export interface PilgrimageUmrahHotelRow extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_umrah_hotel_rows';
+  info: {
+    description: 'A single hotel row in an Umrah program (Madinah hotel relation + Makkah hotel relation + per-person pricing)';
+    displayName: 'Umrah Hotel Row';
+    icon: 'house';
+  };
+  attributes: {
+    madinahHotel: Schema.Attribute.Relation<'oneToOne', 'api::hotel.hotel'>;
+    madinahHotelLabel: Schema.Attribute.String;
+    madinahMeals: Schema.Attribute.String;
+    madinahNights: Schema.Attribute.String;
+    makkahHotel: Schema.Attribute.Relation<'oneToOne', 'api::hotel.hotel'>;
+    makkahHotelLabel: Schema.Attribute.String;
+    makkahMeals: Schema.Attribute.String;
+    makkahNights: Schema.Attribute.String;
+    priceDouble: Schema.Attribute.String;
+    priceQuad: Schema.Attribute.String;
+    priceTriple: Schema.Attribute.String;
+  };
+}
+
 export interface PilgrimageUmrahPackageCard extends Struct.ComponentSchema {
   collectionName: 'components_pilgrimage_umrah_package_cards';
   info: {
@@ -431,6 +453,62 @@ export interface PilgrimageUmrahPremiumSection extends Struct.ComponentSchema {
     haramainTrain: Schema.Attribute.String;
     packages: Schema.Attribute.Component<'pilgrimage.umrah-package-card', true>;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface PilgrimageUmrahProgram extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_umrah_programs';
+  info: {
+    description: 'A complete Umrah program (one offer/sheet) with hotels and policies';
+    displayName: 'Umrah Program';
+    icon: 'stack';
+  };
+  attributes: {
+    accentColor: Schema.Attribute.Enumeration<['red', 'pink', 'default']> &
+      Schema.Attribute.DefaultTo<'default'>;
+    badge: Schema.Attribute.String;
+    documentsTitle: Schema.Attribute.String;
+    duration: Schema.Attribute.String;
+    headerNote: Schema.Attribute.Text;
+    hotels: Schema.Attribute.Component<'pilgrimage.umrah-hotel-row', true>;
+    logoVariant: Schema.Attribute.Enumeration<['umrah', 'ramadan', 'default']> &
+      Schema.Attribute.DefaultTo<'default'>;
+    notes: Schema.Attribute.Component<'pilgrimage.bullet', true>;
+    notesTitle: Schema.Attribute.String;
+    priceDisclaimer: Schema.Attribute.String;
+    programExcludes: Schema.Attribute.Component<'pilgrimage.bullet', true>;
+    programExcludesTitle: Schema.Attribute.String;
+    programIncludes: Schema.Attribute.Component<'pilgrimage.bullet', true>;
+    programIncludesTitle: Schema.Attribute.String;
+    releaseDate: Schema.Attribute.String;
+    requiredDocuments: Schema.Attribute.Component<'pilgrimage.bullet', true>;
+    route: Schema.Attribute.String;
+    season: Schema.Attribute.String;
+    title: Schema.Attribute.Text & Schema.Attribute.Required;
+    travelDates: Schema.Attribute.String;
+  };
+}
+
+export interface PilgrimageUmrahTableLabels extends Struct.ComponentSchema {
+  collectionName: 'components_pilgrimage_umrah_table_labels';
+  info: {
+    description: 'Common labels used across all Umrah program tables';
+    displayName: 'Umrah Table Labels';
+    icon: 'layout';
+  };
+  attributes: {
+    currency: Schema.Attribute.String;
+    doubleColumn: Schema.Attribute.String;
+    duration: Schema.Attribute.String;
+    issueDateLabel: Schema.Attribute.String;
+    logoTagline: Schema.Attribute.String;
+    madinahHeader: Schema.Attribute.String;
+    makkahHeader: Schema.Attribute.String;
+    perPersonHeader: Schema.Attribute.String;
+    quadColumn: Schema.Attribute.String;
+    routeLabel: Schema.Attribute.String;
+    tripDatesLabel: Schema.Attribute.String;
+    tripleColumn: Schema.Attribute.String;
   };
 }
 
@@ -513,9 +591,12 @@ declare module '@strapi/strapi' {
       'pilgrimage.steps-section': PilgrimageStepsSection;
       'pilgrimage.text-block': PilgrimageTextBlock;
       'pilgrimage.umrah-economy-section': PilgrimageUmrahEconomySection;
+      'pilgrimage.umrah-hotel-row': PilgrimageUmrahHotelRow;
       'pilgrimage.umrah-package-card': PilgrimageUmrahPackageCard;
       'pilgrimage.umrah-policies': PilgrimageUmrahPolicies;
       'pilgrimage.umrah-premium-section': PilgrimageUmrahPremiumSection;
+      'pilgrimage.umrah-program': PilgrimageUmrahProgram;
+      'pilgrimage.umrah-table-labels': PilgrimageUmrahTableLabels;
       'shared.open-graph': SharedOpenGraph;
       'shared.seo': SharedSeo;
     }

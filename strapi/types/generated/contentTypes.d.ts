@@ -1062,6 +1062,24 @@ export interface ApiUmrahPageUmrahPage extends Struct.SingleTypeSchema {
           localized: true;
         };
       }>;
+    programs: Schema.Attribute.Component<'pilgrimage.umrah-program', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    programsSectionSubtitle: Schema.Attribute.Text &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    programsSectionTitle: Schema.Attribute.String &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     publishedAt: Schema.Attribute.DateTime;
     seo: Schema.Attribute.Component<'shared.seo', false> &
       Schema.Attribute.SetPluginOptions<{
@@ -1071,6 +1089,15 @@ export interface ApiUmrahPageUmrahPage extends Struct.SingleTypeSchema {
       }>;
     stepsSection: Schema.Attribute.Component<
       'pilgrimage.steps-section',
+      false
+    > &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
+    tableLabels: Schema.Attribute.Component<
+      'pilgrimage.umrah-table-labels',
       false
     > &
       Schema.Attribute.SetPluginOptions<{

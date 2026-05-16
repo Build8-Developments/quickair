@@ -164,9 +164,18 @@ function buildUmrahPackageCard(pkg) {
   };
 }
 
-function buildUmrahPage(omra) {
+async function buildUmrahPage(strapi, omra, locale) {
   const policies = omra.policies || {};
   const pricing = omra.pricing || {};
+  const tableLabels = omra.tableLabels || {};
+  const programsSection = omra.programsSection || {};
+  const programs = Array.isArray(omra.programs) ? omra.programs : [];
+
+  const builtPrograms = [];
+  for (const prog of programs) {
+    const built = await buildUmrahProgram(strapi, prog, locale);
+    if (built) builtPrograms.push(built);
+  }
 
   return {
     hero: {
@@ -185,6 +194,9 @@ function buildUmrahPage(omra) {
         description: omra.steps?.[key]?.description,
       })).filter((step) => step.title),
     },
+    programsSectionTitle: programsSection.title,
+    programsSectionSubtitle: programsSection.subtitle,
+    programs: builtPrograms,
     premiumSection: {
       badge: omra.premium?.badge,
       title: omra.premium?.title,
@@ -244,6 +256,93 @@ function buildUmrahPage(omra) {
       madinah: pricing.madinah,
       nights: pricing.nights,
     },
+    tableLabels: {
+      tripDatesLabel: tableLabels.tripDatesLabel,
+      routeLabel: tableLabels.routeLabel,
+      duration: tableLabels.duration,
+      madinahHeader: tableLabels.madinahHeader,
+      makkahHeader: tableLabels.makkahHeader,
+      perPersonHeader: tableLabels.perPersonHeader,
+      doubleColumn: tableLabels.doubleColumn,
+      tripleColumn: tableLabels.tripleColumn,
+      quadColumn: tableLabels.quadColumn,
+      currency: tableLabels.currency,
+      issueDateLabel: tableLabels.issueDateLabel,
+      logoTagline: tableLabels.logoTagline,
+    },
+  };
+}
+
+async function findHotelDocumentId(strapi, name, locale) {
+  if (!name) return null;
+  const trimmed = String(name).trim();
+  if (!trimmed) return null;
+  // Search by exact (case-insensitive) name match in the requested locale.
+  // Also try the default locale as a fallback so seeding works when only one
+  // locale of the hotel exists.
+  const tryLocales = [locale, "en", "ar"].filter(
+    (l, i, arr) => l && arr.indexOf(l) === i,
+  );
+  for (const tryLocale of tryLocales) {
+    const matches = await strapi.documents("api::hotel.hotel").findMany({
+      locale: tryLocale,
+      filters: { name: { eqi: trimmed } },
+      fields: ["documentId", "name"],
+      limit: 1,
+    });
+    if (matches?.length) return matches[0].documentId;
+  }
+  return null;
+}
+
+async function buildUmrahProgram(strapi, prog, locale) {
+  if (!prog) return null;
+  const hotels = await Promise.all(
+    (prog.hotels || []).map(async (h) => {
+      const [madinahId, makkahId] = await Promise.all([
+        findHotelDocumentId(strapi, h.madinahHotel, locale),
+        findHotelDocumentId(strapi, h.makkahHotel, locale),
+      ]);
+      return {
+        // relation by documentId; null is acceptable (Strapi 5 allows it)
+        madinahHotel: madinahId || null,
+        // Always keep the displayed label so the brochure renders even if the
+        // hotel relation hasn't been linked yet.
+        madinahHotelLabel: h.madinahHotel || null,
+        madinahNights: h.madinahNights,
+        madinahMeals: h.madinahMeals,
+        makkahHotel: makkahId || null,
+        makkahHotelLabel: h.makkahHotel || null,
+        makkahNights: h.makkahNights,
+        makkahMeals: h.makkahMeals,
+        priceQuad: h.priceQuad,
+        priceTriple: h.priceTriple,
+        priceDouble: h.priceDouble,
+      };
+    }),
+  );
+
+  return {
+    badge: prog.badge,
+    releaseDate: prog.releaseDate,
+    title: prog.title,
+    season: prog.season,
+    route: prog.route,
+    travelDates: prog.travelDates,
+    duration: prog.duration,
+    headerNote: prog.headerNote,
+    priceDisclaimer: prog.priceDisclaimer,
+    logoVariant: prog.logoVariant || "default",
+    accentColor: prog.accentColor || "default",
+    hotels,
+    programIncludesTitle: prog.programIncludesTitle,
+    programIncludes: bulletsFromStrings(prog.programIncludes),
+    programExcludesTitle: prog.programExcludesTitle,
+    programExcludes: bulletsFromStrings(prog.programExcludes),
+    notesTitle: prog.notesTitle,
+    notes: bulletsFromStrings(prog.notes),
+    documentsTitle: prog.documentsTitle,
+    requiredDocuments: bulletsFromStrings(prog.requiredDocuments),
   };
 }
 
@@ -306,8 +405,18 @@ async function main() {
     await upsertLocale(app, hajUid, "en", buildHajPage(en.haj));
 
     console.log("Seeding structured Umrah page (ar, en)...");
-    await upsertLocale(app, umrahUid, "ar", buildUmrahPage(ar.omra));
-    await upsertLocale(app, umrahUid, "en", buildUmrahPage(en.omra));
+    await upsertLocale(
+      app,
+      umrahUid,
+      "ar",
+      await buildUmrahPage(app, ar.omra, "ar"),
+    );
+    await upsertLocale(
+      app,
+      umrahUid,
+      "en",
+      await buildUmrahPage(app, en.omra, "en"),
+    );
 
     console.log("\nDone. Haj & Umrah pages seeded with structured components.");
   } catch (error) {

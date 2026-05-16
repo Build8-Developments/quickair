@@ -3,6 +3,7 @@ import {
   GET_ALL_HOTELS_PAGINATED,
   GET_FEATURED_TRIPS,
   GET_HOTEL_WITH_OFFER,
+  GET_HOTEL_BY_SLUG,
 } from "@/lib/api/queries/hotel";
 import { executeGraphQL } from "@/lib/api/client";
 
@@ -131,5 +132,26 @@ export async function getFeaturedTrips({ locale = "en", limit = 10 } = {}) {
       console.error("[HotelService] Error fetching featured trips:", error);
     }
     return [];
+  }
+}
+
+/**
+ * Resolve a hotel identifier (documentId or slug) to a documentId.
+ * If the id looks like a UUID/documentId, returns it as-is.
+ * Otherwise, queries by slug and returns the documentId.
+ */
+export async function resolveHotelId(id, locale = "en") {
+  // Strapi documentIds are typically 24-char hex or UUID-like strings.
+  // Slugs contain dashes and lowercase letters.
+  const looksLikeDocId = /^[a-f0-9]{24}$/.test(id) || /^[0-9a-f-]{36}$/.test(id);
+  if (looksLikeDocId) return id;
+
+  // Treat as slug — look up the documentId
+  try {
+    const data = await executeGraphQL(GET_HOTEL_BY_SLUG, { slug: id, locale });
+    const hotels = data?.hotels || [];
+    return hotels[0]?.documentId || null;
+  } catch {
+    return null;
   }
 }

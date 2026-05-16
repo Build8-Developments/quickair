@@ -1,7 +1,7 @@
 import FooterTwo from "@/components/layout/footers/FooterTwo";
 import Header3 from "@/components/layout/header/Header3";
 import HotelDetail from "@/components/tourSingle/pages/HotelDetail";
-import { getHotelWithOffer } from "@/lib/api/services/hotel";
+import { getHotelWithOffer, resolveHotelId } from "@/lib/api/services/hotel";
 import { siteInfo } from "@/data/seo";
 import { notFound } from "next/navigation";
 
@@ -56,8 +56,14 @@ export async function generateMetadata({ params }) {
 export default async function HotelDetailPage({ params }) {
   const { id, locale } = await params;
 
+  // Resolve slug to documentId if needed (supports both /hotels/<documentId> and /hotels/<slug>)
+  const resolvedId = await resolveHotelId(id, locale);
+  if (!resolvedId) {
+    notFound();
+  }
+
   // Server-side data fetching with locale from URL params
-  const data = await getHotelWithOffer({ id, locale });
+  const data = await getHotelWithOffer({ id: resolvedId, locale });
 
   if (!data?.hotel) {
     notFound();

@@ -495,7 +495,109 @@
       "paragraph1": "الحج هو الركن الخامس من أركان الإسلام، وهو فريضة على كل مسلم قادر مرة واحدة في العمر. إنها رحلة روحانية عميقة تجمع المسلمين من جميع أنحاء العالم في مكة المكرمة.",
       "paragraph2": "نقدم لكم باقات حج شاملة تضمن لكم رحلة مريحة وروحانية، مع فريق متخصص لمرافقتكم في كل خطوة.",
       "imageAlt": "الكعبة المشرفة"
-    }
+    },
+    "tableLabels": {
+      "tripDatesLabel": "تواريخ السفر",
+      "routeLabel": "خط سير الرحلة",
+      "duration": "مدة البرنامج",
+      "madinahHeader": "المدينة المنورة",
+      "makkahHeader": "مكة المكرمة",
+      "perPersonHeader": "تكلفة الفرد بالجنيه المصري في غرفة",
+      "doubleColumn": "ثنائي",
+      "tripleColumn": "ثلاثي",
+      "quadColumn": "رباعي",
+      "currency": "جنيه",
+      "issueDateLabel": "إصدار",
+      "logoTagline": "للسياحة"
+    },
+    "programsSection": {
+      "title": "برامج الحج",
+      "subtitle": "اختر البرنامج المناسب من بين برامج الحج الفاخرة"
+    },
+    "programs": [
+      {
+        "badge": "حج VIP",
+        "releaseDate": "1 ديسمبر 2025",
+        "title": "برنامج الحج الفاخر VIP لشركة كويك آير للسياحة لموسم حج 1447 هـ",
+        "season": "20 يوم - 19 ليلة",
+        "route": "القاهرة / المدينة - جدة / القاهرة",
+        "travelDates": "23 مايو",
+        "logoVariant": "umrah",
+        "accentColor": "default",
+        "priceDisclaimer": "الأسعار تشمل تذكرة الطيران",
+        "headerNote": "إقامة فاخرة بأرقى الفنادق في كادنا ومكة المكرمة وعرفات؛ مع إشراف ديني وإداري متخصص ووجبات راقية على مدار البرنامج.",
+        "hotels": [
+          {
+            "madinahHotel": "موفنبيك أنوار المدينة",
+            "madinahHotelLink": "movenpick-anwar-madinah",
+            "madinahMeals": "نصف إقامة",
+            "madinahNights": "5 ليالي",
+            "makkahHotel": "فيرمونت برج الساعة",
+            "makkahHotelLink": "fairmont-makkah",
+            "makkahMeals": "إقامة كاملة",
+            "makkahNights": "14 ليلة",
+            "priceQuad": "320,000",
+            "priceTriple": "360,000",
+            "priceDouble": "420,000"
+          },
+          {
+            "madinahHotel": "دار الإيمان إنتركونتيننتال",
+            "madinahHotelLink": "dar-iman-intercontinental-madinah",
+            "madinahMeals": "نصف إقامة",
+            "madinahNights": "5 ليالي",
+            "makkahHotel": "موفنبيك مكة",
+            "makkahHotelLink": "movenpick-makkah",
+            "makkahMeals": "إقامة كاملة",
+            "makkahNights": "14 ليلة",
+            "priceQuad": "265,000",
+            "priceTriple": "295,000",
+            "priceDouble": "350,000"
+          },
+          {
+            "madinahHotel": "أنوار المدينة",
+            "madinahHotelLink": "anwar-madinah",
+            "madinahMeals": "نصف إقامة",
+            "madinahNights": "5 ليالي",
+            "makkahHotel": "ماكارم أم القرى",
+            "makkahHotelLink": "makarem-um-qura-makkah",
+            "makkahMeals": "إقامة كاملة",
+            "makkahNights": "14 ليلة",
+            "priceQuad": "210,000",
+            "priceTriple": "235,000",
+            "priceDouble": "275,000"
+          }
+        ],
+        "programIncludesTitle": "البرنامج يشمل",
+        "programIncludes": [
+          "الإقامة في الفنادق المذكورة أو ما يماثلها بنفس المستوى مع وجبات حسب البرنامج.",
+          "تأشيرة الحج ورسوم الخدمات الكاملة لشركات السياحة.",
+          "تذكرة طيران ذهاب وعودة على إحدى شركات الطيران المعتمدة (مصر للطيران أو الخطوط السعودية).",
+          "الانتقال داخل المملكة العربية السعودية بأتوبيسات حديثة مكيفة بالكامل.",
+          "الإقامة في عرفات في خيام مكيفة مع وجبات راقية ومرافق متكاملة.",
+          "إقامة في مخيم منى مكيف مع كافة الخدمات.",
+          "إشراف ديني متخصص لشرح المناسك ومرافقة الحجاج طوال البرنامج.",
+          "إشراف إداري وطبي طوال أيام البرنامج."
+        ],
+        "programExcludesTitle": "البرنامج لا يشمل",
+        "programExcludes": [
+          "أي مصاريف شخصية للحاج خلال البرنامج.",
+          "هدايا أو مشتريات شخصية."
+        ],
+        "notesTitle": "ملحوظة",
+        "notes": [
+          "تم احتساب سعر صرف الريال السعودي ما يعادل 12.75 جنيه مصري؛ وأي زيادة تطرأ على سعر الصرف تضاف على سعر البرنامج.",
+          "جميع الغرف الثلاثية والرباعية عبارة عن غرف مزدوجة ويتم إضافة أسرة إضافية لها.",
+          "جميع الأسعار المعلنة للغرف غير مطلة."
+        ],
+        "documentsTitle": "المستندات المطلوبة",
+        "requiredDocuments": [
+          "جواز سفر جديد صالح لمدة ستة أشهر من تاريخ السفر.",
+          "عدد 6 صور شخصية حديثة بخلفية بيضاء.",
+          "شهادة تطعيمات معتمدة (الحمى الشوكية).",
+          "تصريح سفر من إدارة التجنيد لمن هو في سن التجنيد (مسؤولية المسافر نفسه)."
+        ]
+      }
+    ]
   },
   "omra": {
     "pageTitle": "العمرة",
@@ -724,7 +826,113 @@
       "madinah": "المدينة المنورة",
       "nights": "ليالي",
       "meals": "الوجبات"
-    }
+    },
+    "tableLabels": {
+      "tripDatesLabel": "تواريخ الرحلات",
+      "routeLabel": "خط سير الرحلة",
+      "duration": "مدة البرنامج",
+      "madinahHeader": "المدينة المنورة",
+      "makkahHeader": "مكة المكرمة",
+      "perPersonHeader": "تكلفة الفرد بالجنيه المصري في غرفة",
+      "doubleColumn": "ثنائي",
+      "tripleColumn": "ثلاثي",
+      "quadColumn": "رباعي",
+      "currency": "جنيه",
+      "issueDateLabel": "إصدار",
+      "logoTagline": "للسياحة"
+    },
+    "programsSection": {
+      "title": "برامج العمرة",
+      "subtitle": "اختر البرنامج المناسب من بين برامج العمرة الفاخرة والاقتصادية"
+    },
+    "programs": [
+      {
+        "badge": "عمرة الفاخرة",
+        "releaseDate": "15 فبراير 2026",
+        "title": "برنامج رحلات العمرة الفاخرة لموسم عمرة 1447 هـ",
+        "season": "10 أيام و 9 ليالي",
+        "route": "القاهرة / المدينة - جدة / القاهرة",
+        "travelDates": "26 مارس",
+        "logoVariant": "umrah",
+        "accentColor": "default",
+        "priceDisclaimer": "الأسعار لا تشمل سعر تذكرة الطيران",
+        "hotels": [
+          {
+            "madinahHotel": "الحارثية",
+            "madinahHotelLink": "al-harithia-madinah",
+            "madinahMeals": "بالإفطار",
+            "madinahNights": "4 ليالي",
+            "makkahHotel": "فيرمونت",
+            "makkahHotelLink": "fairmont-makkah",
+            "makkahMeals": "بالإفطار",
+            "makkahNights": "5 ليالي",
+            "priceQuad": "63,000",
+            "priceTriple": "70,000",
+            "priceDouble": "85,500"
+          },
+          {
+            "madinahHotel": "الحارثية",
+            "madinahHotelLink": "al-harithia-madinah",
+            "madinahMeals": "بالإفطار",
+            "madinahNights": "4 ليالي",
+            "makkahHotel": "موفنبيك هاجر",
+            "makkahHotelLink": "movenpick-hajar-makkah",
+            "makkahMeals": "بالإفطار",
+            "makkahNights": "5 ليالي",
+            "priceQuad": "55,500",
+            "priceTriple": "61,000",
+            "priceDouble": "73,000"
+          },
+          {
+            "madinahHotel": "جراند بلازا",
+            "madinahHotelLink": "grand-plaza-madinah",
+            "madinahMeals": "إقامة فقط",
+            "madinahNights": "4 ليالي",
+            "makkahHotel": "الشهداء",
+            "makkahHotelLink": "al-shohada-makkah",
+            "makkahMeals": "بالإفطار",
+            "makkahNights": "5 ليالي",
+            "priceQuad": "41,500",
+            "priceTriple": "45,500",
+            "priceDouble": "53,000"
+          },
+          {
+            "madinahHotel": "أركان المنار",
+            "madinahHotelLink": "arkan-al-manar-madinah",
+            "madinahMeals": "إقامة فقط",
+            "madinahNights": "4 ليالي",
+            "makkahHotel": "جراند الماسة",
+            "makkahHotelLink": "grand-al-massa-makkah",
+            "makkahMeals": "إقامة فقط",
+            "makkahNights": "5 ليالي",
+            "priceQuad": "36,000",
+            "priceTriple": "40,000",
+            "priceDouble": "47,000"
+          }
+        ],
+        "programIncludesTitle": "البرنامج يشمل",
+        "programIncludes": [
+          "الإقامة بالفنادق المذكورة أعلاه أو ما يماثلها بنفس المستوى؛ علماً بأنه يمكن تغيير سعر البرنامج في حالة تغيير سعر الفندق حسب الفترات المقررة للرحلات من قبل الوكيل الخارجي أو الفندق ذاته.",
+          "رسوم استخراج التأشيرة ورسوم شركات السياحة.",
+          "الانتقالات داخل المملكة العربية السعودية بأتوبيسات حديثة مكيفة، والانتقال من المدينة المنورة إلى مكة المكرمة عبر قطار الحرمين الشريفين."
+        ],
+        "programExcludesTitle": "البرنامج لا يشمل",
+        "programExcludes": [
+          "سعر تذاكر الطيران."
+        ],
+        "notesTitle": "ملحوظة",
+        "notes": [
+          "تم احتساب سعر صرف الريال السعودي ما يعادل 12.75 جنيه مصري؛ وأي زيادة تطرأ على سعر الصرف تضاف على سعر البرنامج.",
+          "جميع الأسعار المعلنة للغرف غير مطلة.",
+          "جميع الغرف الثلاثية والرباعية عبارة عن غرف مزدوجة ويتم إضافة أسرة إضافية لها."
+        ],
+        "documentsTitle": "المستندات المطلوبة",
+        "requiredDocuments": [
+          "جواز سفر جديد صالح لمدة ستة أشهر من تاريخ السفر - عدد 3 صور شخصية خلفية بيضاء.",
+          "الحصول على تصريح سفر من إدارة التجنيد لمن هو في سن التجنيد (وذلك التصريح مسؤولية المسافر نفسه)."
+        ]
+      }
+    ]
   },
   "branches": {
     "pageTitle": "فروعنا",

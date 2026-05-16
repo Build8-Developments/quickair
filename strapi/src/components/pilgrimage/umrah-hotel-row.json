@@ -1,0 +1,50 @@
+{
+  "collectionName": "components_pilgrimage_umrah_hotel_rows",
+  "info": {
+    "displayName": "Umrah Hotel Row",
+    "description": "A single hotel row in an Umrah program (Madinah hotel relation + Makkah hotel relation + per-person pricing)",
+    "icon": "house"
+  },
+  "options": {},
+  "attributes": {
+    "madinahHotel": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::hotel.hotel"
+    },
+    "madinahHotelLabel": {
+      "type": "string",
+      "description": "Optional override for the displayed hotel name. Falls back to the linked hotel's localized name."
+    },
+    "madinahNights": {
+      "type": "string"
+    },
+    "madinahMeals": {
+      "type": "string"
+    },
+    "makkahHotel": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::hotel.hotel"
+    },
+    "makkahHotelLabel": {
+      "type": "string",
+      "description": "Optional override for the displayed hotel name. Falls back to the linked hotel's localized name."
+    },
+    "makkahNights": {
+      "type": "string"
+    },
+    "makkahMeals": {
+      "type": "string"
+    },
+    "priceQuad": {
+      "type": "string"
+    },
+    "priceTriple": {
+      "type": "string"
+    },
+    "priceDouble": {
+      "type": "string"
+    }
+  }
+}

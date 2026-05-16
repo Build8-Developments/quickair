@@ -125,6 +125,78 @@ const UMRAH_PACKAGE = `
   isFeatured
 `;
 
+const UMRAH_HOTEL_ROW = `
+  madinahHotelLabel
+  madinahNights
+  madinahMeals
+  madinahHotel {
+    documentId
+    name
+    slug
+    stars
+  }
+  makkahHotelLabel
+  makkahNights
+  makkahMeals
+  makkahHotel {
+    documentId
+    name
+    slug
+    stars
+  }
+  priceQuad
+  priceTriple
+  priceDouble
+`;
+
+const UMRAH_PROGRAM = `
+  badge
+  releaseDate
+  title
+  season
+  route
+  travelDates
+  duration
+  headerNote
+  priceDisclaimer
+  logoVariant
+  accentColor
+  hotels {
+    ${UMRAH_HOTEL_ROW}
+  }
+  programIncludesTitle
+  programIncludes {
+    ${BULLET}
+  }
+  programExcludesTitle
+  programExcludes {
+    ${BULLET}
+  }
+  notesTitle
+  notes {
+    ${BULLET}
+  }
+  documentsTitle
+  requiredDocuments {
+    ${BULLET}
+  }
+`;
+
+const UMRAH_TABLE_LABELS = `
+  tripDatesLabel
+  routeLabel
+  duration
+  madinahHeader
+  makkahHeader
+  perPersonHeader
+  doubleColumn
+  tripleColumn
+  quadColumn
+  currency
+  issueDateLabel
+  logoTagline
+`;
+
 const UMRAH_PREMIUM = `
   badge
   title
@@ -236,6 +308,11 @@ export const UMRAH_PAGE_QUERY = `
       stepsSection {
         ${STEPS_SECTION}
       }
+      programsSectionTitle
+      programsSectionSubtitle
+      programs {
+        ${UMRAH_PROGRAM}
+      }
       premiumSection {
         ${UMRAH_PREMIUM}
       }
@@ -247,6 +324,9 @@ export const UMRAH_PAGE_QUERY = `
       }
       pricingLabels {
         ${PRICING_LABELS}
+      }
+      tableLabels {
+        ${UMRAH_TABLE_LABELS}
       }
       seo {
         ${SEO}

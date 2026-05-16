@@ -495,7 +495,109 @@
       "paragraph1": "Hajj is the fifth pillar of Islam, obligatory once in a lifetime for every able Muslim. It is a profound spiritual journey that brings Muslims from around the world together in Makkah.",
       "paragraph2": "We offer comprehensive Hajj packages that ensure a comfortable and spiritual journey, with a dedicated team to accompany you every step of the way.",
       "imageAlt": "The Holy Kaaba"
-    }
+    },
+    "tableLabels": {
+      "tripDatesLabel": "Travel dates",
+      "routeLabel": "Trip route",
+      "duration": "Duration",
+      "madinahHeader": "Madinah",
+      "makkahHeader": "Makkah",
+      "perPersonHeader": "Price per person in EGP, by room type",
+      "doubleColumn": "Double",
+      "tripleColumn": "Triple",
+      "quadColumn": "Quad",
+      "currency": "EGP",
+      "issueDateLabel": "Issued",
+      "logoTagline": "Tourism"
+    },
+    "programsSection": {
+      "title": "Hajj Programs",
+      "subtitle": "Pick from our curated luxury Hajj programs"
+    },
+    "programs": [
+      {
+        "badge": "VIP Hajj",
+        "releaseDate": "1 December 2025",
+        "title": "Quick Air Tourism luxury VIP Hajj program for the 1447 AH season",
+        "season": "20 days · 19 nights",
+        "route": "Cairo / Madinah – Jeddah / Cairo",
+        "travelDates": "23 May",
+        "logoVariant": "umrah",
+        "accentColor": "default",
+        "priceDisclaimer": "Prices include airfare",
+        "headerNote": "Premium accommodations in Kadana, Makkah, and Arafat with dedicated religious and administrative supervision and refined meals throughout the program.",
+        "hotels": [
+          {
+            "madinahHotel": "Movenpick Anwar Al-Madinah",
+            "madinahHotelLink": "movenpick-anwar-madinah",
+            "madinahMeals": "Half board",
+            "madinahNights": "5 nights",
+            "makkahHotel": "Fairmont Clock Tower",
+            "makkahHotelLink": "fairmont-makkah",
+            "makkahMeals": "Full board",
+            "makkahNights": "14 nights",
+            "priceQuad": "320,000",
+            "priceTriple": "360,000",
+            "priceDouble": "420,000"
+          },
+          {
+            "madinahHotel": "Dar Al-Iman InterContinental",
+            "madinahHotelLink": "dar-iman-intercontinental-madinah",
+            "madinahMeals": "Half board",
+            "madinahNights": "5 nights",
+            "makkahHotel": "Movenpick Makkah",
+            "makkahHotelLink": "movenpick-makkah",
+            "makkahMeals": "Full board",
+            "makkahNights": "14 nights",
+            "priceQuad": "265,000",
+            "priceTriple": "295,000",
+            "priceDouble": "350,000"
+          },
+          {
+            "madinahHotel": "Anwar Al-Madinah",
+            "madinahHotelLink": "anwar-madinah",
+            "madinahMeals": "Half board",
+            "madinahNights": "5 nights",
+            "makkahHotel": "Makarem Um Al-Qura",
+            "makkahHotelLink": "makarem-um-qura-makkah",
+            "makkahMeals": "Full board",
+            "makkahNights": "14 nights",
+            "priceQuad": "210,000",
+            "priceTriple": "235,000",
+            "priceDouble": "275,000"
+          }
+        ],
+        "programIncludesTitle": "The program includes",
+        "programIncludes": [
+          "Stay at the listed hotels or equivalent of the same standard with meals as specified.",
+          "Hajj visa and full tourism agency service fees.",
+          "Round-trip airfare on a certified airline (EgyptAir or Saudia).",
+          "Internal transfers in Saudi Arabia by modern, fully air-conditioned coaches.",
+          "Accommodation in Arafat in air-conditioned tents with refined meals and complete amenities.",
+          "Stay in air-conditioned Mina camp with full services.",
+          "Dedicated religious supervision explaining the rituals and guiding pilgrims throughout.",
+          "Administrative and medical supervision throughout the program."
+        ],
+        "programExcludesTitle": "The program does not include",
+        "programExcludes": [
+          "Any personal expenses for the pilgrim during the program.",
+          "Gifts or personal purchases."
+        ],
+        "notesTitle": "Notes",
+        "notes": [
+          "The Saudi Riyal is calculated at 12.75 EGP. Any FX increase will be added to the program price.",
+          "All triple and quad rooms are double rooms with extra beds added.",
+          "Advertised prices apply to non-view rooms."
+        ],
+        "documentsTitle": "Required documents",
+        "requiredDocuments": [
+          "A passport valid for at least six months from the travel date.",
+          "6 recent personal photos with a white background.",
+          "Approved vaccination certificate (meningitis).",
+          "Travel permit from military recruitment for travelers of recruitment age (traveler's responsibility)."
+        ]
+      }
+    ]
   },
   "omra": {
     "pageTitle": "Umrah",
@@ -721,7 +823,113 @@
       "madinah": "Madinah",
       "nights": "nights",
       "meals": "Meals"
-    }
+    },
+    "tableLabels": {
+      "tripDatesLabel": "Travel dates",
+      "routeLabel": "Trip route",
+      "duration": "Duration",
+      "madinahHeader": "Madinah",
+      "makkahHeader": "Makkah",
+      "perPersonHeader": "Price per person in EGP, by room type",
+      "doubleColumn": "Double",
+      "tripleColumn": "Triple",
+      "quadColumn": "Quad",
+      "currency": "EGP",
+      "issueDateLabel": "Issued",
+      "logoTagline": "Tourism"
+    },
+    "programsSection": {
+      "title": "Umrah Programs",
+      "subtitle": "Pick from our curated luxury and economy Umrah programs"
+    },
+    "programs": [
+      {
+        "badge": "Premium Umrah",
+        "releaseDate": "15 February 2026",
+        "title": "Premium Umrah program for the 1447 AH season",
+        "season": "10 days · 9 nights",
+        "route": "Cairo / Madinah – Jeddah / Cairo",
+        "travelDates": "26 March",
+        "logoVariant": "umrah",
+        "accentColor": "default",
+        "priceDisclaimer": "Prices do not include airfare",
+        "hotels": [
+          {
+            "madinahHotel": "Al-Harithia",
+            "madinahHotelLink": "al-harithia-madinah",
+            "madinahMeals": "Breakfast",
+            "madinahNights": "4 nights",
+            "makkahHotel": "Fairmont",
+            "makkahHotelLink": "fairmont-makkah",
+            "makkahMeals": "Breakfast",
+            "makkahNights": "5 nights",
+            "priceQuad": "63,000",
+            "priceTriple": "70,000",
+            "priceDouble": "85,500"
+          },
+          {
+            "madinahHotel": "Al-Harithia",
+            "madinahHotelLink": "al-harithia-madinah",
+            "madinahMeals": "Breakfast",
+            "madinahNights": "4 nights",
+            "makkahHotel": "Movenpick Hajar",
+            "makkahHotelLink": "movenpick-hajar-makkah",
+            "makkahMeals": "Breakfast",
+            "makkahNights": "5 nights",
+            "priceQuad": "55,500",
+            "priceTriple": "61,000",
+            "priceDouble": "73,000"
+          },
+          {
+            "madinahHotel": "Grand Plaza",
+            "madinahHotelLink": "grand-plaza-madinah",
+            "madinahMeals": "Room only",
+            "madinahNights": "4 nights",
+            "makkahHotel": "Al-Shohada",
+            "makkahHotelLink": "al-shohada-makkah",
+            "makkahMeals": "Breakfast",
+            "makkahNights": "5 nights",
+            "priceQuad": "41,500",
+            "priceTriple": "45,500",
+            "priceDouble": "53,000"
+          },
+          {
+            "madinahHotel": "Arkan Al-Manar",
+            "madinahHotelLink": "arkan-al-manar-madinah",
+            "madinahMeals": "Room only",
+            "madinahNights": "4 nights",
+            "makkahHotel": "Grand Al-Massa",
+            "makkahHotelLink": "grand-al-massa-makkah",
+            "makkahMeals": "Room only",
+            "makkahNights": "5 nights",
+            "priceQuad": "36,000",
+            "priceTriple": "40,000",
+            "priceDouble": "47,000"
+          }
+        ],
+        "programIncludesTitle": "The program includes",
+        "programIncludes": [
+          "Stay at the listed hotels or equivalent of the same standard. Program price may change if hotel rates change for the listed travel periods (per the foreign agent or hotel itself).",
+          "Visa issuance fees and tourism agency service fees.",
+          "Internal transfers in Saudi Arabia by modern air-conditioned coaches, and the Madinah-to-Makkah leg via the Haramain High-Speed Train."
+        ],
+        "programExcludesTitle": "The program does not include",
+        "programExcludes": [
+          "Airfare price."
+        ],
+        "notesTitle": "Notes",
+        "notes": [
+          "The Saudi Riyal is calculated at 12.75 EGP. Any FX increase will be added to the program price.",
+          "Advertised prices apply to non-view rooms.",
+          "All triple and quad rooms are double rooms with extra beds added."
+        ],
+        "documentsTitle": "Required documents",
+        "requiredDocuments": [
+          "A passport valid for at least six months from the travel date - 3 personal photos with a white background.",
+          "Travel permit from military recruitment for travelers of recruitment age (traveler's responsibility)."
+        ]
+      }
+    ]
   },
   "branches": {
     "pageTitle": "Our Branches",

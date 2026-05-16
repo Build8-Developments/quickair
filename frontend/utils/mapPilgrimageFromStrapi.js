@@ -244,6 +244,50 @@ function mapUmrahPackageCard(card) {
   };
 }
 
+function mapUmrahProgram(prog) {
+  if (!prog) return null;
+  return {
+    badge: prog.badge,
+    releaseDate: prog.releaseDate,
+    title: prog.title,
+    season: prog.season,
+    route: prog.route,
+    travelDates: prog.travelDates,
+    duration: prog.duration,
+    headerNote: prog.headerNote,
+    priceDisclaimer: prog.priceDisclaimer,
+    logoVariant: prog.logoVariant || "default",
+    accentColor: prog.accentColor || "default",
+    hotels: (prog.hotels || []).map((h) => {
+      const madinah = h.madinahHotel || null;
+      const makkah = h.makkahHotel || null;
+      return {
+        madinahHotel: h.madinahHotelLabel || madinah?.name || null,
+        madinahHotelLink: madinah?.documentId || null,
+        madinahHotelStars: madinah?.stars ?? null,
+        madinahNights: h.madinahNights,
+        madinahMeals: h.madinahMeals,
+        makkahHotel: h.makkahHotelLabel || makkah?.name || null,
+        makkahHotelLink: makkah?.documentId || null,
+        makkahHotelStars: makkah?.stars ?? null,
+        makkahNights: h.makkahNights,
+        makkahMeals: h.makkahMeals,
+        priceQuad: h.priceQuad,
+        priceTriple: h.priceTriple,
+        priceDouble: h.priceDouble,
+      };
+    }),
+    programIncludesTitle: prog.programIncludesTitle,
+    programIncludes: bulletsToStrings(prog.programIncludes),
+    programExcludesTitle: prog.programExcludesTitle,
+    programExcludes: bulletsToStrings(prog.programExcludes),
+    notesTitle: prog.notesTitle,
+    notes: bulletsToStrings(prog.notes),
+    documentsTitle: prog.documentsTitle,
+    requiredDocuments: bulletsToStrings(prog.requiredDocuments),
+  };
+}
+
 export function mapUmrahPageFromStrapi(page) {
   if (!page) return null;
 
@@ -271,6 +315,27 @@ export function mapUmrahPageFromStrapi(page) {
       description: page.stepsSection?.header?.description,
       ...steps,
     },
+    programsSection: {
+      title: page.programsSectionTitle,
+      subtitle: page.programsSectionSubtitle,
+    },
+    programs: (page.programs || []).map(mapUmrahProgram).filter(Boolean),
+    tableLabels: page.tableLabels
+      ? {
+          tripDatesLabel: page.tableLabels.tripDatesLabel,
+          routeLabel: page.tableLabels.routeLabel,
+          duration: page.tableLabels.duration,
+          madinahHeader: page.tableLabels.madinahHeader,
+          makkahHeader: page.tableLabels.makkahHeader,
+          perPersonHeader: page.tableLabels.perPersonHeader,
+          doubleColumn: page.tableLabels.doubleColumn,
+          tripleColumn: page.tableLabels.tripleColumn,
+          quadColumn: page.tableLabels.quadColumn,
+          currency: page.tableLabels.currency,
+          issueDateLabel: page.tableLabels.issueDateLabel,
+          logoTagline: page.tableLabels.logoTagline,
+        }
+      : null,
     premium: {
       badge: page.premiumSection?.badge,
       title: page.premiumSection?.title,

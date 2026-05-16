@@ -1,0 +1,86 @@
+{
+  "collectionName": "components_pilgrimage_umrah_programs",
+  "info": {
+    "displayName": "Umrah Program",
+    "description": "A complete Umrah program (one offer/sheet) with hotels and policies",
+    "icon": "stack"
+  },
+  "options": {},
+  "attributes": {
+    "badge": {
+      "type": "string"
+    },
+    "releaseDate": {
+      "type": "string"
+    },
+    "title": {
+      "type": "text",
+      "required": true
+    },
+    "season": {
+      "type": "string"
+    },
+    "route": {
+      "type": "string"
+    },
+    "travelDates": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "string"
+    },
+    "headerNote": {
+      "type": "text"
+    },
+    "priceDisclaimer": {
+      "type": "string"
+    },
+    "logoVariant": {
+      "type": "enumeration",
+      "enum": ["umrah", "ramadan", "default"],
+      "default": "default"
+    },
+    "accentColor": {
+      "type": "enumeration",
+      "enum": ["red", "pink", "default"],
+      "default": "default"
+    },
+    "hotels": {
+      "type": "component",
+      "component": "pilgrimage.umrah-hotel-row",
+      "repeatable": true
+    },
+    "programIncludesTitle": {
+      "type": "string"
+    },
+    "programIncludes": {
+      "type": "component",
+      "component": "pilgrimage.bullet",
+      "repeatable": true
+    },
+    "programExcludesTitle": {
+      "type": "string"
+    },
+    "programExcludes": {
+      "type": "component",
+      "component": "pilgrimage.bullet",
+      "repeatable": true
+    },
+    "notesTitle": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "component",
+      "component": "pilgrimage.bullet",
+      "repeatable": true
+    },
+    "documentsTitle": {
+      "type": "string"
+    },
+    "requiredDocuments": {
+      "type": "component",
+      "component": "pilgrimage.bullet",
+      "repeatable": true
+    }
+  }
+}

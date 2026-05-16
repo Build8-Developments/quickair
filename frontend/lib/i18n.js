@@ -20,6 +20,7 @@ if (!i18n.isInitialized) {
     resources,
     lng: "en", // default language
     fallbackLng: "en",
+    returnObjects: true, // Allow t() to return arrays/objects
     interpolation: {
       escapeValue: false, // React already does escaping
     },

@@ -1,0 +1,47 @@
+{
+  "collectionName": "components_pilgrimage_umrah_table_labels",
+  "info": {
+    "displayName": "Umrah Table Labels",
+    "description": "Common labels used across all Umrah program tables",
+    "icon": "layout"
+  },
+  "options": {},
+  "attributes": {
+    "tripDatesLabel": {
+      "type": "string"
+    },
+    "routeLabel": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "string"
+    },
+    "madinahHeader": {
+      "type": "string"
+    },
+    "makkahHeader": {
+      "type": "string"
+    },
+    "perPersonHeader": {
+      "type": "string"
+    },
+    "doubleColumn": {
+      "type": "string"
+    },
+    "tripleColumn": {
+      "type": "string"
+    },
+    "quadColumn": {
+      "type": "string"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "issueDateLabel": {
+      "type": "string"
+    },
+    "logoTagline": {
+      "type": "string"
+    }
+  }
+}

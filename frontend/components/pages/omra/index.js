@@ -3,6 +3,7 @@ export { default as HeroSection } from "./HeroSection";
 export { default as AboutSection } from "./AboutSection";
 export { default as UmrahStepsSection } from "./UmrahStepsSection";
 export { default as PackageCard } from "./PackageCard";
+export { default as UmrahProgramCard } from "./UmrahProgramCard";
 export { default as PremiumPackageSection } from "./PremiumPackageSection";
 export { default as EconomyPackageSection } from "./EconomyPackageSection";
 export { default as PoliciesSection } from "./PoliciesSection";

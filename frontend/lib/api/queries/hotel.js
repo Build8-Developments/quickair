@@ -58,6 +58,14 @@ export const GET_ALL_HOTELS_PAGINATED = `
 `;
 
 // Get single hotel with its associated offer
+export const GET_HOTEL_BY_SLUG = `
+  query GetHotelBySlug($slug: String!, $locale: I18NLocaleCode) {
+    hotels(filters: { slug: { eq: $slug } }, locale: $locale, pagination: { limit: 1 }) {
+      documentId
+    }
+  }
+`;
+
 export const GET_HOTEL_WITH_OFFER = `
   query GetHotelWithOffer($hotelId: ID!, $locale: I18NLocaleCode) {
     hotel(documentId: $hotelId, locale: $locale) {

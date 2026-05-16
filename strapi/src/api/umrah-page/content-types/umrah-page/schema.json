@@ -32,6 +32,26 @@
         "i18n": { "localized": true }
       }
     },
+    "programsSectionTitle": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "programsSectionSubtitle": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "programs": {
+      "type": "component",
+      "component": "pilgrimage.umrah-program",
+      "repeatable": true,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
     "premiumSection": {
       "type": "component",
       "component": "pilgrimage.umrah-premium-section",
@@ -59,6 +79,14 @@
     "pricingLabels": {
       "type": "component",
       "component": "pilgrimage.pricing-labels",
+      "repeatable": false,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
+    "tableLabels": {
+      "type": "component",
+      "component": "pilgrimage.umrah-table-labels",
       "repeatable": false,
       "pluginOptions": {
         "i18n": { "localized": true }
