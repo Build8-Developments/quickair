@@ -280,13 +280,17 @@ async function findHotelDocumentId(strapi, name, locale) {
   // Search by exact (case-insensitive) name match in the requested locale.
   // Also try the default locale as a fallback so seeding works when only one
   // locale of the hotel exists.
+  // NOTE: Strapi 5's strapi.documents().findMany() requires the `$` prefix on
+  // operators (e.g. $eqi). Without it the filter is silently ignored and the
+  // first row in the table is returned, which previously caused every program
+  // hotel relation to point at the same (wrong) hotel.
   const tryLocales = [locale, "en", "ar"].filter(
     (l, i, arr) => l && arr.indexOf(l) === i,
   );
   for (const tryLocale of tryLocales) {
     const matches = await strapi.documents("api::hotel.hotel").findMany({
       locale: tryLocale,
-      filters: { name: { eqi: trimmed } },
+      filters: { name: { $eqi: trimmed } },
       fields: ["documentId", "name"],
       limit: 1,
     });

@@ -263,12 +263,13 @@ function mapUmrahProgram(prog) {
       const makkah = h.makkahHotel || null;
       return {
         madinahHotel: h.madinahHotelLabel || madinah?.name || null,
-        madinahHotelLink: madinah?.documentId || null,
+        // Prefer slug for human-friendly URLs; fall back to documentId.
+        madinahHotelLink: madinah?.slug || madinah?.documentId || null,
         madinahHotelStars: madinah?.stars ?? null,
         madinahNights: h.madinahNights,
         madinahMeals: h.madinahMeals,
         makkahHotel: h.makkahHotelLabel || makkah?.name || null,
-        makkahHotelLink: makkah?.documentId || null,
+        makkahHotelLink: makkah?.slug || makkah?.documentId || null,
         makkahHotelStars: makkah?.stars ?? null,
         makkahNights: h.makkahNights,
         makkahMeals: h.makkahMeals,
