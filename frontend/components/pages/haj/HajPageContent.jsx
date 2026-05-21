@@ -200,8 +200,8 @@ function ServicesSection({ isRTL }) {
                   style={{
                     width: "64px",
                     height: "64px",
-                    backgroundColor: "rgba(1, 159, 177, 0.1)",
-                    color: "var(--color-accent-1)",
+                    backgroundColor: "var(--color-accent-1)",
+                    color: "#ffffff",
                     marginBottom: "20px",
                     flexShrink: 0,
                   }}
