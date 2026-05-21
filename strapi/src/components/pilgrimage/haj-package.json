@@ -9,6 +9,15 @@
     "badge": {
       "type": "string"
     },
+    "tier": {
+      "type": "enumeration",
+      "enum": ["economy", "standard", "premium", "vip", "distinguished"]
+    },
+    "tags": {
+      "type": "component",
+      "component": "pilgrimage.bullet",
+      "repeatable": true
+    },
     "title": {
       "type": "string",
       "required": true

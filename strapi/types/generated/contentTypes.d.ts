@@ -559,6 +559,12 @@ export interface ApiHajPageHajPage extends Struct.SingleTypeSchema {
       'oneToMany',
       'api::haj-page.haj-page'
     >;
+    packages: Schema.Attribute.Component<'pilgrimage.haj-package', true> &
+      Schema.Attribute.SetPluginOptions<{
+        i18n: {
+          localized: true;
+        };
+      }>;
     pricingLabels: Schema.Attribute.Component<
       'pilgrimage.pricing-labels',
       false

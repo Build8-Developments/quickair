@@ -111,6 +111,7 @@ function mapHajPackageToProgram(pkg, packageKey, page) {
   const makkahHotel = linkedHotelDisplay(makkah);
   const pricing = pkg.pricing || {};
   const features = bulletsToStrings(pkg.features);
+  const tags = bulletsToStrings(pkg.tags);
   const ritualItems = (pkg.rituals || [])
     .flatMap((ritual) => [
       ritual?.description,
@@ -120,6 +121,8 @@ function mapHajPackageToProgram(pkg, packageKey, page) {
 
   return {
     badge: pkg.badge,
+    tier: pkg.tier || packageKey || null,
+    tags,
     releaseDate: page.hero?.dateOrSeason,
     title: pkg.title,
     season: page.hero?.dateOrSeason,
@@ -167,6 +170,7 @@ function mapHajPackage(pkg, ritualFallbacks, strapiUrl) {
   if (!pkg) return null;
 
   const features = bulletsToStrings(pkg.features);
+  const tags = bulletsToStrings(pkg.tags);
   const rituals = (pkg.rituals || []).map((ritual, index) => {
     const imageUrl =
       resolveMediaUrl(ritual.image, strapiUrl) ||
@@ -199,6 +203,8 @@ function mapHajPackage(pkg, ritualFallbacks, strapiUrl) {
   return {
     title: pkg.title,
     badge: pkg.badge,
+    tier: pkg.tier || null,
+    tags,
     lotteryNote: pkg.notePrimary,
     lotteryDisclaimer: pkg.noteSecondary,
     ministryNote: pkg.notePrimary,
@@ -263,6 +269,11 @@ export function mapHajPageFromStrapi(page, strapiUrl = "") {
     ],
     strapiUrl,
   );
+  const packagePrograms = (page.packages || [])
+    .map((pkg, index) =>
+      mapHajPackageToProgram(pkg, pkg?.tier || `package-${index + 1}`, page),
+    )
+    .filter(Boolean);
 
   const steps = {};
   (page.stepsSection?.steps || []).forEach((step, i) => {
@@ -292,10 +303,17 @@ export function mapHajPageFromStrapi(page, strapiUrl = "") {
       title: undefined,
       subtitle: page.servicesSection?.header?.description,
     },
-    programs: [
-      mapHajPackageToProgram(page.vipPackage, "vip", page),
-      mapHajPackageToProgram(page.distinguishedPackage, "distinguished", page),
-    ].filter(Boolean),
+    programs:
+      packagePrograms.length > 0
+        ? packagePrograms
+        : [
+            mapHajPackageToProgram(page.vipPackage, "vip", page),
+            mapHajPackageToProgram(
+              page.distinguishedPackage,
+              "distinguished",
+              page,
+            ),
+          ].filter(Boolean),
     tableLabels: {
       tripDatesLabel: page.pricingLabels?.nights,
       routeLabel:
@@ -377,6 +395,8 @@ function mapUmrahProgram(prog) {
   if (!prog) return null;
   return {
     badge: prog.badge,
+    tier: prog.tier || null,
+    tags: bulletsToStrings(prog.tags),
     releaseDate: prog.releaseDate,
     title: prog.title,
     season: prog.season,

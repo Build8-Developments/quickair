@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import UmrahStepsSection from "./UmrahStepsSection";
 import UmrahProgramCard from "./UmrahProgramCard";
 import { usePilgrimageContent } from "@/contexts/PilgrimageContentContext";
+import TierTabs from "@/components/pages/pilgrimage/TierTabs";
+import RitualsGuideSection from "@/components/pages/pilgrimage/RitualsGuideSection";
 
 /**
  * OmraPageContent - Main content component for the Omra (Umrah) page.
@@ -57,6 +59,8 @@ export default function OmraPageContent({ locale }) {
       style={{ direction: isRTL ? "rtl" : "ltr" }}
     >
       <UmrahStepsSection isRTL={isRTL} />
+
+      <RitualsGuideSection type="umrah" isRTL={isRTL} />
 
       {programs.length > 0 && (
         <ProgramsSection
@@ -113,24 +117,13 @@ function ProgramsSection({ programs, tableLabels, title, subtitle, isRTL }) {
           </div>
         )}
 
-        <div
-          className="programs-list"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "40px",
-          }}
-        >
-          {programs.map((program, idx) => (
-            <div key={idx} data-aos="fade-up" data-aos-delay={idx * 100}>
-              <UmrahProgramCard
-                program={program}
-                tableLabels={tableLabels}
-                isRTL={isRTL}
-              />
-            </div>
-          ))}
-        </div>
+        <TierTabs
+          programs={programs}
+          tableLabels={tableLabels}
+          isRTL={isRTL}
+          CardComponent={UmrahProgramCard}
+          allLabel={isRTL ? "كل البرامج" : "All programs"}
+        />
       </div>
     </section>
   );

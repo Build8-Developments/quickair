@@ -190,6 +190,10 @@ export interface PilgrimageHajPackage extends Struct.ComponentSchema {
     pricingTitle: Schema.Attribute.String;
     rituals: Schema.Attribute.Component<'pilgrimage.ritual-card', true>;
     ritualsTitle: Schema.Attribute.String;
+    tags: Schema.Attribute.Component<'pilgrimage.bullet', true>;
+    tier: Schema.Attribute.Enumeration<
+      ['economy', 'standard', 'premium', 'vip', 'distinguished']
+    >;
     title: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
@@ -486,6 +490,10 @@ export interface PilgrimageUmrahProgram extends Struct.ComponentSchema {
     requiredDocuments: Schema.Attribute.Component<'pilgrimage.bullet', true>;
     route: Schema.Attribute.String;
     season: Schema.Attribute.String;
+    tags: Schema.Attribute.Component<'pilgrimage.bullet', true>;
+    tier: Schema.Attribute.Enumeration<
+      ['economy', 'standard', 'premium', 'vip', 'distinguished']
+    >;
     title: Schema.Attribute.Text & Schema.Attribute.Required;
     travelDates: Schema.Attribute.String;
   };

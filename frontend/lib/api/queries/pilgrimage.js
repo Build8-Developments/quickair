@@ -63,6 +63,10 @@ const RITUAL_CARD = `
 
 const HAJ_PACKAGE = `
   badge
+  tier
+  tags {
+    ${BULLET}
+  }
   title
   notePrimary
   noteSecondary
@@ -158,6 +162,10 @@ const UMRAH_HOTEL_ROW = `
 
 const UMRAH_PROGRAM = `
   badge
+  tier
+  tags {
+    ${BULLET}
+  }
   releaseDate
   title
   season
@@ -290,6 +298,9 @@ export const HAJ_PAGE_QUERY = `
         ${HAJ_PACKAGE}
       }
       distinguishedPackage {
+        ${HAJ_PACKAGE}
+      }
+      packages {
         ${HAJ_PACKAGE}
       }
       pricingLabels {

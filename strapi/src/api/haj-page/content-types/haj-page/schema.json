@@ -48,6 +48,14 @@
         "i18n": { "localized": true }
       }
     },
+    "packages": {
+      "type": "component",
+      "component": "pilgrimage.haj-package",
+      "repeatable": true,
+      "pluginOptions": {
+        "i18n": { "localized": true }
+      }
+    },
     "pricingLabels": {
       "type": "component",
       "component": "pilgrimage.pricing-labels",
