@@ -44,6 +44,12 @@ function mapHotelsToLegacy(hotels) {
           feature1: madinah.feature1,
           feature2: madinah.feature2,
           nights: madinah.nightsDates,
+          hotelLink:
+            madinah.hotel?.slug ||
+            madinah.hotelSlug ||
+            madinah.hotel?.documentId ||
+            null,
+          stars: madinah.hotel?.stars ?? null,
         }
       : {},
     makkah: makkah
@@ -53,8 +59,107 @@ function mapHotelsToLegacy(hotels) {
           feature1: makkah.feature1,
           feature2: makkah.feature2,
           nights: makkah.nightsDates,
+          hotelLink:
+            makkah.hotel?.slug ||
+            makkah.hotelSlug ||
+            makkah.hotel?.documentId ||
+            null,
+          stars: makkah.hotel?.stars ?? null,
         }
       : {},
+  };
+}
+
+function cityKey(value) {
+  const text = String(value || "").toLowerCase();
+  if (
+    text.includes("madinah") ||
+    text.includes("medina") ||
+    text.includes("المدينة")
+  ) {
+    return "madinah";
+  }
+  if (text.includes("makkah") || text.includes("mecca") || text.includes("مكة")) {
+    return "makkah";
+  }
+  return null;
+}
+
+function splitHajHotelCards(hotels) {
+  const cards = hotels || [];
+  const madinah =
+    cards.find((hotel) => cityKey(hotel.location) === "madinah") || cards[0];
+  const makkah =
+    cards.find((hotel) => cityKey(hotel.location) === "makkah") || cards[1];
+  return { madinah, makkah };
+}
+
+function linkedHotelDisplay(card) {
+  const hotel = card?.hotel || null;
+  return {
+    name: card?.name || hotel?.name || null,
+    link: hotel?.slug || card?.hotelSlug || hotel?.documentId || null,
+    stars: hotel?.stars ?? null,
+  };
+}
+
+function mapHajPackageToProgram(pkg, packageKey, page) {
+  if (!pkg) return null;
+
+  const { madinah, makkah } = splitHajHotelCards(pkg.hotels);
+  const madinahHotel = linkedHotelDisplay(madinah);
+  const makkahHotel = linkedHotelDisplay(makkah);
+  const pricing = pkg.pricing || {};
+  const features = bulletsToStrings(pkg.features);
+  const ritualItems = (pkg.rituals || [])
+    .flatMap((ritual) => [
+      ritual?.description,
+      ...bulletsToStrings(ritual?.featureBullets),
+    ])
+    .filter(Boolean);
+
+  return {
+    badge: pkg.badge,
+    releaseDate: page.hero?.dateOrSeason,
+    title: pkg.title,
+    season: page.hero?.dateOrSeason,
+    route: [madinah?.location, makkah?.location].filter(Boolean).join(" - "),
+    travelDates: madinah?.nightsDates || makkah?.nightsDates || null,
+    headerNote: pkg.notePrimary,
+    priceDisclaimer: pkg.noteSecondary || pricing.note,
+    hotels:
+      madinah || makkah
+        ? [
+            {
+              madinahHotel: madinahHotel.name,
+              madinahHotelLink: madinahHotel.link,
+              madinahHotelStars: madinahHotel.stars,
+              madinahNights: madinah?.nightsDates,
+              madinahMeals: [madinah?.feature1, madinah?.feature2]
+                .filter(Boolean)
+                .join(" · "),
+              makkahHotel: makkahHotel.name,
+              makkahHotelLink: makkahHotel.link,
+              makkahHotelStars: makkahHotel.stars,
+              makkahNights: makkah?.nightsDates,
+              makkahMeals: [makkah?.feature1, makkah?.feature2]
+                .filter(Boolean)
+                .join(" · "),
+              priceQuad: pricing.quadRoom,
+              priceTriple: pricing.tripleRoom,
+              priceDouble: pricing.doubleRoom,
+            },
+          ]
+        : [],
+    programIncludesTitle: pkg.featuresTitle || pkg.hotelsTitle,
+    programIncludes: [...features, ...ritualItems],
+    programExcludesTitle: null,
+    programExcludes: [],
+    notesTitle: pkg.pricingTitle,
+    notes: [pricing.note, pkg.footerNote].filter(Boolean),
+    documentsTitle: null,
+    requiredDocuments: [],
+    logoVariant: packageKey,
   };
 }
 
@@ -183,6 +288,30 @@ export function mapHajPageFromStrapi(page, strapiUrl = "") {
     vipPackage: vip,
     distinguishedPackage: distinguished,
     hotels,
+    programsSection: {
+      title: undefined,
+      subtitle: page.servicesSection?.header?.description,
+    },
+    programs: [
+      mapHajPackageToProgram(page.vipPackage, "vip", page),
+      mapHajPackageToProgram(page.distinguishedPackage, "distinguished", page),
+    ].filter(Boolean),
+    tableLabels: {
+      tripDatesLabel: page.pricingLabels?.nights,
+      routeLabel:
+        page.pricingLabels?.makkah && page.pricingLabels?.madinah
+          ? `${page.pricingLabels.madinah} / ${page.pricingLabels.makkah}`
+          : undefined,
+      duration: page.hero?.dateOrSeason,
+      madinahHeader: page.pricingLabels?.madinah,
+      makkahHeader: page.pricingLabels?.makkah,
+      perPersonHeader: page.pricingLabels?.perPerson,
+      doubleColumn: page.pricingLabels?.doubleRoom,
+      tripleColumn: page.pricingLabels?.tripleRoom,
+      quadColumn: page.pricingLabels?.quadRoom,
+      currency: page.pricingLabels?.currency,
+      issueDateLabel: undefined,
+    },
     pricing: {
       doubleRoom: page.pricingLabels?.doubleRoom,
       tripleRoom: page.pricingLabels?.tripleRoom,

@@ -32,6 +32,13 @@ const HOTEL_CARD = `
   feature1
   feature2
   nightsDates
+  hotelSlug
+  hotel {
+    documentId
+    name
+    slug
+    stars
+  }
 `;
 
 const ROOM_PRICING = `

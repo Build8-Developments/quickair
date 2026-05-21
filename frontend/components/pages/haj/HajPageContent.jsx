@@ -57,7 +57,6 @@ export default function HajPageContent({ locale }) {
         textAlign: isRTL ? "right" : "left",
       }}
     >
-      <HeroSection isRTL={isRTL} />
       <ServicesSection isRTL={isRTL} />
 
       {programs.length > 0 && (
@@ -70,105 +69,6 @@ export default function HajPageContent({ locale }) {
         />
       )}
     </div>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/* Hero                                                                       */
-/* -------------------------------------------------------------------------- */
-
-function HeroSection({ isRTL }) {
-  const { pt } = usePilgrimageContent();
-
-  return (
-    <section
-      className="hero-section"
-      style={{
-        position: "relative",
-        width: "100%",
-        minHeight: "450px",
-        overflow: "hidden",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        direction: isRTL ? "rtl" : "ltr",
-        marginTop: "80px",
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          backgroundImage:
-            'url("https://images.pexels.com/photos/2895295/pexels-photo-2895295.jpeg")',
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "linear-gradient(180deg, rgba(1, 159, 177, 0.85) 0%, rgba(1, 122, 137, 0.9) 50%, rgba(5, 7, 60, 0.95) 100%)",
-        }}
-      />
-      <div
-        className="container"
-        style={{
-          position: "relative",
-          zIndex: 1,
-          textAlign: "center",
-          padding: "80px 20px",
-        }}
-      >
-        <h1
-          data-aos="fade-up"
-          data-aos-duration="800"
-          style={{
-            fontSize: "clamp(56px, 12vw, 96px)",
-            fontWeight: 700,
-            color: "#ffffff",
-            marginBottom: "15px",
-            textShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
-            fontFamily: isRTL ? "'Noto Kufi Arabic', sans-serif" : "inherit",
-          }}
-        >
-          {pt("hero.title")}
-        </h1>
-        <div
-          data-aos="fade-up"
-          data-aos-duration="800"
-          data-aos-delay="100"
-          style={{
-            fontSize: "clamp(22px, 4vw, 32px)",
-            fontWeight: 600,
-            color: "rgba(255, 255, 255, 0.95)",
-            marginBottom: "30px",
-            letterSpacing: "3px",
-          }}
-        >
-          {pt("hero.date")}
-        </div>
-        <p
-          data-aos="fade-up"
-          data-aos-duration="800"
-          data-aos-delay="300"
-          style={{
-            fontSize: "clamp(15px, 2.5vw, 18px)",
-            color: "rgba(255, 255, 255, 0.9)",
-            maxWidth: "800px",
-            margin: "0 auto",
-            lineHeight: 1.9,
-            textAlign: "center",
-            direction: isRTL ? "rtl" : "ltr",
-          }}
-        >
-          {pt("hero.subtitle")}
-        </p>
-      </div>
-    </section>
   );
 }
 
@@ -223,7 +123,7 @@ function ServicesSection({ isRTL }) {
 
   return (
     <section
-      className="layout-pt-lg layout-pb-lg"
+      className="pilgrimage-section pilgrimage-services layout-pt-lg layout-pb-lg"
       style={{
         background: "linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%)",
         padding: "80px 0",
@@ -234,20 +134,20 @@ function ServicesSection({ isRTL }) {
         <div className="row justify-center text-center mb-50">
           <div className="col-lg-8">
             <span
-              className="text-accent-1 text-15 fw-500 mb-10 d-block"
+              className="pilgrimage-section-kicker text-accent-1 text-15 fw-500 mb-10 d-block"
               data-aos="fade-up"
             >
               {pt("services.sectionTitle")}
             </span>
             <h2
-              className="text-30 md:text-24 fw-700 text-dark-1 mb-20"
+              className="pilgrimage-section-title text-30 md:text-24 fw-700 text-dark-1 mb-20"
               data-aos="fade-up"
               data-aos-delay="100"
             >
               {pt("services.sectionSubtitle")}
             </h2>
             <p
-              className="text-15 text-light-2 lh-18"
+              className="pilgrimage-section-subtitle text-15 text-light-2 lh-18"
               data-aos="fade-up"
               data-aos-delay="200"
               style={{ textAlign: "center", direction: isRTL ? "rtl" : "ltr" }}
@@ -271,7 +171,7 @@ function ServicesSection({ isRTL }) {
               data-aos-delay={index * 100}
             >
               <div
-                className="service-card bg-white rounded-12 border-1 border-light-1"
+                className="pilgrimage-service-card service-card bg-white rounded-12 border-1 border-light-1"
                 style={{
                   textAlign: isRTL ? "right" : "left",
                   direction: isRTL ? "rtl" : "ltr",
@@ -336,7 +236,7 @@ function ServicesSection({ isRTL }) {
 function ProgramsSection({ programs, tableLabels, title, subtitle, isRTL }) {
   return (
     <section
-      className="haj-programs-section layout-pt-lg layout-pb-lg"
+      className="pilgrimage-programs-section haj-programs-section layout-pt-lg layout-pb-lg"
       style={{
         background: "linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%)",
         direction: isRTL ? "rtl" : "ltr",
@@ -349,7 +249,7 @@ function ProgramsSection({ programs, tableLabels, title, subtitle, isRTL }) {
             <div className="col-lg-9">
               {title && (
                 <h2
-                  className="text-30 md:text-24 fw-700 text-dark-1 mb-15"
+                  className="pilgrimage-section-title text-30 md:text-24 fw-700 text-dark-1 mb-15"
                   style={{
                     lineHeight: 1.5,
                     fontFamily: "'Noto Kufi Arabic', sans-serif",
@@ -361,7 +261,7 @@ function ProgramsSection({ programs, tableLabels, title, subtitle, isRTL }) {
               )}
               {subtitle && (
                 <p
-                  className="text-15 text-light-2 lh-18"
+                  className="pilgrimage-section-subtitle text-15 text-light-2 lh-18"
                   style={{ fontFamily: "'Noto Kufi Arabic', sans-serif" }}
                   data-aos="fade-up"
                   data-aos-delay="100"

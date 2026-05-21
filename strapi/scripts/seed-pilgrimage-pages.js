@@ -24,23 +24,30 @@ function bulletsFromStrings(strings) {
   return (strings || []).filter(Boolean).map((text) => ({ text }));
 }
 
-function buildHajPage(haj) {
+async function buildHajPage(strapi, haj, locale) {
   const s = haj.services || {};
   const hotels = haj.hotels || {};
   const pricing = haj.pricing || {};
 
-  const hotelCards = [
-    hotels.madinah,
-    hotels.makkah,
-  ]
-    .filter(Boolean)
-    .map((h) => ({
-      location: h.location,
-      name: h.name,
-      feature1: h.feature1,
-      feature2: h.feature2,
-      nightsDates: h.nights,
-    }));
+  const hotelCards = await Promise.all(
+    [hotels.madinah, hotels.makkah].filter(Boolean).map(async (h) => {
+      const hotelSlug = resolveHajHotelSlug(h.name);
+      const hotelId =
+        (await findHotelDocumentId(strapi, h.name, locale)) ||
+        (hotelSlug
+          ? await findHotelDocumentIdBySlug(strapi, hotelSlug, locale)
+          : null);
+      return {
+        location: h.location,
+        name: h.name,
+        feature1: h.feature1,
+        feature2: h.feature2,
+        nightsDates: h.nights,
+        hotelSlug,
+        hotel: hotelId || null,
+      };
+    }),
+  );
 
   const buildPackage = (pkg, pricingKey, isVip) => {
     const p = haj.pricing?.[pricingKey] || {};
@@ -299,6 +306,46 @@ async function findHotelDocumentId(strapi, name, locale) {
   return null;
 }
 
+function normalizeHotelName(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ö/g, "o")
+    .replace(/[^a-z0-9\u0600-\u06ff]+/g, " ")
+    .trim();
+}
+
+function resolveHajHotelSlug(name) {
+  const normalized = normalizeHotelName(name);
+  const known = [
+    ["movenpick anwar al madinah", "movenpick-anwar-madinah"],
+    ["موفنبيك انوار المدينة", "movenpick-anwar-madinah"],
+    ["movenpick hajar swiss", "movenpick-hajar-makkah"],
+    ["موفنبيك هاجر سويس", "movenpick-hajar-makkah"],
+    ["fairmont clock tower", "fairmont-makkah"],
+    ["فيرمونت برج الساعة", "fairmont-makkah"],
+  ];
+  return known.find(([needle]) => normalized.includes(needle))?.[1] || null;
+}
+
+async function findHotelDocumentIdBySlug(strapi, slug, locale) {
+  if (!slug) return null;
+  const tryLocales = [locale, "en", "ar"].filter(
+    (l, i, arr) => l && arr.indexOf(l) === i,
+  );
+  for (const tryLocale of tryLocales) {
+    const matches = await strapi.documents("api::hotel.hotel").findMany({
+      locale: tryLocale,
+      filters: { slug: { $eq: slug } },
+      fields: ["documentId", "slug"],
+      limit: 1,
+    });
+    if (matches?.length) return matches[0].documentId;
+  }
+  return null;
+}
+
 async function buildUmrahProgram(strapi, prog, locale) {
   if (!prog) return null;
   const hotels = await Promise.all(
@@ -405,8 +452,8 @@ async function main() {
 
   try {
     console.log("Seeding structured Haj page (ar, en)...");
-    await upsertLocale(app, hajUid, "ar", buildHajPage(ar.haj));
-    await upsertLocale(app, hajUid, "en", buildHajPage(en.haj));
+    await upsertLocale(app, hajUid, "ar", await buildHajPage(app, ar.haj, "ar"));
+    await upsertLocale(app, hajUid, "en", await buildHajPage(app, en.haj, "en"));
 
     console.log("Seeding structured Umrah page (ar, en)...");
     await upsertLocale(

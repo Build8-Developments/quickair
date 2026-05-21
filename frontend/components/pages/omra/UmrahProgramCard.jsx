@@ -34,11 +34,11 @@ export default function UmrahProgramCard({
 
   return (
     <article
-      className="umrah-program-card"
+      className="umrah-program-card pilgrimage-program"
       style={{
         backgroundColor: "#ffffff",
         borderRadius: "20px",
-        overflow: "hidden",
+        overflow: "visible",
         boxShadow: "0 16px 50px rgba(1, 159, 177, 0.1)",
         border: "1px solid rgba(1, 159, 177, 0.18)",
         direction: isRTL ? "rtl" : "ltr",
@@ -47,52 +47,95 @@ export default function UmrahProgramCard({
     >
       <HeroStrip program={program} isRTL={isRTL} labels={tableLabels} />
 
-      <HighlightsRibbon isRTL={isRTL} />
+      <div className="pilgrimage-program__stack">
+        <ProgramSection tone="soft" eyebrow={isRTL ? "مميزات سريعة" : "Quick perks"}>
+          <HighlightsRibbon isRTL={isRTL} />
+        </ProgramSection>
 
-      <div style={{ padding: "clamp(24px, 4vw, 40px)" }}>
-        <TripOverview program={program} isRTL={isRTL} labels={tableLabels} />
-
-        {program.headerNote && (
-          <CalloutNote text={program.headerNote} isRTL={isRTL} />
-        )}
+        <ProgramSection title={isRTL ? "نظرة عامة على الرحلة" : "Trip overview"}>
+          <TripOverview program={program} isRTL={isRTL} labels={tableLabels} />
+          {program.headerNote && (
+            <CalloutNote text={program.headerNote} isRTL={isRTL} />
+          )}
+        </ProgramSection>
 
         {program.hotels?.length > 0 && (
-          <HotelsAndPricing
-            hotels={program.hotels}
-            isRTL={isRTL}
-            labels={tableLabels}
-            disclaimer={program.priceDisclaimer}
-          />
+          <ProgramSection
+            tone="wash"
+            title={isRTL ? "الفنادق والأسعار" : "Hotels & pricing"}
+            eyebrow={isRTL ? "اختيارات الإقامة" : "Stay options"}
+          >
+            <HotelsAndPricing
+              hotels={program.hotels}
+              isRTL={isRTL}
+              labels={tableLabels}
+              disclaimer={program.priceDisclaimer}
+              showTitle={false}
+            />
+          </ProgramSection>
         )}
 
-        <FeatureGrid
-          title={program.programIncludesTitle}
-          items={program.programIncludes}
-          variant="include"
-          isRTL={isRTL}
-        />
+        {(program.programIncludes?.length > 0 ||
+          program.programExcludes?.length > 0) && (
+          <ProgramSection
+            title={isRTL ? "ما يشمله البرنامج" : "Program details"}
+            eyebrow={isRTL ? "التفاصيل المهمة" : "Important details"}
+          >
+            <div className="pilgrimage-program__two-col">
+              <FeatureGrid
+                title={program.programIncludesTitle}
+                items={program.programIncludes}
+                variant="include"
+                isRTL={isRTL}
+              />
 
-        <FeatureGrid
-          title={program.programExcludesTitle}
-          items={program.programExcludes}
-          variant="exclude"
-          isRTL={isRTL}
-        />
+              <FeatureGrid
+                title={program.programExcludesTitle}
+                items={program.programExcludes}
+                variant="exclude"
+                isRTL={isRTL}
+              />
+            </div>
+          </ProgramSection>
+        )}
 
-        <FeatureGrid
-          title={program.notesTitle}
-          items={program.notes}
-          variant="note"
-          isRTL={isRTL}
-        />
+        {(program.notes?.length > 0 ||
+          program.requiredDocuments?.length > 0) && (
+          <ProgramSection
+            tone="gold"
+            title={isRTL ? "ملاحظات ومستندات" : "Notes & documents"}
+            eyebrow={isRTL ? "قبل السفر" : "Before travel"}
+          >
+            <FeatureGrid
+              title={program.notesTitle}
+              items={program.notes}
+              variant="note"
+              isRTL={isRTL}
+            />
 
-        <RequiredDocuments
-          title={program.documentsTitle}
-          items={program.requiredDocuments}
-          isRTL={isRTL}
-        />
+            <RequiredDocuments
+              title={program.documentsTitle}
+              items={program.requiredDocuments}
+              isRTL={isRTL}
+            />
+          </ProgramSection>
+        )}
       </div>
     </article>
+  );
+}
+
+function ProgramSection({ title, eyebrow, tone = "white", children }) {
+  return (
+    <section className={`pilgrimage-program-block pilgrimage-program-block--${tone}`}>
+      {(eyebrow || title) && (
+        <div className="pilgrimage-program-block__head">
+          {eyebrow && <span>{eyebrow}</span>}
+          {title && <h3>{title}</h3>}
+        </div>
+      )}
+      {children}
+    </section>
   );
 }
 
@@ -605,13 +648,15 @@ function CalloutNote({ text, isRTL }) {
 /* Hotels & Pricing                                                           */
 /* -------------------------------------------------------------------------- */
 
-function HotelsAndPricing({ hotels, isRTL, labels, disclaimer }) {
+function HotelsAndPricing({ hotels, isRTL, labels, disclaimer, showTitle = true }) {
   // determine the cheapest tier per hotel for "best value" highlight
   return (
-    <section style={{ marginBottom: "30px" }}>
-      <SectionTitle
-        text={isRTL ? "الفنادق والأسعار" : "Hotels & pricing"}
-      />
+    <section className="pilgrimage-hotels-section" style={{ marginBottom: 0 }}>
+      {showTitle && (
+        <SectionTitle
+          text={isRTL ? "الفنادق والأسعار" : "Hotels & pricing"}
+        />
+      )}
 
       {disclaimer && (
         <div
@@ -1123,7 +1168,7 @@ function FeatureGrid({ title, items, variant, isRTL }) {
   const tone = resolveListTone(variant);
 
   return (
-    <section style={{ marginTop: "26px" }}>
+    <section className={`pilgrimage-feature-grid pilgrimage-feature-grid--${variant}`}>
       <SectionTitle text={title} color={tone.color} />
 
       <div
@@ -1213,7 +1258,7 @@ function ListIcon({ variant, color }) {
 function RequiredDocuments({ title, items, isRTL }) {
   if (!items?.length) return null;
   return (
-    <section style={{ marginTop: "26px" }}>
+    <section className="pilgrimage-documents">
       <SectionTitle text={title} color="#b8860b" />
       <div
         style={{

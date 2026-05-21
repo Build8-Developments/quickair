@@ -22,6 +22,15 @@
     },
     "nightsDates": {
       "type": "string"
+    },
+    "hotelSlug": {
+      "type": "string",
+      "description": "Optional fallback hotel slug used for frontend hotel detail links when the hotel relation is not set."
+    },
+    "hotel": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::hotel.hotel"
     }
   }
 }

@@ -220,6 +220,229 @@
   }
 }
 
+/* Pilgrimage pages: aligned with About page design system */
+.pilgrimage-section,
+.pilgrimage-programs-section {
+  position: relative;
+  background: #ffffff !important;
+  padding-block: 90px !important;
+}
+
+.pilgrimage-programs-section {
+  padding-top: 30px !important;
+}
+
+.pilgrimage-section-kicker {
+  display: inline-flex !important;
+  align-items: center;
+  width: fit-content;
+  margin-inline: auto;
+  padding: 6px 20px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #019fb1 0%, #01b5c9 100%);
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0;
+}
+
+.pilgrimage-section-title {
+  max-width: 760px;
+  margin-inline: auto;
+  color: #1a1a2e !important;
+  font-size: clamp(28px, 3vw, 34px) !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+  letter-spacing: 0 !important;
+}
+
+.pilgrimage-section-subtitle {
+  max-width: 660px;
+  margin-inline: auto;
+  color: #666666 !important;
+  font-size: 15px !important;
+  line-height: 1.75 !important;
+}
+
+.pilgrimage-step-card,
+.pilgrimage-service-card {
+  position: relative;
+  border: 1px solid #e8f4f6 !important;
+  border-radius: 16px !important;
+  background: #f8fafb !important;
+  box-shadow: none !important;
+}
+
+.pilgrimage-step-card:hover,
+.pilgrimage-service-card:hover {
+  box-shadow: 0 4px 20px rgba(1, 159, 177, 0.08) !important;
+}
+
+.pilgrimage-step-card .rounded-full,
+.pilgrimage-service-card .rounded-full {
+  border-radius: 14px !important;
+  background: linear-gradient(135deg, #019fb1 0%, #01b5c9 100%) !important;
+  box-shadow: none !important;
+}
+
+.umrah-program-card {
+  border: 0 !important;
+  border-radius: 24px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.umrah-program-card > header {
+  background: linear-gradient(135deg, #019fb1 0%, #017a8a 100%) !important;
+  padding: clamp(34px, 5vw, 56px) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 18px 50px rgba(1, 122, 138, 0.18);
+}
+
+.umrah-program-card > header h2 {
+  font-size: clamp(22px, 3vw, 32px) !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0 !important;
+}
+
+.umrah-program-card > header a {
+  border-radius: 10px !important;
+  min-height: 44px;
+}
+
+.umrah-program-card section h3,
+.umrah-program-card h3 {
+  letter-spacing: 0 !important;
+}
+
+.pilgrimage-program__stack {
+  display: grid;
+  gap: 28px;
+  margin-top: 28px;
+}
+
+.pilgrimage-program-block {
+  position: relative;
+  padding: clamp(24px, 4vw, 40px);
+  border: 1px solid #e8f4f6;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 10px 34px rgba(1, 159, 177, 0.06);
+}
+
+.pilgrimage-program-block--soft {
+  padding: 22px;
+  background: #f8fafb;
+}
+
+.pilgrimage-program-block--wash {
+  background: linear-gradient(135deg, #f8fafb 0%, #ffffff 58%, #eef9fb 100%);
+}
+
+.pilgrimage-program-block--gold {
+  background: linear-gradient(135deg, #ffffff 0%, #fffaf0 100%);
+  border-color: rgba(212, 175, 55, 0.22);
+}
+
+.pilgrimage-program-block__head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.pilgrimage-program-block__head span {
+  width: fit-content;
+  padding: 6px 16px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #019fb1 0%, #01b5c9 100%);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.pilgrimage-program-block--gold .pilgrimage-program-block__head span {
+  background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%);
+}
+
+.pilgrimage-program-block__head h3 {
+  margin: 0;
+  color: #1a1a2e;
+  font-size: clamp(24px, 3vw, 34px) !important;
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+}
+
+.pilgrimage-program__two-col {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+  align-items: start;
+}
+
+.pilgrimage-program-block .trip-overview-grid {
+  margin-bottom: 0 !important;
+}
+
+.umrah-program-card [class*="trip-overview-grid"] > div {
+  border-radius: 16px !important;
+  background: #f8fafb !important;
+  box-shadow: none;
+}
+
+.umrah-program-card [class*="hotel-row-grid"] {
+  border-bottom: 1px solid rgba(1, 159, 177, 0.12);
+}
+
+.pilgrimage-program-block .pilgrimage-feature-grid,
+.pilgrimage-program-block .pilgrimage-documents {
+  margin-top: 0 !important;
+}
+
+.pilgrimage-program__two-col .pilgrimage-feature-grid {
+  min-height: 100%;
+  padding: 22px;
+  border: 1px solid #e8f4f6;
+  border-radius: 18px;
+  background: #f8fafb;
+}
+
+.pilgrimage-program__two-col .pilgrimage-feature-grid--exclude {
+  border-color: rgba(200, 16, 46, 0.14);
+  background: rgba(200, 16, 46, 0.035);
+}
+
+.pilgrimage-feature-grid + .pilgrimage-documents,
+.pilgrimage-documents + .pilgrimage-feature-grid {
+  margin-top: 24px !important;
+}
+
+@media (max-width: 767px) {
+  .pilgrimage-section,
+  .pilgrimage-programs-section {
+    padding-block: 60px !important;
+  }
+
+  .umrah-program-card > header {
+    padding: 28px 20px !important;
+    border-radius: 20px !important;
+  }
+
+  .pilgrimage-program__stack {
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .pilgrimage-program-block {
+    padding: 22px 16px;
+    border-radius: 20px;
+  }
+
+  .pilgrimage-program__two-col {
+    grid-template-columns: 1fr;
+  }
+}
+
 .-is-sticky .dnStiky {
   display: none !important;
 }

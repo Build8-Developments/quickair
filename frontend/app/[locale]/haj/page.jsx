@@ -1,5 +1,6 @@
 import Header3 from "@/components/layout/header/Header3";
 import FooterTwo from "@/components/layout/footers/FooterTwo";
+import PageHero from "@/components/common/PageHero";
 import HajPageContent from "@/components/pages/haj/HajPageContent";
 import { PilgrimageContentProvider } from "@/contexts/PilgrimageContentContext";
 import { generateLocalizedMetadata } from "@/utils/seo";
@@ -38,12 +39,25 @@ async function getHajPageData(locale) {
 export default async function HajPage({ params }) {
   const { locale } = await params;
   const pageData = await getHajPageData(locale);
+  const hero = pageData?.content?.hero;
 
   return (
     <>
       <main style={{ overflowX: "hidden" }}>
         <Header3 locale={locale} />
-        <div className="header-margin"></div>
+        <PageHero
+          locale={locale}
+          title={hero?.title || (locale === "ar" ? "الحج" : "Hajj")}
+          badge={hero?.date || (locale === "ar" ? "رحلة مقدسة" : "Sacred Journey")}
+          image="/img/about-bg.webp"
+          description={
+            hero?.subtitle ||
+            (locale === "ar"
+              ? "برامج حج متكاملة بإشراف متخصص وخبرة طويلة في خدمة ضيوف الرحمن."
+              : "Comprehensive Hajj programs with expert supervision and long-standing pilgrimage experience.")
+          }
+          icon="about"
+        />
         <PilgrimageContentProvider
           namespace="haj"
           content={pageData?.content ?? null}

@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import HeroSection from "./HeroSection";
 import UmrahStepsSection from "./UmrahStepsSection";
 import UmrahProgramCard from "./UmrahProgramCard";
 import { usePilgrimageContent } from "@/contexts/PilgrimageContentContext";
@@ -57,7 +56,6 @@ export default function OmraPageContent({ locale }) {
       className="omra-page-content"
       style={{ direction: isRTL ? "rtl" : "ltr" }}
     >
-      <HeroSection isRTL={isRTL} />
       <UmrahStepsSection isRTL={isRTL} />
 
       {programs.length > 0 && (
@@ -76,7 +74,7 @@ export default function OmraPageContent({ locale }) {
 function ProgramsSection({ programs, tableLabels, title, subtitle, isRTL }) {
   return (
     <section
-      className="umrah-programs-section layout-pt-lg layout-pb-lg"
+      className="pilgrimage-programs-section umrah-programs-section layout-pt-lg layout-pb-lg"
       style={{
         background: "linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%)",
         direction: isRTL ? "rtl" : "ltr",
@@ -89,7 +87,7 @@ function ProgramsSection({ programs, tableLabels, title, subtitle, isRTL }) {
             <div className="col-lg-9">
               {title && (
                 <h2
-                  className="text-30 md:text-24 fw-700 text-dark-1 mb-15"
+                  className="pilgrimage-section-title text-30 md:text-24 fw-700 text-dark-1 mb-15"
                   style={{
                     lineHeight: 1.5,
                     fontFamily: "'Noto Kufi Arabic', sans-serif",
@@ -101,7 +99,7 @@ function ProgramsSection({ programs, tableLabels, title, subtitle, isRTL }) {
               )}
               {subtitle && (
                 <p
-                  className="text-15 text-light-2 lh-18"
+                  className="pilgrimage-section-subtitle text-15 text-light-2 lh-18"
                   style={{
                     fontFamily: "'Noto Kufi Arabic', sans-serif",
                   }}

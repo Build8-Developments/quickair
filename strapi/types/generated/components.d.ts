@@ -217,6 +217,8 @@ export interface PilgrimageHotelCard extends Struct.ComponentSchema {
   attributes: {
     feature1: Schema.Attribute.String;
     feature2: Schema.Attribute.String;
+    hotel: Schema.Attribute.Relation<'oneToOne', 'api::hotel.hotel'>;
+    hotelSlug: Schema.Attribute.String;
     location: Schema.Attribute.String & Schema.Attribute.Required;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     nightsDates: Schema.Attribute.String;

@@ -40,7 +40,7 @@ export default function UmrahStepsSection({ isRTL }) {
 
   return (
     <section
-      className="umrah-steps-section layout-pt-lg layout-pb-lg"
+      className="pilgrimage-section pilgrimage-steps umrah-steps-section layout-pt-lg layout-pb-lg"
       style={{
         background: "linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%)",
         direction: isRTL ? "rtl" : "ltr",
@@ -51,20 +51,20 @@ export default function UmrahStepsSection({ isRTL }) {
         <div className="row justify-center text-center mb-50">
           <div className="col-lg-8">
             <span
-              className="text-accent-1 text-15 fw-500 mb-10 d-block"
+              className="pilgrimage-section-kicker text-accent-1 text-15 fw-500 mb-10 d-block"
               data-aos="fade-up"
             >
               {pt("steps.title")}
             </span>
             <h2
-              className="text-30 md:text-24 fw-700 text-dark-1 mb-15"
+              className="pilgrimage-section-title text-30 md:text-24 fw-700 text-dark-1 mb-15"
               data-aos="fade-up"
               data-aos-delay="100"
             >
               {pt("steps.subtitle")}
             </h2>
             <p
-              className="text-15 text-light-2 lh-18"
+              className="pilgrimage-section-subtitle text-15 text-light-2 lh-18"
               data-aos="fade-up"
               data-aos-delay="200"
               style={{ textAlign: "center" }}
@@ -84,7 +84,7 @@ export default function UmrahStepsSection({ isRTL }) {
               data-aos-delay={index * 100}
             >
               <div
-                className="step-card bg-white rounded-12 h-100 border-1 border-light-1"
+                className="pilgrimage-step-card step-card bg-white rounded-12 h-100 border-1 border-light-1"
                 style={{
                   padding: "30px 25px",
                   textAlign: "center",
