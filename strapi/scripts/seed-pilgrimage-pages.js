@@ -397,23 +397,54 @@ async function buildUmrahProgram(strapi, prog, locale) {
   };
 }
 
-async function upsertLocale(strapi, uid, locale, data) {
+async function upsertBaseLocale(strapi, uid, locale, data) {
   const existing = await strapi.documents(uid).findMany({ locale });
 
   if (existing?.length > 0) {
-    return strapi.documents(uid).update({
+    const updated = await strapi.documents(uid).update({
       documentId: existing[0].documentId,
       locale,
       data,
       status: "published",
     });
+    return updated.documentId;
   }
 
-  return strapi.documents(uid).create({
+  const created = await strapi.documents(uid).create({
     data,
     locale,
     status: "published",
   });
+  return created.documentId;
+}
+
+async function upsertLinkedLocale(strapi, uid, documentId, locale, data) {
+  const existing = await strapi.documents(uid).findMany({ locale });
+  const matching = existing?.find((entry) => entry.documentId === documentId);
+  const unlinked = existing?.filter((entry) => entry.documentId !== documentId);
+
+  if (unlinked?.length > 0) {
+    console.warn(
+      `Found ${unlinked.length} unlinked ${uid} ${locale} document(s). ` +
+        "They should be removed before reseeding to avoid duplicate dashboard entries.",
+    );
+  }
+
+  const result = await strapi.documents(uid).update({
+    documentId,
+    locale,
+    data,
+    status: "published",
+  });
+
+  return matching?.documentId || result.documentId;
+}
+
+async function seedLocalizedSingleType(strapi, uid, enData, arData, label) {
+  console.log(`Seeding structured ${label} page (en, ar)...`);
+  const documentId = await upsertBaseLocale(strapi, uid, "en", enData);
+  await upsertLinkedLocale(strapi, uid, documentId, "ar", arData);
+  return documentId;
 }
 
 async function main() {
@@ -451,22 +482,20 @@ async function main() {
   let exitCode = 0;
 
   try {
-    console.log("Seeding structured Haj page (ar, en)...");
-    await upsertLocale(app, hajUid, "ar", await buildHajPage(app, ar.haj, "ar"));
-    await upsertLocale(app, hajUid, "en", await buildHajPage(app, en.haj, "en"));
-
-    console.log("Seeding structured Umrah page (ar, en)...");
-    await upsertLocale(
+    await seedLocalizedSingleType(
       app,
-      umrahUid,
-      "ar",
-      await buildUmrahPage(app, ar.omra, "ar"),
+      hajUid,
+      await buildHajPage(app, en.haj, "en"),
+      await buildHajPage(app, ar.haj, "ar"),
+      "Haj",
     );
-    await upsertLocale(
+
+    await seedLocalizedSingleType(
       app,
       umrahUid,
-      "en",
       await buildUmrahPage(app, en.omra, "en"),
+      await buildUmrahPage(app, ar.omra, "ar"),
+      "Umrah",
     );
 
     console.log("\nDone. Haj & Umrah pages seeded with structured components.");
