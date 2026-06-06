@@ -13,7 +13,6 @@ import HotelCardsWidget from "./widgets/HotelCardsWidget";
 import MealPlanWidget from "./widgets/MealPlanWidget";
 import RoomTypeWidget from "./widgets/RoomTypeWidget";
 import BookingSummaryWidget from "./widgets/BookingSummaryWidget";
-import OffersPopup from "./OffersPopup";
 
 // LocalStorage keys
 const STORAGE_KEYS = {
@@ -134,35 +133,6 @@ export default function AIChatbot() {
       }
     };
   }, [showNextPopup]);
-
-  // ✅ Offers Popup Timer - show after 15 seconds if not dismissed
-  const [showOffersPopup, setShowOffersPopup] = useState(false);
-  
-  useEffect(() => {
-    // Check if offers popup was dismissed before
-    if (typeof window !== "undefined") {
-      const dismissed = localStorage.getItem("offersPopupDismissed");
-      if (dismissed === "true") {
-        return;
-      }
-    }
-
-    // Show offers popup after 15 seconds
-    const offersTimer = setTimeout(() => {
-      if (!isOpen) {
-        setShowOffersPopup(true);
-      }
-    }, 15000);
-
-    return () => clearTimeout(offersTimer);
-  }, [isOpen]);
-
-  // ✅ Hide popup when chat opens
-  useEffect(() => {
-    if (isOpen) {
-      setShowPopup(false);
-    }
-  }, [isOpen]);
 
   // ✅ Dismiss popup permanently for this session
   const dismissPopup = () => {
@@ -1285,23 +1255,6 @@ export default function AIChatbot() {
         </div>
       )}
 
-      {/* ✅ Offers Popup - Shows after 15 seconds if not dismissed */}
-      {showOffersPopup && !isOpen && (
-        <OffersPopup
-          language={language}
-          onClose={() => {
-            // Mark as dismissed so it doesn't show again
-            setShowOffersPopup(false);
-            localStorage.setItem("offersPopupDismissed", "true");
-          }}
-          onSubmit={(leadData) => {
-            console.log("Lead captured:", leadData);
-            // Mark as dismissed after successful submission
-            setShowOffersPopup(false);
-            localStorage.setItem("offersPopupDismissed", "true");
-          }}
-        />
-      )}
     </>
   );
 }
