@@ -448,7 +448,7 @@ export const pilgrimageAPI = {
 
     return {
       ...raw,
-      content: mapUmrahPageFromStrapi(raw),
+      content: mapUmrahPageFromStrapi(raw, STRAPI_CONFIG.url),
       media: null,
     };
   },

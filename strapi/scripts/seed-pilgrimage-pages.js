@@ -20,6 +20,248 @@ const SERVICE_ENTRIES = [
 const HAJ_STEP_KEYS = ["ihram", "tawaf", "sai", "arafat", "muzdalifah", "rami"];
 const UMRAH_STEP_KEYS = ["ihram", "tawaf", "sai", "halq"];
 
+const DEFAULT_HAJ_RITUALS = {
+  ar: [
+    {
+      id: "ihram",
+      title: "الإحرام",
+      subtitle: "بداية الرحلة المقدسة",
+      description: "الإحرام هو نية الدخول في النسك، ويكون عند الميقات المحدد. يرتدي الرجل إزاراً ورداءً أبيضين، وتلبس المرأة ملابسها العادية الساترة.",
+      steps: ["الاغتسال والتطيب قبل الإحرام", "لبس ملابس الإحرام عند الميقات", "عقد النية والتلبية: لبيك اللهم حجاً", "التلبية المستمرة حتى رمي جمرة العقبة"],
+      dua: "لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لَا شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ، لَا شَرِيكَ لَكَ",
+      significance: "الإحرام يرمز إلى المساواة بين جميع المسلمين أمام الله، فلا فرق بين غني وفقير، ولا بين عربي وأعجمي."
+    },
+    {
+      id: "tawaf-qudum",
+      title: "طواف القدوم",
+      subtitle: "تحية البيت الحرام",
+      description: "طواف القدوم هو أول ما يفعله الحاج عند وصوله إلى مكة المكرمة، وهو تحية للمسجد الحرام والكعبة المشرفة.",
+      steps: ["البدء من الحجر الأسود مع التكبير", "الطواف سبعة أشواط حول الكعبة", "الاضطباع والرمل في الأشواط الثلاثة الأولى للرجال", "صلاة ركعتين خلف مقام إبراهيم"],
+      dua: "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+      significance: "الطواف يرمز إلى وحدة المسلمين ودورانهم حول محور واحد هو بيت الله الحرام، كما تدور الملائكة حول العرش."
+    },
+    {
+      id: "sai",
+      title: "السعي",
+      subtitle: "بين الصفا والمروة",
+      description: "السعي بين الصفا والمروة سبعة أشواط، إحياءً لذكرى سعي السيدة هاجر عليها السلام بحثاً عن الماء لابنها إسماعيل.",
+      steps: ["البدء من الصفا والصعود عليه", "التوجه إلى المروة (شوط واحد)", "الإسراع بين العلمين الأخضرين للرجال", "إتمام سبعة أشواط (الانتهاء عند المروة)"],
+      dua: "إِنَّ الصَّفَا وَالْمَرْوَةَ مِن شَعَائِرِ اللَّهِ",
+      significance: "السعي يذكّرنا بتوكل السيدة هاجر على الله وسعيها لطلب الرزق، وأن الله لا يضيع أجر من أحسن عملاً."
+    },
+    {
+      id: "arafat",
+      title: "الوقوف بعرفة",
+      subtitle: "ركن الحج الأعظم",
+      description: "الوقوف بعرفة هو ركن الحج الأعظم، يكون في اليوم التاسع من ذي الحجة. قال النبي ﷺ: 'الحج عرفة'.",
+      steps: ["التوجه إلى عرفة صباح يوم التاسع من ذي الحجة", "الوقوف بعرفة من الزوال إلى غروب الشمس", "الإكثار من الدعاء والذكر والاستغفار", "الجمع بين الظهر والعصر قصراً وجمع تقديم"],
+      dua: "خَيْرُ الدُّعَاءِ دُعَاءُ يَوْمِ عَرَفَةَ، وَخَيْرُ مَا قُلْتُ أَنَا وَالنَّبِيُّونَ مِنْ قَبْلِي: لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ",
+      significance: "يوم عرفة هو أفضل أيام الدنيا، يباهي الله بأهل عرفة أهل السماء، ويعتق فيه رقاباً من النار أكثر من أي يوم آخر."
+    },
+    {
+      id: "muzdalifah",
+      title: "المبيت بمزدلفة",
+      subtitle: "ليلة العاشر من ذي الحجة",
+      description: "بعد غروب شمس يوم عرفة، ينفر الحجاج إلى مزدلفة للمبيت بها وجمع الحصى لرمي الجمرات.",
+      steps: ["الانطلاق من عرفة بعد الغروب بسكينة", "صلاة المغرب والعشاء جمع تأخير عند الوصول", "المبيت بمزدلفة حتى الفجر", "جمع حصى الجمرات (49 أو 70 حصاة)"],
+      dua: "اللَّهُمَّ إِنِّي أَسْأَلُكَ أَنْ تَرْزُقَنِي جَوَامِعَ الْخَيْرِ، وَتُجِيرَنِي مِنَ النَّارِ",
+      significance: "المبيت بمزدلفة واجب من واجبات الحج، وهو وقت للراحة والتأمل والاستعداد ليوم النحر."
+    },
+    {
+      id: "rami",
+      title: "رمي الجمرات",
+      subtitle: "رمز رفض الشيطان",
+      description: "رمي الجمرات في منى يرمز إلى رفض وساوس الشيطان، اقتداءً بسيدنا إبراهيم عليه السلام حين رمى الشيطان بالحصى.",
+      steps: ["رمي جمرة العقبة الكبرى يوم النحر (7 حصيات)", "رمي الجمرات الثلاث أيام التشريق (11، 12، 13 ذي الحجة)", "الترتيب: الصغرى ثم الوسطى ثم الكبرى", "التكبير مع كل حصاة"],
+      dua: "بِسْمِ اللَّهِ، اللَّهُ أَكْبَرُ، رَغْمًا لِلشَّيْطَانِ وَحِزْبِهِ",
+      significance: "رمي الجمرات يعلّمنا مقاومة الشيطان ووساوسه، والثبات على طاعة الله مهما كانت التحديات."
+    },
+    {
+      id: "nahr",
+      title: "الهدي (الذبح)",
+      subtitle: "يوم النحر",
+      description: "ذبح الهدي يوم النحر (العاشر من ذي الحجة) اقتداءً بسيدنا إبراهيم عليه السلام حين فدى الله ابنه إسماعيل بذبح عظيم.",
+      steps: ["ذبح الهدي بعد رمي جمرة العقبة", "يجوز التوكيل في الذبح", "الحلق أو التقصير بعد الذبح", "التحلل الأول (خلع الإحرام)"],
+      dua: "بِسْمِ اللَّهِ وَاللَّهُ أَكْبَرُ، اللَّهُمَّ هَذَا مِنْكَ وَلَكَ",
+      significance: "الهدي يرمز إلى التضحية والفداء في سبيل الله، ويذكّرنا بقصة سيدنا إبراهيم وابنه إسماعيل عليهما السلام."
+    },
+    {
+      id: "tawaf-ifadah",
+      title: "طواف الإفاضة",
+      subtitle: "ركن من أركان الحج",
+      description: "طواف الإفاضة ركن من أركان الحج لا يصح الحج بدونه. يؤدى بعد التحلل الأول يوم النحر أو بعده.",
+      steps: ["التوجه إلى المسجد الحرام", "الطواف سبعة أشواط حول الكعبة", "صلاة ركعتين خلف مقام إبراهيم", "السعي بين الصفا والمروة (لمن لم يسعَ بعد طواف القدوم)"],
+      dua: "اللَّهُمَّ اجْعَلْهُ حَجًّا مَبْرُورًا، وَسَعْيًا مَشْكُورًا، وَذَنْبًا مَغْفُورًا",
+      significance: "طواف الإفاضة يمثل التحلل الكامل من الإحرام والعودة إلى الحياة الطبيعية بعد إتمام أعظم أركان الحج."
+    }
+  ],
+  en: [
+    {
+      id: "ihram",
+      title: "Ihram",
+      subtitle: "Beginning the Sacred Journey",
+      description: "Ihram is the state of ritual purity entered at the designated Miqat. Men wear two white unstitched cloths, while women wear their regular modest clothing.",
+      steps: ["Perform Ghusl (ritual bath) and apply fragrance before Ihram", "Wear Ihram garments at the Miqat", "Make the intention and recite Talbiyah", "Continue reciting Talbiyah until stoning Jamrat al-Aqabah"],
+      dua: "Labbayk Allahumma labbayk, labbayk la shareeka laka labbayk. Innal-hamda wan-ni'mata laka wal-mulk, la shareeka lak.",
+      significance: "Ihram symbolizes equality before Allah — no distinction between rich and poor, Arab and non-Arab. All stand equal before their Creator."
+    },
+    {
+      id: "tawaf-qudum",
+      title: "Tawaf al-Qudum",
+      subtitle: "Greeting the Sacred House",
+      description: "Tawaf al-Qudum is the first act upon arriving in Makkah — a greeting to the Sacred Mosque and the Holy Kaaba.",
+      steps: ["Begin at the Black Stone with Takbeer", "Circle the Kaaba seven times counter-clockwise", "Men perform Idtiba and Raml in the first three rounds", "Pray two Rak'ahs behind Maqam Ibrahim"],
+      dua: "Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina adhab an-nar.",
+      significance: "Tawaf represents the unity of Muslims revolving around one center — the House of Allah — just as angels circle the Throne."
+    },
+    {
+      id: "sai",
+      title: "Sa'i",
+      subtitle: "Between Safa and Marwah",
+      description: "Sa'i is walking seven times between the hills of Safa and Marwah, commemorating Hajar's search for water for her son Ismail.",
+      steps: ["Start at Safa and ascend it", "Walk towards Marwah (one lap)", "Men jog between the green markers", "Complete seven laps (ending at Marwah)"],
+      dua: "Indeed, Safa and Marwah are among the symbols of Allah.",
+      significance: "Sa'i reminds us of Hajar's trust in Allah and her effort to seek provision — Allah never wastes the reward of those who do good."
+    },
+    {
+      id: "arafat",
+      title: "Standing at Arafat",
+      subtitle: "The Greatest Pillar of Hajj",
+      description: "Standing at Arafat on the 9th of Dhul Hijjah is the greatest pillar of Hajj. The Prophet ﷺ said: 'Hajj is Arafat.'",
+      steps: ["Travel to Arafat on the morning of the 9th Dhul Hijjah", "Stand at Arafat from noon until sunset", "Engage in abundant supplication and remembrance", "Combine Dhuhr and Asr prayers (shortened)"],
+      dua: "The best supplication is on the Day of Arafat: La ilaha illallahu wahdahu la shareeka lah.",
+      significance: "The Day of Arafat is the best day of the year. Allah boasts to the angels about the people of Arafat and frees more souls from the Fire than any other day."
+    },
+    {
+      id: "muzdalifah",
+      title: "Night at Muzdalifah",
+      subtitle: "The Night of the 10th Dhul Hijjah",
+      description: "After sunset on the Day of Arafat, pilgrims proceed to Muzdalifah to spend the night and collect pebbles for stoning.",
+      steps: ["Depart from Arafat after sunset with tranquility", "Pray Maghrib and Isha combined upon arrival", "Spend the night at Muzdalifah until Fajr", "Collect pebbles for stoning (49 or 70 pebbles)"],
+      dua: "O Allah, I ask You to grant me comprehensive goodness and to protect me from the Fire.",
+      significance: "Staying at Muzdalifah is an obligation of Hajj — a time for rest, reflection, and preparation for the Day of Sacrifice."
+    },
+    {
+      id: "rami",
+      title: "Stoning the Jamarat",
+      subtitle: "Rejecting the Devil",
+      description: "Stoning the Jamarat in Mina symbolizes rejecting Satan's whispers, following Prophet Ibrahim who pelted the devil with stones.",
+      steps: ["Stone Jamrat al-Aqabah on the Day of Sacrifice (7 pebbles)", "Stone all three Jamarat on the Days of Tashreeq (11th, 12th, 13th)", "Order: smallest, then middle, then largest", "Say Takbeer with each pebble"],
+      dua: "Bismillah, Allahu Akbar — in defiance of Shaytan and his party.",
+      significance: "Stoning teaches us to resist Satan and his whispers, and to remain steadfast in obedience to Allah despite all challenges."
+    },
+    {
+      id: "nahr",
+      title: "Sacrifice (Hady)",
+      subtitle: "Day of Sacrifice",
+      description: "Offering a sacrifice on the 10th of Dhul Hijjah follows Prophet Ibrahim's example when Allah ransomed his son Ismail with a great sacrifice.",
+      steps: ["Offer the sacrifice after stoning Jamrat al-Aqabah", "Delegation for slaughter is permissible", "Shave or trim hair after the sacrifice", "First release from Ihram (partial)"],
+      dua: "Bismillah, Allahu Akbar. O Allah, this is from You and for You.",
+      significance: "The sacrifice symbolizes devotion and redemption for Allah's sake, reminding us of Ibrahim and Ismail's story of ultimate submission."
+    },
+    {
+      id: "tawaf-ifadah",
+      title: "Tawaf al-Ifadah",
+      subtitle: "A Pillar of Hajj",
+      description: "Tawaf al-Ifadah is an essential pillar of Hajj — without it, Hajj is incomplete. It is performed after the first release from Ihram on the Day of Sacrifice or after.",
+      steps: ["Proceed to the Sacred Mosque", "Circle the Kaaba seven times", "Pray two Rak'ahs behind Maqam Ibrahim", "Perform Sa'i if not done after Tawaf al-Qudum"],
+      dua: "O Allah, make it an accepted Hajj, a rewarded effort, and a forgiven sin.",
+      significance: "Tawaf al-Ifadah represents the complete release from Ihram and the return to normal life after completing the greatest pillar of Hajj."
+    }
+  ]
+};
+
+const DEFAULT_UMRAH_RITUALS = {
+  ar: [
+    {
+      id: "ihram",
+      title: "الإحرام",
+      subtitle: "الدخول في النسك",
+      description: "الإحرام هو نية الدخول في العمرة عند الميقات. يغتسل المعتمر ويتطيب ثم يلبس ملابس الإحرام ويعقد النية.",
+      steps: ["الاغتسال والتطيب", "لبس ملابس الإحرام (إزار ورداء أبيضان للرجال)", "عقد النية: لبيك اللهم عمرة", "التلبية المستمرة حتى بدء الطواف"],
+      dua: "لَبَّيْكَ اللَّهُمَّ عُمْرَةً، لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ",
+      significance: "الإحرام يطهّر النفس من التعلق بالدنيا ويذكّر المسلم بيوم الحشر حين يقف الجميع سواسية أمام الله."
+    },
+    {
+      id: "tawaf",
+      title: "الطواف",
+      subtitle: "سبعة أشواط حول الكعبة",
+      description: "الطواف حول الكعبة المشرفة سبعة أشواط، بدءاً من الحجر الأسود وانتهاءً به، في اتجاه عكس عقارب الساعة.",
+      steps: ["استقبال الحجر الأسود والتكبير", "الطواف سبعة أشواط (الكعبة عن يسارك)", "الدعاء والذكر أثناء الطواف", "صلاة ركعتين خلف مقام إبراهيم"],
+      dua: "سُبْحَانَ اللَّهِ وَالْحَمْدُ لِلَّهِ وَلَا إِلَهَ إِلَّا اللَّهُ وَاللَّهُ أَكْبَرُ",
+      significance: "الطواف عبادة قلبية وبدنية، يدور فيها المسلم حول بيت الله معبّراً عن خضوعه وتعظيمه لله وحده."
+    },
+    {
+      id: "sai",
+      title: "السعي",
+      subtitle: "بين الصفا والمروة",
+      description: "السعي بين الصفا والمروة سبعة أشواط، بدءاً من الصفا وانتهاءً بالمروة، إحياءً لسنة السيدة هاجر عليها السلام.",
+      steps: ["الصعود على الصفا والدعاء", "المشي إلى المروة (شوط واحد)", "الهرولة بين العلمين الأخضرين (للرجال)", "إتمام سبعة أشواط (الانتهاء عند المروة)"],
+      dua: "إِنَّ الصَّفَا وَالْمَرْوَةَ مِن شَعَائِرِ اللَّهِ، أَبْدَأُ بِمَا بَدَأَ اللَّهُ بِهِ",
+      significance: "السعي يعلّمنا الأخذ بالأسباب مع التوكل على الله، فالسيدة هاجر سعت ولم تجلس تنتظر، فأكرمها الله بماء زمزم."
+    },
+    {
+      id: "halq",
+      title: "الحلق أو التقصير",
+      subtitle: "التحلل من الإحرام",
+      description: "الحلق (حلق الرأس بالكامل) أو التقصير (قص جزء من الشعر) هو آخر مناسك العمرة، وبه يتحلل المعتمر من إحرامه.",
+      steps: ["الحلق أفضل للرجال (حلق الرأس كاملاً)", "التقصير جائز (قص أطراف الشعر)", "المرأة تقصّر من أطراف شعرها قدر أنملة", "التحلل الكامل من الإحرام بعد ذلك"],
+      dua: "اللَّهُمَّ اغْفِرْ لِلْمُحَلِّقِينَ وَالْمُقَصِّرِينَ",
+      significance: "الحلق أو التقصير يرمز إلى التجديد والتخلص من الذنوب، كأن المعتمر يولد من جديد بعد إتمام العمرة."
+    }
+  ],
+  en: [
+    {
+      id: "ihram",
+      title: "Ihram",
+      subtitle: "Entering the Sacred State",
+      description: "Ihram is the intention to enter the state of Umrah at the Miqat. The pilgrim bathes, applies fragrance, wears Ihram garments, and makes the intention.",
+      steps: ["Perform Ghusl and apply fragrance", "Wear Ihram garments (two white cloths for men)", "Make intention: Labbayk Allahumma Umrah", "Continue reciting Talbiyah until beginning Tawaf"],
+      dua: "Labbayk Allahumma Umratan, Labbayk Allahumma labbayk.",
+      significance: "Ihram purifies the soul from worldly attachments and reminds Muslims of the Day of Resurrection when all stand equal before Allah."
+    },
+    {
+      id: "tawaf",
+      title: "Tawaf",
+      subtitle: "Seven Circuits Around the Kaaba",
+      description: "Tawaf is circling the Holy Kaaba seven times, starting and ending at the Black Stone, moving counter-clockwise.",
+      steps: ["Face the Black Stone and say Takbeer", "Circle seven times (Kaaba on your left)", "Make dua and dhikr during Tawaf", "Pray two Rak'ahs behind Maqam Ibrahim"],
+      dua: "SubhanAllah, Alhamdulillah, La ilaha illallah, Allahu Akbar.",
+      significance: "Tawaf is an act of worship combining heart and body — the Muslim revolves around Allah's House expressing submission and glorification of Allah alone."
+    },
+    {
+      id: "sai",
+      title: "Sa'i",
+      subtitle: "Between Safa and Marwah",
+      description: "Sa'i is walking seven laps between Safa and Marwah, starting at Safa and ending at Marwah, commemorating Hajar's legacy.",
+      steps: ["Ascend Safa and make supplication", "Walk to Marwah (one lap)", "Jog between the green markers (for men)", "Complete seven laps (ending at Marwah)"],
+      dua: "Indeed, Safa and Marwah are among the symbols of Allah. I begin with what Allah began with.",
+      significance: "Sa'i teaches us to take action while trusting in Allah — Hajar strived and did not sit idle, so Allah honored her with the water of Zamzam."
+    },
+    {
+      id: "halq",
+      title: "Shaving or Trimming",
+      subtitle: "Release from Ihram",
+      description: "Shaving the head (Halq) or trimming the hair (Taqseer) is the final rite of Umrah, after which the pilgrim is fully released from Ihram.",
+      steps: ["Shaving is preferred for men (complete head shave)", "Trimming is permissible (cutting hair ends)", "Women trim a fingertip's length from their hair", "Full release from Ihram after this step"],
+      dua: "O Allah, forgive those who shave and those who trim.",
+      significance: "Shaving or trimming symbolizes renewal and shedding of sins — as if the pilgrim is reborn after completing Umrah."
+    }
+  ]
+};
+
+function mapRitualsToStrapi(rituals) {
+  return (rituals || []).map((r) => ({
+    title: r.title,
+    subtitle: r.subtitle,
+    description: r.description,
+    icon: r.id,
+    steps: (r.steps || []).map(text => ({ text })),
+    dua: r.dua,
+    significance: r.significance,
+  }));
+}
+
 function bulletsFromStrings(strings) {
   return (strings || []).filter(Boolean).map((text) => ({ text }));
 }
@@ -55,30 +297,6 @@ async function buildHajPage(strapi, haj, locale) {
       ? Object.values(pkg.features).filter(Boolean)
       : [];
 
-    const rituals = [];
-    if (pkg.arafatRitual) {
-      rituals.push({
-        title: pkg.arafatRitual.title,
-        description: pkg.arafatRitual.description,
-        featureBullets: [],
-      });
-    }
-    if (pkg.minaRitual) {
-      const minaBullets = isVip
-        ? [
-            pkg.minaRitual.featuresTitle,
-            pkg.minaRitual.feature1,
-            pkg.minaRitual.feature2,
-            pkg.minaRitual.feature3,
-          ].filter(Boolean)
-        : [];
-      rituals.push({
-        title: pkg.minaRitual.title,
-        description: pkg.minaRitual.description || undefined,
-        featureBullets: bulletsFromStrings(minaBullets),
-      });
-    }
-
     return {
       badge: pkg.badge,
       title: pkg.title,
@@ -97,7 +315,8 @@ async function buildHajPage(strapi, haj, locale) {
         note: isVip ? undefined : pkg.priceWithoutAirfare,
       },
       ritualsTitle: pkg.ritualsTitle,
-      rituals,
+      showRituals: true,
+      rituals: mapRitualsToStrapi(DEFAULT_HAJ_RITUALS[locale]),
       footerNote: isVip ? pkg.directVisaNote : undefined,
     };
   };
@@ -284,13 +503,6 @@ async function findHotelDocumentId(strapi, name, locale) {
   if (!name) return null;
   const trimmed = String(name).trim();
   if (!trimmed) return null;
-  // Search by exact (case-insensitive) name match in the requested locale.
-  // Also try the default locale as a fallback so seeding works when only one
-  // locale of the hotel exists.
-  // NOTE: Strapi 5's strapi.documents().findMany() requires the `$` prefix on
-  // operators (e.g. $eqi). Without it the filter is silently ignored and the
-  // first row in the table is returned, which previously caused every program
-  // hotel relation to point at the same (wrong) hotel.
   const tryLocales = [locale, "en", "ar"].filter(
     (l, i, arr) => l && arr.indexOf(l) === i,
   );
@@ -355,10 +567,7 @@ async function buildUmrahProgram(strapi, prog, locale) {
         findHotelDocumentId(strapi, h.makkahHotel, locale),
       ]);
       return {
-        // relation by documentId; null is acceptable (Strapi 5 allows it)
         madinahHotel: madinahId || null,
-        // Always keep the displayed label so the brochure renders even if the
-        // hotel relation hasn't been linked yet.
         madinahHotelLabel: h.madinahHotel || null,
         madinahNights: h.madinahNights,
         madinahMeals: h.madinahMeals,
@@ -394,12 +603,14 @@ async function buildUmrahProgram(strapi, prog, locale) {
     notes: bulletsFromStrings(prog.notes),
     documentsTitle: prog.documentsTitle,
     requiredDocuments: bulletsFromStrings(prog.requiredDocuments),
+    ritualsTitle: prog.ritualsTitle,
+    showRituals: true,
+    rituals: mapRitualsToStrapi(DEFAULT_UMRAH_RITUALS[locale]),
   };
 }
 
 async function upsertBaseLocale(strapi, uid, locale, data) {
   const existing = await strapi.documents(uid).findMany({ locale });
-
   if (existing?.length > 0) {
     const updated = await strapi.documents(uid).update({
       documentId: existing[0].documentId,
@@ -409,7 +620,6 @@ async function upsertBaseLocale(strapi, uid, locale, data) {
     });
     return updated.documentId;
   }
-
   const created = await strapi.documents(uid).create({
     data,
     locale,
@@ -419,25 +629,13 @@ async function upsertBaseLocale(strapi, uid, locale, data) {
 }
 
 async function upsertLinkedLocale(strapi, uid, documentId, locale, data) {
-  const existing = await strapi.documents(uid).findMany({ locale });
-  const matching = existing?.find((entry) => entry.documentId === documentId);
-  const unlinked = existing?.filter((entry) => entry.documentId !== documentId);
-
-  if (unlinked?.length > 0) {
-    console.warn(
-      `Found ${unlinked.length} unlinked ${uid} ${locale} document(s). ` +
-        "They should be removed before reseeding to avoid duplicate dashboard entries.",
-    );
-  }
-
   const result = await strapi.documents(uid).update({
     documentId,
     locale,
     data,
     status: "published",
   });
-
-  return matching?.documentId || result.documentId;
+  return result.documentId;
 }
 
 async function seedLocalizedSingleType(strapi, uid, enData, arData, label) {
@@ -448,73 +646,45 @@ async function seedLocalizedSingleType(strapi, uid, enData, arData, label) {
 }
 
 async function main() {
-  const arPath = path.join(
-    __dirname,
-    "../../frontend/locales/ar/translation.json",
-  );
-  const enPath = path.join(
-    __dirname,
-    "../../frontend/locales/en/translation.json",
-  );
-
+  const arPath = path.join(__dirname, "../../frontend/locales/ar/translation.json");
+  const enPath = path.join(__dirname, "../../frontend/locales/en/translation.json");
   if (!fs.existsSync(arPath) || !fs.existsSync(enPath)) {
     console.error("Translation files not found.");
     process.exit(1);
   }
-
   const distDir = path.join(__dirname, "..", "dist");
   if (!fs.existsSync(distDir)) {
     console.error('Run "npm run build" in strapi/ first.');
     process.exit(1);
   }
-
   const ar = JSON.parse(fs.readFileSync(arPath, "utf8"));
   const en = JSON.parse(fs.readFileSync(enPath, "utf8"));
-
   console.log("Loading Strapi...");
   const { createStrapi } = require("@strapi/strapi");
   const app = await createStrapi({ distDir: "./dist" }).load();
   console.log("Strapi loaded.\n");
 
-  const hajUid = "api::haj-page.haj-page";
-  const umrahUid = "api::umrah-page.umrah-page";
-
-  let exitCode = 0;
-
   try {
     await seedLocalizedSingleType(
       app,
-      hajUid,
+      "api::haj-page.haj-page",
       await buildHajPage(app, en.haj, "en"),
       await buildHajPage(app, ar.haj, "ar"),
-      "Haj",
+      "Haj"
     );
-
     await seedLocalizedSingleType(
       app,
-      umrahUid,
+      "api::umrah-page.umrah-page",
       await buildUmrahPage(app, en.omra, "en"),
       await buildUmrahPage(app, ar.omra, "ar"),
-      "Umrah",
+      "Umrah"
     );
-
     console.log("\nDone. Haj & Umrah pages seeded with structured components.");
   } catch (error) {
     console.error("Seed failed:", error);
-    exitCode = 1;
+    process.exit(1);
   }
-
-  if (exitCode === 0) {
-    // Exit before PG pool teardown — avoids harmless "aborted" error from tarn
-    process.exit(0);
-  }
-
-  try {
-    await app.destroy();
-  } catch {
-    // ignore
-  }
-  process.exit(exitCode);
+  process.exit(0);
 }
 
 main().catch((err) => {

@@ -51,11 +51,14 @@ const ROOM_PRICING = `
 
 const RITUAL_CARD = `
   title
+  subtitle
   description
-  image {
-    url
-    alternativeText
+  icon
+  steps {
+    ${BULLET}
   }
+  dua
+  significance
   featureBullets {
     ${BULLET}
   }
@@ -83,6 +86,7 @@ const HAJ_PACKAGE = `
     ${ROOM_PRICING}
   }
   ritualsTitle
+  showRituals
   rituals {
     ${RITUAL_CARD}
   }
@@ -194,6 +198,11 @@ const UMRAH_PROGRAM = `
   documentsTitle
   requiredDocuments {
     ${BULLET}
+  }
+  ritualsTitle
+  showRituals
+  rituals {
+    ${RITUAL_CARD}
   }
 `;
 

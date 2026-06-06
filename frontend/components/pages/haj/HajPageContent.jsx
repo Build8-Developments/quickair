@@ -5,7 +5,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { usePilgrimageContent } from "@/contexts/PilgrimageContentContext";
 import UmrahProgramCard from "@/components/pages/omra/UmrahProgramCard";
 import TierTabs from "@/components/pages/pilgrimage/TierTabs";
-import RitualsGuideSection from "@/components/pages/pilgrimage/RitualsGuideSection";
 
 /**
  * HajPageContent
@@ -60,8 +59,6 @@ export default function HajPageContent({ locale }) {
       }}
     >
       <ServicesSection isRTL={isRTL} />
-
-      <RitualsGuideSection type="haj" isRTL={isRTL} />
 
       {programs.length > 0 && (
         <ProgramsSection

@@ -90,6 +90,18 @@
       "type": "component",
       "component": "pilgrimage.bullet",
       "repeatable": true
+    },
+    "ritualsTitle": {
+      "type": "string"
+    },
+    "showRituals": {
+      "type": "boolean",
+      "default": true
+    },
+    "rituals": {
+      "type": "component",
+      "component": "pilgrimage.ritual-card",
+      "repeatable": true
     }
   }
 }

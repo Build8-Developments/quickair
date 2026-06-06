@@ -75,6 +75,14 @@ export default function UmrahProgramCard({
           </ProgramSection>
         )}
 
+        {program.showRituals !== false && program.rituals?.length > 0 && (
+          <ProgramRituals
+            title={program.ritualsTitle}
+            items={program.rituals}
+            isRTL={isRTL}
+          />
+        )}
+
         {(program.programIncludes?.length > 0 ||
           program.programExcludes?.length > 0) && (
           <ProgramSection
@@ -1318,5 +1326,288 @@ function RequiredDocuments({ title, items, isRTL }) {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Required documents                                                         */
+/* Program Rituals                                                            */
 /* -------------------------------------------------------------------------- */
+
+function ProgramRituals({ title, items, isRTL }) {
+  if (!items?.length) return null;
+
+  return (
+    <ProgramSection
+      tone="soft"
+      title={title || (isRTL ? "مناسك البرنامج" : "Program rituals")}
+      eyebrow={isRTL ? "دليل المناسك" : "Rituals guide"}
+    >
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "16px",
+          marginTop: "10px",
+        }}
+      >
+        {items.map((ritual, i) => (
+          <RitualCard key={i} ritual={ritual} index={i} isRTL={isRTL} />
+        ))}
+      </div>
+    </ProgramSection>
+  );
+}
+
+function RitualCard({ ritual, index, isRTL }) {
+  const [expanded, setExpanded] = React.useState(false);
+
+  return (
+    <div
+      style={{
+        backgroundColor: "#ffffff",
+        borderRadius: "14px",
+        border: "1px solid rgba(1, 159, 177, 0.15)",
+        overflow: "hidden",
+        boxShadow: expanded
+          ? "0 10px 30px rgba(1, 159, 177, 0.1)"
+          : "0 2px 8px rgba(0,0,0,0.02)",
+        transition: "all 0.3s ease",
+      }}
+    >
+      <button
+        onClick={() => setExpanded(!expanded)}
+        style={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          gap: "14px",
+          padding: "16px 20px",
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          textAlign: isRTL ? "right" : "left",
+          direction: isRTL ? "rtl" : "ltr",
+        }}
+      >
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div
+            style={{
+              fontSize: "11px",
+              fontWeight: 700,
+              color: "var(--color-accent-1)",
+              marginBottom: "2px",
+              fontFamily: "'Noto Kufi Arabic', sans-serif",
+              textTransform: "uppercase",
+            }}
+          >
+            {isRTL ? `الخطوة ${index + 1}` : `Step ${index + 1}`}
+            {ritual.subtitle && ` · ${ritual.subtitle}`}
+          </div>
+          <h4
+            style={{
+              fontSize: "16px",
+              fontWeight: 700,
+              color: "#1a1a2e",
+              margin: 0,
+              fontFamily: "'Noto Kufi Arabic', sans-serif",
+            }}
+          >
+            {ritual.title}
+          </h4>
+        </div>
+        <ChevronIcon expanded={expanded} />
+      </button>
+
+      {expanded && (
+        <div
+          style={{
+            padding: "0 20px 20px",
+            borderTop: "1px solid rgba(1, 159, 177, 0.1)",
+          }}
+        >
+          {ritual.description && (
+            <p
+              style={{
+                fontSize: "14.5px",
+                lineHeight: 1.85,
+                color: "#4b5563",
+                marginTop: "14px",
+                marginBottom: "16px",
+                fontFamily: "'Noto Kufi Arabic', sans-serif",
+              }}
+            >
+              {ritual.description}
+            </p>
+          )}
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gap: "14px",
+              marginBottom: "16px",
+            }}
+          >
+            {ritual.steps?.length > 0 && (
+              <RitualInfoBlock title={isRTL ? "الخطوات" : "Steps"} icon="list">
+                <ol
+                  style={{
+                    margin: 0,
+                    paddingInlineStart: "18px",
+                    fontSize: "13.5px",
+                    lineHeight: 1.9,
+                    color: "#4b5563",
+                    fontFamily: "'Noto Kufi Arabic', sans-serif",
+                  }}
+                >
+                  {ritual.steps.map((step, i) => (
+                    <li key={i}>{step}</li>
+                  ))}
+                </ol>
+              </RitualInfoBlock>
+            )}
+
+            {ritual.significance && (
+              <RitualInfoBlock
+                title={isRTL ? "الحكمة" : "Significance"}
+                icon="info"
+              >
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: "13.5px",
+                    lineHeight: 1.8,
+                    color: "#4b5563",
+                    fontFamily: "'Noto Kufi Arabic', sans-serif",
+                  }}
+                >
+                  {ritual.significance}
+                </p>
+              </RitualInfoBlock>
+            )}
+          </div>
+
+          {ritual.dua && (
+            <div
+              style={{
+                background: "rgba(1, 159, 177, 0.05)",
+                borderRadius: "10px",
+                padding: "14px 16px",
+                borderInlineStart: "3px solid var(--color-accent-1)",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  color: "var(--color-accent-1)",
+                  marginBottom: "6px",
+                  fontFamily: "'Noto Kufi Arabic', sans-serif",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                <DuaIcon />
+                {isRTL ? "الدعاء" : "Supplication"}
+              </div>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "14.5px",
+                  lineHeight: 1.9,
+                  color: "#1a1a2e",
+                  fontWeight: 600,
+                  fontFamily: "'Noto Kufi Arabic', sans-serif",
+                }}
+              >
+                {ritual.dua}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function RitualInfoBlock({ title, icon, children }) {
+  return (
+    <div
+      style={{
+        backgroundColor: "#f9fafb",
+        borderRadius: "10px",
+        padding: "14px",
+        border: "1px solid #e5e7eb",
+      }}
+    >
+      <div
+        style={{
+          fontSize: "12px",
+          fontWeight: 700,
+          color: "#1a1a2e",
+          marginBottom: "8px",
+          display: "flex",
+          alignItems: "center",
+          gap: "6px",
+          fontFamily: "'Noto Kufi Arabic', sans-serif",
+        }}
+      >
+        <RitualInfoIcon type={icon} />
+        {title}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function RitualInfoIcon({ type }) {
+  const sz = { width: 14, height: 14, fill: "var(--color-accent-1)" };
+  if (type === "list") {
+    return (
+      <svg viewBox="0 0 24 24" style={sz}>
+        <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" />
+      </svg>
+    );
+  }
+  return (
+    <svg viewBox="0 0 24 24" style={sz}>
+      <path d="M11 17h2v-6h-2v6zm1-15C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 9h2V7h-2v2z" />
+    </svg>
+  );
+}
+
+function RitualIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      style={{ width: 22, height: 22, fill: "currentColor" }}
+    >
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z" />
+    </svg>
+  );
+}
+
+function DuaIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      style={{ width: 14, height: 14, fill: "currentColor" }}
+    >
+      <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7.01 2 18h6.99l-3.72-3.72C6.75 12.89 9.49 12 12.5 12s5.75.89 7.23 2.28L16.01 18H23V7.01l-3.6 3.6C17.55 8.99 15.15 8 12.5 8z" />
+    </svg>
+  );
+}
+
+function ChevronIcon({ expanded }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      style={{
+        width: 20,
+        height: 20,
+        fill: "var(--color-accent-1)",
+        transition: "transform 0.3s ease",
+        transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
+      }}
+    >
+      <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z" />
+    </svg>
+  );
+}

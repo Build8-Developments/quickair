@@ -10,13 +10,25 @@
       "type": "string",
       "required": true
     },
+    "subtitle": {
+      "type": "string"
+    },
     "description": {
       "type": "text"
     },
-    "image": {
-      "type": "media",
-      "multiple": false,
-      "allowedTypes": ["images"]
+    "icon": {
+      "type": "string"
+    },
+    "steps": {
+      "type": "component",
+      "component": "pilgrimage.bullet",
+      "repeatable": true
+    },
+    "dua": {
+      "type": "text"
+    },
+    "significance": {
+      "type": "text"
     },
     "featureBullets": {
       "type": "component",

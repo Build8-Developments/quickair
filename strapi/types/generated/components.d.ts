@@ -190,6 +190,7 @@ export interface PilgrimageHajPackage extends Struct.ComponentSchema {
     pricingTitle: Schema.Attribute.String;
     rituals: Schema.Attribute.Component<'pilgrimage.ritual-card', true>;
     ritualsTitle: Schema.Attribute.String;
+    showRituals: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     tags: Schema.Attribute.Component<'pilgrimage.bullet', true>;
     tier: Schema.Attribute.Enumeration<
       ['economy', 'standard', 'premium', 'vip', 'distinguished']
@@ -271,8 +272,12 @@ export interface PilgrimageRitualCard extends Struct.ComponentSchema {
   };
   attributes: {
     description: Schema.Attribute.Text;
+    dua: Schema.Attribute.Text;
     featureBullets: Schema.Attribute.Component<'pilgrimage.bullet', true>;
-    image: Schema.Attribute.Media<'images'>;
+    icon: Schema.Attribute.String;
+    significance: Schema.Attribute.Text;
+    steps: Schema.Attribute.Component<'pilgrimage.bullet', true>;
+    subtitle: Schema.Attribute.String;
     title: Schema.Attribute.String & Schema.Attribute.Required;
   };
 }
@@ -488,8 +493,11 @@ export interface PilgrimageUmrahProgram extends Struct.ComponentSchema {
     programIncludesTitle: Schema.Attribute.String;
     releaseDate: Schema.Attribute.String;
     requiredDocuments: Schema.Attribute.Component<'pilgrimage.bullet', true>;
+    rituals: Schema.Attribute.Component<'pilgrimage.ritual-card', true>;
+    ritualsTitle: Schema.Attribute.String;
     route: Schema.Attribute.String;
     season: Schema.Attribute.String;
+    showRituals: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     tags: Schema.Attribute.Component<'pilgrimage.bullet', true>;
     tier: Schema.Attribute.Enumeration<
       ['economy', 'standard', 'premium', 'vip', 'distinguished']

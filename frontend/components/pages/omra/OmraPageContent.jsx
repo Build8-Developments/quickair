@@ -1,18 +1,15 @@
 "use client";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import UmrahStepsSection from "./UmrahStepsSection";
 import UmrahProgramCard from "./UmrahProgramCard";
 import { usePilgrimageContent } from "@/contexts/PilgrimageContentContext";
 import TierTabs from "@/components/pages/pilgrimage/TierTabs";
-import RitualsGuideSection from "@/components/pages/pilgrimage/RitualsGuideSection";
 
 /**
  * OmraPageContent - Main content component for the Omra (Umrah) page.
  *
  * Renders, in order:
  * - Hero
- * - Umrah steps
  * - Programs section: a data-driven list of Umrah programs (mirrors the
  *   printed brochure layout). Programs come from Strapi when available,
  *   otherwise fall back to translation files via `pt()`.
@@ -58,10 +55,6 @@ export default function OmraPageContent({ locale }) {
       className="omra-page-content"
       style={{ direction: isRTL ? "rtl" : "ltr" }}
     >
-      <UmrahStepsSection isRTL={isRTL} />
-
-      <RitualsGuideSection type="umrah" isRTL={isRTL} />
-
       {programs.length > 0 && (
         <ProgramsSection
           programs={programs}

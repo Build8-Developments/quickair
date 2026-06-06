@@ -55,6 +55,10 @@
     "ritualsTitle": {
       "type": "string"
     },
+    "showRituals": {
+      "type": "boolean",
+      "default": true
+    },
     "rituals": {
       "type": "component",
       "component": "pilgrimage.ritual-card",

@@ -2,17 +2,6 @@
  * Maps structured Strapi pilgrimage pages to the shape expected by page components (translation-compatible).
  */
 
-const HAJ_RITUAL_IMAGE_FALLBACKS = {
-  vipArafat:
-    "https://cnn-arabic-images.cnn.io/cloudinary/image/upload/w_1920,c_scale,q_auto/cnnarabic/2023/06/27/images/243914.avif",
-  vipMina:
-    "https://cdn4.premiumread.com/?url=https://www.al-madina.com/uploads/images/2024/06/16/2315534.jpg",
-  distinguishedArafat:
-    "https://cnn-arabic-images.cnn.io/cloudinary/image/upload/w_1920,c_scale,q_auto/cnnarabic/2023/06/27/images/243914.avif",
-  distinguishedMina:
-    "https://cdn4.premiumread.com/?url=https://www.al-madina.com/uploads/images/2024/06/16/2315534.jpg",
-};
-
 const SERVICE_ICON_TO_KEY = {
   star: "comfort",
   plane: "vipLounge",
@@ -103,7 +92,19 @@ function linkedHotelDisplay(card) {
   };
 }
 
-function mapHajPackageToProgram(pkg, packageKey, page) {
+function mapRituals(rituals, strapiUrl) {
+  return (rituals || []).map((ritual) => ({
+    title: ritual.title,
+    subtitle: ritual.subtitle,
+    description: ritual.description,
+    icon: ritual.icon,
+    steps: bulletsToStrings(ritual.steps),
+    dua: ritual.dua,
+    significance: ritual.significance,
+  }));
+}
+
+function mapHajPackageToProgram(pkg, packageKey, page, strapiUrl) {
   if (!pkg) return null;
 
   const { madinah, makkah } = splitHajHotelCards(pkg.hotels);
@@ -112,12 +113,17 @@ function mapHajPackageToProgram(pkg, packageKey, page) {
   const pricing = pkg.pricing || {};
   const features = bulletsToStrings(pkg.features);
   const tags = bulletsToStrings(pkg.tags);
-  const ritualItems = (pkg.rituals || [])
-    .flatMap((ritual) => [
-      ritual?.description,
-      ...bulletsToStrings(ritual?.featureBullets),
-    ])
-    .filter(Boolean);
+
+  const showRituals = pkg.showRituals ?? true;
+  const ritualItems =
+    showRituals !== false
+      ? (pkg.rituals || [])
+          .flatMap((ritual) => [
+            ritual?.description,
+            ...bulletsToStrings(ritual?.featureBullets),
+          ])
+          .filter(Boolean)
+      : [];
 
   return {
     badge: pkg.badge,
@@ -163,25 +169,23 @@ function mapHajPackageToProgram(pkg, packageKey, page) {
     documentsTitle: null,
     requiredDocuments: [],
     logoVariant: packageKey,
+    ritualsTitle: pkg.ritualsTitle,
+    showRituals,
+    rituals: mapRituals(pkg.rituals, strapiUrl),
   };
 }
 
-function mapHajPackage(pkg, ritualFallbacks, strapiUrl) {
+function mapHajPackage(pkg) {
   if (!pkg) return null;
 
   const features = bulletsToStrings(pkg.features);
   const tags = bulletsToStrings(pkg.tags);
-  const rituals = (pkg.rituals || []).map((ritual, index) => {
-    const imageUrl =
-      resolveMediaUrl(ritual.image, strapiUrl) ||
-      ritualFallbacks[index] ||
-      null;
+  const rituals = (pkg.rituals || []).map((ritual) => {
     const featureBullets = bulletsToStrings(ritual.featureBullets);
 
     if (featureBullets.length > 0) {
       return {
         title: ritual.title,
-        imageUrl,
         features: featureBullets,
         featuresTitle: featureBullets[0],
         feature1: featureBullets[1],
@@ -193,7 +197,6 @@ function mapHajPackage(pkg, ritualFallbacks, strapiUrl) {
     return {
       title: ritual.title,
       description: ritual.description,
-      imageUrl,
     };
   });
 
@@ -222,6 +225,7 @@ function mapHajPackage(pkg, ritualFallbacks, strapiUrl) {
     hotelsTitle: pkg.hotelsTitle,
     pricingTitle: pkg.pricingTitle,
     ritualsTitle: pkg.ritualsTitle,
+    showRituals: pkg.showRituals ?? true,
     reservationAmount: pkg.pricing?.reservationAmount,
     directVisaNote: pkg.footerNote,
     minaNote: pkg.footerNote,
@@ -256,22 +260,16 @@ export function mapHajPageFromStrapi(page, strapiUrl = "") {
   });
 
   const hotels = mapHotelsToLegacy(page.vipPackage?.hotels);
-  const vip = mapHajPackage(
-    page.vipPackage,
-    [HAJ_RITUAL_IMAGE_FALLBACKS.vipArafat, HAJ_RITUAL_IMAGE_FALLBACKS.vipMina],
-    strapiUrl,
-  );
-  const distinguished = mapHajPackage(
-    page.distinguishedPackage,
-    [
-      HAJ_RITUAL_IMAGE_FALLBACKS.distinguishedArafat,
-      HAJ_RITUAL_IMAGE_FALLBACKS.distinguishedMina,
-    ],
-    strapiUrl,
-  );
+  const vip = mapHajPackage(page.vipPackage);
+  const distinguished = mapHajPackage(page.distinguishedPackage);
   const packagePrograms = (page.packages || [])
     .map((pkg, index) =>
-      mapHajPackageToProgram(pkg, pkg?.tier || `package-${index + 1}`, page),
+      mapHajPackageToProgram(
+        pkg,
+        pkg?.tier || `package-${index + 1}`,
+        page,
+        strapiUrl,
+      ),
     )
     .filter(Boolean);
 
@@ -307,11 +305,12 @@ export function mapHajPageFromStrapi(page, strapiUrl = "") {
       packagePrograms.length > 0
         ? packagePrograms
         : [
-            mapHajPackageToProgram(page.vipPackage, "vip", page),
+            mapHajPackageToProgram(page.vipPackage, "vip", page, strapiUrl),
             mapHajPackageToProgram(
               page.distinguishedPackage,
               "distinguished",
               page,
+              strapiUrl,
             ),
           ].filter(Boolean),
     tableLabels: {
@@ -356,12 +355,6 @@ export function mapHajPageFromStrapi(page, strapiUrl = "") {
       description: page.stepsSection?.header?.description,
       ...steps,
     },
-    _media: {
-      vipArafatRitual: vip?._rituals?.[0]?.imageUrl,
-      vipMinaRitual: vip?._rituals?.[1]?.imageUrl,
-      distinguishedArafatRitual: distinguished?._rituals?.[0]?.imageUrl,
-      distinguishedMinaRitual: distinguished?._rituals?.[1]?.imageUrl,
-    },
     _structured: page,
   };
 }
@@ -391,7 +384,7 @@ function mapUmrahPackageCard(card) {
   };
 }
 
-function mapUmrahProgram(prog) {
+function mapUmrahProgram(prog, strapiUrl) {
   if (!prog) return null;
   return {
     badge: prog.badge,
@@ -435,10 +428,13 @@ function mapUmrahProgram(prog) {
     notes: bulletsToStrings(prog.notes),
     documentsTitle: prog.documentsTitle,
     requiredDocuments: bulletsToStrings(prog.requiredDocuments),
+    ritualsTitle: prog.ritualsTitle,
+    showRituals: prog.showRituals ?? true,
+    rituals: mapRituals(prog.rituals, strapiUrl),
   };
 }
 
-export function mapUmrahPageFromStrapi(page) {
+export function mapUmrahPageFromStrapi(page, strapiUrl = "") {
   if (!page) return null;
 
   const steps = {};
@@ -469,7 +465,9 @@ export function mapUmrahPageFromStrapi(page) {
       title: page.programsSectionTitle,
       subtitle: page.programsSectionSubtitle,
     },
-    programs: (page.programs || []).map(mapUmrahProgram).filter(Boolean),
+    programs: (page.programs || [])
+      .map((p) => mapUmrahProgram(p, strapiUrl))
+      .filter(Boolean),
     tableLabels: page.tableLabels
       ? {
           tripDatesLabel: page.tableLabels.tripDatesLabel,
