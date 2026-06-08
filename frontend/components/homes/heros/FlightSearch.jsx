@@ -1,15 +1,14 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { AlertCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { submitFlightSearch } from "@/utils/flightUrl";
 import FlightCalendar from "./FlightCalendar";
 import AirportSearch from "./AirportSearch";
 import PassengersClass from "./PassengersClass";
 
 export default function FlightSearch({ onBack }) {
-  const router = useRouter();
   const { t } = useTranslation();
   const { language } = useLanguage();
   const isRTL = language === "ar";
@@ -71,163 +70,20 @@ export default function FlightSearch({ onBack }) {
   }, []);
 
   const handleSearch = () => {
-    const baseUrl = "https://www.skysync.travel/flight/search";
-    const params = new URLSearchParams();
-
-    // Reset errors
-    const newErrors = {
-      from: "",
-      to: "",
-      departureDate: "",
-      returnDate: "",
-      sameCity: "",
-      multiCity: {},
-    };
-
-    const formatDate = (date) => {
-      if (!date) return "";
-      const d = new Date(date);
-      const months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      return `${d.getDate()}-${months[d.getMonth()]}-${d.getFullYear()}`;
-    };
-
-    if (tripType === "multicity") {
-      const validSegments = multiCitySegments.filter(
-        (seg) => seg.from && seg.to && seg.date
-      );
-
-      // Validate each segment
-      let hasErrors = false;
-      multiCitySegments.forEach((seg, index) => {
-        const segmentErrors = [];
-        if (!seg.from)
-          segmentErrors.push(
-            language === "ar" ? "المدينة مطلوبة" : "City required"
-          );
-        if (!seg.to)
-          segmentErrors.push(
-            language === "ar" ? "المدينة مطلوبة" : "City required"
-          );
-        if (!seg.date)
-          segmentErrors.push(
-            language === "ar" ? "التاريخ مطلوب" : "Date required"
-          );
-
-        if (seg.from && seg.to && seg.from.iata === seg.to.iata) {
-          segmentErrors.push(
-            language === "ar"
-              ? "يرجى اختيار مدينة مختلفة"
-              : "Cities must be different"
-          );
-        }
-
-        if (segmentErrors.length > 0) {
-          newErrors.multiCity[index] = segmentErrors.join(", ");
-          hasErrors = true;
-        }
-      });
-
-      if (validSegments.length < 2) {
-        newErrors.multiCity.general =
-          language === "ar"
-            ? "يرجى ملء رحلتين على الأقل"
-            : "Please fill in at least 2 flights";
-        hasErrors = true;
-      }
-
-      if (hasErrors) {
-        setErrors(newErrors);
-        return;
-      }
-
-      validSegments.forEach((seg, i) => {
-        const segNum = i + 1;
-        params.append(`dep${segNum}`, seg.from.iata);
-        params.append(`ret${segNum}`, seg.to.iata);
-        params.append(`dtt${segNum}`, formatDate(seg.date));
-        params.append(`cl${segNum}`, flightClass);
-      });
-      params.append("triptype", "3");
-      params.append("key", "NMC");
-    } else {
-      // Validate single segment
-      if (!fromAirport) {
-        newErrors.from =
-          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
-      }
-      if (!toAirport) {
-        newErrors.to =
-          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
-      }
-      if (!departureDate) {
-        newErrors.departureDate =
-          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
-      }
-      if (tripType === "roundtrip" && !returnDate) {
-        newErrors.returnDate =
-          language === "ar" ? "هذا الحقل مطلوب" : "This field is required";
-      }
-
-      if (fromAirport && toAirport && fromAirport.iata === toAirport.iata) {
-        newErrors.sameCity =
-          language === "ar"
-            ? "يرجى اختيار مدينة مختلفة للوصول"
-            : "Departure and arrival cities must be different";
-      }
-
-      if (
-        Object.values(newErrors).some(
-          (error) => error !== "" && typeof error === "string"
-        )
-      ) {
-        setErrors(newErrors);
-        return;
-      }
-
-      params.append("dep1", fromAirport.iata);
-      params.append("ret1", toAirport.iata);
-      params.append("dtt1", formatDate(departureDate));
-      params.append("cl1", flightClass);
-
-      if (tripType === "roundtrip" && returnDate) {
-        params.append("dep2", toAirport.iata);
-        params.append("ret2", fromAirport.iata);
-        params.append("dtt2", formatDate(returnDate));
-        params.append("cl2", flightClass);
-        params.append("triptype", "2");
-        params.append("key", "IRT");
-      } else {
-        params.append("triptype", "1");
-        params.append("key", "OW");
-      }
-    }
-
-    params.append("adult", passengers.adults.toString());
-    params.append("child", passengers.children.toString());
-    params.append("infant", passengers.infants.toString());
-    params.append("direct", "false");
-    params.append("baggage", "false");
-    params.append("pft", "");
-    params.append("airlines", "");
-    params.append("ref", "false");
-    params.append("lc", language.toUpperCase());
-    params.append("curr", "EGP");
-    params.append("currtime", Date.now().toString());
-
-    window.open(`${baseUrl}?${params.toString()}`, "_blank");
+    const result = submitFlightSearch(
+      {
+        tripType,
+        fromAirport,
+        toAirport,
+        departureDate,
+        returnDate,
+        multiCitySegments,
+        passengers,
+        flightClass,
+      },
+      language,
+    );
+    if (!result.ok) setErrors(result.errors);
   };
 
   const totalPassengers =

@@ -167,6 +167,26 @@ export default [
     country: "Turkey",
   },
 
+  // Metro / multi-airport city codes (SkySync-compatible)
+  {
+    iata: "LON",
+    name: "All London Airports",
+    city: "London",
+    country: "United Kingdom",
+  },
+  {
+    iata: "PAR",
+    name: "All Paris Airports",
+    city: "Paris",
+    country: "France",
+  },
+  {
+    iata: "NYC",
+    name: "All New York Airports",
+    city: "New York",
+    country: "United States",
+  },
+
   // United Kingdom
   {
     iata: "LHR",

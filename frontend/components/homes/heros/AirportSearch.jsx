@@ -1,23 +1,22 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { searchAirports } from "@/lib/amadeus";
+import { useAirportSearch } from "@/lib/api/hooks/useAirportSearch";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function AirportSearch({ active, setAirport }) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredAirports, setFilteredAirports] = useState([]);
   const { t } = useTranslation();
   const { language } = useLanguage();
   const isRTL = language === "ar";
 
-  useEffect(() => {
-    // Load airports when dropdown opens or search changes
-    if (active) {
-      const airports = searchAirports(searchQuery, language);
-      setFilteredAirports(airports);
-    }
-  }, [active, searchQuery, language]);
+  const { airports: filteredAirports, loading } = useAirportSearch({
+    query: active ? searchQuery : "",
+    locale: language,
+    maxResults: 20,
+    minQueryLength: 0,
+    debounceMs: 150,
+  });
 
   const handleSelect = (airport) => {
     setAirport(airport);
@@ -38,11 +37,15 @@ export default function AirportSearch({ active, setAirport }) {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        {filteredAirports.length > 0 ? (
-          filteredAirports.map((airport, i) => (
+        {loading ? (
+          <div className="airport-no-results">
+            {t("flightSearch.airport.searching", "Searching...")}
+          </div>
+        ) : filteredAirports.length > 0 ? (
+          filteredAirports.map((airport) => (
             <div
               onClick={() => handleSelect(airport)}
-              key={i}
+              key={airport.iata}
               className="airport-item"
             >
               <div className="airport-city">

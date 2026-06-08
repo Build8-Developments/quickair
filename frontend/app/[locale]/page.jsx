@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import BrandsOne from "@/components/homes/brands/BrandsOne";
 import ChatbotWidget from "@/components/homes/chatbot/ChatbotWidget";
 import OfferDestinations from "@/components/homes/destinations/OfferDestinations";
@@ -42,7 +43,9 @@ export default async function HomePage({ params }) {
     <>
       <main>
         <Header3 locale={locale} />
-        <Hero3 locale={locale} />
+        <Suspense fallback={null}>
+          <Hero3 locale={locale} />
+        </Suspense>
         <BrandsOne locale={locale} />
         <TripTypeSelector locale={locale} />
         <OfferDestinations locale={locale} />

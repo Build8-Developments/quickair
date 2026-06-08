@@ -21,27 +21,6 @@ const STORAGE_KEYS = {
   TRIP_DATA: "quickair_chat_trip_data",
   MESSAGES: "quickair_chat_messages",
   CURRENT_STEP: "quickair_chat_current_step",
-  POPUP_DISMISSED: "quickair_chat_popup_dismissed",
-};
-
-// Popup messages - رسائل جذب الانتباه
-const POPUP_MESSAGES = {
-  ar: [
-    "وكيل سفرك جاهز يجهزلك أفضل خطة",
-    "قلّي الوجهة والميزانية وأنا أراجع المتاح",
-    "أقدر أقارنلك الفنادق والعروض في دقائق",
-    "عايز رحلة؟ هطلعلك اختيارات مناسبة فوراً",
-    "ابدأ بس بجملة: عايز أسافر شرم 5 أيام",
-    "خليني أجهزلك أفضل فنادق وأسعار",
-  ],
-  en: [
-    "Your travel agent is ready to plan",
-    "Tell me the destination and budget",
-    "I can compare hotels and offers for you",
-    "Need a trip? I'll shortlist real options",
-    "Start with: I want Sharm for 5 days",
-    "Let me prepare the best hotels and prices",
-  ],
 };
 
 export default function AIChatbot() {
@@ -70,13 +49,6 @@ export default function AIChatbot() {
   const [selectedLang, setSelectedLang] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // Popup state
-  const [showPopup, setShowPopup] = useState(false);
-  const [popupMessage, setPopupMessage] = useState("");
-  const [popupDismissed, setPopupDismissed] = useState(false);
-  const popupTimerRef = useRef(null);
-  const messageIndexRef = useRef(0);
-
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const languageDropdownRef = useRef(null);
@@ -88,63 +60,6 @@ export default function AIChatbot() {
   const chatLanguage = userInfo.preferredLanguage || language;
   const isChatArabic = chatLanguage === "ar";
   const t = (ar, en) => (isChatArabic ? ar : en);
-
-  // ✅ Show popup message
-  const showNextPopup = useCallback(() => {
-    if (isOpen || popupDismissed) return;
-
-    const msgs = isArabic ? POPUP_MESSAGES.ar : POPUP_MESSAGES.en;
-    const msg = msgs[messageIndexRef.current % msgs.length];
-    setPopupMessage(msg);
-    setShowPopup(true);
-    messageIndexRef.current++;
-
-    // Auto hide after 5 seconds
-    setTimeout(() => {
-      setShowPopup(false);
-    }, 5000);
-  }, [isOpen, popupDismissed, isArabic]);
-
-  // ✅ Popup timer - show first popup after 5 seconds, then every 30 seconds
-  useEffect(() => {
-    // Check if popup was dismissed in this session
-    if (typeof window !== "undefined") {
-      const dismissed = sessionStorage.getItem(STORAGE_KEYS.POPUP_DISMISSED);
-      if (dismissed) {
-        setPopupDismissed(true);
-        return;
-      }
-    }
-
-    // First popup after 5 seconds
-    const initialTimer = setTimeout(() => {
-      showNextPopup();
-    }, 5000);
-
-    // Recurring popups every 30 seconds
-    popupTimerRef.current = setInterval(() => {
-      showNextPopup();
-    }, 30000);
-
-    return () => {
-      clearTimeout(initialTimer);
-      if (popupTimerRef.current) {
-        clearInterval(popupTimerRef.current);
-      }
-    };
-  }, [showNextPopup]);
-
-  // ✅ Dismiss popup permanently for this session
-  const dismissPopup = () => {
-    setShowPopup(false);
-    setPopupDismissed(true);
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem(STORAGE_KEYS.POPUP_DISMISSED, "true");
-    }
-    if (popupTimerRef.current) {
-      clearInterval(popupTimerRef.current);
-    }
-  };
 
   // ✅ Load saved data from localStorage on mount
   useEffect(() => {
@@ -307,7 +222,6 @@ export default function AIChatbot() {
 
   useEffect(() => {
     const openAgent = () => {
-      setShowPopup(false);
       setIsOpen(true);
     };
 
@@ -1149,35 +1063,9 @@ export default function AIChatbot() {
 
   return (
     <>
-      {/* Popup Message Bubble */}
-      {showPopup && !isOpen && (
-        <div className={styles.popupBubble} dir={isArabic ? "rtl" : "ltr"}>
-          <button
-            className={styles.popupClose}
-            onClick={(e) => {
-              e.stopPropagation();
-              dismissPopup();
-            }}
-            aria-label="Close"
-          >
-            ×
-          </button>
-          <div
-            className={styles.popupContent}
-            onClick={() => {
-              setShowPopup(false);
-              setIsOpen(true);
-            }}
-          >
-            <p>{popupMessage}</p>
-          </div>
-          <div className={styles.popupArrow}></div>
-        </div>
-      )}
-
       {/* Floating Chat Button - hidden on mobile when chat is open */}
       <button
-        className={`${styles.chatButton} ${isOpen ? styles.chatButtonOpen : ""} ${isOpen ? styles.chatButtonHiddenMobile : ""} ${showPopup ? styles.chatButtonPulse : ""}`}
+        className={`${styles.chatButton} ${isOpen ? styles.chatButtonOpen : ""} ${isOpen ? styles.chatButtonHiddenMobile : ""}`}
         onClick={() => setIsOpen(!isOpen)}
         data-chatbot-trigger="quickair-agent"
         aria-label={t("وكيل سفر ذكي", "AI Travel Agent")}

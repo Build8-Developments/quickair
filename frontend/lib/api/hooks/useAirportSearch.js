@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import airportsData from "@/data/airports.js";
+import { searchAirports } from "@/lib/airportSearch";
 
 /**
  * Custom hook for searching airports by name, city, or IATA code
@@ -8,21 +8,23 @@ import airportsData from "@/data/airports.js";
  * @param {string} options.locale - Language locale (en/ar)
  * @param {number} options.debounceMs - Debounce delay in milliseconds
  * @param {number} options.maxResults - Maximum number of results to return
+ * @param {number} options.minQueryLength - Min chars before search (0 = show popular)
  * @returns {Object} { airports, loading, error }
  */
 export function useAirportSearch({
   query = "",
   locale = "en",
   debounceMs = 300,
-  maxResults = 10,
+  maxResults = 20,
+  minQueryLength = 0,
 }) {
   const [airports, setAirports] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Don't search if query is too short
-    if (query.trim().length < 2) {
+    const trimmed = query.trim();
+    if (trimmed.length > 0 && trimmed.length < minQueryLength) {
       setAirports([]);
       setLoading(false);
       return;
@@ -31,37 +33,9 @@ export function useAirportSearch({
     setLoading(true);
     setError(null);
 
-    // Debounce the search
     const timeoutId = setTimeout(() => {
       try {
-        const searchQuery = query.toLowerCase().trim();
-
-        // Search in name, city, country, and IATA code
-        const results = airportsData.filter((airport) => {
-          return (
-            airport.name.toLowerCase().includes(searchQuery) ||
-            airport.city.toLowerCase().includes(searchQuery) ||
-            airport.country.toLowerCase().includes(searchQuery) ||
-            airport.iata.toLowerCase().includes(searchQuery)
-          );
-        });
-
-        // Sort results: prioritize exact IATA matches, then city matches, then name matches
-        const sortedResults = results.sort((a, b) => {
-          const aIataMatch = a.iata.toLowerCase() === searchQuery;
-          const bIataMatch = b.iata.toLowerCase() === searchQuery;
-          if (aIataMatch && !bIataMatch) return -1;
-          if (!aIataMatch && bIataMatch) return 1;
-
-          const aCityMatch = a.city.toLowerCase().startsWith(searchQuery);
-          const bCityMatch = b.city.toLowerCase().startsWith(searchQuery);
-          if (aCityMatch && !bCityMatch) return -1;
-          if (!aCityMatch && bCityMatch) return 1;
-
-          return 0;
-        });
-
-        setAirports(sortedResults.slice(0, maxResults));
+        setAirports(searchAirports(trimmed, locale, maxResults));
         setLoading(false);
       } catch (err) {
         setError(err.message);
@@ -70,7 +44,7 @@ export function useAirportSearch({
     }, debounceMs);
 
     return () => clearTimeout(timeoutId);
-  }, [query, locale, debounceMs, maxResults]);
+  }, [query, locale, debounceMs, maxResults, minQueryLength]);
 
   return { airports, loading, error };
 }
